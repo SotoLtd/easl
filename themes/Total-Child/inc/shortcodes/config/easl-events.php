@@ -1,0 +1,142 @@
+<?php
+if ( ! defined( 'ABSPATH' ) ) {
+	die( '-1' );
+}
+
+return array(
+	'name' => __( 'EASL Events', 'total-child' ),
+	'base' => 'easl_events',
+	'category' => __( 'EASL', 'total' ),
+	'description' => __( 'EASL Events', 'total-child' ),
+	'icon' => 'vcex-icon ticon ticon-list-alt',
+	'php_class_name' => 'EASL_VC_Events',
+	'params' => array(
+		array(
+			'type' => 'textfield',
+			'heading' => __( 'Widget title', 'total-child' ),
+			'param_name' => 'title',
+			'description' => __( 'Enter text used as widget title (Note: located above content element).', 'total-child' ),
+		),
+		array(
+			'type'        => 'textfield',
+			'heading'     => __( 'Widget subtitle', 'total-child' ),
+			'param_name'  => 'subtitle',
+			'description' => __( 'Enter text used as widget subtitle (Note: located below Widget title).', 'total-child' ),
+		),
+		vc_map_add_css_animation(),
+		array(
+			'type' => 'el_id',
+			'heading' => __( 'Element ID', 'total-child' ),
+			'param_name' => 'el_id',
+			'description' => sprintf( __( 'Enter element ID (Note: make sure it is unique and valid according to <a href="%s" target="_blank">w3c specification</a>).', 'total-child' ), 'http://www.w3schools.com/tags/att_global_id.asp' ),
+		),
+		array(
+			'type' => 'textfield',
+			'heading' => __( 'Extra class name', 'total-child' ),
+			'param_name' => 'el_class',
+			'description' => __( 'Style particular content element differently - add a class name and refer to it in custom CSS.', 'total-child' ),
+		),
+		array(
+			'type'        => 'textfield',
+			'heading'     => __( 'Number of Events', 'total-child' ),
+			'param_name'  => 'numberposts',
+			'std'         => '4',
+			'description' => __( 'You can leave empty to display all Events.', 'total-child' ),
+			'group'              => __( 'Query', 'total-child' ),
+		),
+		array(
+			'type'				 => 'autocomplete',
+			'heading'			 => __( 'Topics', 'total-child' ),
+			'param_name'		 => 'topics',
+			'param_holder_class' => 'vc_not-for-custom',
+			'admin_label'		 => true,
+			'settings'			 => array(
+				'multiple'		 => true,
+				'min_length'	 => 1,
+				'groups'		 => false,
+				'unique_values'	 => true,
+				'display_inline' => true,
+				'delay'			 => 0,
+				'auto_focus'	 => true,
+			),
+			'group'				 => __( 'Query', 'total-child' ),
+		),
+		array(
+			'type'				 => 'autocomplete',
+			'heading'			 => __( 'Meeting Types', 'total-child' ),
+			'param_name'		 => 'meeting_types',
+			'param_holder_class' => 'vc_not-for-custom',
+			'admin_label'		 => true,
+			'settings'			 => array(
+				'multiple'		 => true,
+				'min_length'	 => 1,
+				'groups'		 => false,
+				'unique_values'	 => true,
+				'display_inline' => true,
+				'delay'			 => 0,
+				'auto_focus'	 => true,
+			),
+			'group'				 => __( 'Query', 'total-child' ),
+		),
+		array(
+			'type'		 => 'dropdown',
+			'heading'	 => __( 'Order', 'total-child' ),
+			'param_name' => 'order',
+			'value'		 => array(
+				__( 'Default', 'total-child' ) => '',
+				__( 'DESC', 'total-child' )	 => 'DESC',
+				__( 'ASC', 'total-child' )	 => 'ASC',
+			),
+			'group'		 => __( 'Query', 'total-child' ),
+		),
+		array(
+			'type'		 => 'dropdown',
+			'heading'	 => __( 'Event Type', 'total-child' ),
+			'param_name' => 'event_type',
+			'value'		 => array(
+				__( 'All', 'total-child' ) => '',
+				__( 'Upcoming', 'total-child' )	 => 'upcoming',
+				__( 'Past', 'total-child' )	 => 'past',
+			),
+			'group'		 => __( 'Query', 'total-child' ),
+		),
+		array(
+			'type'		 => 'dropdown',
+			'heading'	 => __( 'Event Organiser', 'total-child' ),
+			'param_name' => 'organizer',
+			'value'		 => array(
+				__( 'All', 'total-child' ) => '',
+				__( 'EASL', 'total-child' )	 => 'easl',
+				__( 'Other', 'total-child' )	 => 'other',
+			),
+			'group'		 => __( 'Query', 'total-child' ),
+		),
+		array(
+			'type' => 'checkbox',
+			'param_name' => 'view_all_link',
+			'heading' => __( 'Show view all link?', 'total-child' ),
+			'description' => __( 'Enable view all links beside widget title.', 'total-child' ),
+			'group'              => __( 'View', 'total-child' ),
+		),
+		array(
+			'type' => 'textfield',
+			'heading' => __( 'View All links Text', 'total-child' ),
+			'param_name' => 'view_all_text',
+			'description' => __( 'Enter text used as view all events link.', 'total-child' ),
+			'group'              => __( 'View', 'total-child' ),
+		),
+		array(
+			'type' => 'textfield',
+			'heading' => __( 'View All links URL', 'total-child' ),
+			'param_name' => 'view_all_url',
+			'description' => __( 'Enter URL used as view all events link.', 'total-child' ),
+			'group'              => __( 'View', 'total-child' ),
+		),
+		array(
+			'type' => 'css_editor',
+			'heading' => __( 'CSS box', 'total-child' ),
+			'param_name' => 'css',
+			'group' => __( 'Design Options', 'total-child' ),
+		),
+	),
+);

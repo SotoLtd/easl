@@ -1,0 +1,11 @@
+.easl-card-btn:hover .easl-card-btn-icon-wrapper {
+    background-color: #ffffff !important;
+}
+.easl-card-btn:hover .easl-card-btn-icon-wrapper .mask{
+    position: absolute;
+    top: 0;
+    left: 0;
+    height: 100%;
+    width: 100%;
+    background-color: rgba(255,255,255,0.5);
+}

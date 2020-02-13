@@ -1,0 +1,93 @@
+
+body{
+    background-color: #ffffff !important;
+}
+.easl-custom-checkbox:after {
+    background: transparent;
+    content: "\f00c";
+    color: #fff;
+    font-family: ticons;
+    font-size: 11px;
+    position: absolute;
+    left: 0;
+    top: 1px;
+    opacity: 0;
+    width: 20px;
+    height: 20px;
+    line-height: 20px;
+    text-align: center;
+    z-index: 2;
+    -webkit-transition: opacity 0.15s linear;
+    -moz-transition: opacity 0.15s linear;
+    transition: opacity 0.15s linear;
+}
+.easl-custom-checkbox:before {
+    content: "";
+    width: 20px;
+    height: 20px;
+    position: absolute;
+    left: 0;
+    top: 0;
+    z-index: 1;
+    background-color: #f0f0f0;
+}
+.ec-filter-topics li{
+    list-style: none;
+}
+.ec-filter-search input {
+    background: #f0f0f0;
+    color: #666;
+    display: block;
+    width: 100%;
+    height: 40px;
+    line-height: 18px;
+    font-size: 16px;
+    z-index: 2;
+}
+.easl-custom-select {
+    position: relative;
+    height: 40px;
+    background: #f0f0f0;
+    line-height: 40px;
+    padding: 0 40px 0 10px;
+    color: #004b87;
+    font-size: 14px;
+    cursor: pointer;
+}
+.ec-filter-search .ecs-icon {
+    color: #004b87;
+    position: absolute;
+    right: 0;
+    top: 0;
+    height: 40px;
+    padding: 0 10px;
+    font-size: 24px;
+    line-height: 40px;
+}
+.publication-filter-button {
+    background-color: #ffffff;
+    font-size: 14px;
+    padding: 0;
+    color: #004b87;
+    font-family: "KnockoutHTF51Middleweight", "Helvetica Neue", Helvetica, Arial, sans-serif;
+}
+.publication-filter-button:hover{
+    background-color: #ffffff;
+    color: #004b87;
+}
+.entry ul, .entry ol {
+    margin: 0 0 0 0;
+}
+.ec-filter-topics li{
+    margin-bottom: 5px;
+}
+.scientific-publication .sp-thumb a {
+    display: block;
+    line-height: 1rem;
+}
+.publication-filter-button {
+    margin-right: 15px;
+}
+.publication-filter-button .theme-button-icon-right{
+    padding-left: 0.3em;
+}

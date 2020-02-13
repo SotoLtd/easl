@@ -1,0 +1,35 @@
+.page-header.background-image-page-header .page-header-title{
+    color: #004b87 !important;
+}
+.intro-text{
+    display: flex;
+    align-items: center;
+    flex-direction: row;
+}
+
+a.button {
+    margin: 0 15px 0 0;
+}
+.printed-copies{
+    align-items: center;
+    border-top: 1px solid #ffffff;
+    background-color: #d9d9d9;
+    justify-content: space-evenly;
+}
+.printed-copies .books img{
+    margin-top: 10px;
+    margin-bottom: 5px;
+}
+.printed-copies .books-text{
+    color: #004b87;
+    font-family: "KnockoutHTF51Middleweight";
+}
+.membership .ticon-angle-right::before{
+    color: #004b87;
+}
+.entry ul, .entry ol {
+    margin: 0px 0 20px 18px;
+}
+
+
+
