@@ -3,8 +3,8 @@
 
 # Except for the themes and plugins directories:
 
-!themes/**
-!plugins/**
+!themes/Total-Child/**
+!plugins/easl-member-zone/**
 
 # And this file itself
 !.gitignore
