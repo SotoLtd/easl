@@ -1,0 +1,10 @@
+# Ignore everything:
+*
+
+# Except for the themes and plugins directories:
+
+!themes/**
+!plugins/**
+
+# And this file itself
+!.gitignore
