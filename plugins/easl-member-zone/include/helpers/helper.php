@@ -51,6 +51,21 @@ function easl_mz_get_current_session_data() {
 	return EASL_MZ_Manager::get_instance()->getSession()->get_current_session_data();
 }
 
+function easl_mz_get_logged_in_member_data() {
+    $session = easl_mz_get_current_session_data();
+    if ($session['member_id']) {
+        $api = EASL_MZ_API::get_instance();
+        $session_data = easl_mz_get_current_session_data();
+        return $session_data ? $api->get_member_details($session_data['member_id']) : null;
+    }
+    return null;
+}
+
+function easl_mz_user_is_member() {
+    $member = easl_mz_get_logged_in_member_data();
+    return $member ? !!$member['dotb_mb_id'] : false;
+}
+
 function easl_mz_setcookie( $name, $value, $expire = 0, $secure = false, $httponly = false ) {
 	if ( ! headers_sent() ) {
 		setcookie( $name, $value, $expire, COOKIEPATH ? COOKIEPATH : '/', COOKIE_DOMAIN, $secure, $httponly );
@@ -98,12 +113,22 @@ function easl_mz_get_note_download_url( $note ) {
 	return $url;
 }
 
-function easl_mz_jhep_menu_link( $atts ) {
+function easl_mz_menu_attrs( $atts ) {
+
 	if ( empty( $atts['href'] ) ) {
 		return $atts;
 	}
+
+    $has_membership = easl_mz_user_is_member();
+
+    $restricted_urls = easl_mz_get_restricted_urls();
+
+    if ( in_array($atts['href'], $restricted_urls) && !$has_membership ) {
+        $atts['href'] = '#';
+        $atts['class'] = 'disabled';
+    }
 	if ( $atts['href'] == '#jhep_link' ) {
-		$atts['href'] = easl_mz_get_jhep_link();
+	    $atts['href'] = easl_mz_get_jhep_link();
 	}
 	if ( $atts['href'] == '#jhep_test_link' ) {
 		$atts['href'] = easl_mz_get_jhep_link( true );
@@ -118,4 +143,30 @@ function easl_mz_country_short( $c1, $c2 ) {
 	}
 
 	return ( $c1['member_count'] > $c2['member_count'] ) ? - 1 : 1;
+}
+
+function easl_mz_get_restricted_urls() {
+    $urls = array_map(function($link) {
+            return $link['link'];
+        }, get_field('restricted_pages', 'option')
+    );
+
+    //Also restrict the link to JHEP
+    $urls[] = '#jhep_link';
+    return $urls;
+}
+
+function easl_mz_user_can_access_memberzone_page($page_id) {
+    $link = get_permalink($page_id);
+    return easl_mz_user_can_access_url($link);
+}
+
+function easl_mz_user_can_access_url($url) {
+    if (!easl_mz_is_member_logged_in()) {
+        return false;
+    }
+    if (easl_mz_user_is_member()) {
+        return true;
+    }
+    return !in_array($url, easl_mz_get_restricted_urls());
 }

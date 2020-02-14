@@ -602,6 +602,15 @@ body .mzms-button::after {
     color: #62cff5;
 }
 
+.disabled.mz-panel-button {
+    pointer-events: none;
+}
+
+.easl-mz-page-menu li a.disabled, .disabled .easl-icon-widget-link, .disabled .mz-panel-button-icon, .disabled .mz-panel-button-title {
+    pointer-events: none;
+    opacity:0.5;
+}
+
 .easl-mz-page-menu li a::after {
     content: "\f105";
     color: #fff;
