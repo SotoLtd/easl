@@ -145,9 +145,10 @@ function easl_mz_validate_new_member_form($data = array()) {
         'dotb_area_of_interest',
         'dotb_easl_specialty',
         'dotb_gender',
-        'birthdate',
         'email1',
-        'dotb_place_of_work'
+        'dotb_place_of_work',
+        'dotb_easl_interest',
+        'dotb_country'
     ];
 
     $errors = validate_required_fields($required_fields, $data);

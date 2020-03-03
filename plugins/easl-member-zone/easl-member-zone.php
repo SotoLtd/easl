@@ -415,15 +415,6 @@ class EASL_MZ_Manager {
 		if ( ! in_array( $billing_mode, array( 'c1', 'c2', 'other' ) ) ) {
 			$billing_mode = 'c1';
 		}
-		$billing_address = array();
-		if ( $billing_mode == 'other' ) {
-			$billing_address['street']    = ! empty( $_POST['billing_address_street'] ) ? $_POST['billing_address_street'] : '';
-			$billing_address['city']      = ! empty( $_POST['billing_address_city'] ) ? $_POST['billing_address_city'] : '';
-			$billing_address['state']     = ! empty( $_POST['billing_address_state'] ) ? $_POST['billing_address_state'] : '';
-			$billing_address['postalcod'] = ! empty( $_POST['billing_address_postalcode'] ) ? $_POST['billing_address_postalcode'] : '';
-			$billing_address['country']   = ! empty( $_POST['billing_address_street'] ) ? $_POST['billing_address_country'] : '';
-			$billing_address['georeg']    = easl_mz_get_geo_reg( $billing_address['country'] );
-		}
 
 		if ( ! in_array( $jhephardcopy_recipient, array( 'c1', 'c2', 'other' ) ) ) {
 			$jhephardcopy_recipient = 'c1';
@@ -448,7 +439,7 @@ class EASL_MZ_Manager {
 			$membership_api_data['billing_address_state']      = ! empty( $_POST['billing_address_state'] ) ? $_POST['billing_address_state'] : '';
 			$membership_api_data['billing_address_postalcode'] = ! empty( $_POST['billing_address_postalcode'] ) ? $_POST['billing_address_postalcode'] : '';
 			$membership_api_data['billing_address_country']    = ! empty( $_POST['billing_address_country'] ) ? $_POST['billing_address_country'] : '';
-			$membership_api_data['billing_address_georeg']     = easl_mz_get_geo_reg( $membership_api_data['billing_address_country'] );
+			$membership_api_data['billing_address_georeg']     = easl_mz_get_geo_reg( $_POST['billing_address_country'] );
 		}
 
 		if ( $jhep_hard_copy ) {
@@ -464,6 +455,9 @@ class EASL_MZ_Manager {
 			}
 		}
 
+		print_r($_POST);
+		print_r($membership_api_data);
+		die();
 		$this->api->get_user_auth_token();
 		$membership_id = $this->api->create_membership( $membership_api_data );
 

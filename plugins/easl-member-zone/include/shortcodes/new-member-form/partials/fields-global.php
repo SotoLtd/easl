@@ -73,7 +73,7 @@ if ( ! defined( 'ABSPATH' ) ) {
     </div>
     <div class="easl-col">
         <div class="easl-col-inner mzms-fields-con">
-            <label class="mzms-field-label" for="mzf_birthdate">Date of birth <span class="mzms-asteric">*</span></label>
+            <label class="mzms-field-label" for="mzf_birthdate">Date of birth</label>
             <div class="mzms-field-wrap">
                 <input type="hidden" placeholder="" name="birthdate" id="mzf_birthdate" value="" class="easl-mz-date" autocomplete="off">
                 <input type="text" placeholder="" name="" id="mzf_birthdate_fz" value="<?php echo esc_attr( $date_of_birth_formatted ); ?>" class="easl-mz-date" autocomplete="off">
@@ -99,6 +99,19 @@ if ( ! defined( 'ABSPATH' ) ) {
             <div class="mzms-field-wrap">
                 <select class="easl-mz-select2" name="dotb_easl_interest[]" id="mzf_dotb_easl_interest" multiple="multiple" data-placeholder="Select one/more options"  style="width: 100%;">
                     <?php echo easl_mz_get_crm_dropdown_items( 'easl_interests' ); ?>
+                </select>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="mzms-fields-row easl-row easl-row-col-2">
+    <div class="easl-col">
+        <div class="easl-col-inner mzms-fields-con">
+            <label class="mzms-field-label" for="dotb_country">Country <span class="mzms-asteric">*</span></label>
+            <div class="mzms-field-wrap">
+                <select class="easl-mz-select2" name="dotb_country" id="mzf_dotb_country" multiple="multiple" data-placeholder="Select an option"  style="width: 100%;">
+                    <?php echo easl_mz_get_crm_dropdown_items( 'countries' ); ?>
                 </select>
             </div>
         </div>
