@@ -587,7 +587,7 @@ class EASL_MZ_Ajax_Handler {
 		if ( empty( $request_data ) ) {
 			$this->respond( 'No fields specified!', 405 );
 		}
-		$errors = easl_mz_validate_member_data( $request_data );
+		$errors = easl_mz_validate_new_member_form( $request_data );
 		if ( ! $errors ) {
 			$errors = array();
 		}

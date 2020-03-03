@@ -124,63 +124,60 @@ function easl_mz_parse_crm_membership_data( $response ) {
 	return $data;
 }
 
+function validate_required_fields( $required_field_names, $data, $message = 'Mandatory field' ) {
+    $errors = array();
+
+    foreach($required_field_names as $field_name) {
+        if (empty($data[$field_name])) {
+            $errors[$field_name] = $message;
+        }
+    }
+
+    return $errors;
+}
+
+function easl_mz_validate_new_member_form($data = array()) {
+    $required_fields = [
+        'salutation',
+        'first_name',
+        'last_name',
+        'dotb_job_function',
+        'dotb_area_of_interest',
+        'dotb_easl_specialty',
+        'dotb_gender',
+        'birthdate',
+        'email1',
+        'dotb_place_of_work'
+    ];
+
+    $errors = validate_required_fields($required_fields, $data);
+
+    if ( isset( $data['title'] ) && empty( $data['title'] ) ) {
+        $errors['title'] = 'Mandatory field';
+    }
+    if ( ! empty( $data['dotb_job_function'] ) && ( $data['dotb_job_function'] == 'other' ) && empty( $data['dotb_job_function_other'] ) ) {
+        $errors['dotb_job_function_other'] = 'Mandatory field';
+    }
+    if ( ! empty( $data['dotb_easl_specialty'] ) && in_array( 'other', $data['dotb_easl_specialty'] ) && empty( $data['dotb_easl_specialty_other'] ) ) {
+        $errors['dotb_easl_specialty_other'] = 'Mandatory field';
+    }
+    if ( ! empty( $data['birthdate'] ) && ! preg_match( "/^[0-9]{4}-(0[1-9]|1[0-2])-(0[1-9]|[1-2][0-9]|3[0-1])$/", $data['birthdate'] ) ) {
+        $errors['birthdate'] = 'Enter date in yyyy-mm-dd format.';
+    }
+
+    return $errors;
+
+}
 
 function easl_mz_validate_member_data( $data = array() ) {
-	$errors = array();
-	if ( empty( $data['salutation'] ) ) {
-		$errors['salutation'] = 'Mandatory field';
-	}
-	if ( empty( $data['first_name'] ) ) {
-		$errors['first_name'] = 'Mandatory field';
-	}
-	if ( empty( $data['last_name'] ) ) {
-		$errors['last_name'] = 'Mandatory field';
-	}
-	if ( empty( $data['dotb_job_function'] ) ) {
-		$errors['dotb_job_function'] = 'Mandatory field';
-	}
-	if ( ! empty( $data['dotb_job_function'] ) && ( $data['dotb_job_function'] == 'other' ) && empty( $data['dotb_job_function_other'] ) ) {
-		$errors['dotb_job_function_other'] = 'Mandatory field';
-	}
-	if ( empty( $data['dotb_area_of_interest'] ) ) {
-		$errors['dotb_area_of_interest'] = 'Mandatory field';
-	}
-	if ( isset( $data['title'] ) && empty( $data['title'] ) ) {
-		$errors['title'] = 'Mandatory field';
-	}
-	if ( empty( $data['dotb_easl_specialty'] ) ) {
-		$errors['dotb_easl_specialty'] = 'Mandatory field';
-	}
-	if ( ! empty( $data['dotb_easl_specialty'] ) && in_array( 'other', $data['dotb_easl_specialty'] ) && empty( $data['dotb_easl_specialty_other'] ) ) {
-		$errors['dotb_easl_specialty_other'] = 'Mandatory field';
-	}
-	if ( empty( $data['dotb_gender'] ) ) {
-		$errors['dotb_gender'] = 'Mandatory field';
-	}
-	if ( empty( $data['birthdate'] ) ) {
-		$errors['birthdate'] = 'Mandatory field';
-	}
-	if ( ! empty( $data['birthdate'] ) && ! preg_match( "/^[0-9]{4}-(0[1-9]|1[0-2])-(0[1-9]|[1-2][0-9]|3[0-1])$/", $data['birthdate'] ) ) {
-		$errors['birthdate'] = 'Enter date in yyyy-mm-dd format.';
-	}
-	if ( empty( $data['email1'] ) ) {
-		$errors['email1'] = 'Mandatory field';
-	}
-	if ( empty( $data['primary_address_street'] ) ) {
-		$errors['primary_address_street'] = 'Mandatory field';
-	}
-	if ( empty( $data['primary_address_postalcode'] ) ) {
-		$errors['primary_address_postalcode'] = 'Mandatory field';
-	}
-	if ( empty( $data['primary_address_city'] ) ) {
-		$errors['primary_address_city'] = 'Mandatory field';
-	}
-	if ( empty( $data['primary_address_state'] ) ) {
-		$errors['primary_address_state'] = 'Mandatory field';
-	}
-	if ( empty( $data['primary_address_country'] ) ) {
-		$errors['primary_address_country'] = 'Mandatory field';
-	}
+
+    $errors = validate_required_fields([
+        'primary_address_street',
+        'primary_address_postalcode',
+        'primary_address_city',
+        'primary_address_state',
+        'primary_address_country'
+    ], $data);
 
 	return $errors;
 }

@@ -407,3 +407,33 @@ function easl_mz_get_list_membership_statuses() {
 		'cancelled'   => 'Cancelled',
 	);
 }
+
+function easl_mz_get_list_places_of_work() {
+    return array(
+        'hospital_clinic' => 'Hospital / Clinic',
+        'industry_healthcare' => 'Industry, healthcare',
+        'industry_other' => 'Industry, other',
+        'ngo_non_profit' => 'NGO / Not-for-Profit Organization',
+        'media' => 'Media',
+        'publishing_journals' => 'Publishing / Journals',
+        'private_hospital' => 'Private Hospital',
+        'private_practice' => 'Private Practice',
+        'research_institution' => 'Research Institution',
+        'university' => 'University',
+        'university_hospital' => 'University Hospital'
+    );
+}
+
+function easl_mz_get_list_easl_interests() {
+    return array(
+        'campus' => 'EASL Campus',
+        'summits' => 'EASL Summits',
+        'fellowships_grants_awards' => 'Fellowships, Grants & Awards',
+        'ilc' => 'International Liver Congress (ILC)',
+        'jhep_cpgs' => 'Journal of Hepatology, JHEP Reports, CPGs',
+        'masterclasses_schools' => 'Masterclasses & Schools',
+        'membership' => 'Membership',
+        'monothematic_conferences' => 'Monothematic conferences',
+        'sister_societies_national_associations' => 'Sister Societies & National Associations'
+    );
+}

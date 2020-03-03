@@ -8,6 +8,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * @var $renew
  * @var $messages
  */
+$template_base = easl_mz_get_manager()->path( 'SHORTCODES_DIR', '/new-membership-form' );
 
 $member_name_parts = array();
 if ( $member['salutation'] ) {
@@ -60,6 +61,23 @@ if ( ! $member_has_waiting_payemnt ):
             <input type="hidden" name="mz_member_name" value="<?php echo implode( ' ', $member_name_parts ); ?>">
             <input type="hidden" name="mz_member_fname" value="<?php echo $member['first_name']; ?>">
             <input type="hidden" name="mz_member_lname" value="<?php echo $member['last_name']; ?>">
+
+<!--            --><?php //include $template_base . '/partials/fields-add-membership.php'; ?>
+<!--            <div class="mzms-fields-separator"></div>-->
+            <?php include $template_base . '/partials/fields-communication.php'; ?>
+            <div class="mzms-fields-separator"></div>
+            <?php include $template_base . '/partials/fields-address.php'; ?>
+
+            <div class="mzms-fields-separator"></div>
+            <div class="mzms-fields-row">
+                <div class="mzms-fields-con">
+                    <label class="mzms-field-label" for="mzms_personal_profile">Personal Profile</label>
+                    <div class="mzms-field-wrap">
+                        <textarea name="description" id="mzms_personal_profile" placeholder=""></textarea>
+                    </div>
+                </div>
+            </div>
+            <div class="mzms-fields-separator"></div>
 
             <div class="mzms-fields-row easl-row easl-row-col-2">
                 <div class="easl-col">

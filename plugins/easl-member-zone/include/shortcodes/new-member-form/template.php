@@ -53,19 +53,6 @@ if ( ! easl_mz_is_member_logged_in() ):
 				<?php include $template_base . '/partials/fields-basic.php'; ?>
                 <div class="mzms-fields-separator"></div>
 				<?php include $template_base . '/partials/fields-global.php'; ?>
-                <div class="mzms-fields-separator"></div>
-				<?php include $template_base . '/partials/fields-communication.php'; ?>
-                <div class="mzms-fields-separator"></div>
-				<?php include $template_base . '/partials/fields-address.php'; ?>
-                <div class="mzms-fields-separator"></div>
-                <div class="mzms-fields-row">
-                    <div class="mzms-fields-con">
-                        <label class="mzms-field-label" for="mzms_personal_profile">Personal Profile</label>
-                        <div class="mzms-field-wrap">
-                            <textarea name="description" id="mzms_personal_profile" placeholder=""></textarea>
-                        </div>
-                    </div>
-                </div>
                 <div class="mzms-fields-row">
                     <div class="mzms-fields-con">
                         <div class="mzms-field-wrap mzms-inline-checkbox">
