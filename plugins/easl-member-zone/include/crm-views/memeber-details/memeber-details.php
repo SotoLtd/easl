@@ -6,7 +6,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 /**
  * @var $member array
  */
-$title = 'My membership';
+$title = 'My profile';
 $template_base = easl_mz_get_manager()->path( 'CRM_VIEWS', '/memeber-details' );
 ?>
 

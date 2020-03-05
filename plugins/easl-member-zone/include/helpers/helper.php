@@ -53,25 +53,34 @@ function easl_mz_get_current_session_data() {
 function easl_mz_get_logged_in_member_data() {
     $session_data = easl_mz_get_current_session_data();
     if ($session_data['member_id']) {
-        $member_id = $session_data['member_id'];
         if (!$session_data['member_data']) {
-            $api = EASL_MZ_API::get_instance();
-            $member_data = $api->get_member_details($member_id);
-            $membership_data = $api->get_membership_details($member_id);
-            $member_data['membership'] = $membership_data;
-            $session = EASL_MZ_Manager::get_instance()->getSession();
-            $session->add_data('member_data', $member_data);
-            $session->save_session_data();
-
-            return $member_data;
+            return easl_mz_refresh_logged_in_member_data();
         }
         return $session_data['member_data'];
     }
     return null;
 }
 
+function easl_mz_refresh_logged_in_member_data() {
+    $session_data = easl_mz_get_current_session_data();
+    if ($session_data['member_id']) {
+        $member_id = $session_data['member_id'];
+        $api = EASL_MZ_API::get_instance();
+        $member_data = $api->get_member_details($member_id);
+        $membership_data = $api->get_membership_details($member_id);
+        $member_data['membership'] = $membership_data;
+        $session = EASL_MZ_Manager::get_instance()->getSession();
+        $session->add_data('member_data', $member_data);
+        $session->save_session_data();
+
+        return $member_data;
+    }
+    return null;
+}
+
 function easl_mz_user_is_member() {
     $member = easl_mz_get_logged_in_member_data();
+
     if ($member) {
         return !!$member['dotb_mb_id'] && $member['dotb_mb_current_status'] === 'active';
     }

@@ -437,3 +437,16 @@ function easl_mz_get_list_easl_interests() {
         'sister_societies_national_associations' => 'Sister Societies & National Associations'
     );
 }
+
+function easl_mz_get_list_user_categories() {
+    return array(
+        'md' => 'Medical Doctor (MD)',
+        'phd' => 'PhD',
+        'md_phd' => 'MD PhD',
+        'nurse_prescriber' => 'Nurse - Prescriber',
+        'nurse_non_prescriber' => 'Nurse - Non Prescriber',
+        'pharmacist' => 'Pharmacist',
+        'patient' => 'Patient',
+        'other' => 'Other - Please Specify'
+    );
+}

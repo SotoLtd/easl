@@ -237,6 +237,8 @@ class EASL_MZ_Manager {
 			$this->session->save_session_data();
 		}
 
+        easl_mz_refresh_logged_in_member_data();
+
 		do_action( 'easl_mz_member_looged_id' );
 
 		if ( ! $redirect ) {
@@ -455,10 +457,46 @@ class EASL_MZ_Manager {
 			}
 		}
 
-		print_r($_POST);
-		print_r($membership_api_data);
-		die();
-		$this->api->get_user_auth_token();
+		$contact_data_fields = [
+		    'phone_work',
+            'phone_mobile',
+            'phone_home',
+            'phone_other',
+            'phone_fax',
+            'assistant',
+            'dotb_assistant_email',
+            'assistant_phone',
+            'twitter',
+            'dotb_tmp_account',
+            'primary_address_street',
+            'primary_address_city',
+            'primary_address_state',
+            'primary_address_postalcode',
+            'primary_address_country',
+            'alt_address_street',
+            'alt_address_city',
+            'alt_address_state',
+            'alt_address_postalcode',
+            'alt_address_country',
+            'department',
+            'dotb_interaction_with_patient'
+        ];
+
+		$contact_data = [];
+		foreach($contact_data_fields as $field) {
+		    if (isset($_POST[$field])) {
+                $contact_data[$field] = $_POST[$field];
+            }
+        }
+
+        $this->api->get_user_auth_token();
+
+        $updated = $this->api->update_member_personal_info( $member_id, $contact_data );
+
+        if ( ! $updated ) {
+            $this->respond( 'Error!', 500 );
+        }
+
 		$membership_id = $this->api->create_membership( $membership_api_data );
 
 		if ( ! $membership_id ) {
@@ -476,6 +514,8 @@ class EASL_MZ_Manager {
 			'membership_created_id' => $membership_id,
 			'membership_number'     => $membership_number,
 		);
+
+        easl_mz_refresh_logged_in_member_data();
 
 		if ( $require_proof && ! empty( $_FILES['supporting_docs'] ) && ( $_FILES['supporting_docs']['error'] === UPLOAD_ERR_OK ) ) {
 
