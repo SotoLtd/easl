@@ -118,7 +118,7 @@ if ( ! defined( 'ABSPATH' ) ) {
         <div class="easl-col-inner mzms-fields-con">
             <label class="mzms-field-label" for="mzf_dotb_easl_interest">EASL Interest <span class="mzms-asteric">*</span></label>
             <div class="mzms-field-wrap">
-                <select class="easl-mz-select2" name="dotb_easl_interest[]" id="mzf_dotb_easl_interest" multiple="multiple" data-placeholder="Select one/more options"  style="width: 100%;">
+                <select class="easl-mz-select2" name="dotb_area_of_interest_industry[]" id="mzf_dotb_easl_interest" multiple="multiple" data-placeholder="Select one/more options"  style="width: 100%;">
                     <?php echo easl_mz_get_crm_dropdown_items( 'easl_interests' ); ?>
                 </select>
             </div>
@@ -131,7 +131,7 @@ if ( ! defined( 'ABSPATH' ) ) {
         <div class="easl-col-inner mzms-fields-con">
             <label class="mzms-field-label" for="dotb_country">Country <span class="mzms-asteric">*</span></label>
             <div class="mzms-field-wrap">
-                <select class="easl-mz-select2" name="dotb_country" id="mzf_dotb_country" multiple="multiple" data-placeholder="Select an option"  style="width: 100%;">
+                <select class="easl-mz-select2" name="dotb_country" id="mzf_dotb_country" data-placeholder="Select an option"  style="width: 100%;">
                     <?php echo easl_mz_get_crm_dropdown_items( 'countries' ); ?>
                 </select>
             </div>

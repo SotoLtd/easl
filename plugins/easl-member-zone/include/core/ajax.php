@@ -501,6 +501,7 @@ class EASL_MZ_Ajax_Handler {
 		}
 		$request_data = array();
 		parse_str( $_POST['request_data'], $request_data );
+
 		if ( empty( $request_data['id'] ) ) {
 			$this->respond( 'No member specified!', 405 );
 		}
