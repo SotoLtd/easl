@@ -597,6 +597,7 @@ class EASL_MZ_API {
 			'OAuth-Token'  => $this->get_access_token( $is_member ),
 		);
 		$result  = $this->put( '/Contacts/' . $member_id, $is_member, $headers, $data );
+
 		if ( ! $result ) {
 			return false;
 		}

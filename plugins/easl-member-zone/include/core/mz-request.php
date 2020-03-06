@@ -157,15 +157,16 @@ class EASL_MZ_Request {
 		return false;
 	}
 
-	public function post( $endpoint, $data = array(), $data_format = 'body', $cookies = array(), $parse_json = true ) {
+	public function post( $endpoint, $data = array(), $data_format = 'body', $cookies = array(), $parse_json = true, $json_encode_body = true ) {
 		$url  = $this->base_uri . $endpoint;
+		$body_data = $json_encode_body ? json_encode( $data ) : $data;
 		$args = array(
 			'method'      => 'POST',
 			'timeout'     => 45,
 			'redirection' => 5,
 			'httpversion' => '1.1',
 			'blocking'    => true,
-			'body'        => json_encode( $data ),
+			'body'        => $body_data,
 			'data_format' => $data_format,
 			'headers'     => $this->request_headers,
 			'cookies'     => $cookies

@@ -144,6 +144,7 @@ class EASL_MZ_Manager {
 	public function init() {
 		$this->add_options_page();
 		$this->handle_member_login();
+		$this->handle_openid_auth_code();
 		$this->handle_member_logout();
 		$this->handle_mz_actions();
 
@@ -151,6 +152,39 @@ class EASL_MZ_Manager {
 			add_action( 'template_redirect', array( $this, 'maybe_disable_wp_rocket_cache' ) );
 		}
 	}
+
+	public function handle_openid_auth_code() {
+	    if ($_GET['code']) {
+	        $data = [
+	            'client_id' => 'soto-prod',
+                'redirect_url' => 'https://easldev.websitestage.co.uk/member-zone/',
+                'client_secret' => '0de461b7-4843-4a0c-a7ad-0b62577fa3a1',
+                'code' => $_GET['code'],
+                'grant_type' => 'authorization_code',
+                'scope' => 'profile email'
+            ];
+            $token_url = 'token';
+
+            $request = new EASL_MZ_Request( 'https://sso.easl.eu/auth/realms/sso-easl-prod/protocol/openid-connect' );
+
+            $request->post('/token', $data, 'body', [], true, false);
+
+            $response = $request->get_response_body();
+
+            if ($response->access_token) {
+                $access_token = $response->access_token;
+
+                $request->set_request_header('Authorization', 'Bearer ' . $access_token);
+                $request->get('/userinfo');
+
+                $response = $request->get_response_body();
+
+                $email = $response->email;
+
+                die();
+            }
+        }
+    }
 
 	public function memberzone_page_content() {
 		include $this->path( 'TEMPLATES_DIR', 'main.php' );
