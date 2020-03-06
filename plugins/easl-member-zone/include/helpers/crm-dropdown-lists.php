@@ -413,7 +413,7 @@ function easl_mz_get_list_places_of_work() {
         'hospital_clinic' => 'Hospital / Clinic',
         'industry_healthcare' => 'Industry, healthcare',
         'industry_other' => 'Industry, other',
-        'ngo_non_profit' => 'NGO / Not-for-Profit Organization',
+        'ngo' => 'NGO / Not-for-Profit Organization',
         'media' => 'Media',
         'publishing_journals' => 'Publishing / Journals',
         'private_hospital' => 'Private Hospital',
@@ -443,9 +443,9 @@ function easl_mz_get_list_user_categories() {
         'md' => 'Medical Doctor (MD)',
         'phd' => 'PhD',
         'md_phd' => 'MD PhD',
-        'nurse_prescriber' => 'Nurse - Prescriber',
-        'nurse_non_prescriber' => 'Nurse - Non Prescriber',
-        'pharmacist' => 'Pharmacist',
+        'nurse_prescr' => 'Nurse - Prescriber',
+        'nurse_non_prescr' => 'Nurse - Non Prescriber',
+        'pharma' => 'Pharmacist',
         'patient' => 'Patient',
         'other' => 'Other - Please Specify'
     );
