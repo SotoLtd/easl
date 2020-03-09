@@ -9,6 +9,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * @return array
  */
 function easl_mz_parse_crm_contact_data( $response ) {
+
 	$data = array(
 		'id'         => $response->id,
 		'salutation' => $response->salutation,
