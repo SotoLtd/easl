@@ -424,20 +424,6 @@ function easl_mz_get_list_places_of_work() {
     );
 }
 
-function easl_mz_get_list_easl_interests() {
-    return array(
-        'campus' => 'EASL Campus',
-        'summits' => 'EASL Summits',
-        'fellowships_grants_awards' => 'Fellowships, Grants & Awards',
-        'ilc' => 'International Liver Congress (ILC)',
-        'jhep_cpgs' => 'Journal of Hepatology, JHEP Reports, CPGs',
-        'masterclasses_schools' => 'Masterclasses & Schools',
-        'membership' => 'Membership',
-        'monothematic_conferences' => 'Monothematic conferences',
-        'sister_societies_national_associations' => 'Sister Societies & National Associations'
-    );
-}
-
 function easl_mz_get_list_user_categories() {
     return array(
         'md' => 'Medical Doctor (MD)',
