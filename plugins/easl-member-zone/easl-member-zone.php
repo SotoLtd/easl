@@ -111,6 +111,7 @@ class EASL_MZ_Manager {
 		require $this->path( 'CORE_DIR', 'session-handler.php' );
 		require $this->path( 'CORE_DIR', 'mz-request.php' );
 		require $this->path( 'CORE_DIR', 'crm-api.php' );
+		require $this->path( 'CORE_DIR', 'sso.php' );
 		require $this->path( 'CORE_DIR', 'ajax.php' );
 		require $this->path( 'CORE_DIR', 'class-easl-mz-tps-token.php' );
 		require $this->path( 'APP_ROOT', 'include/customizer/customizer.php' );
@@ -154,35 +155,8 @@ class EASL_MZ_Manager {
 	}
 
 	public function handle_openid_auth_code() {
-	    if ($_GET['code']) {
-	        $data = [
-	            'client_id' => 'soto-prod',
-                'redirect_url' => 'https://easldev.websitestage.co.uk/member-zone/',
-                'client_secret' => '0de461b7-4843-4a0c-a7ad-0b62577fa3a1',
-                'code' => $_GET['code'],
-                'grant_type' => 'authorization_code',
-                'scope' => 'profile email'
-            ];
-            $token_url = 'token';
-
-            $request = new EASL_MZ_Request( 'https://sso.easl.eu/auth/realms/sso-easl-prod/protocol/openid-connect' );
-
-            $request->post('/token', $data, 'body', [], true, false);
-
-            $response = $request->get_response_body();
-
-            if ($response->access_token) {
-                $access_token = $response->access_token;
-
-                $request->set_request_header('Authorization', 'Bearer ' . $access_token);
-                $request->get('/userinfo');
-
-                $response = $request->get_response_body();
-
-                $email = $response->email;
-
-                die();
-            }
+	    if (isset($_GET['code'])) {
+	        EASL_MZ_SSO::get_instance()->handle_auth_code($_GET['code']);
         }
     }
 
