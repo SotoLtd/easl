@@ -635,7 +635,7 @@ class EASL_MZ_Ajax_Handler {
 
 		$auth_response_status = $this->api->get_auth_token( $request_data['portal_name'], $password, true );
 		if ( ! $auth_response_status ) {
-			$this->respond_file( 'member-login/basic-login-form.php', array( 'redirect_url' => $membership_page ), 201 );
+		    //@todo redirect to SSO??
 		}
 		// Member authenticated
 		$this->session->set_auth_cookie( $request_data['portal_name'], $this->api->get_credential_data( true ) );

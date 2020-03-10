@@ -53,30 +53,6 @@ if ( ! easl_mz_is_member_logged_in() ):
 	?>
     <div class="header-aside-buttons mz-loggedout-buttons">
 		<?php echo implode( '<span class="mz-buttonsep">|</span>', $buttons_to_display ); ?>
-        <div class="<?php echo $login_form_class; ?>">
-            <form action="" method="post" class="clr">
-				<?php if ( $login_error_messages ): ?>
-                    <div class="mz-login-row mz-login-errors">
-						<?php echo implode( '', $login_error_messages ); ?>
-                    </div>
-				<?php endif; ?>
-                <div class="mz-login-row">
-                    <input type="text" name="mz_member_login" value="" placeholder="Username">
-                </div>
-                <div class="mz-login-row">
-                    <input type="password" name="mz_member_password" value="" placeholder="Password">
-                </div>
-                <div class="mz-login-row">
-                    <input type="hidden" name="mz_rdirect_url" value="<?php echo esc_url( $member_dashboard_url ); ?>">
-                    <button class="easl-generic-button easl-color-lightblue">Login</button>
-                </div>
-            </form>
-            <div class="mz-forgot-pass-fields clr">
-                <input class="mz-reset-pass-email" type="text" value="" placeholder="Your email address">
-                <button class="easl-generic-button easl-color-lightblue mz-reset-pass-button">Reset Password</button>
-            </div>
-            <div class="mz-forgot-pass-row"><a class="mz-forgot-password" href="#">Forgot your password?</a></div>
-        </div>
     </div>
 <?php else: ?>
     <div class="easl-mz-header-member-card">
