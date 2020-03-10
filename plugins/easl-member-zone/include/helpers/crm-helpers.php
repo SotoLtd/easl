@@ -31,7 +31,6 @@ function easl_mz_parse_crm_contact_data( $response ) {
 		'dotb_easl_newsletter_agree'    => $response->dotb_easl_newsletter_agree,
 		'department'                    => $response->department,
 		'dotb_interaction_with_patient' => $response->dotb_interaction_with_patient,
-		'dotb_area_of_interest_industry'=> $response->dotb_area_of_interest_industry,
 		'dotb_gender'                   => $response->dotb_gender,
 		'birthdate'                     => $response->birthdate,
 		'email1'                        => $response->email1,
@@ -153,8 +152,7 @@ function easl_mz_validate_new_member_form($data = array()) {
         'dotb_gender',
         'email1',
         'dotb_place_of_work',
-        'dotb_area_of_interest_industry',
-        'dotb_country',
+        'alt_address_country',
         'dotb_user_category',
         'dotb_user_category_other'
     ];
