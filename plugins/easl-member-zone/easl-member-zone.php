@@ -230,12 +230,13 @@ class EASL_MZ_Manager {
 			$redirect = $member_password['mz_redirect_url'];
 		}
 
-		$auth_response_status = $this->api->get_auth_token( $member_login, $member_password, true );
-		if ( ! $auth_response_status ) {
-			$this->set_message( 'login_error', 'Invalid username or password.' );
+//		$auth_response_status = $this->api->get_auth_token( $member_login, $member_password, true );
+//		if ( ! $auth_response_status ) {
+//			$this->set_message( 'login_error', 'Invalid username or password.' );
+//
+//			return false;
+//		}
 
-			return false;
-		}
 		// Member authenticated
 		do_action( 'easl_mz_member_authenticated', $member_login, $this->api->get_credential_data( true ), $redirect );
 

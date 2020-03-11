@@ -142,6 +142,8 @@ class EASL_MZ_Session_Handler {
 	}
 
 	public function set_auth_cookie( $member_login, $data = array() ) {
+
+	    print_r($data);
 		$this->_member_login = $member_login;
 
 		$session_data = $this->sanitize_session_data( $data );

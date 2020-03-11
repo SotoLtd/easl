@@ -33,7 +33,8 @@ if ( ! defined( 'ABSPATH' ) ) {
             </div>
         </div>
     </div>
-<?php else: ?>
+<?php else:
+    $sso = EASL_MZ_SSO::get_instance();?>
     <p>
         Please <a href="<?php echo $sso->get_login_url();?>" class="easl-header-mz-buttons easl-mz-header-login-button">login to your MyEASL account</a> to see this page.
     </p>

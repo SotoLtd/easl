@@ -358,6 +358,9 @@ class EASL_MZ_API {
 			'Cache-Control' => 'no-cache',
 			'OAuth-Token'   => $this->get_access_token( true ),
 		);
+
+		print_r($this->get_access_token(true));
+        print_r($headers);
 		$result  = $this->get( '/me', true, $headers );
 		if ( ! $result ) {
 			return false;
@@ -1052,6 +1055,7 @@ class EASL_MZ_API {
 
 	public function get( $endpoint, $is_member = true, $headers = array(), $data = array(), $cookies = array(), $codes = array( 200 ) ) {
 		if ( $this->is_session_expired( $is_member ) ) {
+		    die('session expired');
 			return false;
 		}
 		$this->maybe_refresh_auth_token( $is_member );
@@ -1067,14 +1071,19 @@ class EASL_MZ_API {
 				return $this->get( $endpoint, $is_member, $headers, $data, $cookies, $codes );
 			}
 
+			die('not valid');
 			return false;
 		}
 
 		if ( ! $this->request->is_valid_response_code( $codes ) ) {
+		    print_r($this->request->get_response_code());
+		    print_r($this->request->get_response_body());
+		    die ('not valid 2');
 			return false;
 		}
 
 		if ( ! $this->request->get_response_body() ) {
+		    die('no body');
 			return false;
 		}
 
