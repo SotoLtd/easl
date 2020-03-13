@@ -27,6 +27,8 @@ class EASL_MZ_API {
 	protected $user_auth_refresh_called = false;
 	protected $user_session_expired = false;
 
+	protected $member_details; //Cache member details from API to avoid multiple requests in same page load
+
 	private static $_instance;
 	/**
 	 * @var EASL_MZ_Request
@@ -359,8 +361,6 @@ class EASL_MZ_API {
 			'OAuth-Token'   => $this->get_access_token( true ),
 		);
 
-		print_r($this->get_access_token(true));
-        print_r($headers);
 		$result  = $this->get( '/me', true, $headers );
 		if ( ! $result ) {
 			return false;
@@ -399,6 +399,7 @@ class EASL_MZ_API {
 			'OAuth-Token'   => $this->get_access_token( $is_member ),
 		);
 		$result  = $this->get( '/Contacts/' . $member_id, $is_member, $headers );
+
 		if ( ! $result ) {
 			return false;
 		}
@@ -409,6 +410,7 @@ class EASL_MZ_API {
 
 		$data = easl_mz_parse_crm_contact_data( $response );
 
+		$this->member_details = $data;
 		return $data;
 	}
 
@@ -1055,10 +1057,9 @@ class EASL_MZ_API {
 
 	public function get( $endpoint, $is_member = true, $headers = array(), $data = array(), $cookies = array(), $codes = array( 200 ) ) {
 		if ( $this->is_session_expired( $is_member ) ) {
-		    die('session expired');
 			return false;
 		}
-		$this->maybe_refresh_auth_token( $is_member );
+//		$this->maybe_refresh_auth_token( $is_member );
 		$this->request->reset_headers();
 		if ( is_array( $headers ) ) {
 			foreach ( $headers as $key => $value ) {
@@ -1067,23 +1068,18 @@ class EASL_MZ_API {
 		}
 		$this->request->get( $endpoint, $data, $cookies );
 		if ( $this->request->is_valid_response_code( 401 ) && ! $this->is_auth_refresh_called() ) {
-			if ( $this->refresh_auth_token( $is_member ) ) {
-				return $this->get( $endpoint, $is_member, $headers, $data, $cookies, $codes );
-			}
+//			if ( $this->refresh_auth_token( $is_member ) ) {
+//				return $this->get( $endpoint, $is_member, $headers, $data, $cookies, $codes );
+//			}
 
-			die('not valid');
 			return false;
 		}
 
 		if ( ! $this->request->is_valid_response_code( $codes ) ) {
-		    print_r($this->request->get_response_code());
-		    print_r($this->request->get_response_body());
-		    die ('not valid 2');
 			return false;
 		}
 
 		if ( ! $this->request->get_response_body() ) {
-		    die('no body');
 			return false;
 		}
 
