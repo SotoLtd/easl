@@ -58,6 +58,10 @@ class EASL_MZ_API {
 		return self::$_instance;
 	}
 
+	public function get_request_object(){
+	    return $this->request;
+    }
+
 	public function clear_credentials( $is_member = true ) {
 		if ( $is_member ) {
 			$this->access_token       = '';

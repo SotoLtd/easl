@@ -69,12 +69,12 @@ class EASL_MZ_SSO {
 
                 $response_data = json_decode(json_encode($response), true);
 
+                // Member authenticated
+                do_action( 'easl_mz_member_authenticated', $response->email, $response_data, $redirect );
+
                 $api->set_credentials(['access_token' => $response_data['sugarcrm_token']], true);
 
                 $session->add_data('access_token', $response_data['sugarcrm_token']);
-
-                // Member authenticated
-                do_action( 'easl_mz_member_authenticated', $response->email, $response_data, $redirect );
 
                 $member_id = $api->get_member_id();
 

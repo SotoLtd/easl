@@ -36,8 +36,8 @@ class EASL_MZ_Ajax_Handler {
 	}
 
 	public function respond( $html = '', $status = 200, $extra_data = array() ) {
-		if ( ! is_array( $data ) ) {
-			$data = (array) $data;
+		if ( ! is_array( $extra_data ) ) {
+            $extra_data = (array) $extra_data;
 		}
 		wp_send_json( array(
 			'Status' => $status,
@@ -388,10 +388,7 @@ class EASL_MZ_Ajax_Handler {
 		if ( ! $current_member_id ) {
 			$this->respond( 'Member not found!', 404 );
 		}
-		$member_details = $this->api->get_member_details( $current_member_id );
-
-		print_r($member_details);
-		die();
+		$member_details = $this->api->get_member_details( $current_member_id, true );
 
 		if ( ! $member_details ) {
 			$this->respond( 'Member ' . $current_member_id . ' not found!', 404 );
