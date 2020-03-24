@@ -98,7 +98,7 @@
                 $el.html(response.Html);
                 $el.removeClass("easl-mz-loading");
             } else if (response.Status === 401) {
-                // TODO-maybe reload
+                _this.sessionExpiredModal();
             }
 
         },
@@ -150,6 +150,14 @@
                         $input.removeClass('has-focus');
                     });
             });
+        },
+        sessionExpiredModal: function(){
+            var _this = this;
+            mzModal.init();
+            mzModal.$el.one("mz.modal.hidden.session.expired", function () {
+                window.location.href = _this.homePage;
+            });
+            mzModal.show('<div class="mz-modal-password-reset">Your session expired</div>', 'session.expired');
         },
         resetPassword: function () {
             var _this = this;
@@ -216,23 +224,11 @@
                 $el.on("mz_loaded:" + this.methods.memberCard, function (event, response, method) {
                     if (response.Status === 200) {
                         !_this.modulesLoadTrigger && _this.loadModules();
-                        $el.html(response.Html);
-                        $el.removeClass("easl-mz-loading");
-                        if (response.Panel) {
-                            _this.loadMemberZonePanel(response.Panel);
-                        }
-                    } else if (response.Status === 401) {
-                        // TODO-maybe reload
-                    }
-                    if (response.Status === 200) {
-                        !_this.modulesLoadTrigger && _this.loadModules();
-                        _this.loadHtml($(this), response);
+                        $el
+                            .html(response.Html)
+                            .removeClass("easl-mz-loading");
                     } else {
-                        mzModal.init();
-                        mzModal.$el.one("mz.modal.hidden.session.expired", function () {
-                            window.location.href = _this.homePage;
-                        });
-                        mzModal.show('<div class="mz-modal-password-reset">Your session expired</div>', 'session.expired');
+                        _this.sessionExpiredModal();
                     }
                 });
                 this.request(this.methods.memberCard, $el);
@@ -411,11 +407,7 @@
                         mzModal.show('<div class="mz-modal-password-changed">Failed! Refresh the page and try again!</div>', 'password.changed.notok');
                     }
                     if (response.Status === 401) {
-                        mzModal.init();
-                        mzModal.$el.one("mz.modal.hidden.password.changed.unauthorized", function () {
-                            // May be refresh
-                        });
-                        mzModal.show('<div class="mz-modal-unauthorized">Unauthorized! Refresh the page</div>', 'password.changed.unauthorized');
+                        _this.sessionExpiredModal();
                     }
                 });
                 this.request(this.methods.changePassword, $el, data);
@@ -495,25 +487,31 @@
             if ($el.length) {
                 $(".mz-expiring-message-wrap").addClass('mz-banner-loading');
                 $el.on("mz_loaded:" + this.methods.membershipForm, function (event, response, method) {
-                    _this.loadHtml($(this), response);
-                    $("body").trigger("mz_reload_custom_fields");
-                    $(".easl-mz-select2", $(this)).select2({
-                        closeOnSelect: true,
-                        allowClear: true
-                    });
-                    $("#mzf_birthdate_fz", $(this)).datepicker({
-                        dateFormat: "dd.mm.yy",
-                        altFormat: "yy-mm-dd",
-                        altField: "#mzf_birthdate",
-                        changeMonth: true,
-                        changeYear: true,
-                        yearRange: "1900:-00",
-                        maxDate: "-0D"
-                    });
+                    if (response.Status === 200) {
+                        $(this)
+                            .html(response.Html)
+                            .removeClass("easl-mz-loading");
+                        $("body").trigger("mz_reload_custom_fields");
+                        $(".easl-mz-select2", $(this)).select2({
+                            closeOnSelect: true,
+                            allowClear: true
+                        });
+                        $("#mzf_birthdate_fz", $(this)).datepicker({
+                            dateFormat: "dd.mm.yy",
+                            altFormat: "yy-mm-dd",
+                            altField: "#mzf_birthdate",
+                            changeMonth: true,
+                            changeYear: true,
+                            yearRange: "1900:-00",
+                            maxDate: "-0D"
+                        });
+                        _this.membershipFormEvents($el);
+                    } else {
+                        _this.sessionExpiredModal();
+                    }
                     if ((response.Status === 200) && response.Data && response.Data.banner) {
                         _this.loadBanner(response.Data.banner);
                     }
-                    _this.membershipFormEvents($el);
                 });
                 this.request(this.methods.membershipForm, $el);
             }

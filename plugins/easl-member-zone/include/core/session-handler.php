@@ -30,7 +30,7 @@ class EASL_MZ_Session_Handler {
 		$this->init_session_cookie();
 		//add_action( 'shutdown', array( $this, 'save_data' ), 20 );
 		add_action( 'easl_mz_member_authenticated', array( $this, 'set_auth_cookie' ), 20, 2 );
-//		add_action( 'easl_mz_member_token_expired', array( $this, 'unset_auth_cookie' ), 20, 1 );
+		add_action( 'easl_mz_member_token_expired', array( $this, 'unset_auth_cookie' ), 20, 1 );
 		add_action( 'easl_mz_member_token_refreshed', array( $this, 'refresh_session_data_form_api' ), 20, 2 );
 	}
 

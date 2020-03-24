@@ -169,8 +169,17 @@ class EASL_MZ_API {
 		set_transient( 'easl_mz_crm_user_credentials', $credentials, $this->user_refresh_expires_in );
 	}
 
+	public function member_session_expired(){
+        $this->session_expired = true;
+        do_action( 'easl_mz_member_token_expired', true );
+    }
+
 	public function is_session_expired( $is_member = true ) {
 		return $is_member ? $this->session_expired : $this->user_session_expired;
+	}
+
+	public function is_member_session_expired() {
+		return $this->session_expired;
 	}
 
 	public function is_auth_refresh_called( $is_member = true ) {
@@ -285,9 +294,7 @@ class EASL_MZ_API {
 		$this->clear_credentials( true );
 
 		if ( ! $this->post( '/oauth2/token', true, $headers, $request_body ) ) {
-			$this->session_expired = true;
-			do_action( 'easl_mz_member_token_expired', true );
-
+			$this->member_session_expired();
 			return false;
 		}
 
@@ -965,7 +972,11 @@ class EASL_MZ_API {
 		if ( $this->is_session_expired( $is_member ) ) {
 			return false;
 		}
-		$this->maybe_refresh_auth_token( $is_member );
+
+        if(!$is_member){
+            $this->maybe_refresh_user_auth_token( );
+        }
+
 		$this->request->reset_headers();
 		if ( is_array( $headers ) ) {
 			foreach ( $headers as $key => $value ) {
@@ -973,14 +984,17 @@ class EASL_MZ_API {
 			}
 		}
 		$this->request->post( $endpoint, $data, $data_format, $cookies );
-		if ( $this->request->is_valid_response_code( 401 ) && ! $this->is_auth_refresh_called() ) {
-			if ( $this->refresh_auth_token( $is_member ) ) {
-				return $this->post( $endpoint, $is_member, $headers, $data, $data_format, $cookies, $codes );
-			}
 
-			return false;
-		}
-
+        if( $this->request->is_valid_response_code( 401 )) {
+            if($is_member){
+                $this->member_session_expired();
+            }elseif ( !$this->is_auth_refresh_called(false)){
+                if ( $this->refresh_auth_token( false ) ) {
+                    return $this->post( $endpoint, $is_member, $headers, $data, $data_format, $cookies, $codes );
+                }
+            }
+            return false;
+        }
 
 		if ( ! $this->request->is_valid_response_code( $codes ) ) {
 			return false;
@@ -997,7 +1011,11 @@ class EASL_MZ_API {
 		if ( $this->is_session_expired( $is_member ) ) {
 			return false;
 		}
-		$this->maybe_refresh_auth_token( $is_member );
+
+        if(!$is_member){
+            $this->maybe_refresh_user_auth_token( );
+        }
+
 		$this->request->reset_headers();
 		if ( is_array( $headers ) ) {
 			foreach ( $headers as $key => $value ) {
@@ -1006,14 +1024,16 @@ class EASL_MZ_API {
 		}
 		$this->request->put( $endpoint, $data, $data_format, $cookies, true, $body_json_encode );
 
-		if ( $this->request->is_valid_response_code( 401 ) && ! $this->is_auth_refresh_called() ) {
-			if ( $this->refresh_auth_token( $is_member ) ) {
-				return $this->put( $endpoint, $is_member, $headers, $data, $data_format, $cookies, $codes, $body_json_encode );
-			}
-
-			return false;
-		}
-
+        if( $this->request->is_valid_response_code( 401 )) {
+            if($is_member){
+                $this->member_session_expired();
+            }elseif ( !$this->is_auth_refresh_called(false)){
+                if ( $this->refresh_auth_token( false ) ) {
+                    return $this->put( $endpoint, $is_member, $headers, $data, $data_format, $cookies, $codes, $body_json_encode );
+                }
+            }
+            return false;
+        }
 
 		if ( ! $this->request->is_valid_response_code( $codes ) ) {
 			return false;
@@ -1030,7 +1050,11 @@ class EASL_MZ_API {
 		if ( $this->is_session_expired( $is_member ) ) {
 			return false;
 		}
-		$this->maybe_refresh_auth_token( $is_member );
+
+        if(!$is_member){
+            $this->maybe_refresh_user_auth_token( );
+        }
+
 		$this->request->reset_headers();
 		if ( is_array( $headers ) ) {
 			foreach ( $headers as $key => $value ) {
@@ -1039,14 +1063,16 @@ class EASL_MZ_API {
 		}
 		$this->request->delete( $endpoint, $data, $data_format, $cookies );
 
-		if ( $this->request->is_valid_response_code( 401 ) && ! $this->is_auth_refresh_called() ) {
-			if ( $this->refresh_auth_token( $is_member ) ) {
-				return $this->delete( $endpoint, $is_member, $headers, $data, $data_format, $cookies, $codes );
-			}
-
-			return false;
-		}
-
+        if( $this->request->is_valid_response_code( 401 )) {
+            if($is_member){
+                $this->member_session_expired();
+            }elseif ( !$this->is_auth_refresh_called(false)){
+                if ( $this->refresh_auth_token( false ) ) {
+                    return $this->delete( $endpoint, $is_member, $headers, $data, $data_format, $cookies, $codes );
+                }
+            }
+            return false;
+        }
 
 		if ( ! $this->request->is_valid_response_code( $codes ) ) {
 			return false;
@@ -1063,7 +1089,9 @@ class EASL_MZ_API {
 		if ( $this->is_session_expired( $is_member ) ) {
 			return false;
 		}
-//		$this->maybe_refresh_auth_token( $is_member );
+		if(!$is_member){
+		    $this->maybe_refresh_user_auth_token( );
+        }
 		$this->request->reset_headers();
 		if ( is_array( $headers ) ) {
 			foreach ( $headers as $key => $value ) {
@@ -1071,13 +1099,16 @@ class EASL_MZ_API {
 			}
 		}
 		$this->request->get( $endpoint, $data, $cookies );
-		if ( $this->request->is_valid_response_code( 401 ) && ! $this->is_auth_refresh_called() ) {
-//			if ( $this->refresh_auth_token( $is_member ) ) {
-//				return $this->get( $endpoint, $is_member, $headers, $data, $cookies, $codes );
-//			}
-
-			return false;
-		}
+		if( $this->request->is_valid_response_code( 401 )) {
+		    if($is_member){
+                $this->member_session_expired();
+            }elseif ( !$this->is_auth_refresh_called(false)){
+                if ( $this->refresh_auth_token( false ) ) {
+                    return $this->get( $endpoint, $is_member, $headers, $data, $cookies, $codes );
+                }
+            }
+		    return false;
+        }
 
 		if ( ! $this->request->is_valid_response_code( $codes ) ) {
 			return false;
