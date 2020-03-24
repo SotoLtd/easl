@@ -409,6 +409,7 @@ class EASL_MZ_API {
 			'Cache-Control' => 'no-cache',
 			'OAuth-Token'   => $this->get_access_token( $is_member ),
 		);
+
 		$result  = $this->get( '/Contacts/' . $member_id, $is_member, $headers );
 
 		if ( ! $result ) {
@@ -612,6 +613,7 @@ class EASL_MZ_API {
 			'Content-Type' => 'application/json',
 			'OAuth-Token'  => $this->get_access_token( $is_member ),
 		);
+
 		$result  = $this->put( '/Contacts/' . $member_id, $is_member, $headers, $data );
 
 		if ( ! $result ) {

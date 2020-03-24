@@ -33,8 +33,11 @@ if ( $icon_post ) {
 	$link_new_tab     = get_field( 'link_new_tab', $icon_widget );
 }
 
+// Can the logged in user access the URL?
+$can_access_url = easl_mz_user_can_access_url( $link_url );
+
 if ( $link_url ) {
-	$link_url = esc_url( $link_url );
+	$link_url = $can_access_url ? esc_url( $link_url ) : '#';
 }
 
 if ( $link_new_tab ) {
@@ -47,6 +50,9 @@ $class_to_filter = 'wpb_easl_icon_widget wpb_content_element ' . $this->getCSSAn
 $class_to_filter .= vc_shortcode_custom_css_class( $css, ' ' ) . $this->getExtraClass( $el_class );
 $css_class       = apply_filters( VC_SHORTCODE_CUSTOM_CSS_FILTER_TAG, $class_to_filter, $this->settings['base'], $atts );
 
+if (!$can_access_url) {
+    $css_class .= ' disabled';
+}
 if ( EASL_VC_Icon_Widget_Grid::is_grid_active() ) {
 	$css_class .= ' easl-icon-widget-wrap easl-col';
 }

@@ -251,6 +251,8 @@
             var $jobFunctionOther = $("#mzms-fields-con-dotb_job_function_other", $el);
             var $speciality = $("#mzf_dotb_easl_specialty", $el);
             var $specialityOther = $("#mzms-fields-con-dotb_easl_specialty_other", $el);
+            var $userCategory = $("#mzf_dotb_user_category", $el);
+            var $userCategoryOther = $("#mzms-fields-con-dotb_user_category_other", $el);
             var $publicField = $("#mzms_dotb_public_profile", $el);
             var $publicProfileFields = $("#mzf_dotb_public_profile_fields", $el);
 
@@ -279,6 +281,19 @@
                     $specialityOther.addClass("easl-mz-hide");
                 }
             });
+            if ($userCategory.val() === "other") {
+                $userCategoryOther.removeClass("easl-mz-hide");
+            } else {
+                $userCategoryOther.addClass("easl-mz-hide");
+            }
+            $userCategory.on("change", function () {
+                if ($(this).val() && (-1 !== $(this).val().indexOf("other"))) {
+                    $userCategoryOther.removeClass("easl-mz-hide");
+                } else {
+                    $userCategoryOther.addClass("easl-mz-hide");
+                }
+            });
+
             $("#mzms-delete-account", $el).on("click", function (event) {
                 event.preventDefault();
                 _this.deleteMyAccount($("#easl-mz-membership-form", $el));
@@ -561,6 +576,11 @@
                 var $jobFunctionOther = $("#mzms-fields-con-dotb_job_function_other", $el);
                 var $speciality = $("#mzf_dotb_easl_specialty", $el);
                 var $specialityOther = $("#mzms-fields-con-dotb_easl_specialty_other", $el);
+                var $userCategory = $("#mzf_dotb_user_category", $el);
+                var $userCategoryOther = $("#mzms-fields-con-dotb_user_category_other", $el);
+
+                console.log($userCategory.length);
+                console.log($userCategoryOther.length);
 
                 if ($jobFunction.val() === "other") {
                     $jobFunctionOther.removeClass("easl-mz-hide");
@@ -587,6 +607,20 @@
                         $specialityOther.addClass("easl-mz-hide");
                     }
                 });
+
+                if ($userCategory.val() === "other") {
+                    $userCategoryOther.removeClass("easl-mz-hide");
+                } else {
+                    $userCategoryOther.addClass("easl-mz-hide");
+                }
+                $userCategory.on("change", function () {
+                    if ($(this).val() && (-1 !== $(this).val().indexOf("other"))) {
+                        $userCategoryOther.removeClass("easl-mz-hide");
+                    } else {
+                        $userCategoryOther.addClass("easl-mz-hide");
+                    }
+                });
+
                 var $termsCondition = $("#mzf_terms_condition", $el);
                 $("#easl-mz-new-member-form").on("submit", function (event) {
                     event.preventDefault();

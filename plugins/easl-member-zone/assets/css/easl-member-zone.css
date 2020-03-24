@@ -400,10 +400,24 @@ body .mzms-button::after {
 
 .easl-mz-membercard {
     padding: 8px;
-    background: #d0d0d0;
     border-bottom: 4px solid #62cff5;
     margin: 0 0 0 15px;
     min-width: 255px;
+}
+
+.easl-mz-membercard, .easl-member-banner {
+    background: #d0d0d0;
+}
+
+.easl-member-banner {
+    padding:16px;
+    margin-bottom:16px;
+    overflow:hidden;
+    font-weight:bold;
+    display:flex;
+    flex-direction:row;
+    justify-content:space-between;
+    align-items:center;
 }
 
 .mz-member-card-inner {
@@ -451,7 +465,9 @@ body .mzms-button::after {
 }
 
 .mz-member-welcome-block .mz-member-welcome-button a,
-.mz-member-welcome-block .mz-member-welcome-button a:visited {
+.mz-member-welcome-block .mz-member-welcome-button a:visited,
+.easl-member-banner a,
+.easl-member-banner a:visited {
     font-size: 16px;
     line-height: 16px;
     color: #fff;
@@ -462,9 +478,17 @@ body .mzms-button::after {
 }
 
 .mz-member-welcome-block .mz-member-welcome-button a:hover,
-.mz-member-welcome-block .mz-member-welcome-button a:active {
+.mz-member-welcome-block .mz-member-welcome-button a:active,
+.easl-member-banner a:hover,
+.easl-member-banner a:active  {
     text-decoration: none;
     background: #62cff5;
+}
+
+.easl-member-banner a {
+    font-weight:bold;
+    padding:7px 30px;
+    display:inline-block;
 }
 
 .mz-member-welcome-block .mz-seperator {
@@ -600,6 +624,15 @@ body .mzms-button::after {
 .easl-mz-page-menu li.current-menu-item a,
 .easl-mz-page-menu li a:hover {
     color: #62cff5;
+}
+
+.disabled.mz-panel-button {
+    pointer-events: none;
+}
+
+.easl-mz-page-menu li a.disabled, .disabled .easl-icon-widget-link, .disabled .mz-panel-button-icon, .disabled .mz-panel-button-title {
+    pointer-events: none;
+    opacity:0.5;
 }
 
 .easl-mz-page-menu li a::after {

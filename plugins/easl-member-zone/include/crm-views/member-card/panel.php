@@ -32,15 +32,23 @@ if ( have_rows( 'mz_memberzone_panel_widgets', 'option' ) ) :
 							$link_url         = get_field( 'link_url', $widget_id );
 							$link_new_tab     = get_field( 'link_new_tab', $widget_id );
 						}
+
+                        // Can the logged in user access the URL?
+                        $can_access_url = easl_mz_user_can_access_url( $link_url );
+
 						if ( $link_url ) {
-							$link_url = esc_url( $link_url );
+                            $link_url = $can_access_url ? esc_url( $link_url ) : '#';
 						}
+
 
 						if ( $link_new_tab ) {
 							$link_new_tab = ' target="_blank"';
 						} else {
 							$link_new_tab = '';
 						}
+						if (! $can_access_url) {
+						    $css_class .= ' disabled';
+                        }
 						if ( $hover_state_icon ) {
 							$css_class .= ' has-hover-icon';
 						}

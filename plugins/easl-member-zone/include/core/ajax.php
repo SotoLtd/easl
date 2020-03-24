@@ -524,6 +524,7 @@ class EASL_MZ_Ajax_Handler {
 		}
 		$request_data = array();
 		parse_str( $_POST['request_data'], $request_data );
+
 		if ( empty( $request_data['id'] ) ) {
 			$this->respond( 'No member specified!', 405 );
 		}
@@ -616,7 +617,8 @@ class EASL_MZ_Ajax_Handler {
 		if ( empty( $request_data ) ) {
 			$this->respond( 'No fields specified!', 405 );
 		}
-		$errors = easl_mz_validate_member_data( $request_data );
+		$errors = easl_mz_validate_new_member_form( $request_data );
+
 		if ( ! $errors ) {
 			$errors = array();
 		}
@@ -654,10 +656,10 @@ class EASL_MZ_Ajax_Handler {
 			$this->respond( 'Error!', 405 );
 		}
 
-		$membership_page = easl_member_new_membership_form_url( false );
-		if ( ! $membership_page ) {
-			$membership_page = get_field( 'member_dashboard_url', 'option' );
-		}
+//		$membership_page = easl_member_new_membership_form_url( false );
+
+        //Redirect to the dashboard
+        $membership_page = get_field( 'member_dashboard_url', 'option' );
 		if ( ! $membership_page ) {
 			$membership_page = get_site_url();
 		}
@@ -670,6 +672,8 @@ class EASL_MZ_Ajax_Handler {
 		$this->session->set_auth_cookie( $request_data['portal_name'], $this->api->get_credential_data( true ) );
 		$this->session->add_data( 'member_id', $created_member_id );
 		$this->session->save_session_data();
+        easl_mz_refresh_logged_in_member_data();
+
 		$this->respond( $membership_page, 200 );
 	}
 
