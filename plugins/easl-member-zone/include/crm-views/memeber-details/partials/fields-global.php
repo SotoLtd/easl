@@ -138,25 +138,28 @@ if ( ! defined( 'ABSPATH' ) ) {
             </div>
         </div>
     </div>
+</div>
+
+<div class="mzms-fields-row easl-row easl-row-col-2">
     <div class="easl-col">
         <div class="easl-col-inner mzms-fields-con">
             <label class="mzms-field-label" for="mzf_birthdate_fz">Date of birth <span class="mzms-asteric">*</span></label>
             <div class="mzms-field-wrap mzms-field-has-privacy<?php if ( ! easl_mz_field_is_public( 'birthdate', $member['dotb_public_profile'], $member['dotb_public_profile_fields'] ) ) {
-				echo ' mzms-privacy-enabled';
-			} ?>">
-				<?php
-				$date_of_birth           = $member['birthdate'];
-				$date_of_birth_formatted = '';
-				if ( $date_of_birth ) {
-					$date_of_birth = explode( '-', $date_of_birth );
-					if ( count( $date_of_birth ) == 3 ) {
-						$date_of_birth_formatted = trim( $date_of_birth[2] ) . '.' . trim( $date_of_birth[1] ) . '.' . trim( $date_of_birth[0] );
-					}
-				}
-				?>
+                echo ' mzms-privacy-enabled';
+            } ?>">
+                <?php
+                $date_of_birth           = $member['birthdate'];
+                $date_of_birth_formatted = '';
+                if ( $date_of_birth ) {
+                    $date_of_birth = explode( '-', $date_of_birth );
+                    if ( count( $date_of_birth ) == 3 ) {
+                        $date_of_birth_formatted = trim( $date_of_birth[2] ) . '.' . trim( $date_of_birth[1] ) . '.' . trim( $date_of_birth[0] );
+                    }
+                }
+                ?>
                 <input type="hidden" placeholder="" name="birthdate" id="mzf_birthdate" value="<?php echo esc_attr( $member['birthdate'] ); ?>" class="easl-mz-date">
                 <input type="text" placeholder="" name="" id="mzf_birthdate_fz" value="<?php echo esc_attr( $date_of_birth_formatted ); ?>" class="easl-mz-date" autocomplete="off">
-				<?php echo easl_mz_field_public_field( 'birthdate', $member['dotb_public_profile'], $member['dotb_public_profile_fields'] ); ?>
+                <?php echo easl_mz_field_public_field( 'birthdate', $member['dotb_public_profile'], $member['dotb_public_profile_fields'] ); ?>
             </div>
         </div>
     </div>

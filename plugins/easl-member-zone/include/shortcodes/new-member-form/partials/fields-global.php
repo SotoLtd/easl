@@ -92,6 +92,8 @@ if ( ! defined( 'ABSPATH' ) ) {
             </div>
         </div>
     </div>
+</div>
+<div class="mzms-fields-row easl-row easl-row-col-2">
     <div class="easl-col">
         <div class="easl-col-inner mzms-fields-con">
             <label class="mzms-field-label" for="mzf_birthdate">Date of birth</label>
