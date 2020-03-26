@@ -667,6 +667,8 @@ class EASL_MZ_Ajax_Handler {
 		$auth_response_status = $this->api->get_auth_token( $request_data['portal_name'], $password, true );
 		if ( ! $auth_response_status ) {
 		    //@todo redirect to SSO??
+            // Update $membership_page with the sso login url
+            $this->respond( $membership_page, 401 );
 		}
 		// Member authenticated
 		$this->session->set_auth_cookie( $request_data['portal_name'], $this->api->get_credential_data( true ) );

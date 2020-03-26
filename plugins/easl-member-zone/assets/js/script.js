@@ -643,23 +643,27 @@
             }, 600);
             $form.one("mz_loaded:" + this.methods.submitNewMemberForm, function (event, response, method) {
                 $form.closest(".wpb_easl_mz_new_member_form").removeClass("easl-mz-form-processing");
-                if (response.Status === 200) {
-                    window.location.href = response.Html;
-                }
-                if (response.Status === 201) {
-                    _this.loadHtml($form.closest(".easl-mz-new-member-form-inner"), response);
-                }
                 if (response.Status === 400) {
                     for (var fieldName in response.Errors) {
                         _this.showFieldError(fieldName, response.Errors[fieldName], $form);
                     }
                 }
-                if (response.Status === 401) {
+                if (response.Status === 417) {
+                    // Member creation failed
                     mzModal.init();
-                    mzModal.$el.one("mz.modal.hidden.account.create.unauthorized", function () {
-                        //may be refresh here
+                    mzModal.$el.one("mz.modal.hidden.account.create.failed", function () {
+
                     });
-                    mzModal.show('<div class="mz-modal-unauthorized">Unauthorized! Refresh the page.</div>', 'account.create.unauthorized');
+                    mzModal.show('<div class="mz-modal-unauthorized">Failed! Please try again.</div>', 'account.create.failed');
+                }
+                if (response.Status === 401) {
+                    // Member created but login failed - go to sso
+                    window.location.href = response.Html;
+                }
+
+                if (response.Status === 200) {
+                    // Member created and login OK - redirect member
+                    window.location.href = response.Html;
                 }
             });
             _this.request(this.methods.submitNewMemberForm, $form, $form.serialize());
