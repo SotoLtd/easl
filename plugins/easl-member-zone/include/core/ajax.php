@@ -636,6 +636,9 @@ class EASL_MZ_Ajax_Handler {
 		if ( $password !== $password2 ) {
 			$errors['password2'] = 'Must be same as password.';
 		}
+		if ( empty($errors['email1']) && $this->api->is_member_exists( $request_data['email1'] ) ) {
+			$errors['email1'] = 'Member already exist with this email.';
+		}
 		if ( count( $errors ) > 0 ) {
 			$this->respond_field_errors( $errors );
 		}

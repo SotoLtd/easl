@@ -519,6 +519,34 @@ class EASL_MZ_API {
 		return true;
 	}
 
+	public function is_member_exists( $email ) {
+		$filter_args = array(
+			'max_num' => 1,
+			'fields'  => 'id',
+			'filter'  => array(
+				array('portal_name' => $email),
+			)
+		);
+		$headers = array(
+			'Content-Type'  => 'application/json',
+			'Cache-Control' => 'no-cache',
+			'OAuth-Token'   => $this->get_access_token( false ),
+		);
+		$result  = $this->get( '/Contacts/filter', false, $headers, $filter_args );
+		if ( ! $result ) {
+			return false;
+		}
+		$response = $this->request->get_response_body();
+		if ( empty( $response->records ) ) {
+			return false;
+		}
+		if ( count( $response->records ) < 1 ) {
+			return false;
+		}
+
+		return true;
+	}
+
 	public function get_members( $filter_args = array() ) {
 		$headers = array(
 			'Content-Type'  => 'application/json',
