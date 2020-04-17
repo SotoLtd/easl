@@ -8,12 +8,23 @@ function easl_mz_get_manager() {
 	return EASL_MZ_Manager::get_instance();
 }
 
+
 function easl_mz_get_asset_url( $filename = '' ) {
 	return easl_mz_get_manager()->asset_url( $filename );
 }
 
 function easl_mz_is_member_logged_in() {
 	return EASL_MZ_Manager::get_instance()->getSession()->has_member_active_session();
+}
+
+function easl_mz_get_member_data($member_id) {
+//    $member_id = EASL_MZ_Manager::get_instance()->getSession()->ge_current_member_id();
+//    print_r($member_id);
+//    if ($member_id) {
+        $api = easl_mz_get_manager()->getApi();
+        return $api->get_member_details($member_id);
+//    }
+//    return null;
 }
 
 function easl_member_logout_url() {

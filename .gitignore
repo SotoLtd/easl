@@ -5,6 +5,7 @@
 
 !themes/Total-Child/**
 !plugins/easl-member-zone/**
+!plugins/easl-applications/**
 
 # And this file itself
 !.gitignore
