@@ -25,3 +25,16 @@
 
     </tbody>
 </table>
+
+<h2>Scoring criteria</h2>
+<?php print_r($scoringCriteria);?>
+
+<form>
+    <?php foreach($scoringCriteria as $category):?>
+        <div>
+            <h4><?=$category['criteria_name'];?></h4>
+            <input type="number" max="<?=$category['criteria_max'];?>" min="0" />
+            <p><?=$category['criteria_instructions'];?></p>
+        </div>
+    <?php endforeach;?>
+</form>

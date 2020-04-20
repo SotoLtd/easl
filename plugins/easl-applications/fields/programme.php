@@ -23,6 +23,23 @@ acf_add_local_field_group([
     ],
     'location' => EASLApplicationsPlugin::acfPostTypeLocation('programme')
 ]);
+acf_add_local_field_group([
+    'key' => 'programme-fieldset-category',
+    'title' => 'Programme category',
+    'fields' => [
+        [
+            'key' => 'programme-category',
+            'name' => 'programme-category',
+            'instructions' => 'This defines which fields will be shown',
+            'label' => 'Programme category',
+            'type' => 'select',
+            'choices' => [null => 'Please select'] + EASLApplicationsPlugin::SUBMISSION_FIELD_SETS,
+            'required' => true,
+            'allow_null' => 0
+        ]
+    ],
+    'location' => EASLApplicationsPlugin::acfPostTypeLocation('programme')
+]);
 
 acf_add_local_field_group([
     'key' => 'programme-email-fields',

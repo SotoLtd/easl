@@ -1,5 +1,6 @@
 <?php
 require_once(EASLApplicationsPlugin::rootDir() . 'lib/EASLAppSubmission.php');
+require_once(EASLApplicationsPlugin::rootDir() . 'lib/EASLAppReview.php');
 /*
 Plugin Name: EASL Applications
 Description: The plugin contains the functionality for EASL Programmes - Fellowships, Masterclass etc.
@@ -11,14 +12,13 @@ class EASLApplicationsPlugin {
 
     const OPTIONS_PAGE_SLUG = 'application-system-options';
 
-    const SUBMISSION_FIELD_SET_KEYS = [
-        'fellowship',
-        'masterclass',
-        'easl-schools',
-        'sponsorship',
-        'fellowship',
-        'mentorship',
-        'registry-grant'
+    const SUBMISSION_FIELD_SETS = [
+        'fellowship' => 'Fellowship',
+        'masterclass' => 'EASL Masterclass',
+        'easl-schools' => 'EASL Schools',
+        'sponsorship' => 'Sponsorship',
+        'mentorship' => 'Mentorship',
+        'registry-grant' => 'Registry Grant'
     ];
 
     /**
@@ -141,7 +141,6 @@ class EASLApplicationsPlugin {
 
         //ACF custom fields
         $this->createFields();
-
     }
 
     /**
@@ -155,7 +154,16 @@ class EASLApplicationsPlugin {
     }
 
     public function pageContent() {
-        require_once($this->templateDir . 'apply.php');
+        if (is_page('review-applications')) {
+            $review = new EASLAppReview(false);
+            if (isset($_GET['submissionId'])) {
+                $review->reviewSubmissionPage($_GET['submissionId']);
+            } else {
+                $review->programmePage($_GET['programmeId']);
+            }
+        } else {
+            require_once($this->templateDir . 'apply.php');
+        }
     }
 
     public static function getSlug($string) {

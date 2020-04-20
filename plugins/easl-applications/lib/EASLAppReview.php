@@ -30,11 +30,15 @@ class EASLAppReview {
     const PAGE_SUBMISSION = 'submission';
     const PAGE_INVITE_REVIEWER = 'invite_reviewer';
 
-    public static function getUrl($page, $args) {
-        $url = admin_url('admin.php?page=' . self::ADMIN_MENU_SLUG . '&subpage=' . $page);
+    public function getUrl($page, $args) {
+        if ($this->isAdmin) {
+            $url = admin_url('admin.php?page=' . self::ADMIN_MENU_SLUG . '&subpage=' . $page . '&');
+        } else {
+            $url = '/review-applications?';
+        }
         if ($args) {
             $queryString = http_build_query($args);
-            $url .= '&' . $queryString;
+            $url .= $queryString;
         }
         return $url;
     }
@@ -68,12 +72,17 @@ class EASLAppReview {
         $programme = get_post($programmeId);
         $fields = get_field_objects($submissionId);
         $confirmationFieldsetId = EASLApplicationsPlugin::getInstance()->submissionFieldSets['fellowship']['confirmation'];
-        $this->renderTemplate('review.php', ['submission' => $submission, 'programme' => $programme
-        , 'fields' => $fields, 'confirmationFieldsetId' => $confirmationFieldsetId]);
+        $this->renderTemplate('review.php', [
+            'submission' => $submission,
+            'programme' => $programme,
+            'fields' => $fields,
+            'confirmationFieldsetId' => $confirmationFieldsetId,
+            'reviewManager' => $this,
+            'scoringCriteria' => get_field('scoring_criteria', $programmeId)
+        ]);
     }
 
-    public function adminProgrammePage($programmeId, $tab) {
-        $programme = get_post($programmeId);
+    protected function getSubmissions($programmeId) {
         $submission_posts = get_posts([
             'post_type' => 'submission',
             'post_status' => 'any',
@@ -89,7 +98,7 @@ class EASLAppReview {
                 ]
             ]
         ]);
-        $submissions = array_map(function($submission){
+        return array_map(function($submission){
             $meta = get_post_meta($submission->ID);
 
             return [
@@ -98,10 +107,21 @@ class EASLAppReview {
                 'date' => new DateTime('@' . $meta['submitted_timestamp'][0])
             ];
         }, $submission_posts);
+    }
+
+    public function adminProgrammePage($programmeId, $tab) {
+        $programme = get_post($programmeId);
+
+        $submissions = $this->getSubmissions($programmeId);
 
         $reviewers = get_post_meta($programmeId, 'reviewers', true);
+        $this->renderTemplate('admin/programme.php', ['reviewers' => $reviewers, 'submissions' => $submissions, 'programme' => $programme, 'tab' => $tab, 'reviewManager' => $this]);
+    }
 
-        $this->renderTemplate('admin/programme.php', ['reviewers' => $reviewers, 'submissions' => $submissions, 'programme' => $programme, 'tab' => $tab]);
+    public function programmePage($programmeId) {
+        $programme = get_post($programmeId);
+        $submissions = $this->getSubmissions($programmeId);
+        $this->renderTemplate('submissions.php', ['submissions' => $submissions, 'programme' => $programme, 'reviewManager' => $this]);
     }
 
     protected function renderTemplate($file, $vars) {
@@ -155,7 +175,6 @@ class EASLAppReview {
                 return;
             }
 
-
             $reviewers[] = [
                 'email' => $email,
                 'firstName' => $member['first_name'],
@@ -176,6 +195,7 @@ class EASLAppReview {
         $subject = get_field('reviewer_email_subject', $programmeId);
         $content = get_field('reviewer_email', $programmeId);
         $email = 'will@willevans.tech';
-        wp_mail($email, $subject, $content);
+        $headers = ['Content-Type: text/html; charset=UTF-8'];
+        wp_mail($email, $subject, $content. $headers);
     }
 }

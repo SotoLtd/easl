@@ -4,12 +4,14 @@ $programme = get_post($programme_id);
 $sub = new EASLAppSubmission($programme_id);
 $valid = $sub->setup();
 
+$programmeCategory = get_field('programme-category', $programme_id);
+
 $apps = EASLApplicationsPlugin::getInstance();
 if ($valid):?>
     <?php acf_form(
         [
             'post_id' => $sub->getSubmissionId(),
-            'field_groups' => array_values($apps->submissionFieldSets['fellowship']),
+            'field_groups' => array_values($apps->submissionFieldSets[$programmeCategory]),
             'updated_message' => 'Thank you, your application has been submitted.',
             'submit_value' => 'Submit application'
         ]
