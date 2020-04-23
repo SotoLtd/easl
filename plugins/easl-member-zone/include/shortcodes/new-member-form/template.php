@@ -53,25 +53,22 @@ if ( ! easl_mz_is_member_logged_in() ):
 				<?php include $template_base . '/partials/fields-basic.php'; ?>
                 <div class="mzms-fields-separator"></div>
 				<?php include $template_base . '/partials/fields-global.php'; ?>
-                <div class="mzms-fields-separator"></div>
-				<?php include $template_base . '/partials/fields-communication.php'; ?>
-                <div class="mzms-fields-separator"></div>
-				<?php include $template_base . '/partials/fields-address.php'; ?>
-                <div class="mzms-fields-separator"></div>
-                <div class="mzms-fields-row">
-                    <div class="mzms-fields-con">
-                        <label class="mzms-field-label" for="mzms_personal_profile">Personal Profile</label>
-                        <div class="mzms-field-wrap">
-                            <textarea name="description" id="mzms_personal_profile" placeholder=""></textarea>
-                        </div>
-                    </div>
-                </div>
                 <div class="mzms-fields-row">
                     <div class="mzms-fields-con">
                         <div class="mzms-field-wrap mzms-inline-checkbox">
                             <label for="mzf_terms_condition" class="easl-custom-checkbox">
                                 <input type="checkbox" name="terms_condition" id="mzf_terms_condition" value="1">
                                 <span>I agree to <a href="https://easl.eu/terms-conditions/" target="+_blank">terms and conditions</a></span>
+                            </label>
+                        </div>
+                    </div>
+                </div>
+                <div class="mzms-fields-row">
+                    <div class="mzms-fields-con">
+                        <div class="mzms-field-wrap mzms-inline-checkbox">
+                            <label for="mzf_newsletter_subscribe" class="easl-custom-checkbox">
+                                <input type="checkbox" name="newsletter_subscribe" id="mzf_newsletter_subscribe" value="1">
+                                <span>I agree to receive EASL news</span>
                             </label>
                         </div>
                     </div>

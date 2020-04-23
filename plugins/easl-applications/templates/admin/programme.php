@@ -14,11 +14,14 @@
 <?php if ($tab === 'submissions'):?>
 
 <h2>Applications</h2>
-<table>
+<table class="widefat striped">
     <thead>
         <tr>
             <th>Name</th>
             <th>Date submitted</th>
+            <th>Reviews</th>
+            <th>Score</th>
+            <th></th>
         </tr>
     </thead>
     <tbody>
@@ -26,7 +29,9 @@
         <tr>
             <td><?=$submission['name'];?></td>
             <td><?=$submission['date']->format('Y-m-d');?></td>
-            <td><a href="<?=EASLAppReview::getUrl(EASLAppReview::PAGE_SUBMISSION, ['submissionId' => $submission['id']]);?>">Review</a></td>
+            <td><?=$submission['numberReviews'];?></td>
+            <td><?=$submission['averageScore'] ? $submission['averageScore'] : '-';?></td>
+            <td><a href="<?=EASLAppReview::getUrl(EASLAppReview::PAGE_SUBMISSION, ['submissionId' => $submission['id']]);?>" class="button">Review</a></td>
         </tr>
     <?php endforeach;?>
     </tbody>
@@ -34,9 +39,9 @@
 
 <?php else:?>
 
-<div class="postbox">
-    <h4>Invite reviewer</h4>
+<div class="postbox" style="margin-top:20px;">
     <div class="inside">
+        <h4>Invite reviewer</h4>
         <form method="post">
             <input type="email" name="reviewer_invitation_email" placeholder="Email address" />
             <button type="submit" class="wp-core-ui button">Submit</button>
@@ -45,7 +50,7 @@
 </div>
 
 <h2>Reviewers</h2>
-<table>
+<table class="widefat striped">
     <thead>
     <tr>
         <th>Name</th>

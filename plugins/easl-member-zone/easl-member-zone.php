@@ -13,7 +13,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 	die( '-1' );
 }
 
-define( 'EASL_MZ_VERSION', '1.1.6' );
+define( 'EASL_MZ_VERSION', '1.1.6.5' );
 
 //define( 'EASL_MZ_VERSION', time() );
 
@@ -67,6 +67,10 @@ class EASL_MZ_Manager {
 
 		add_action( 'template_redirect', array( $this, 'logged_member_actions' ) );
 		add_filter( 'body_class', array( $this, 'body_class' ) );
+
+		add_action( 'eals_mz_daily_checklist', array( $this, 'daily_scheduled_tasks' ) );
+
+		$this->cron_init();
 	}
 
 	/**
@@ -111,6 +115,7 @@ class EASL_MZ_Manager {
 		require $this->path( 'CORE_DIR', 'session-handler.php' );
 		require $this->path( 'CORE_DIR', 'mz-request.php' );
 		require $this->path( 'CORE_DIR', 'crm-api.php' );
+		require $this->path( 'CORE_DIR', 'sso.php' );
 		require $this->path( 'CORE_DIR', 'ajax.php' );
 		require $this->path( 'CORE_DIR', 'class-easl-mz-tps-token.php' );
 		require $this->path( 'APP_ROOT', 'include/customizer/customizer.php' );
@@ -133,6 +138,17 @@ class EASL_MZ_Manager {
 		load_plugin_textdomain( 'easlmz', false, $this->path( 'APP_ROOT', 'locale' ) );
 	}
 
+	public function cron_init() {
+		if ( ! wp_next_scheduled( 'eals_mz_daily_checklist' ) ) {
+			wp_schedule_event( time(), 'daily', 'eals_mz_daily_checklist' );
+		}
+	}
+
+	public function daily_scheduled_tasks() {
+		$this->session->clean_expired_session();
+	}
+
+
 	/**
 	 * Callback function for WP init action hook.
 	 *
@@ -144,6 +160,7 @@ class EASL_MZ_Manager {
 	public function init() {
 		$this->add_options_page();
 		$this->handle_member_login();
+		$this->handle_openid_auth_code();
 		$this->handle_member_logout();
 		$this->handle_mz_actions();
 
@@ -151,6 +168,12 @@ class EASL_MZ_Manager {
 			add_action( 'template_redirect', array( $this, 'maybe_disable_wp_rocket_cache' ) );
 		}
 	}
+
+	public function handle_openid_auth_code() {
+	    if (isset($_GET['code'])) {
+	        EASL_MZ_SSO::get_instance()->handle_auth_code($_GET['code']);
+        }
+    }
 
 	public function memberzone_page_content() {
 		include $this->path( 'TEMPLATES_DIR', 'main.php' );
@@ -222,12 +245,13 @@ class EASL_MZ_Manager {
 			$redirect = $member_password['mz_redirect_url'];
 		}
 
-		$auth_response_status = $this->api->get_auth_token( $member_login, $member_password, true );
-		if ( ! $auth_response_status ) {
-			$this->set_message( 'login_error', 'Invalid username or password.' );
+//		$auth_response_status = $this->api->get_auth_token( $member_login, $member_password, true );
+//		if ( ! $auth_response_status ) {
+//			$this->set_message( 'login_error', 'Invalid username or password.' );
+//
+//			return false;
+//		}
 
-			return false;
-		}
 		// Member authenticated
 		do_action( 'easl_mz_member_authenticated', $member_login, $this->api->get_credential_data( true ), $redirect );
 
@@ -236,6 +260,8 @@ class EASL_MZ_Manager {
 			$this->session->add_data( 'member_id', $member_id );
 			$this->session->save_session_data();
 		}
+
+        easl_mz_refresh_logged_in_member_data();
 
 		do_action( 'easl_mz_member_looged_id' );
 
@@ -415,15 +441,6 @@ class EASL_MZ_Manager {
 		if ( ! in_array( $billing_mode, array( 'c1', 'c2', 'other' ) ) ) {
 			$billing_mode = 'c1';
 		}
-		$billing_address = array();
-		if ( $billing_mode == 'other' ) {
-			$billing_address['street']    = ! empty( $_POST['billing_address_street'] ) ? $_POST['billing_address_street'] : '';
-			$billing_address['city']      = ! empty( $_POST['billing_address_city'] ) ? $_POST['billing_address_city'] : '';
-			$billing_address['state']     = ! empty( $_POST['billing_address_state'] ) ? $_POST['billing_address_state'] : '';
-			$billing_address['postalcod'] = ! empty( $_POST['billing_address_postalcode'] ) ? $_POST['billing_address_postalcode'] : '';
-			$billing_address['country']   = ! empty( $_POST['billing_address_street'] ) ? $_POST['billing_address_country'] : '';
-			$billing_address['georeg']    = easl_mz_get_geo_reg( $billing_address['country'] );
-		}
 
 		if ( ! in_array( $jhephardcopy_recipient, array( 'c1', 'c2', 'other' ) ) ) {
 			$jhephardcopy_recipient = 'c1';
@@ -448,7 +465,7 @@ class EASL_MZ_Manager {
 			$membership_api_data['billing_address_state']      = ! empty( $_POST['billing_address_state'] ) ? $_POST['billing_address_state'] : '';
 			$membership_api_data['billing_address_postalcode'] = ! empty( $_POST['billing_address_postalcode'] ) ? $_POST['billing_address_postalcode'] : '';
 			$membership_api_data['billing_address_country']    = ! empty( $_POST['billing_address_country'] ) ? $_POST['billing_address_country'] : '';
-			$membership_api_data['billing_address_georeg']     = easl_mz_get_geo_reg( $membership_api_data['billing_address_country'] );
+			$membership_api_data['billing_address_georeg']     = easl_mz_get_geo_reg( $_POST['billing_address_country'] );
 		}
 
 		if ( $jhep_hard_copy ) {
@@ -464,7 +481,46 @@ class EASL_MZ_Manager {
 			}
 		}
 
-		$this->api->get_user_auth_token();
+		$contact_data_fields = [
+		    'phone_work',
+            'phone_mobile',
+            'phone_home',
+            'phone_other',
+            'phone_fax',
+            'assistant',
+            'dotb_assistant_email',
+            'assistant_phone',
+            'twitter',
+            'dotb_tmp_account',
+            'primary_address_street',
+            'primary_address_city',
+            'primary_address_state',
+            'primary_address_postalcode',
+            'primary_address_country',
+            'alt_address_street',
+            'alt_address_city',
+            'alt_address_state',
+            'alt_address_postalcode',
+            'alt_address_country',
+            'department',
+            'dotb_interaction_with_patient'
+        ];
+
+		$contact_data = [];
+		foreach($contact_data_fields as $field) {
+		    if (isset($_POST[$field])) {
+                $contact_data[$field] = $_POST[$field];
+            }
+        }
+
+        $this->api->get_user_auth_token();
+
+        $updated = $this->api->update_member_personal_info( $member_id, $contact_data );
+
+        if ( ! $updated ) {
+            $this->respond( 'Error!', 500 );
+        }
+
 		$membership_id = $this->api->create_membership( $membership_api_data );
 
 		if ( ! $membership_id ) {
@@ -482,6 +538,8 @@ class EASL_MZ_Manager {
 			'membership_created_id' => $membership_id,
 			'membership_number'     => $membership_number,
 		);
+
+        easl_mz_refresh_logged_in_member_data();
 
 		if ( $require_proof && ! empty( $_FILES['supporting_docs'] ) && ( $_FILES['supporting_docs']['error'] === UPLOAD_ERR_OK ) ) {
 
@@ -804,7 +862,8 @@ class EASL_MZ_Manager {
 	}
 
 	public static function deactivate() {
-
+		$timestamp = wp_next_scheduled( 'eals_mz_daily_checklist' );
+		wp_unschedule_event( $timestamp, 'eals_mz_daily_checklist' );
 	}
 
 	/**

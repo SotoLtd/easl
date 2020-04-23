@@ -139,8 +139,12 @@ class EASL_MZ_Request {
 	}
 
 	public function get_request_header( $key ) {
-		isset( $this->response_headers[ $key ] ) ? $this->response_headers[ $key ] : '';
+		isset( $this->request_headers[ $key ] ) ? $this->request_headers[ $key ] : '';
 	}
+
+    public function get_request_headers( ) {
+        return $this->request_headers;
+    }
 
 	public function get_response_body() {
 		return $this->response_body;
@@ -157,15 +161,16 @@ class EASL_MZ_Request {
 		return false;
 	}
 
-	public function post( $endpoint, $data = array(), $data_format = 'body', $cookies = array(), $parse_json = true ) {
+	public function post( $endpoint, $data = array(), $data_format = 'body', $cookies = array(), $parse_json = true, $json_encode_body = true ) {
 		$url  = $this->base_uri . $endpoint;
+		$body_data = $json_encode_body ? json_encode( $data ) : $data;
 		$args = array(
 			'method'      => 'POST',
 			'timeout'     => 45,
 			'redirection' => 5,
 			'httpversion' => '1.1',
 			'blocking'    => true,
-			'body'        => json_encode( $data ),
+			'body'        => $body_data,
 			'data_format' => $data_format,
 			'headers'     => $this->request_headers,
 			'cookies'     => $cookies

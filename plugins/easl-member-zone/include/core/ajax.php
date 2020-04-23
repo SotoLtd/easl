@@ -36,8 +36,8 @@ class EASL_MZ_Ajax_Handler {
 	}
 
 	public function respond( $html = '', $status = 200, $extra_data = array() ) {
-		if ( ! is_array( $data ) ) {
-			$data = (array) $data;
+		if ( ! is_array( $extra_data ) ) {
+            $extra_data = (array) $extra_data;
 		}
 		wp_send_json( array(
 			'Status' => $status,
@@ -107,6 +107,9 @@ class EASL_MZ_Ajax_Handler {
 	}
 
 	public function get_member_card() {
+        if ( ! easl_mz_is_member_logged_in() ) {
+            $this->respond( 'Member not logged in!', 401 );
+        }
 		$current_member_id = $this->session->ge_current_member_id();
 		if ( ! $current_member_id ) {
 			$current_member_id = $this->api->get_member_id();
@@ -119,15 +122,15 @@ class EASL_MZ_Ajax_Handler {
 				$this->respond( 'Member not found!', 404 );
 			}
 		}
-		$this->api->get_user_auth_token();
-		$member_details = $this->api->get_member_details( $current_member_id, false );
+
+		$member_details = $this->api->get_member_details( $current_member_id, true );
 
 		if ( ! $member_details ) {
 			$this->session->unset_auth_cookie( true );
-			$this->respond( 'Members details not found!', 404 );
+			$this->respond( 'Members details not found!', 401 );
 		}
 
-		$member_details['profile_picture'] = $this->api->get_member_profile_picture( $current_member_id );
+		$member_details['profile_picture'] = easl_mz_get_member_image_src( $member_details['id'], $member_details['picture'] );
 
 		$card  = $this->get_file_html( '/member-card/member-card.php', array( 'member' => $member_details ) );
 		$panel = $this->get_file_html( '/member-card/panel.php', array( 'member' => $member_details ) );
@@ -288,6 +291,9 @@ class EASL_MZ_Ajax_Handler {
 	}
 
 	public function get_members_memberships() {
+        if ( ! easl_mz_is_member_logged_in() ) {
+            $this->respond( 'Member not logged in!', 401 );
+        }
 		$current_member_id = $this->session->ge_current_member_id();
 		if ( ! $current_member_id ) {
 			$current_member_id = $this->api->get_member_id();
@@ -310,6 +316,9 @@ class EASL_MZ_Ajax_Handler {
 	}
 
 	public function get_memberships_notes() {
+        if ( ! easl_mz_is_member_logged_in() ) {
+            $this->respond( 'Member not logged in!', 401 );
+        }
 		if ( ! easl_mz_is_member_logged_in() ) {
 			$this->respond( 'Not logged in.', 401 );
 		}
@@ -344,6 +353,9 @@ class EASL_MZ_Ajax_Handler {
 	}
 
 	public function get_member_statistics() {
+        if ( ! easl_mz_is_member_logged_in() ) {
+            $this->respond( 'Member not logged in!', 401 );
+        }
 		if ( ! easl_mz_is_member_logged_in() ) {
 			$this->respond( 'Member not logged in!', 401 );
 		}
@@ -375,7 +387,11 @@ class EASL_MZ_Ajax_Handler {
 	}
 
 	public function get_membership_form() {
+        if ( ! easl_mz_is_member_logged_in() ) {
+            $this->respond( 'Member not logged in!', 401 );
+        }
 		$current_member_id = $this->session->ge_current_member_id();
+
 		if ( ! $current_member_id ) {
 			$current_member_id = $this->api->get_member_id();
 
@@ -387,12 +403,13 @@ class EASL_MZ_Ajax_Handler {
 		if ( ! $current_member_id ) {
 			$this->respond( 'Member not found!', 404 );
 		}
-		$member_details = $this->api->get_member_details( $current_member_id );
+		$member_details = $this->api->get_member_details( $current_member_id, true );
+
 		if ( ! $member_details ) {
 			$this->respond( 'Member ' . $current_member_id . ' not found!', 404 );
 		}
 
-		$member_details['profile_picture']   = $this->api->get_member_profile_picture( $current_member_id );
+		$member_details['profile_picture']   = easl_mz_get_member_image_src( $member_details['id'], $member_details['picture'] );
 		$member_details['latest_membership'] = $this->api->get_members_latest_membership( $current_member_id );
 
 		$extra_data = array();
@@ -413,41 +430,44 @@ class EASL_MZ_Ajax_Handler {
 		$this->respond_file( '/memeber-details/memeber-details.php', array( 'member' => $member_details ), 200, $extra_data );
 	}
 
-	public function get_membership_banner() {
-		$current_member_id = $this->session->ge_current_member_id();
-		if ( ! $current_member_id ) {
-			$current_member_id = $this->api->get_member_id();
-
-			if ( $current_member_id ) {
-				$this->session->add_data( 'member_id', $current_member_id );
-				$this->session->save_session_data();
-			}
-		}
-		if ( ! $current_member_id ) {
-			$this->respond( 'Member not found!', 404 );
-		}
-		$member_details = $this->api->get_member_details( $current_member_id, false );
-		if ( ! $member_details ) {
-			$this->respond( 'Member ' . $current_member_id . ' not found!', 404 );
-		}
-
-		$member_details['latest_membership'] = $this->api->get_members_latest_membership( $current_member_id );
-
-		$membership_expiring = easl_mz_get_membership_expiring( array(
-			'dotb_mb_current_end_date' => $member_details['dotb_mb_current_end_date'],
-			'dotb_mb_id'               => $member_details['dotb_mb_id'],
-			'latest_membership'        => $member_details['latest_membership'],
-			'first_name'               => $member_details['first_name'],
-			'last_name'                => $member_details['last_name'],
-			'dotb_mb_current_status'   => $member_details['dotb_mb_current_status'],
-		) );
-		if ( ! $membership_expiring ) {
-			$this->respond( '', 400 );
-		}
-		$this->respond( $membership_expiring, 200 );
-	}
+//	public function get_membership_banner() {
+//		$current_member_id = $this->session->ge_current_member_id();
+//		if ( ! $current_member_id ) {
+//			$current_member_id = $this->api->get_member_id();
+//
+//			if ( $current_member_id ) {
+//				$this->session->add_data( 'member_id', $current_member_id );
+//				$this->session->save_session_data();
+//			}
+//		}
+//		if ( ! $current_member_id ) {
+//			$this->respond( 'Member not found!', 404 );
+//		}
+//		$member_details = $this->api->get_member_details( $current_member_id, false );
+//		if ( ! $member_details ) {
+//			$this->respond( 'Member ' . $current_member_id . ' not found!', 404 );
+//		}
+//
+//		$member_details['latest_membership'] = $this->api->get_members_latest_membership( $current_member_id );
+//
+//		$membership_expiring = easl_mz_get_membership_expiring( array(
+//			'dotb_mb_current_end_date' => $member_details['dotb_mb_current_end_date'],
+//			'dotb_mb_id'               => $member_details['dotb_mb_id'],
+//			'latest_membership'        => $member_details['latest_membership'],
+//			'first_name'               => $member_details['first_name'],
+//			'last_name'                => $member_details['last_name'],
+//			'dotb_mb_current_status'   => $member_details['dotb_mb_current_status'],
+//		) );
+//		if ( ! $membership_expiring ) {
+//			$this->respond( '', 400 );
+//		}
+//		$this->respond( $membership_expiring, 200 );
+//	}
 
 	public function get_new_membership_form() {
+        if ( ! easl_mz_is_member_logged_in() ) {
+            $this->respond( 'Member not logged in!', 401 );
+        }
 		$current_member_id = $this->session->ge_current_member_id();
 		if ( ! $current_member_id ) {
 			$current_member_id = $this->api->get_member_id();
@@ -496,11 +516,15 @@ class EASL_MZ_Ajax_Handler {
 	}
 
 	public function update_member_profile() {
+        if ( ! easl_mz_is_member_logged_in() ) {
+            $this->respond( 'Member not logged in!', 401 );
+        }
 		if ( empty( $_POST['request_data'] ) ) {
 			$this->respond( 'No fields specified!', 405 );
 		}
 		$request_data = array();
 		parse_str( $_POST['request_data'], $request_data );
+
 		if ( empty( $request_data['id'] ) ) {
 			$this->respond( 'No member specified!', 405 );
 		}
@@ -542,6 +566,9 @@ class EASL_MZ_Ajax_Handler {
 	}
 
 	public function change_member_password() {
+        if ( ! easl_mz_is_member_logged_in() ) {
+            $this->respond( 'Member not logged in!', 401 );
+        }
 		if ( empty( $_POST['request_data'] ) ) {
 			$this->respond( 'No fields specified!', 405 );
 		}
@@ -572,6 +599,9 @@ class EASL_MZ_Ajax_Handler {
 		);
 
 		$updated = $this->api->change_password( $api_args );
+		if(! $updated && $this->api->is_member_session_expired()) {
+            $this->respond( 'Your session expired!', 401 );
+        }
 		if ( ! $updated ) {
 			$this->respond( 'Error!', 405 );
 		}
@@ -587,7 +617,8 @@ class EASL_MZ_Ajax_Handler {
 		if ( empty( $request_data ) ) {
 			$this->respond( 'No fields specified!', 405 );
 		}
-		$errors = easl_mz_validate_member_data( $request_data );
+		$errors = easl_mz_validate_new_member_form( $request_data );
+
 		if ( ! $errors ) {
 			$errors = array();
 		}
@@ -604,6 +635,9 @@ class EASL_MZ_Ajax_Handler {
 
 		if ( $password !== $password2 ) {
 			$errors['password2'] = 'Must be same as password.';
+		}
+		if ( empty($errors['email1']) && $this->api->is_member_exists( $request_data['email1'] ) ) {
+			$errors['email1'] = 'Member already exist with this email.';
 		}
 		if ( count( $errors ) > 0 ) {
 			$this->respond_field_errors( $errors );
@@ -625,26 +659,33 @@ class EASL_MZ_Ajax_Handler {
 			$this->respond( 'Error!', 405 );
 		}
 
-		$membership_page = easl_member_new_membership_form_url( false );
-		if ( ! $membership_page ) {
-			$membership_page = get_field( 'member_dashboard_url', 'option' );
-		}
+//		$membership_page = easl_member_new_membership_form_url( false );
+
+        //Redirect to the dashboard
+        $membership_page = get_field( 'member_dashboard_url', 'option' );
 		if ( ! $membership_page ) {
 			$membership_page = get_site_url();
 		}
 
 		$auth_response_status = $this->api->get_auth_token( $request_data['portal_name'], $password, true );
 		if ( ! $auth_response_status ) {
-			$this->respond_file( 'member-login/basic-login-form.php', array( 'redirect_url' => $membership_page ), 201 );
+		    //@todo redirect to SSO??
+            // Update $membership_page with the sso login url
+            $this->respond( $membership_page, 401 );
 		}
 		// Member authenticated
 		$this->session->set_auth_cookie( $request_data['portal_name'], $this->api->get_credential_data( true ) );
 		$this->session->add_data( 'member_id', $created_member_id );
 		$this->session->save_session_data();
+        easl_mz_refresh_logged_in_member_data();
+
 		$this->respond( $membership_page, 200 );
 	}
 
 	public function delete_current_member() {
+        if ( ! easl_mz_is_member_logged_in() ) {
+            $this->respond( 'Member not logged in!', 401 );
+        }
 		if ( empty( $_POST['request_data'] ) ) {
 			$this->respond( 'No fields specified!', 405 );
 		}

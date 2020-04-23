@@ -407,3 +407,32 @@ function easl_mz_get_list_membership_statuses() {
 		'cancelled'   => 'Cancelled',
 	);
 }
+
+function easl_mz_get_list_places_of_work() {
+    return array(
+        'hospital_clinic' => 'Hospital / Clinic',
+        'industry_healthcare' => 'Industry, healthcare',
+        'industry_other' => 'Industry, other',
+        'ngo' => 'NGO / Not-for-Profit Organization',
+        'media' => 'Media',
+        'publishing_journals' => 'Publishing / Journals',
+        'private_hospital' => 'Private Hospital',
+        'private_practice' => 'Private Practice',
+        'research_institution' => 'Research Institution',
+        'university' => 'University',
+        'university_hospital' => 'University Hospital'
+    );
+}
+
+function easl_mz_get_list_user_categories() {
+    return array(
+        'md' => 'Medical Doctor (MD)',
+        'phd' => 'PhD',
+        'md_phd' => 'MD PhD',
+        'nurse_prescr' => 'Nurse - Prescriber',
+        'nurse_non_prescr' => 'Nurse - Non Prescriber',
+        'pharma' => 'Pharmacist',
+        'patient' => 'Patient',
+        'other' => 'Other - Please Specify'
+    );
+}

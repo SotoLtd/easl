@@ -77,8 +77,6 @@ class EASLApplicationsPlugin {
 
     private function registerPostTypes()
     {
-
-
         register_post_type('programme', [
             'labels' => [
                 'name' => 'Programmes',
@@ -89,7 +87,7 @@ class EASLApplicationsPlugin {
             'publicly_queryable' => true
         ]);
 
-        register_post_type('application-review', [
+        register_post_type('submission-review', [
             'labels' => [
                 'name' => 'Reviews',
                 'singular_name' => 'Review'

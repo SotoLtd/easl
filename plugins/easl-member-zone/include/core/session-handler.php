@@ -26,7 +26,6 @@ class EASL_MZ_Session_Handler {
 		return self::$_instance;
 	}
 
-
 	public function init() {
 		$this->init_session_cookie();
 		//add_action( 'shutdown', array( $this, 'save_data' ), 20 );
@@ -69,26 +68,27 @@ class EASL_MZ_Session_Handler {
 		$this->_member_login = $session->member_login;
 		$this->_data         = maybe_unserialize( $session->session_value );
 		$api_data            = $this->prepare_api_credential_data();
-
-		if ( $this->api_expired( $api_data ) ) {
-			$this->unset_auth_cookie();
-
-			return false;
-		}
+//
+//		if ( $this->api_expired( $api_data ) ) {
+//			$this->unset_auth_cookie();
+//
+//			return false;
+//		}
 		easl_mz_get_manager()->getApi()->set_credentials( $api_data );
 	}
 
 	public function api_expired( $api_data ) {
-		if ( empty( $api_data['access_token'] ) || empty( $api_data['refresh_token'] ) || empty( $api_data['expires_in'] ) || empty( $api_data['refresh_expires_in'] ) || empty( $api_data['token_set_time'] ) ) {
+		if ( empty( $api_data['access_token'] )) {
 			return true;
 		}
-		if ( ( $api_data['token_set_time'] + $api_data['refresh_expires_in'] - 10 ) < time() ) {
-			return true;
-		}
+//		if ( ( $api_data['token_set_time'] + $api_data['refresh_expires_in'] - 10 ) < time() ) {
+//			return true;
+//		}
 
 		return false;
 	}
 
+	//Currently, we are only getting access_token back from the SSO endpoint, so the others will be empty.  But leaving this code in in case that changes in future.
 	public function prepare_api_credential_data() {
 		$data = array(
 			'access_token'       => '',
@@ -142,6 +142,7 @@ class EASL_MZ_Session_Handler {
 	}
 
 	public function set_auth_cookie( $member_login, $data = array() ) {
+
 		$this->_member_login = $member_login;
 
 		$session_data = $this->sanitize_session_data( $data );
@@ -194,6 +195,7 @@ class EASL_MZ_Session_Handler {
 
 	public function parse_auth_cookie() {
 		if ( empty( $_COOKIE[ $this->_cookie ] ) ) {
+//		    die('no cookiue');
 			return false;
 		}
 
@@ -201,6 +203,8 @@ class EASL_MZ_Session_Handler {
 
 		$cookie_elements = explode( '|', $cookie );
 		if ( count( $cookie_elements ) !== 4 ) {
+//		    print_r($cookie_elements);
+//		    die('nope');
 			return false;
 		}
 
@@ -366,5 +370,12 @@ class EASL_MZ_Session_Handler {
 		if ( $id ) {
 			$wpdb->delete( $this->_table, array( 'session_id' => $id ), array( '%d' ) );
 		}
+	}
+
+	public function clean_expired_session() {
+		global $wpdb;
+		$now = time();
+		$sql = "DELETE FROM {$this->_table} WHERE session_expiry < {$now}";
+		$wpdb->query($sql);
 	}
 }

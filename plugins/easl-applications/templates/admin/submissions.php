@@ -1,5 +1,6 @@
-<h1>Programme applications</h1>
-<table>
+<h1>Programmes</h1>
+
+<table class="widefat striped">
     <thead>
     <tr>
         <th>Programme name</th>
