@@ -234,6 +234,12 @@ class EASL_MZ_Manager {
 	}
 
 	public function handle_member_login() {
+//	    $sessionData = easl_mz_get_current_session_data();
+////
+//	    if (!$sessionData) {
+//	        $_POST['mz_member_login'] = 'test@example.com';
+//	        $_POST['mz_member_password'] = 'password';
+//        }
 		if ( empty( $_POST['mz_member_login'] ) || empty( $_POST['mz_member_password'] ) ) {
 			return false;
 		}
@@ -245,12 +251,12 @@ class EASL_MZ_Manager {
 			$redirect = $member_password['mz_redirect_url'];
 		}
 
-//		$auth_response_status = $this->api->get_auth_token( $member_login, $member_password, true );
-//		if ( ! $auth_response_status ) {
-//			$this->set_message( 'login_error', 'Invalid username or password.' );
-//
-//			return false;
-//		}
+		$auth_response_status = $this->api->get_auth_token( $member_login, $member_password, true );
+		if ( ! $auth_response_status ) {
+			$this->set_message( 'login_error', 'Invalid username or password.' );
+
+			return false;
+		}
 
 		// Member authenticated
 		do_action( 'easl_mz_member_authenticated', $member_login, $this->api->get_credential_data( true ), $redirect );
@@ -744,6 +750,7 @@ class EASL_MZ_Manager {
 			'easl_mz_members_documents',
 			'easl_mz_membership_confirm_message',
 			'easl_mz_publications',
+            'easl_mz_applications'
 		);
 
 		return $shortcodes;

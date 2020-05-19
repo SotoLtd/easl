@@ -108,6 +108,17 @@ class EASLAppSubmission
             return false;
         }
 
+        $start_date = get_field('start_date', $this->programmeId);
+        $end_date = get_field('end_date', $this->programmeId);
+
+        $start_date = DateTime::createFromFormat('d/m/Y', $start_date);
+        $end_date = DateTime::createFromFormat('d/m/Y', $end_date);
+        $now = new DateTime();
+
+        if ($start_date > $now || $end_date < $now) {
+            return false;
+        }
+
         $this->memberId = $sessionData['member_id'];
 
         $this->cacheMemberData($this->memberId);
@@ -115,6 +126,7 @@ class EASLAppSubmission
         $existingSubmission = $this->getExistingSubmissionForMember($this->memberId);
 
         if ($existingSubmission) {
+            $memberData = get_post_meta($existingSubmission->ID, 'member_data', true);
             $this->submissionId = $existingSubmission->ID;
         } else {
             $this->createSubmission();
@@ -124,7 +136,25 @@ class EASLAppSubmission
     }
 
     public static function onSavePost($postId) {
-        update_post_meta($postId, self::SUBMISSION_DATE_META_KEY, time());
+        $submittedAlready = get_post_meta($postId, self::SUBMISSION_DATE_META_KEY, true);
+        $memberData = get_post_meta($postId, 'member_data', true);
+        $programmeId = get_post_meta($postId, 'programme_id', true);
+        $programme = get_post($programmeId);
+
+        if (true || !$submittedAlready) {
+            $apps = EASLApplicationsPlugin::getInstance();
+            $message = EASLApplicationsPlugin::renderEmail($apps->templateDir . 'email/application_confirmation.php', [
+                'firstName' => $memberData['first_name'],
+                'lastName' => $memberData['last_name'],
+                'programmeName' => $programme->post_title
+            ]);
+            update_post_meta($postId, self::SUBMISSION_DATE_META_KEY, time());
+            $email = $memberData['email1'];
+            $email = 'will@willevans.tech';
+            $headers = ['Content-Type: text/html; charset=UTF-8'];
+            wp_mail($email, 'EASL Application Confirmation', $message, $headers);
+        }
+
         wp_update_post(['ID' => $postId, 'post_status' => 'publish']);
     }
 }

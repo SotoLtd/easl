@@ -6,7 +6,7 @@
         <th>Programme name</th>
         <th>Opening date</th>
         <th>Closing date</th>
-        <th>Number of submissions</th>
+        <th>Number of applications</th>
         <th></th>
     </tr>
     </thead>
@@ -18,7 +18,8 @@
                 <td><?=$programme->end_date;?></td>
                 <td><?=$programme->submissions_count;?></td>
                 <td>
-                    <a href="<?=EASLAppReview::getUrl(EASLAppReview::PAGE_PROGRAMME, ['programmeId' => $programme->ID]);?>">Review</a>
+                    <a href="<?=EASLAppReview::getUrl(EASLAppReview::PAGE_PROGRAMME, ['programmeId' => $programme->ID]);?>" class="button">View applications</a>
+                    <a href="<?=EASLAppReview::getUrl(EASLAppReview::PAGE_CSV, ['programmeId' => $programme->ID]);?>" class="button">Export CSV</a>
                 </td>
             </tr>
         <?php endforeach;?>

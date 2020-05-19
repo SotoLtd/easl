@@ -29,7 +29,7 @@ class EASLApplicationsPlugin {
     /**
      * @var string
      */
-    protected $templateDir;
+    public $templateDir;
 
     /**
      * @var string
@@ -39,13 +39,19 @@ class EASLApplicationsPlugin {
     /**
      * @var array
      */
-    public $submissionFieldSets = [];
+    private $submissionFieldSets = [];
 
     public function __construct(){
+        //ACF custom fields
+        $this->createFields();
+
         add_action('init', [$this, 'init']);
         add_action('easl_applications_page_content', [$this, 'pageContent']);
         add_action('admin_menu', [$this, 'adminMenu']);
         add_action('acf/save_post', [EASLAppSubmission::class, 'onSavePost'], 10, 1);
+        add_action('acf/init', [$this, 'addOptionsFields']);
+
+        $this->handleCSVExportRequest();
 
         $this->dir =  dirname( __FILE__ ) . '/';
         $this->templateDir =$this->dir . 'templates/';
@@ -75,6 +81,30 @@ class EASLApplicationsPlugin {
         }
     }
 
+    public function addOptionsFields() {
+        acf_add_local_field_group([
+            'key' => 'key_pages',
+            'title' => 'Key pages',
+            'fields' => [
+                [
+                    'key' => 'apply_page',
+                    'label' => 'Apply page',
+                    'name' => 'apply_page',
+                    'type' => 'page_link'
+                ]
+            ],
+            'location' => [
+                [
+                    [
+                        'param' => 'options_page',
+                        'operator' => '==',
+                        'value' => self::OPTIONS_PAGE_SLUG
+                    ]
+                ]
+            ]
+        ]);
+    }
+
     private function registerPostTypes()
     {
         register_post_type('programme', [
@@ -99,7 +129,6 @@ class EASLApplicationsPlugin {
                 'name' => 'Submissions',
                 'singular_name' => 'Submission'
             ],
-            'public' => true,
             'publicly_queryable' => true
         ]);
     }
@@ -127,9 +156,35 @@ class EASLApplicationsPlugin {
     }
 
     private function createFields() {
-        require_once($this->dir . 'fields/fieldsets/fellowship.php');
-        $this->submissionFieldSets['fellowship'] = $fieldsets;
+        require_once($this->dir . 'fields/EASLApplicationField.php');
+        require_once($this->dir . 'fields/EASLApplicationFieldSet.php');
+
+        require_once($this->dir . 'fields/fieldsets/AbstractFieldContainer.php');
+
+        $fieldsets = [
+            'fellowship' => 'FellowshipFieldContainer',
+            'mentorship' => 'MentorshipFieldContainer',
+            'registry-grant' => 'RegistryGrantFieldContainer',
+            'sponsorship' => 'EndorsementFieldContainer',
+            'schools' => 'EASLSchoolsFieldContainer',
+            'masterclass' => 'MasterclassFieldContainer'
+        ];
+        foreach($fieldsets as $key => $className) {
+            require_once($this->dir . 'fields/fieldsets/' . $className . '.php');
+            $fieldset = new $className($key);
+            $this->submissionFieldSets[$key] = $fieldset;
+        }
+
         require_once($this->dir . 'fields/define_fields.php');
+    }
+
+    /**
+     * @param $programmeId
+     * @return AbstractFieldContainer
+     */
+    public function getProgrammeFieldSetContainer($programmeId) {
+        $programmeCategory = get_field('programme-category', $programmeId);
+        return $this->submissionFieldSets[$programmeCategory];
     }
 
     public function init() {
@@ -137,8 +192,15 @@ class EASLApplicationsPlugin {
         $this->registerPostTypes();
         $this->registerTaxonomies();
 
-        //ACF custom fields
-        $this->createFields();
+    }
+
+    private function handleCSVExportRequest() {
+        if (isset($_GET['csvExport'])) {
+            require_once($this->dir . 'lib/EASLAppReview.php');
+            $review = new EASLAppReview(true);
+            $programmeId = $_GET['csvExport'];
+            $review->exportCSV($programmeId, $this->getProgrammeFieldSetContainer($programmeId));
+        }
     }
 
     /**
@@ -175,6 +237,15 @@ class EASLApplicationsPlugin {
             $out[self::getSlug($option)] = $option;
         }
         return $out;
+    }
+
+    public static function renderEmail($templatePath, $vars = []) {
+        ob_start();
+        extract($vars);
+        include($templatePath);
+        $output = ob_get_contents();
+        ob_end_clean();
+        return $output;
     }
 }
 

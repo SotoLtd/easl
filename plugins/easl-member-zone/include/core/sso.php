@@ -31,7 +31,7 @@ class EASL_MZ_SSO {
     public function get_login_url() {
         $data = [
             'response_type' => 'code',
-            'redirect_url' => $this->redirect_url,
+            'redirect_uri' => $this->redirect_url,
             'client_id' => $this->client_id
         ];
         $query_string = build_query($data);
@@ -43,47 +43,45 @@ class EASL_MZ_SSO {
         $api = EASL_MZ_API::get_instance();
         $session = EASL_MZ_Session_Handler::get_instance();
 
-        if (isset($_GET['code'])) {
-            $data = [
-                'client_id' => $this->client_id,
-                'redirect_url' => $this->redirect_url,
-                'client_secret' => $this->client_secret,
-                'code' => $code,
-                'grant_type' => 'authorization_code',
-                'scope' => 'profile email'
-            ];
+        $data = [
+            'client_id' => $this->client_id,
+            'redirect_uri' => $this->redirect_url,
+            'client_secret' => $this->client_secret,
+            'code' => $code,
+            'grant_type' => 'authorization_code',
+            'scope' => 'profile email'
+        ];
 
-            $this->request->post('/token', $data, 'body', [], true, false);
+        $this->request->post('/token', $data, 'body', [], true, false);
+
+        $response = $this->request->get_response_body();
+
+        $redirect = get_field('member_dashboard_url', 'options');
+
+        if (isset($response->access_token)) {
+            $access_token = $response->access_token;
+
+            $this->request->set_request_header('Authorization', 'Bearer ' . $access_token);
+            $this->request->get('/userinfo');
 
             $response = $this->request->get_response_body();
 
-            $redirect = get_field('member_dashboard_url', 'options');
+            $response_data = json_decode(json_encode($response), true);
 
-            if (isset($response->access_token)) {
-                $access_token = $response->access_token;
+            // Member authenticated
+            do_action( 'easl_mz_member_authenticated', $response->email, $response_data, $redirect );
 
-                $this->request->set_request_header('Authorization', 'Bearer ' . $access_token);
-                $this->request->get('/userinfo');
+            $api->set_credentials(['access_token' => $response_data['sugarcrm_token']], true);
 
-                $response = $this->request->get_response_body();
+            $session->add_data('access_token', $response_data['sugarcrm_token']);
 
-                $response_data = json_decode(json_encode($response), true);
+            $member_id = $api->get_member_id();
 
-                // Member authenticated
-                do_action( 'easl_mz_member_authenticated', $response->email, $response_data, $redirect );
-
-                $api->set_credentials(['access_token' => $response_data['sugarcrm_token']], true);
-
-                $session->add_data('access_token', $response_data['sugarcrm_token']);
-
-                $member_id = $api->get_member_id();
-
-                if ( $member_id ) {
-                    $session->add_data( 'member_id', $member_id );
-                    $session->save_session_data();
-                }
+            if ( $member_id ) {
+                $session->add_data( 'member_id', $member_id );
+                $session->save_session_data();
             }
-            wp_redirect($redirect);
         }
+        wp_redirect($redirect);
     }
 }

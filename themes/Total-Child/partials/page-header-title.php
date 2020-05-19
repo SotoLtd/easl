@@ -50,6 +50,10 @@ if ( empty( $string ) ) {
 	return;
 }
 
+if (is_page('apply')) {
+    //@todo maybe make this more robust, so it doesn't depend on the page having the slug "apply"
+    return;
+}
 // Sanitize
 $html_tag = wp_strip_all_tags( $html_tag );
 

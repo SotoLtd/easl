@@ -14,7 +14,10 @@
 <?php if ($tab === 'submissions'):?>
 
 <h2>Applications</h2>
-<table class="widefat striped">
+
+<a href="<?=$reviewManager->getUrl(EASLAppReview::PAGE_CSV, ['programmeId' => $programme->ID]);?>" class="button">Export CSV</a>
+
+<table class="widefat striped" style="margin-top:20px;">
     <thead>
         <tr>
             <th>Name</th>
@@ -31,7 +34,7 @@
             <td><?=$submission['date']->format('Y-m-d');?></td>
             <td><?=$submission['numberReviews'];?></td>
             <td><?=$submission['averageScore'] ? $submission['averageScore'] : '-';?></td>
-            <td><a href="<?=EASLAppReview::getUrl(EASLAppReview::PAGE_SUBMISSION, ['submissionId' => $submission['id']]);?>" class="button">Review</a></td>
+            <td><a href="<?=$reviewManager->getUrl(EASLAppReview::PAGE_SUBMISSION, ['submissionId' => $submission['id']]);?>" class="button">Review</a></td>
         </tr>
     <?php endforeach;?>
     </tbody>

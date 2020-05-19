@@ -4,18 +4,27 @@ $programme = get_post($programme_id);
 $sub = new EASLAppSubmission($programme_id);
 $valid = $sub->setup();
 
-$programmeCategory = get_field('programme-category', $programme_id);
 
 $apps = EASLApplicationsPlugin::getInstance();
-if ($valid):?>
-    <?php acf_form(
+$fieldContainer = $apps->getProgrammeFieldSetContainer($programme_id);
+
+$fieldSetKeys = $fieldContainer->getFieldSetKeys();
+?>
+
+<h1><?=$programme->post_title;?>: Your application</h1>
+<div><?=$programme->post_content;?></div>
+
+<?php if ($valid):?>
+    <?php
+    $args =
         [
             'post_id' => $sub->getSubmissionId(),
-            'field_groups' => array_values($apps->submissionFieldSets[$programmeCategory]),
+            'field_groups' => $fieldContainer->getFieldSetKeys(),
             'updated_message' => 'Thank you, your application has been submitted.',
-            'submit_value' => 'Submit application'
-        ]
-    );
+            'html_updated_message' => '<div class="application-submitted-message">%s</div>',
+            'html_submit_button' => '<input type="submit" value="Submit application" class="mzms-submit">'
+        ];
+    acf_form($args);
     ?>
 <?php else:?>
     <h2>An error occurred</h2>

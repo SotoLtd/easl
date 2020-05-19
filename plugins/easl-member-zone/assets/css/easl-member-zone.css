@@ -29,13 +29,13 @@
 }
 
 body .mzms-field-wrap .select2-container .select2-selection--single,
-body .mzms-field-wrap .select2-container--default .select2-selection--single .select2-selection__arrow {
+body .mzms-field-wrap .select2-container--default .select2-selection--single .select2-selection__arrow, .acf-input select {
     height: 40px;
     border-radius: 0 !important;
     border-color: #d1d0d0 !important;
 }
 
-body .mzms-field-wrap .select2-container--default .select2-selection--single .select2-selection__rendered {
+body .mzms-field-wrap .select2-container--default .select2-selection--single .select2-selection__rendered, .acf-input select {
     line-height: 40px;
 }
 
@@ -1396,7 +1396,7 @@ body .mzms-button::after {
     width: calc((100% - 30px) / 3);
 }
 
-.mzms-fields-row {
+.mzms-fields-row, .acf-form-submit {
     margin-bottom: 25px;
 }
 
@@ -1484,13 +1484,14 @@ body .mzms-button::after {
 }
 
 .mzms-fields-con .mzms-field-label,
-.mzms-fields-con .easl-custom-checkbox span {
+.mzms-fields-con .easl-custom-checkbox span, .acf-fields .acf-field .acf-label label {
     color: #004b87;
     font-family: "KnockoutHTF51Middleweight", "Helvetica Neue", Helvetica, Arial, sans-serif;
     font-size: 14px;
     line-height: 14px;
     display: block;
     margin: 0 0 8px;
+    font-weight:normal;
 }
 
 .mzms-fields-con .easl-custom-checkbox {
@@ -1544,19 +1545,26 @@ body .mzms-button::after {
 
 }
 
-.mzms-field-wrap .mzms-field-error-msg {
+.mzms-field-wrap .mzms-field-error-msg, .acf-input .acf-notice.acf-error-message {
     color: #de2a57;
-    visibility: hidden;
-    opacity: 0;
-    transition: opacity .25s, visibility .25s;
     font-size: 12px;
-    position: absolute;
-    bottom: -4px;
-    left: 0;
     width: 100%;
     margin: 0;
     padding: 0;
+}
+
+.mzms-field-wrap .mzms-field-error-msg {
     transform: translateY(100%);
+    position: absolute;
+    bottom: -4px;
+    left: 0;
+    transition: opacity .25s, visibility .25s;
+    visibility: hidden;
+    opacity: 0;
+}
+
+.acf-field .acf-input .acf-notice.acf-error-message {
+    background-color:transparent;
 }
 
 .mzms-field-wrap.easl-mz-field-has-error .mzms-field-error-msg {
@@ -1564,9 +1572,19 @@ body .mzms-button::after {
     opacity: 1;
 }
 
+.acf-form .acf-fields > .acf-field {
+    padding-left:0;
+    padding-right:0;
+    border-top:none;
+}
+
 .mzms-fields-con input[type="text"],
 .mzms-fields-con input[type="email"],
-.mzms-fields-con input[type="password"] {
+.mzms-fields-con input[type="password"],
+.acf-input .acf-input-wrap input[type="text"],
+.acf-input .acf-input-wrap input[type="email"],
+.acf-input .acf-input-wrap input[type="password"]
+{
     border-radius: 0;
     display: block;
     border: 1px solid #d1d0d0;
@@ -1577,7 +1595,8 @@ body .mzms-button::after {
     width: 100%;
 }
 
-.mzms-fields-con textarea {
+.mzms-fields-con textarea,
+.acf-input .acf-input-wrap textarea {
     border-radius: 0;
     display: block;
     border: 1px solid #d1d0d0;
@@ -1657,11 +1676,11 @@ body .mzms-button::after {
     opacity: .20;
 }
 
-.mzms-submit-row {
+.mzms-submit-row, .acf-form-submit {
     text-align: right;
 }
 
-.mzms-submit-row .mzms-submit {
+.mzms-submit-row .mzms-submit, .acf-form-submit .mzms-submit {
     background-color: #004b87;
     border-radius: 0;
     color: #fff;
@@ -2745,4 +2764,50 @@ span.mzms-field-file-button {
 
 .easl-mz-modal-transitioning {
     transition: opacity .35s cubic-bezier(.11, .2, .86, .18);
+}
+
+.easl-mz-tabs .tabs-nav {
+    display:flex;
+}
+
+.easl-mz-tabs .tabs-nav .tab {
+    margin:0 20px 0 0;
+    background-color:#f0f0f0;
+    color:#004b87;
+    font-weight:bold;
+}
+
+.easl-mz-tabs .tab-pane, .easl-mz-tabs .tabs-nav .tab {
+    padding:10px 20px;
+}
+
+.easl-mz-tabs .tab-pane {
+    border:1px solid #f0f0f0;
+}
+
+.easl-mz-tabs .tab-pane {
+    display:none;
+}
+
+.easl-mz-tabs .tab-pane.active {
+    display:block;
+}
+
+.applications-widget-programme {
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+}
+
+.applications-widget-programme .programme-title {
+    font-weight:bold;
+}
+
+.application-submitted-message {
+    margin:20px 0;
+    padding:10px;
+    background-color:#f0f0f0;
+    color:#004b87;
+    font-weight:bold;
+    border:1px solid #aaa;
 }

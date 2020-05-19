@@ -6,12 +6,17 @@
         <table class="review-submission-table<?php if ($isAdmin):?> widefat striped<?php endif;?>">
             <tbody>
 
-            <?php foreach($fields as $field):
-                if ($field['parent'] == $confirmationFieldsetId) continue;?>
+            <?php foreach($fields as $key => $field):?>
                 <tr>
-                    <th><?=$field['label'];?></th>
+                    <?php if (is_array($field)):?>
+                        <th><?=$field['label'];?></th>
+                    <?php else:?>
+                        <th><?=$key;?></th>
+                    <?php endif;?>
                     <td>
-                        <?php if ($field['type'] == 'file'):?>
+                        <?php if (is_string($field)):?>
+                            <?=$field;?>
+                        <?php elseif ($field['type'] == 'file'):?>
                             <?php if ($field['value']):?>
                                 <a href="<?=$field['value']['link'];?>">View file</a>
                             <?php else:?>

@@ -23,6 +23,22 @@ acf_add_local_field_group([
     ],
     'location' => EASLApplicationsPlugin::acfPostTypeLocation('programme')
 ]);
+
+acf_add_local_field_group([
+    'key' => 'programme-fieldset-more-info',
+    'title' => 'Information page link',
+    'fields' => [
+        [
+            'key' => 'more_info_link',
+            'label' => 'More info link',
+            'name' => 'more_info_link',
+            'type' => 'page_link',
+            'instructions' => 'Choose which page has the details of this programme'
+        ]
+    ],
+    'location' => EASLApplicationsPlugin::acfPostTypeLocation('programme')
+]);
+
 acf_add_local_field_group([
     'key' => 'programme-fieldset-category',
     'title' => 'Programme category',
@@ -41,41 +57,41 @@ acf_add_local_field_group([
     'location' => EASLApplicationsPlugin::acfPostTypeLocation('programme')
 ]);
 
-acf_add_local_field_group([
-    'key' => 'programme-email-fields',
-    'title' => 'Programme email content',
-    'fields' => [
-        [
-            'key' => 'thanks_email_subject',
-            'label' => 'Confirmation email subject',
-            'name' => 'thanks_email_subject',
-            'type' => 'text'
-        ],
-        [
-            'key' => 'thanks_email',
-            'label' => 'Confirmation email content',
-            'name' => 'thanks_email',
-            'type' => 'wysiwyg',
-            'toolbar' => 'basic',
-            'media_upload' => 0
-        ],
-        [
-            'key' => 'reviewer_email_subject',
-            'label' => 'Reviewer invitation email subject',
-            'name' => 'reviewer_email_subject',
-            'type' => 'text'
-        ],
-        [
-            'key' => 'reviewer_email',
-            'label' => 'Reviewer invitation email content',
-            'name' => 'reviewer_email',
-            'type' => 'wysiwyg',
-            'toolbar' => 'basic',
-            'media_upload' => 0
-        ],
-    ],
-    'location' => EASLApplicationsPlugin::acfPostTypeLocation('programme')
-]);
+//acf_add_local_field_group([
+//    'key' => 'programme-email-fields',
+//    'title' => 'Programme email content',
+//    'fields' => [
+//        [
+//            'key' => 'thanks_email_subject',
+//            'label' => 'Confirmation email subject',
+//            'name' => 'thanks_email_subject',
+//            'type' => 'text'
+//        ],
+//        [
+//            'key' => 'thanks_email',
+//            'label' => 'Confirmation email content',
+//            'name' => 'thanks_email',
+//            'type' => 'wysiwyg',
+//            'toolbar' => 'basic',
+//            'media_upload' => 0
+//        ],
+//        [
+//            'key' => 'reviewer_email_subject',
+//            'label' => 'Reviewer invitation email subject',
+//            'name' => 'reviewer_email_subject',
+//            'type' => 'text'
+//        ],
+//        [
+//            'key' => 'reviewer_email',
+//            'label' => 'Reviewer invitation email content',
+//            'name' => 'reviewer_email',
+//            'type' => 'wysiwyg',
+//            'toolbar' => 'basic',
+//            'media_upload' => 0
+//        ],
+//    ],
+//    'location' => EASLApplicationsPlugin::acfPostTypeLocation('programme')
+//]);
 
 acf_add_local_field_group([
     'key' => 'scoring-fields',
@@ -91,13 +107,13 @@ acf_add_local_field_group([
                 [
                     'key' => 'scoring_criteria_name',
                     'name' => 'criteria_name',
-                    'title' => 'Name',
-                    'type' => 'text'
+                    'type' => 'text',
+                    'label' => 'Category'
                 ],
                 [
                     'key' => 'scoring_criteria_max',
                     'name' => 'criteria_max',
-                    'title' => 'Maximum score',
+                    'label' => 'Maximum score',
                     'type' => 'number',
                     'min' => 1,
                     'step' => 1,
@@ -106,7 +122,7 @@ acf_add_local_field_group([
                 [
                     'key' => 'scoring_criteria_instructions',
                     'name' => 'criteria_instructions',
-                    'title' => 'Instructions for reviewers',
+                    'label' => 'Instructions for reviewers',
                     'instructions' => 'This text will be displayed for reviewers when they are scoring applications.',
                     'type' => 'textarea'
                 ]
