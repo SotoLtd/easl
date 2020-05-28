@@ -178,9 +178,12 @@ function easl_mz_country_short( $c1, $c2 ) {
 }
 
 function easl_mz_get_restricted_urls() {
+    $restricted = get_field('restricted_pages', 'option');
+    if (!$restricted) $restricted = [];
+
     $urls = array_map(function($link) {
             return $link['link'];
-        }, get_field('restricted_pages', 'option')
+        }, $restricted
     );
 
     //Also restrict the link to JHEP

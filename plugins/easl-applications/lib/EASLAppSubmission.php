@@ -91,6 +91,7 @@ class EASLAppSubmission
     protected function createSubmission() {
         $name = $this->memberData['first_name'] . ' ' . $this->memberData['last_name'];
         $this->submissionId = wp_insert_post(['post_type' => 'submission', 'post_title' => $name]);
+
         update_post_meta($this->submissionId, 'programme_id', $this->programmeId);
 
         update_post_meta($this->submissionId, 'member_data', $this->memberData);
@@ -141,7 +142,7 @@ class EASLAppSubmission
         $programmeId = get_post_meta($postId, 'programme_id', true);
         $programme = get_post($programmeId);
 
-        if (true || !$submittedAlready) {
+        if (!$submittedAlready) {
             $apps = EASLApplicationsPlugin::getInstance();
             $message = EASLApplicationsPlugin::renderEmail($apps->templateDir . 'email/application_confirmation.php', [
                 'firstName' => $memberData['first_name'],
@@ -150,7 +151,6 @@ class EASLAppSubmission
             ]);
             update_post_meta($postId, self::SUBMISSION_DATE_META_KEY, time());
             $email = $memberData['email1'];
-            $email = 'will@willevans.tech';
             $headers = ['Content-Type: text/html; charset=UTF-8'];
             wp_mail($email, 'EASL Application Confirmation', $message, $headers);
         }

@@ -51,14 +51,14 @@ class EASLApplicationsPlugin {
         add_action('acf/save_post', [EASLAppSubmission::class, 'onSavePost'], 10, 1);
         add_action('acf/init', [$this, 'addOptionsFields']);
 
-        $this->handleCSVExportRequest();
+        add_filter('wp_nav_menu_items', [$this, 'addReviewMenuItem'], 10, 2);
 
         $this->dir =  dirname( __FILE__ ) . '/';
         $this->templateDir =$this->dir . 'templates/';
     }
 
     public static function getInstance() {
-        if ( ! ( self::$_instance instanceof self ) ) {
+        if (!self::$_instance) {
             self::$_instance = new self();
         }
 
@@ -67,6 +67,18 @@ class EASLApplicationsPlugin {
 
     public static function rootDir() {
         return self::getInstance()->dir;
+    }
+
+    public function addReviewMenuItem($items, $args) {
+        if ($args->theme_location === 'member-zone-pages-menu') {
+            $review = new EASLAppReview(false);
+            $loggedInUserData = easl_mz_get_logged_in_member_data();
+            $validProgrammes = $review->getProgrammesUserCanReview($loggedInUserData['email1']);
+            if (count($validProgrammes) > 0) {
+                $items .= '<li><a href="'. $review->getUrl(EASLAppReview::PAGE_PROGRAMME) .'">Review applications</a></li>';
+            }
+        }
+        return $items;
     }
 
 
@@ -129,7 +141,8 @@ class EASLApplicationsPlugin {
                 'name' => 'Submissions',
                 'singular_name' => 'Submission'
             ],
-            'publicly_queryable' => true
+            'publicly_queryable' => true,
+            'public' => true
         ]);
     }
 
@@ -166,7 +179,7 @@ class EASLApplicationsPlugin {
             'mentorship' => 'MentorshipFieldContainer',
             'registry-grant' => 'RegistryGrantFieldContainer',
             'sponsorship' => 'EndorsementFieldContainer',
-            'schools' => 'EASLSchoolsFieldContainer',
+            'easl-schools' => 'EASLSchoolsFieldContainer',
             'masterclass' => 'MasterclassFieldContainer'
         ];
         foreach($fieldsets as $key => $className) {
@@ -184,6 +197,7 @@ class EASLApplicationsPlugin {
      */
     public function getProgrammeFieldSetContainer($programmeId) {
         $programmeCategory = get_field('programme-category', $programmeId);
+        $fieldset = $this->submissionFieldSets[$programmeCategory];
         return $this->submissionFieldSets[$programmeCategory];
     }
 
@@ -192,6 +206,7 @@ class EASLApplicationsPlugin {
         $this->registerPostTypes();
         $this->registerTaxonomies();
 
+        $this->handleCSVExportRequest();
     }
 
     private function handleCSVExportRequest() {
@@ -219,7 +234,7 @@ class EASLApplicationsPlugin {
             if (isset($_GET['submissionId'])) {
                 $review->reviewSubmissionPage($_GET['submissionId']);
             } else {
-                $review->programmePage($_GET['programmeId']);
+                $review->programmePage(isset($_GET['programmeId']) ? $_GET['programmeId'] : null);
             }
         } else {
             require_once($this->templateDir . 'apply.php');
@@ -246,6 +261,14 @@ class EASLApplicationsPlugin {
         $output = ob_get_contents();
         ob_end_clean();
         return $output;
+    }
+
+    public static function findInArray($array, callable $callable) {
+        $matches = array_filter($array, $callable);
+        if ($matches) {
+            return end($matches);
+        }
+        return null;
     }
 }
 

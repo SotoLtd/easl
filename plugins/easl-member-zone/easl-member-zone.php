@@ -109,16 +109,16 @@ class EASL_MZ_Manager {
 	 *
 	 */
 	protected function autoload() {
-		require $this->path( 'HELPERS_DIR', 'helper.php' );
-		require $this->path( 'HELPERS_DIR', 'crm-dropdown-lists.php' );
-		require $this->path( 'HELPERS_DIR', 'crm-helpers.php' );
-		require $this->path( 'CORE_DIR', 'session-handler.php' );
-		require $this->path( 'CORE_DIR', 'mz-request.php' );
-		require $this->path( 'CORE_DIR', 'crm-api.php' );
-		require $this->path( 'CORE_DIR', 'sso.php' );
-		require $this->path( 'CORE_DIR', 'ajax.php' );
-		require $this->path( 'CORE_DIR', 'class-easl-mz-tps-token.php' );
-		require $this->path( 'APP_ROOT', 'include/customizer/customizer.php' );
+		require_once $this->path( 'HELPERS_DIR', 'helper.php' );
+        require_once $this->path( 'HELPERS_DIR', 'crm-dropdown-lists.php' );
+        require_once $this->path( 'HELPERS_DIR', 'crm-helpers.php' );
+        require_once $this->path( 'CORE_DIR', 'session-handler.php' );
+        require_once $this->path( 'CORE_DIR', 'mz-request.php' );
+        require_once $this->path( 'CORE_DIR', 'crm-api.php' );
+        require_once $this->path( 'CORE_DIR', 'sso.php' );
+        require_once $this->path( 'CORE_DIR', 'ajax.php' );
+        require_once $this->path( 'CORE_DIR', 'class-easl-mz-tps-token.php' );
+        require_once $this->path( 'APP_ROOT', 'include/customizer/customizer.php' );
 	}
 
 	protected function load_vars() {

@@ -1,5 +1,7 @@
 <h1>Review submission: <?=$submission->post_title;?></h1>
 
+<p><a href="<?=$reviewManager->getUrl('programme', ['programmeId' => $programme->ID]);?>">&laquo; Back to all submissions</a></p>
+
 <div class="wpb_column vc_column_container">
     <div class="vc_column-inner">
 
@@ -11,7 +13,15 @@
                     <?php if (is_array($field)):?>
                         <th><?=$field['label'];?></th>
                     <?php else:?>
-                        <th><?=$key;?></th>
+                        <th>
+                            <?php if ($key === 'averageScore'):?>
+                                Average score
+                            <?php elseif ($key === 'numberReviews'):?>
+                                Number reviews
+                            <?php else:?>
+                                <?=$key;?>
+                            <?php endif;?>
+                        </th>
                     <?php endif;?>
                     <td>
                         <?php if (is_string($field)):?>
@@ -34,9 +44,10 @@
             </tbody>
         </table>
 
-        <h2>Reviews</h2>
-
         <?php if ($isAdmin && $reviews):?>
+
+            <h2>Reviews</h2>
+
             <table class="widefat striped">
                 <thead>
                 <th>Reviewer</th>
@@ -64,7 +75,9 @@
         <?php endif;?>
 
         <?php if (!$isAdmin):?>
-        <form method="post">
+            <h2>Review submission</h2>
+
+            <form method="post">
             <?php foreach($scoringCriteria as $i => $category):
                 if ($myReview) {
                     $myScore = array_filter($myReview['scoring'], function($c) use ($category) {
@@ -75,18 +88,19 @@
                 ?>
 
                 <?php if (!$category['criteria_name']): continue; endif;?>
-                <div class="mzms-fields-row">
+                <div class="mzms-fields-row" style="padding-bottom:10px;">
                     <div class="mzms-fields-con">
                         <label class="mzms-field-label"><?=$category['criteria_name'];?> <span class="mzms-asteric">*</span></label>
-                        <div class="mzms-field-wrap">
+                        <div><?=$category['criteria_instructions'];?></div>
+                        <div class="mzms-field-wrap<?php if (isset($saveReviewErrors['categories']) && in_array($i, $saveReviewErrors['categories'])):?> easl-mz-field-has-error<?php endif;?>">
                             <input type="number"
                                    max="<?=$category['criteria_max'];?>"
                                    name="category[<?=$i;?>][score]"
                                    value="<?=isset($myScore) ? $myScore['score'] : '';?>"
                                    min="0" />
                             out of <?=$category['criteria_max'];?>
+                            <p class="mzms-field-error-msg">Please enter the score for this category</p>
                         </div>
-                        <p><?=$category['criteria_instructions'];?></p>
                         <input type="hidden"
                                name="category[<?=$i;?>][name]"
                                value="<?=$category['criteria_name'];?>"/>
@@ -97,8 +111,9 @@
             <div class="mzms-fields-row">
                 <div class="mzms-fields-con">
                     <label class="mzms-field-label">Review <span class="mzms-asteric">*</span></label>
-                    <div class="mzms-field-wrap">
+                    <div class="mzms-field-wrap<?php if (in_array('review_text', $saveReviewErrors)):?> easl-mz-field-has-error<?php endif;?>">
                         <textarea name="review_text"><?=isset($myReview) ? $myReview['review_text'] : '';?></textarea>
+                        <p class="mzms-field-error-msg">Please enter your review</p>
                     </div>
                 </div>
             </div>

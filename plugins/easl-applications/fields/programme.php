@@ -10,7 +10,8 @@ acf_add_local_field_group([
             'name' => 'start_date',
             'type' => 'date_picker',
             'display_format' => 'd/m/Y',
-            'return_format' => 'd/m/Y'
+            'return_format' => 'd/m/Y',
+            'required' => true,
         ],
         [
             'key' => 'end_date',
@@ -18,7 +19,18 @@ acf_add_local_field_group([
             'name' => 'end_date',
             'type' => 'date_picker',
             'display_format' => 'd/m/Y',
-            'return_format' => 'd/m/Y'
+            'return_format' => 'd/m/Y',
+            'required' => true,
+        ],
+        [
+            'key' => 'review_deadline',
+            'label' => 'Review deadline',
+            'name' => 'review_deadline',
+            'type' => 'date_picker',
+            'display_format' => 'd/m/Y',
+            'return_format' => 'd/m/Y',
+            'required' => true,
+            'instructions' => 'When should reviewers complete their reviews of applications for this programme?'
         ]
     ],
     'location' => EASLApplicationsPlugin::acfPostTypeLocation('programme')
@@ -26,7 +38,7 @@ acf_add_local_field_group([
 
 acf_add_local_field_group([
     'key' => 'programme-fieldset-more-info',
-    'title' => 'Information page link',
+    'title' => 'Related page links',
     'fields' => [
         [
             'key' => 'more_info_link',
@@ -34,6 +46,14 @@ acf_add_local_field_group([
             'name' => 'more_info_link',
             'type' => 'page_link',
             'instructions' => 'Choose which page has the details of this programme'
+        ],
+        [
+            'key' => 'guidelines_link',
+            'label' => 'Guidelines link',
+            'name' => 'guidelines_link',
+            'type' => 'link',
+            'instructions' => 'The URL of the application guidelines (sent in the email to reviewers)',
+            'required' => true
         ]
     ],
     'location' => EASLApplicationsPlugin::acfPostTypeLocation('programme')
@@ -57,42 +77,6 @@ acf_add_local_field_group([
     'location' => EASLApplicationsPlugin::acfPostTypeLocation('programme')
 ]);
 
-//acf_add_local_field_group([
-//    'key' => 'programme-email-fields',
-//    'title' => 'Programme email content',
-//    'fields' => [
-//        [
-//            'key' => 'thanks_email_subject',
-//            'label' => 'Confirmation email subject',
-//            'name' => 'thanks_email_subject',
-//            'type' => 'text'
-//        ],
-//        [
-//            'key' => 'thanks_email',
-//            'label' => 'Confirmation email content',
-//            'name' => 'thanks_email',
-//            'type' => 'wysiwyg',
-//            'toolbar' => 'basic',
-//            'media_upload' => 0
-//        ],
-//        [
-//            'key' => 'reviewer_email_subject',
-//            'label' => 'Reviewer invitation email subject',
-//            'name' => 'reviewer_email_subject',
-//            'type' => 'text'
-//        ],
-//        [
-//            'key' => 'reviewer_email',
-//            'label' => 'Reviewer invitation email content',
-//            'name' => 'reviewer_email',
-//            'type' => 'wysiwyg',
-//            'toolbar' => 'basic',
-//            'media_upload' => 0
-//        ],
-//    ],
-//    'location' => EASLApplicationsPlugin::acfPostTypeLocation('programme')
-//]);
-
 acf_add_local_field_group([
     'key' => 'scoring-fields',
     'title' => 'Application scoring',
@@ -108,7 +92,8 @@ acf_add_local_field_group([
                     'key' => 'scoring_criteria_name',
                     'name' => 'criteria_name',
                     'type' => 'text',
-                    'label' => 'Category'
+                    'label' => 'Category',
+                    'required' => true
                 ],
                 [
                     'key' => 'scoring_criteria_max',
@@ -117,14 +102,16 @@ acf_add_local_field_group([
                     'type' => 'number',
                     'min' => 1,
                     'step' => 1,
-                    'instructions' => 'Enter the maximum score that can be achieved for this measure.'
+                    'instructions' => 'Enter the maximum score that can be achieved for this measure.',
+                    'required' => true
                 ],
                 [
                     'key' => 'scoring_criteria_instructions',
                     'name' => 'criteria_instructions',
                     'label' => 'Instructions for reviewers',
                     'instructions' => 'This text will be displayed for reviewers when they are scoring applications.',
-                    'type' => 'textarea'
+                    'type' => 'textarea',
+                    'required' => true
                 ]
             ]
         ]

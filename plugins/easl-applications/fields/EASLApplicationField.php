@@ -29,19 +29,26 @@ class EASLApplicationField
     public $hideFromOutput;
 
     /**
+     * @var array|null
+     */
+    public $conditionalLogic;
+
+    /**
      * EASLApplicationField constructor.
      * @param $key
      * @param $name
      * @param $type
-     * @param $settings
+     * @param array $settings
      * @param bool $hideFromOutput
+     * @param array $conditionalLogic
      */
-    public function __construct($key, $name, $type, $settings = [], $hideFromOutput = false) {
+    public function __construct($key, $name, $type, $settings = [], $hideFromOutput = false, $conditionalLogic = null) {
         $this->key = $key;
         $this->name = $name;
         $this->type = $type;
         $this->settings = $settings;
         $this->hideFromOutput = $hideFromOutput;
+        $this->conditionalLogic = $conditionalLogic;
 
         if ($this->type === 'select') {
             $this->settings['choices'] = [null => 'Please select'] + $this->settings['choices'];

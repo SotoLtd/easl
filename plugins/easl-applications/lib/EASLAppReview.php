@@ -32,7 +32,7 @@ class EASLAppReview {
     const PAGE_INVITE_REVIEWER = 'invite_reviewer';
     const PAGE_CSV = 'export-csv';
 
-    public function getUrl($page, $args) {
+    public function getUrl($page, $args = []) {
         if ($this->isAdmin) {
             if ($page === self::PAGE_CSV) {
                 return admin_url('admin.php?csvExport=' . $args['programmeId']);
@@ -71,6 +71,9 @@ class EASLAppReview {
             'Date of birth' => $memberData['birthdate'],
             'Application submitted' => $submittedDate->format('Y-m-d')
         ];
+        if ($forCSV) {
+            $out = ['ID' => $submission->ID] + $out;
+        }
 
         $fieldSetContainer = EASLApplicationsPlugin::getInstance()->getProgrammeFieldSetContainer($programmeId);
 
@@ -96,11 +99,8 @@ class EASLAppReview {
 
                 $out[$field->name] = $data;
             }
+
         } else {
-            echo $submission->ID;
-            print_r(get_field_objects($submission->ID));
-            echo 'that was fields';
-            die();
             $acfFields = array_filter(get_field_objects($submission->ID), function($field) use ($fields) {
                 return in_array($field['key'], array_keys($fields));
             });
@@ -115,7 +115,7 @@ class EASLAppReview {
     public function exportCSV($programmeId, $fieldSetContainer) {
 
         //Get an array of fields that we are going to want to export
-        $headerFields = ['Title', 'Name', 'Email', 'Phone number', 'Date of Birth', 'Application date'];
+        $headerFields = ['ID', 'Title', 'Name', 'Email', 'Phone number', 'Date of Birth', 'Application date'];
         $fieldSets = $fieldSetContainer->getFieldSets();
         $fields = [];
 
@@ -133,9 +133,38 @@ class EASLAppReview {
         $headerFields[] = 'Average score';
         $headerFields[] = 'Number of reviews';
 
-        $submissions = array_map(function($sub) {
-            $this->getSubmissionDetails($sub['submission'], true);
-        }, $this->getSubmissions($programmeId, null));
+        $submissions = [];
+
+        $reviewers = $this->getProgrammeReviewers($programmeId);
+
+        $scoringCriteria = get_field('scoring_criteria', $programmeId);
+
+        foreach($this->getSubmissions($programmeId, null) as $sub) {
+            $submissions[] = $this->getSubmissionDetails($sub['submission'], true);
+        }
+
+        foreach($reviewers as $reviewer) {
+            $reviewerName = $reviewer['firstName'] . ' ' . $reviewer['lastName'];
+            $headerFields[] = $reviewerName . ' Review total score';
+            $headerFields[] = $reviewerName . ' Review text';
+
+            foreach($scoringCriteria as $category) {
+                $headerFields[] = $reviewerName . ' ' . $category['criteria_name'] . ' score (out of ' . $category['criteria_max'] . ')';
+            }
+
+            foreach($submissions as &$submission) {
+                $reviews = $this->getSubmissionReviews($submission['ID']);
+                foreach($reviews as $review) {
+                    if ($review['reviewer_email'] === $reviewer['email']) {
+                        $submission[] = $review['total_score'];
+                        $submission[] = $review['review_text'];
+                        foreach($review['scoring'] as $category) {
+                            $submission[] = $category['score'];
+                        }
+                    }
+                }
+            }
+        }
 
         $programme = get_post($programmeId);
         $filename = $programme->post_title . ' export.csv';
@@ -170,6 +199,20 @@ class EASLAppReview {
     protected function saveReviewDetails($loggedInUserData, $submission, $formData) {
         $submissionId = $submission->ID;
 
+        $errors = [];
+        foreach($formData['category'] as $i => $cat) {
+            if (!$cat['score']) {
+                $errors['categories'][] = $i;
+            }
+        }
+        if (!$formData['review_text']) {
+            $errors[] = 'review_text';
+        }
+
+        if ($errors) {
+            return $errors;
+        }
+
         if ($formData['review_id']) {
             $reviewId = $formData['review_id'];
             $reviewerEmail = get_post_meta($reviewId, 'reviewer_email', true);
@@ -181,11 +224,13 @@ class EASLAppReview {
             $reviewerName = $loggedInUserData['first_name'] . ' ' . $loggedInUserData['last_name'];
             $reviewTitle = 'Review by ' . $reviewerName . ' of submission from ' . $submission->post_title;
             $reviewId = wp_insert_post(['post_type' => 'submission-review', 'post_title' => $reviewTitle]);
-            update_post_meta($reviewId, 'submission_id', $submissionId);
-            update_post_meta($reviewId, 'review_text', $formData['review_text']);
             update_post_meta($reviewId, 'reviewer_name', $reviewerName);
             update_post_meta($reviewId, 'reviewer_email', $loggedInUserData['email1']);
+            update_post_meta($reviewId, 'submission_id', $submissionId);
         }
+
+        update_post_meta($reviewId, 'review_text', $formData['review_text']);
+
         $totalScore = 0;
         foreach($formData['category'] as $cat) {
             $totalScore += $cat['score'];
@@ -234,16 +279,20 @@ class EASLAppReview {
 
         $submission = get_post($submissionId);
         $fields = $this->getSubmissionDetails($submission);
-        $reviews = $this->getSubmissionReviews($submissionId);
 
-        $myReview = null;
+        $myReview = $saveReviewErrors = null;
+
+        $loggedInUserData = easl_mz_get_logged_in_member_data();
 
         if (!$this->isAdmin) {
-            $loggedInUserData = easl_mz_get_logged_in_member_data();
             if (isset($_POST['review_submitted'])) {
-                $this->saveReviewDetails($loggedInUserData, $submission, $_POST);
+                $saveReviewErrors = $this->saveReviewDetails($loggedInUserData, $submission, $_POST);
             }
+        }
 
+        $reviews = $this->getSubmissionReviews($submissionId);
+
+        if (!$this->isAdmin) {
             $myReview = $this->findReviewByUser($reviews, $loggedInUserData['email1']);
         }
 
@@ -258,18 +307,17 @@ class EASLAppReview {
             'scoringCriteria' => get_field('scoring_criteria', $programmeId),
             'reviews' => $reviews,
             'myReview' => $myReview,
+            'saveReviewErrors' => $saveReviewErrors,
             'isAdmin' => $this->isAdmin
         ]);
     }
 
     /**
      * @param $programmeId
-     * @param null $reviewerEmail
-     * @return array
+     * @return int[]|WP_Post[]
      */
-    protected function getSubmissions($programmeId, $reviewerEmail = null) {
-
-        $submission_posts = get_posts([
+    protected function getSubmissionPosts($programmeId) {
+        return get_posts([
             'post_type' => 'submission',
             'post_status' => 'any',
             'meta_query' => [
@@ -284,6 +332,15 @@ class EASLAppReview {
                 ]
             ]
         ]);
+    }
+
+    /**
+     * @param $programmeId
+     * @param null $reviewerEmail
+     * @return array
+     */
+    protected function getSubmissions($programmeId, $reviewerEmail = null) {
+        $submission_posts = $this->getSubmissionPosts($programmeId);
 
         return array_map(function($submission) use ($reviewerEmail, $programmeId) {
 
@@ -317,10 +374,14 @@ class EASLAppReview {
                 $reviewedByMe = !!$myReview;
             }
         }
-        $out = [
-            'averageScore' => isset($averageScore) ? $averageScore : null,
-            'numberReviews' => count($reviews)
-        ];
+        if ($this->isAdmin) {
+            $out = [
+                'averageScore' => isset($averageScore) ? $averageScore : null,
+                'numberReviews' => count($reviews)
+            ];
+        } else {
+            $out = [];
+        }
         if ($reviewerEmail) {
             $out['reviewedByMe'] = $reviewedByMe;
         }
@@ -343,22 +404,27 @@ class EASLAppReview {
         ]);
     }
 
-    public function programmePage($programmeId = null) {
-        $programmes = get_posts(['post_type' => 'programme']);
-        $loggedInUserData = easl_mz_get_logged_in_member_data();
+    public function getProgrammesUserCanReview($email) {
 
-        $validProgrammes = array_filter($programmes, function($p) use ($loggedInUserData) {
+        $programmes = get_posts(['post_type' => 'programme', 'numberposts' => -1]);
+        return array_filter($programmes, function($p) use ($email) {
             $reviewers = $this->getProgrammeReviewers($p->ID);
             if (!$reviewers) return false;
 
-            $userIsReviewer = array_filter($reviewers, function($reviewer) use($loggedInUserData) {
-                return $reviewer['email'] == $loggedInUserData['email1'];
+            $userIsReviewer = array_filter($reviewers, function($reviewer) use($email) {
+                return $reviewer['email'] == $email;
             });
             if (count($userIsReviewer) === 0) {
                 return false;
             }
             return true;
         });
+    }
+
+    public function programmePage($programmeId = null) {
+        $loggedInUserData = easl_mz_get_logged_in_member_data();
+
+        $validProgrammes = $this->getProgrammesUserCanReview($loggedInUserData['email1']);
 
         if (count($validProgrammes) === 1) {
             $programmeId = $validProgrammes[0]->ID;
@@ -396,13 +462,14 @@ class EASLAppReview {
     }
 
     protected function getNumberSubmissions($programmeId) {
-        global $wpdb;
-        return $wpdb->get_var("
-          SELECT COUNT(DISTINCT(post_id))
-          FROM $wpdb->postmeta
-          WHERE meta_key = 'programme_id'
-          AND meta_value = $programmeId
-        ");
+        return count($this->getSubmissionPosts($programmeId));
+//        global $wpdb;
+//        return $wpdb->get_var("
+//          SELECT COUNT(DISTINCT(post_id))
+//          FROM $wpdb->postmeta
+//          WHERE meta_key = 'programme_id'
+//          AND meta_value = $programmeId
+//        ");
     }
 
     public function handleInviteReviewerFormSubmit() {
@@ -450,17 +517,29 @@ class EASLAppReview {
             update_post_meta($programmeId, 'reviewers', $reviewers);
 
             //Invite the reviewer
-            $this->sendReviewerInviteEmail($email, $programmeId);
+            $this->sendReviewerInviteEmail($email, $member, $programmeId);
         } else {
             $this->error = 'No MyEASL account was found for ' . $email;
         }
     }
 
-    protected function sendReviewerInviteEmail($email, $programmeId) {
-        $subject = get_field('reviewer_email_subject', $programmeId);
-        $content = get_field('reviewer_email', $programmeId);
-        $email = 'will@willevans.tech';
+    protected function sendReviewerInviteEmail($email, $memberData, $programmeId) {
+
+        $programme = get_post($programmeId);
+        $apps = EASLApplicationsPlugin::getInstance();
+
+        $guidelinesLink = get_field('guidelines_link', $programmeId);
+        $reviewDeadline = get_field('review_deadline', $programmeId);
+
+        $message = EASLApplicationsPlugin::renderEmail($apps->templateDir . 'email/invite_reviewer.php', [
+            'firstName' => $memberData['first_name'],
+            'lastName' => $memberData['last_name'],
+            'programmeName' => $programme->post_title,
+            'guidelinesLink' => $guidelinesLink,
+            'reviewDeadline' => $reviewDeadline
+        ]);
+
         $headers = ['Content-Type: text/html; charset=UTF-8'];
-        wp_mail($email, $subject, $content, $headers);
+        wp_mail($email, 'Invitation to Review EASL Applications', $message, $headers);
     }
 }

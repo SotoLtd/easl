@@ -39,6 +39,10 @@ body .mzms-field-wrap .select2-container--default .select2-selection--single .se
     line-height: 40px;
 }
 
+.acf-field-text .acf-input input, .acf-field-select .acf-input select, .acf-field-date-picker .acf-input input {
+    max-width:500px;
+}
+
 .mzms-field-wrap.easl-mz-field-has-error .select2-container--default .select2-selection--multiple,
 .mzms-field-wrap.easl-mz-field-has-error .select2-container--default .select2-selection--single {
     border-color: #de2a57 !important;
@@ -2773,8 +2777,15 @@ span.mzms-field-file-button {
 .easl-mz-tabs .tabs-nav .tab {
     margin:0 20px 0 0;
     background-color:#f0f0f0;
+    border-bottom:none;
     color:#004b87;
     font-weight:bold;
+}
+
+.easl-mz-tabs .tabs-nav .tab.active, .easl-mz-tabs .tabs-nav .tab:hover {
+    background-color:#004b87;
+    color:#fff;
+    text-decoration:none;
 }
 
 .easl-mz-tabs .tab-pane, .easl-mz-tabs .tabs-nav .tab {
@@ -2797,10 +2808,24 @@ span.mzms-field-file-button {
     display:flex;
     justify-content:space-between;
     align-items:center;
+    margin-top:10px;
+}
+.applications-widget-programme:first-child {
+    margin-top:0;
 }
 
 .applications-widget-programme .programme-title {
     font-weight:bold;
+}
+
+.applications-widget-closed {
+    color: #333333;
+    background-color:#f5f5f5;
+}
+.applications-widget-closed:hover {
+    color: #333333;
+    background-color:#f5f5f5;
+    cursor:default;
 }
 
 .application-submitted-message {
@@ -2810,4 +2835,76 @@ span.mzms-field-file-button {
     color:#004b87;
     font-weight:bold;
     border:1px solid #aaa;
+}
+
+.review-programmes-table td a.programme-name {
+    font-weight:bold;
+}
+
+.review-programmes-table td a.easl-generic-button {
+    float:right;
+}
+
+li.menu-item.review-applications {
+    display:none;
+}
+
+.sp-modal-overlay {
+    background-color:rgba(0,0,0,0.5);
+    position:fixed;
+    top:0;
+    left:0;
+    right:0;
+    bottom:0;
+    display:none;
+    z-index:1000;
+}
+
+.sp-modal {
+    background-color: #fff;
+    padding: 30px;
+    margin-bottom: 35px;
+    box-shadow: 0 0px 20px 0 rgba(0,0,0,.2);
+    display:none;
+    position:fixed;
+    left:50%;
+    top:25vh;
+    width:600px;
+    margin-left:-300px;
+
+}
+
+.sp-modal .sp-modal-close {
+    position:absolute;
+    top:10px;
+    right:10px;
+    display:block;
+    width:30px;
+    height:30px;
+    text-align:center;
+    font-size:30px;
+    font-weight:bold;
+    color:#444;
+}
+
+.sp-modal-close:hover {
+    text-decoration:none;
+}
+
+@media (max-width:767px) {
+    .s-modal {
+        width:100vw;
+        left:0;
+        top:0;
+        right:0;
+        bottom:0;
+        margin-left:0;
+    }
+}
+
+.sp-modal-overlay .sp-modal ul {
+    margin: 0 0 20px 20px
+}
+.sp-modal-overlay.active, .active .sp-modal {
+    display:block;
 }

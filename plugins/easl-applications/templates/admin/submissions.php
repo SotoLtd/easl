@@ -18,6 +18,7 @@
                 <td><?=$programme->end_date;?></td>
                 <td><?=$programme->submissions_count;?></td>
                 <td>
+                    <a href="<?=EASLAppReview::getUrl(EASLAppReview::PAGE_PROGRAMME, ['programmeId' => $programme->ID, 'tab' => 'reviewers']);?>" class="button">Manage reviewers</a>
                     <a href="<?=EASLAppReview::getUrl(EASLAppReview::PAGE_PROGRAMME, ['programmeId' => $programme->ID]);?>" class="button">View applications</a>
                     <a href="<?=EASLAppReview::getUrl(EASLAppReview::PAGE_CSV, ['programmeId' => $programme->ID]);?>" class="button">Export CSV</a>
                 </td>

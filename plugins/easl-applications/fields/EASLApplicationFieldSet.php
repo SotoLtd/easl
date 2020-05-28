@@ -61,6 +61,25 @@ class EASLApplicationFieldSet
                 'type' => $field->type,
             ];
 
+            if ($field->conditionalLogic) {
+                $dependsOnKey = $field->conditionalLogic[0];
+                $dependsOnValue = $field->conditionalLogic[1];
+
+                $dependsOnField = EASLApplicationsPlugin::findInArray($this->fields, function($field) use ($dependsOnKey) {
+                    return $field->key === $dependsOnKey;
+                });
+
+                $output['conditional_logic'] = [
+                    [
+                        [
+                            'field' => $this->getFieldKey($dependsOnField),
+                            'operator' => '==',
+                            'value' => EASLApplicationsPlugin::getSlug($dependsOnValue)
+                        ]
+                    ]
+                ];
+            }
+
             $output += $field->settings;
             return $output;
 

@@ -1031,6 +1031,24 @@
         }
 
         easlMemberZone.init();
+
+        $('.sp-modal-trigger').click(function(e) {
+            var url = $(this).attr('href');
+            console.log(url);
+            e.preventDefault();
+
+            var ssoLink = $('.sso-link');
+            var ssoUrl = ssoLink.attr('href');
+            var updatedUrl = ssoUrl.replace(/(redirect_uri=)[^\&]+/, '$1' + url);
+            ssoLink.attr('href', updatedUrl);
+            
+            $('.sp-modal-overlay').addClass('active');
+        });
+
+        $('.sp-modal-close').click(function(e) {
+            e.preventDefault();
+            $('.sp-modal-overlay').removeClass('active');
+        });
     });
 
 })(jQuery);
