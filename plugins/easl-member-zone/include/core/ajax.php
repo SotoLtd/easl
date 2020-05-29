@@ -123,7 +123,7 @@ class EASL_MZ_Ajax_Handler {
 			}
 		}
 
-		$member_details = $this->api->get_member_details( $current_member_id, true );
+		$member_details = $this->api->get_member_details( $current_member_id, false );
 
 		if ( ! $member_details ) {
 			$this->session->unset_auth_cookie( true );
@@ -403,7 +403,7 @@ class EASL_MZ_Ajax_Handler {
 		if ( ! $current_member_id ) {
 			$this->respond( 'Member not found!', 404 );
 		}
-		$member_details = $this->api->get_member_details( $current_member_id, true );
+		$member_details = $this->api->get_member_details( $current_member_id, false );
 
 		if ( ! $member_details ) {
 			$this->respond( 'Member ' . $current_member_id . ' not found!', 404 );
@@ -480,7 +480,7 @@ class EASL_MZ_Ajax_Handler {
 		if ( ! $current_member_id ) {
 			$this->respond( 'Member not found!', 404 );
 		}
-		$member_details = $this->api->get_member_details( $current_member_id );
+		$member_details = $this->api->get_member_details( $current_member_id, false );
 		if ( ! $member_details ) {
 			$this->respond( 'Member ' . $current_member_id . ' not found!', 404 );
 		}
