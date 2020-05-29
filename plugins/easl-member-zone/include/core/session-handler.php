@@ -371,4 +371,11 @@ class EASL_MZ_Session_Handler {
 			$wpdb->delete( $this->_table, array( 'session_id' => $id ), array( '%d' ) );
 		}
 	}
+
+	public function clean_expired_session() {
+		global $wpdb;
+		$now = time();
+		$sql = "DELETE FROM {$this->_table} WHERE session_expiry < {$now}";
+		$wpdb->query($sql);
+	}
 }

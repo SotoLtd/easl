@@ -67,6 +67,10 @@ class EASL_MZ_Manager {
 
 		add_action( 'template_redirect', array( $this, 'logged_member_actions' ) );
 		add_filter( 'body_class', array( $this, 'body_class' ) );
+
+		add_action( 'eals_mz_daily_checklist', array( $this, 'daily_scheduled_tasks' ) );
+
+		$this->cron_init();
 	}
 
 	/**
@@ -133,6 +137,17 @@ class EASL_MZ_Manager {
 		// Setup locale
 		load_plugin_textdomain( 'easlmz', false, $this->path( 'APP_ROOT', 'locale' ) );
 	}
+
+	public function cron_init() {
+		if ( ! wp_next_scheduled( 'eals_mz_daily_checklist' ) ) {
+			wp_schedule_event( time(), 'daily', 'eals_mz_daily_checklist' );
+		}
+	}
+
+	public function daily_scheduled_tasks() {
+		$this->session->clean_expired_session();
+	}
+
 
 	/**
 	 * Callback function for WP init action hook.
@@ -847,7 +862,8 @@ class EASL_MZ_Manager {
 	}
 
 	public static function deactivate() {
-
+		$timestamp = wp_next_scheduled( 'eals_mz_daily_checklist' );
+		wp_unschedule_event( $timestamp, 'eals_mz_daily_checklist' );
 	}
 
 	/**

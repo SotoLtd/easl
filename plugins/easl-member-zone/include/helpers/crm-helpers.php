@@ -154,7 +154,6 @@ function easl_mz_validate_new_member_form($data = array()) {
         'dotb_place_of_work',
         'alt_address_country',
         'dotb_user_category',
-        'dotb_user_category_other'
     ];
 
     $errors = validate_required_fields($required_fields, $data);
@@ -167,6 +166,9 @@ function easl_mz_validate_new_member_form($data = array()) {
     }
     if ( ! empty( $data['dotb_easl_specialty'] ) && in_array( 'other', $data['dotb_easl_specialty'] ) && empty( $data['dotb_easl_specialty_other'] ) ) {
         $errors['dotb_easl_specialty_other'] = 'Mandatory field';
+    }
+    if ( ! empty( $data['dotb_user_category'] ) && in_array( 'other', $data['dotb_user_category'] ) && empty( $data['dotb_user_category_other'] ) ) {
+        $errors['dotb_user_category_other'] = 'Mandatory field';
     }
     if ( ! empty( $data['birthdate'] ) && ! preg_match( "/^[0-9]{4}-(0[1-9]|1[0-2])-(0[1-9]|[1-2][0-9]|3[0-1])$/", $data['birthdate'] ) ) {
         $errors['birthdate'] = 'Enter date in yyyy-mm-dd format.';
