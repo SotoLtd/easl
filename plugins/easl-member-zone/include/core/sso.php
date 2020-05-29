@@ -31,7 +31,7 @@ class EASL_MZ_SSO {
     public function get_login_url() {
         $data = [
             'response_type' => 'code',
-            'redirect_url' => $this->redirect_url,
+            'redirect_uri' => $this->redirect_url,
             'client_id' => $this->client_id
         ];
         $query_string = build_query($data);
