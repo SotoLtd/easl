@@ -43,14 +43,14 @@ class EASL_MZ_SSO {
         $api = EASL_MZ_API::get_instance();
         $session = EASL_MZ_Session_Handler::get_instance();
 
-        $data = [
-            'client_id' => $this->client_id,
-            'redirect_uri' => $this->redirect_url,
-            'client_secret' => $this->client_secret,
-            'code' => $code,
-            'grant_type' => 'authorization_code',
-            'scope' => 'profile email'
-        ];
+            $data = [
+                'client_id' => $this->client_id,
+                'redirect_uri' => $this->redirect_url,
+                'client_secret' => $this->client_secret,
+                'code' => $code,
+                'grant_type' => 'authorization_code',
+                'scope' => 'profile email'
+            ];
 
         $this->request->post('/token', $data, 'body', [], true, false);
 
@@ -67,21 +67,31 @@ class EASL_MZ_SSO {
             $response = $this->request->get_response_body();
 
             $response_data = json_decode(json_encode($response), true);
+            $credential_data = $this->parse_credential_data( $response_data );
 
-            // Member authenticated
-            do_action( 'easl_mz_member_authenticated', $response->email, $response_data, $redirect );
+            if($credential_data) {
+                // Member authenticated
+                do_action( 'easl_mz_member_authenticated', $response->email, $credential_data, $redirect );
 
-            $api->set_credentials(['access_token' => $response_data['sugarcrm_token']], true);
-
-            $session->add_data('access_token', $response_data['sugarcrm_token']);
-
-            $member_id = $api->get_member_id();
-
-            if ( $member_id ) {
-                $session->add_data( 'member_id', $member_id );
-                $session->save_session_data();
+                if ( $response_data['sugarcrm_userid'] ) {
+                    $session->add_data( 'member_id', $response_data['sugarcrm_userid'] );
+                    $session->save_session_data();
+                }
             }
         }
-        wp_redirect($redirect);
+//        wp_redirect($redirect);
     }
+
+	public function parse_credential_data( $response ) {
+		if ( empty( $response['sugarcrm_token'] ) || empty( $response['sugarcrm_refresh_token'] ) ) {
+			return false;
+		}
+		return array(
+			'access_token'       => $response['sugarcrm_token'],
+			'refresh_token'      => $response['sugarcrm_refresh_token'],
+			'expires_in'         => intval( $response['sugarcrm_token_expires_in'] ),
+			'refresh_expires_in' => intval( $response['sugarcrm_refresh_token_expires_in'] ),
+			'login'              => time(),
+		);
+	}
 }

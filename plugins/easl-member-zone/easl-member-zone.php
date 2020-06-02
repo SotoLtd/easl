@@ -13,9 +13,9 @@ if ( ! defined( 'ABSPATH' ) ) {
 	die( '-1' );
 }
 
-define( 'EASL_MZ_VERSION', '1.1.6.5' );
+//define( 'EASL_MZ_VERSION', '1.1.6.3' );
 
-//define( 'EASL_MZ_VERSION', time() );
+define( 'EASL_MZ_VERSION', time() );
 
 class EASL_MZ_Manager {
 	/**
@@ -159,7 +159,6 @@ class EASL_MZ_Manager {
 	 */
 	public function init() {
 		$this->add_options_page();
-		$this->handle_member_login();
 		$this->handle_openid_auth_code();
 		$this->handle_member_logout();
 		$this->handle_mz_actions();
@@ -231,53 +230,6 @@ class EASL_MZ_Manager {
 				$this->get_membership_note();
 				break;
 		}
-	}
-
-	public function handle_member_login() {
-//	    $sessionData = easl_mz_get_current_session_data();
-////
-//	    if (!$sessionData) {
-//	        $_POST['mz_member_login'] = 'test@example.com';
-//	        $_POST['mz_member_password'] = 'password';
-//        }
-		if ( empty( $_POST['mz_member_login'] ) || empty( $_POST['mz_member_password'] ) ) {
-			return false;
-		}
-		$member_login    = $_POST['mz_member_login'];
-		$member_password = $_POST['mz_member_password'];
-		$redirect        = get_field( 'member_profile_url', 'option' );
-
-		if ( ! empty( $member_password['mz_redirect_url'] ) ) {
-			$redirect = $member_password['mz_redirect_url'];
-		}
-
-		$auth_response_status = $this->api->get_auth_token( $member_login, $member_password, true );
-		if ( ! $auth_response_status ) {
-			$this->set_message( 'login_error', 'Invalid username or password.' );
-
-			return false;
-		}
-
-		// Member authenticated
-		do_action( 'easl_mz_member_authenticated', $member_login, $this->api->get_credential_data( true ), $redirect );
-
-		$member_id = $this->api->get_member_id();
-		if ( $member_id ) {
-			$this->session->add_data( 'member_id', $member_id );
-			$this->session->save_session_data();
-		}
-
-        easl_mz_refresh_logged_in_member_data();
-
-		do_action( 'easl_mz_member_looged_id' );
-
-		if ( ! $redirect ) {
-			$redirect = site_url();
-		}
-		if ( wp_redirect( $redirect ) ) {
-			exit;
-		}
-
 	}
 
 	public function handle_member_logout() {

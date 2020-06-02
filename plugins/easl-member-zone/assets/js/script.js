@@ -82,7 +82,7 @@
             "memberCard": 'get_member_card',
             "featuredMember": 'get_featured_member',
             "membershipForm": 'get_membership_form',
-            // "membershipBanner": 'get_membership_banner',
+            "membershipBanner": 'get_membership_banner',
             "newMembershipForm": 'get_new_membership_form',
             "submitMemberShipForm": "update_member_profile",
             "submitNewMemberForm": "create_member_profile",
@@ -1005,7 +1005,7 @@
             this.getMembershipForm();
             this.getMemberDocuments();
             this.getNewMembershipForm();
-            this.getMembershipBanner();
+            //this.getMembershipBanner();
             this.initMemberDirectory();
             this.initMemberStatistics();
         },
