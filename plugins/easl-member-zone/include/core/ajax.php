@@ -511,7 +511,8 @@ class EASL_MZ_Ajax_Handler {
 		$this->respond_file( '/new-membership-form/new-membership-form.php', array(
 			'member'   => $member_details,
 			'renew'    => $renew,
-			'messages' => $messages
+			'messages' => $messages,
+            'skip_dashboard' => $_POST['request_data']['skip_dashboard']
 		), 200, $extra_data );
 	}
 
@@ -662,16 +663,20 @@ class EASL_MZ_Ajax_Handler {
 //		$membership_page = easl_member_new_membership_form_url( false );
 
         //Redirect to the dashboard
-        $membership_page = get_field( 'member_dashboard_url', 'option' );
-		if ( ! $membership_page ) {
-			$membership_page = get_site_url();
-		}
+        if ($request_data['skip_dashboard']) {
+            $redirect = get_field('membership_plan_url', 'option');
+        } else {
+            $redirect = get_field( 'member_dashboard_url', 'option' );
+            if ( ! $redirect ) {
+                $redirect = get_site_url();
+            }
+        }
 
 		$auth_response_status = $this->api->get_auth_token( $request_data['portal_name'], $password, true );
 		if ( ! $auth_response_status ) {
 		    //@todo redirect to SSO??
             // Update $membership_page with the sso login url
-            $this->respond( $membership_page, 401 );
+            $this->respond( $redirect, 401 );
 		}
 		// Member authenticated
 		$this->session->set_auth_cookie( $request_data['portal_name'], $this->api->get_credential_data( true ) );
@@ -679,7 +684,7 @@ class EASL_MZ_Ajax_Handler {
 		$this->session->save_session_data();
         easl_mz_refresh_logged_in_member_data();
 
-		$this->respond( $membership_page, 200 );
+		$this->respond( $redirect, 200 );
 	}
 
 	public function delete_current_member() {

@@ -359,12 +359,15 @@ $not_found_text = $has_filter ? 'Nothing has been found' : 'content is coming so
 						$publication_date = DateTime::createFromFormat('d/m/Y', $publication_date);
 						$publication_date = $publication_date->format($publication_date_format);
                     }
-                    $logged_in = false;//easl_mz_is_member_logged_in();
+                    $logged_in = easl_mz_is_member_logged_in();
+                    $cpg = has_term('clinical-practice-guidelines', 'publication_category', get_the_ID());
+                    $needs_modal = !$logged_in && $cpg;
+
 					?>
 					<article class="scientific-publication <?php if(!$image_src){echo 'sp-has-no-thumb';} ?> easl-sprow-color-<?php echo easl_get_publication_topic_color(); ?> clr">
 						<?php if($image_src): ?>
 						<div class="sp-thumb">
-							<a href="<?php echo $read_more_link;?>" title="" <?php $target ?> class="<?php if (!$logged_in):?>sp-modal-trigger<?php endif;?>" >
+							<a href="<?php echo $read_more_link;?>" title="" <?php $target ?> class="<?php if ($needs_modal):?>sp-modal-trigger<?php endif;?>" >
 								<img alt="" src="<?php echo $image_src; ?>"/>
 							</a>
 						</div>
@@ -383,10 +386,10 @@ $not_found_text = $has_filter ? 'Nothing has been found' : 'content is coming so
 									<span class="sp-meta-value"><?php echo $topics; ?></span>
 									<?php endif; ?>
 								</p>
-								<h3><a href="<?php echo $read_more_link; ?>" <?php echo $target; ?> class="<?php if (!$logged_in):?>sp-modal-trigger<?php endif;?>"><?php the_title(); ?></a></h3>
+								<h3><a href="<?php echo $read_more_link; ?>" <?php echo $target; ?> class="<?php if ($needs_modal):?>sp-modal-trigger<?php endif;?>"><?php the_title(); ?></a></h3>
 							</div>
 							<p class="sp-excerpt"><?php echo $excerpt; ?></p>
-                            <a class="easl-button<?php if (!$logged_in):?> sp-modal-trigger<?php endif;?>" href="<?php echo $read_more_link; ?>" <?php echo $target; ?>><?php _e('Read More', 'total-child'); ?> <span class="easl-generic-button-icon"><span class="ticon ticon-chevron-right"></span></span></a>
+                            <a class="easl-button<?php if ($needs_modal):?> sp-modal-trigger<?php endif;?>" href="<?php echo $read_more_link; ?>" <?php echo $target; ?>><?php _e('Read More', 'total-child'); ?> <span class="easl-generic-button-icon"><span class="ticon ticon-chevron-right"></span></span></a>
 						</div>
 					</article>
 			<?php
@@ -401,27 +404,4 @@ $not_found_text = $has_filter ? 'Nothing has been found' : 'content is coming so
 		<?php echo $pagination; ?>
 	</div>
 </div>
-<div class="sp-modal-overlay">
-
-    <div class="sp-modal">
-        <a class="sp-modal-close" href="#">&times;</a>
-        <h3>Create a MyEASL profile to access these resources</h3>
-        <p>With your MyEASL Profile you get access to:</p>
-        <ul>
-            <li>Online education through EASL Campus</li>
-            <li>EASL Clinical Practice Guidelines (CPGs)</li>
-            <li>Event specific information through the EASL App</li>
-            <li>Dedicated EASL newsletter</li>
-            <li>And more</li>
-        </ul>
-
-        <p>
-            <a href="/become-a-member" class="easl-button easl-color-lightblue">Create account
-                <span class="easl-generic-button-icon"><span class="ticon ticon-chevron-right"></span></span>
-            </a>
-        </p>
-        <div>
-            <strong><a class="sso-link" href="<?=EASL_MZ_SSO::get_instance()->get_login_url();?>">Already have an account?  Sign in here.</a></strong>
-        </div>
-    </div>
-</div>
+<?php require_once(__DIR__ . '/../partials/publication/publication-modal.php');

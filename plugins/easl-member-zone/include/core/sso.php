@@ -40,17 +40,18 @@ class EASL_MZ_SSO {
 
     public function handle_auth_code($code) {
 
-        $api = EASL_MZ_API::get_instance();
         $session = EASL_MZ_Session_Handler::get_instance();
 
-            $data = [
-                'client_id' => $this->client_id,
-                'redirect_uri' => $this->redirect_url,
-                'client_secret' => $this->client_secret,
-                'code' => $code,
-                'grant_type' => 'authorization_code',
-                'scope' => 'profile email'
-            ];
+        $redirect_url = 'https://' . $_SERVER['HTTP_HOST'] . rtrim(strtok($_SERVER['REQUEST_URI'], '?'), '/');
+
+        $data = [
+            'client_id' => $this->client_id,
+            'redirect_uri' => $redirect_url,
+            'client_secret' => $this->client_secret,
+            'code' => $code,
+            'grant_type' => 'authorization_code',
+            'scope' => 'profile email'
+        ];
 
         $this->request->post('/token', $data, 'body', [], true, false);
 
@@ -67,6 +68,7 @@ class EASL_MZ_SSO {
             $response = $this->request->get_response_body();
 
             $response_data = json_decode(json_encode($response), true);
+
             $credential_data = $this->parse_credential_data( $response_data );
 
             if($credential_data) {

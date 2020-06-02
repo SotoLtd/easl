@@ -35,6 +35,9 @@ wp_enqueue_script('publication-detailed-item-script',
     false,
     true);
 
+$logged_in = easl_mz_is_member_logged_in();
+$cpg = has_term('clinical-practice-guidelines', 'publication_category', get_the_ID());
+$needs_modal = !$logged_in && $cpg;
 ?>
 
 <article id="single-blocks" class="single-publication-article entry easl-color-<?php echo $topic_color; ?> clr">
@@ -118,7 +121,7 @@ wp_enqueue_script('publication-detailed-item-script',
                             <?php if(get_field('publication_slide_decks')):?>
                             <div class="" style="border-top: 1px solid #004b87;">
                                 <a href="<?php echo get_field('publication_slide_decks')?>"
-                                   class="vcex-button theme-button inline animate-on-hover wpex-dhover-0"
+                                   class="vcex-button theme-button inline animate-on-hover wpex-dhover-0 <?php if ($needs_modal):?> sp-modal-trigger<?php endif;?>"
                                    style="background:#ffffff;
                                            color:#004b87;
                                            font-family: KnockoutHTF51Middleweight;
@@ -135,14 +138,14 @@ wp_enqueue_script('publication-detailed-item-script',
                             <?php endif;?>
                         <?php else:?>
                             <div class="publication-sidebar-item pub-download-item">
-                                <a href="<?php echo get_field('publication_link_to_pdf')?>" class="text-decoration-none" target="_blank">
+                                <a href="<?php echo get_field('publication_link_to_pdf')?>" class="text-decoration-none <?php if ($needs_modal):?>sp-modal-trigger<?php endif;?>" target="_blank">
                                     <h3 class="publication-sidebar-item-title" style="border-bottom: none;">Download as a PDF</h3>
                                 </a>
                             </div>
                             <?php if(get_field('publication_slide_decks')):?>
                             <div class="" style="padding-top: 10px;border-top: 1px solid #004b87;">
                                 <a href="<?php echo get_field('publication_slide_decks')?>"
-                                   class="vcex-button theme-button inline animate-on-hover wpex-dhover-0 text-decoration-none"
+                                   class="vcex-button theme-button inline animate-on-hover wpex-dhover-0 text-decoration-none <?php if ($needs_modal):?> sp-modal-trigger<?php endif;?>"
                                    style="background:#ffffff;
                                            color:#004b87;
                                            font-family: KnockoutHTF51Middleweight;
@@ -165,3 +168,4 @@ wp_enqueue_script('publication-detailed-item-script',
     </div>
 
 </article><!-- #single-blocks -->
+<?php require_once(__DIR__ . '/publication-modal.php');

@@ -743,6 +743,7 @@
             });
         },
         getNewMembershipForm: function () {
+            console.log('here');
             var _this = this;
             var $el = $(".easl-mz-new-membership-form");
             if ($el.length) {
@@ -760,9 +761,14 @@
                         _this.loadBanner(response.Data.banner);
                     }
                 });
+
+                url = new URL(window.location.href);
+                var skipDashboard = url.searchParams.get('skip_dashboard');
+                console.log(skipDashboard);
                 this.request(this.methods.newMembershipForm, $el, {
                     'renew': $el.data('paymenttype'),
-                    'messages': _this.messages
+                    'messages': _this.messages,
+                    'skip_dashboard': skipDashboard
                 });
             }
         },
@@ -1034,12 +1040,14 @@
 
         $('.sp-modal-trigger').click(function(e) {
             var url = $(this).attr('href');
+            url = url.replace(/\/$/, '');
             console.log(url);
             e.preventDefault();
 
             var ssoLink = $('.sso-link');
             var ssoUrl = ssoLink.attr('href');
             var updatedUrl = ssoUrl.replace(/(redirect_uri=)[^\&]+/, '$1' + url);
+            console.log(updatedUrl);
             ssoLink.attr('href', updatedUrl);
             
             $('.sp-modal-overlay').addClass('active');

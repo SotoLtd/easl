@@ -50,6 +50,11 @@ if ( ! easl_mz_is_member_logged_in() ):
                 <h2 class="mz-page-heading"><?php echo $title; ?></h2>
 			<?php endif; ?>
             <form id="easl-mz-new-member-form" action="" method="post" autocomplete="off">
+
+                <?php if (!empty($_GET['skip_dashboard'])):?>
+                    <input type="hidden" name="skip_dashboard" value="1">
+                <?php endif;?>
+
 				<?php include $template_base . '/partials/fields-basic.php'; ?>
                 <div class="mzms-fields-separator"></div>
 				<?php include $template_base . '/partials/fields-global.php'; ?>
