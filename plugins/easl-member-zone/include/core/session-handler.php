@@ -68,12 +68,13 @@ class EASL_MZ_Session_Handler {
 		$this->_member_login = $session->member_login;
 		$this->_data         = maybe_unserialize( $session->session_value );
 		$api_data            = $this->prepare_api_credential_data();
-//
-//		if ( $this->api_expired( $api_data ) ) {
-//			$this->unset_auth_cookie();
-//
-//			return false;
-//		}
+
+		if ( $this->api_expired( $api_data ) ) {
+			$this->unset_auth_cookie();
+
+			return false;
+		}
+
 		easl_mz_get_manager()->getApi()->set_credentials( $api_data );
 	}
 
@@ -81,9 +82,9 @@ class EASL_MZ_Session_Handler {
 		if ( empty( $api_data['access_token'] )) {
 			return true;
 		}
-//		if ( ( $api_data['token_set_time'] + $api_data['refresh_expires_in'] - 10 ) < time() ) {
-//			return true;
-//		}
+		if ( ( $api_data['token_set_time'] + $api_data['refresh_expires_in'] - 10 ) < time() ) {
+			return true;
+		}
 
 		return false;
 	}
