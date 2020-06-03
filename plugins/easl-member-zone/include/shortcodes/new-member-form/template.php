@@ -55,6 +55,8 @@ if ( ! easl_mz_is_member_logged_in() ):
                     <input type="hidden" name="skip_dashboard" value="1">
                 <?php endif;?>
 
+                <h1>MyEASL Account Creation</h1>
+
 				<?php include $template_base . '/partials/fields-basic.php'; ?>
                 <div class="mzms-fields-separator"></div>
 				<?php include $template_base . '/partials/fields-global.php'; ?>

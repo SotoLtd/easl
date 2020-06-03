@@ -409,11 +409,14 @@ body .mzms-button::after {
     min-width: 255px;
 }
 
-.easl-mz-membercard, .easl-member-banner {
+.easl-mz-membercard {
     background: #d0d0d0;
 }
 
 .easl-member-banner {
+    background-color:#62cff5;
+    color:#fff;
+    font-size:24px;
     padding:16px;
     margin-bottom:16px;
     overflow:hidden;
@@ -422,6 +425,7 @@ body .mzms-button::after {
     flex-direction:row;
     justify-content:space-between;
     align-items:center;
+
 }
 
 .mz-member-card-inner {
@@ -2793,7 +2797,7 @@ span.mzms-field-file-button {
 }
 
 .easl-mz-tabs .tab-pane {
-    border:1px solid #f0f0f0;
+    box-shadow:0 0 4px 0 rgba(0, 0, 0, .2);
 }
 
 .easl-mz-tabs .tab-pane {
