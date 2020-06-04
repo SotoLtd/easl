@@ -544,7 +544,7 @@ class EASL_MZ_Ajax_Handler {
 			$this->respond( 'Member not found!', 404 );
 		}
 
-		$errors = easl_mz_validate_member_data( $request_data );
+        $errors = easl_mz_validate_new_member_form( $request_data );
 
 		if ( count( $errors ) > 0 ) {
 			$this->respond_field_errors( $errors );

@@ -9,6 +9,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * @var $messages
  */
 $template_base = easl_mz_get_manager()->path( 'SHORTCODES_DIR', '/new-membership-form' );
+$addfields = $template_base . '/partials/fields-address.php';
 
 $member_name_parts = array();
 if ( $member['salutation'] ) {
@@ -64,9 +65,9 @@ if ( ! $member_has_waiting_payemnt ):
 
 <!--            --><?php //include $template_base . '/partials/fields-add-membership.php'; ?>
 <!--            <div class="mzms-fields-separator"></div>-->
-            <?php include $template_base . '/partials/fields-communication.php'; ?>
+            <?php require ($template_base . '/partials/fields-communication.php'); ?>
             <div class="mzms-fields-separator"></div>
-            <?php include $template_base . '/partials/fields-address.php'; ?>
+            <?php require ($template_base . '/partials/fields-address.php'); ?>
             <div class="mzms-fields-row easl-row easl-row-col-2">
                 <div class="easl-col">
                     <div class="easl-col-inner mzms-fields-con">
