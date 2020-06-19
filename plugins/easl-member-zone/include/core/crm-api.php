@@ -511,7 +511,7 @@ class EASL_MZ_API {
 			'Content-Type' => 'multipart/form-data',
 			'OAuth-Token'  => $this->get_access_token( false ),
 		);
-		$result  = $this->put( '/Contacts/' . $member_id . '/file/picture', true, $headers, $img_file, 'body', array(), array( 200 ), false );
+		$result  = $this->put( '/Contacts/' . $member_id . '/file/picture', false, $headers, $img_file, 'body', array(), array( 200 ), false );
 		if ( ! $result ) {
 			return false;
 		}
@@ -1002,11 +1002,7 @@ class EASL_MZ_API {
 		if ( $this->is_session_expired( $is_member ) ) {
 			return false;
 		}
-
-        if(!$is_member){
-            $this->maybe_refresh_user_auth_token( );
-        }
-
+		$this->maybe_refresh_auth_token( $is_member );
 		$this->request->reset_headers();
 		if ( is_array( $headers ) ) {
 			foreach ( $headers as $key => $value ) {
@@ -1014,17 +1010,13 @@ class EASL_MZ_API {
 			}
 		}
 		$this->request->post( $endpoint, $data, $data_format, $cookies );
+		if ( $this->request->is_valid_response_code( 401 ) && ! $this->is_auth_refresh_called() ) {
+			if ( $this->refresh_auth_token( $is_member ) ) {
+				return $this->post( $endpoint, $is_member, $headers, $data, $data_format, $cookies, $codes );
+			}
 
-        if( $this->request->is_valid_response_code( 401 )) {
-            if($is_member){
-                $this->member_session_expired();
-            }elseif ( !$this->is_auth_refresh_called(false)){
-                if ( $this->refresh_auth_token( false ) ) {
-                    return $this->post( $endpoint, $is_member, $headers, $data, $data_format, $cookies, $codes );
-                }
-            }
-            return false;
-        }
+			return false;
+		}
 
 		if ( ! $this->request->is_valid_response_code( $codes ) ) {
 			return false;
@@ -1041,11 +1033,7 @@ class EASL_MZ_API {
 		if ( $this->is_session_expired( $is_member ) ) {
 			return false;
 		}
-
-        if(!$is_member){
-            $this->maybe_refresh_user_auth_token( );
-        }
-
+		$this->maybe_refresh_auth_token( $is_member );
 		$this->request->reset_headers();
 		if ( is_array( $headers ) ) {
 			foreach ( $headers as $key => $value ) {
@@ -1054,16 +1042,13 @@ class EASL_MZ_API {
 		}
 		$this->request->put( $endpoint, $data, $data_format, $cookies, true, $body_json_encode );
 
-        if( $this->request->is_valid_response_code( 401 )) {
-            if($is_member){
-                $this->member_session_expired();
-            }elseif ( !$this->is_auth_refresh_called(false)){
-                if ( $this->refresh_auth_token( false ) ) {
-                    return $this->put( $endpoint, $is_member, $headers, $data, $data_format, $cookies, $codes, $body_json_encode );
-                }
-            }
-            return false;
-        }
+		if ( $this->request->is_valid_response_code( 401 ) && ! $this->is_auth_refresh_called() ) {
+			if ( $this->refresh_auth_token( $is_member ) ) {
+				return $this->put( $endpoint, $is_member, $headers, $data, $data_format, $cookies, $codes, $body_json_encode );
+			}
+
+			return false;
+		}
 
 		if ( ! $this->request->is_valid_response_code( $codes ) ) {
 			return false;
@@ -1080,11 +1065,7 @@ class EASL_MZ_API {
 		if ( $this->is_session_expired( $is_member ) ) {
 			return false;
 		}
-
-        if(!$is_member){
-            $this->maybe_refresh_user_auth_token( );
-        }
-
+		$this->maybe_refresh_auth_token( $is_member );
 		$this->request->reset_headers();
 		if ( is_array( $headers ) ) {
 			foreach ( $headers as $key => $value ) {
@@ -1093,16 +1074,13 @@ class EASL_MZ_API {
 		}
 		$this->request->delete( $endpoint, $data, $data_format, $cookies );
 
-        if( $this->request->is_valid_response_code( 401 )) {
-            if($is_member){
-                $this->member_session_expired();
-            }elseif ( !$this->is_auth_refresh_called(false)){
-                if ( $this->refresh_auth_token( false ) ) {
-                    return $this->delete( $endpoint, $is_member, $headers, $data, $data_format, $cookies, $codes );
-                }
-            }
-            return false;
-        }
+		if ( $this->request->is_valid_response_code( 401 ) && ! $this->is_auth_refresh_called() ) {
+			if ( $this->refresh_auth_token( $is_member ) ) {
+				return $this->delete( $endpoint, $is_member, $headers, $data, $data_format, $cookies, $codes );
+			}
+
+			return false;
+		}
 
 		if ( ! $this->request->is_valid_response_code( $codes ) ) {
 			return false;
@@ -1119,9 +1097,7 @@ class EASL_MZ_API {
 		if ( $this->is_session_expired( $is_member ) ) {
 			return false;
 		}
-		if(!$is_member){
-		    $this->maybe_refresh_user_auth_token( );
-        }
+		$this->maybe_refresh_auth_token( $is_member );
 		$this->request->reset_headers();
 		if ( is_array( $headers ) ) {
 			foreach ( $headers as $key => $value ) {
@@ -1129,16 +1105,13 @@ class EASL_MZ_API {
 			}
 		}
 		$this->request->get( $endpoint, $data, $cookies );
-		if( $this->request->is_valid_response_code( 401 )) {
-		    if($is_member){
-                $this->member_session_expired();
-            }elseif ( !$this->is_auth_refresh_called(false)){
-                if ( $this->refresh_auth_token( false ) ) {
-                    return $this->get( $endpoint, $is_member, $headers, $data, $cookies, $codes );
-                }
-            }
-		    return false;
-        }
+		if ( $this->request->is_valid_response_code( 401 ) && ! $this->is_auth_refresh_called() ) {
+			if ( $this->refresh_auth_token( $is_member ) ) {
+				return $this->get( $endpoint, $is_member, $headers, $data, $cookies, $codes );
+			}
+
+			return false;
+		}
 
 		if ( ! $this->request->is_valid_response_code( $codes ) ) {
 			return false;
