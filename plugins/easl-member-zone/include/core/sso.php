@@ -81,7 +81,7 @@ class EASL_MZ_SSO {
                 }
             }
         }
-//        wp_redirect($redirect);
+        wp_redirect($redirect);
     }
 
 	public function parse_credential_data( $response ) {

@@ -59,8 +59,8 @@ if ( easl_mz_is_member_logged_in() ):
 
 	if ( ( 'online_cc_indiv' == $billing_type ) && $membership_checkout_id ) {
 		$api->get_user_auth_token();
-		$member     = $api->get_member_details( $member_id, false );
-		$membership = $api->get_membership_details( $membership_checkout_id, false );
+		$member     = $api->get_member_details( $member_id );
+		$membership = $api->get_membership_details( $membership_checkout_id );
 	}
 	if ( $member && $membership ):
 		$billing_amount = intval( $membership['fee'] * 100 );

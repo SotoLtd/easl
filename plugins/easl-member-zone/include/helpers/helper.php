@@ -64,7 +64,7 @@ function easl_mz_get_current_session_data() {
 function easl_mz_get_logged_in_member_data() {
     $session_data = easl_mz_get_current_session_data();
     if ($session_data['member_id']) {
-        if (!$session_data['member_data']) {
+        if (empty($session_data['member_data']) ) {
             return easl_mz_refresh_logged_in_member_data();
         }
         return $session_data['member_data'];

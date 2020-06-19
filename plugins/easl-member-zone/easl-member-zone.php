@@ -660,7 +660,7 @@ class EASL_MZ_Manager {
 		}
 
 		$this->api->get_user_auth_token();
-		$image_data = $this->api->get_member_profile_picture_raw( $_REQUEST['member_id'], false );
+		$image_data = $this->api->get_member_profile_picture_raw( $_REQUEST['member_id'] );
 		if ( ! $image_data ) {
 			die();
 		}

@@ -385,12 +385,12 @@ class EASL_MZ_API {
 
 	}
 
-	public function change_password( $data, $is_member = true ) {
+	public function change_password( $data ) {
 		$headers = array(
 			'Content-Type' => 'application/json',
-			'OAuth-Token'  => $this->get_access_token( $is_member ),
+			'OAuth-Token'  => $this->get_access_token( true ),
 		);
-		$result  = $this->put( '/me/password', $is_member, $headers, $data );
+		$result  = $this->put( '/me/password', true, $headers, $data );
 
 		if ( ! $result ) {
 			return false;
@@ -403,7 +403,7 @@ class EASL_MZ_API {
 		return true;
 	}
 
-	public function get_member_details( $member_id, $is_member = true ) {
+	public function get_member_details( $member_id, $is_member = false ) {
 		$headers = array(
 			'Content-Type'  => 'application/json',
 			'Cache-Control' => 'no-cache',
@@ -446,9 +446,9 @@ class EASL_MZ_API {
 		return $data;
 	}
 
-	public function get_member_profile_picture( $member_id, $is_member = true ) {
+	public function get_member_profile_picture( $member_id ) {
 		$this->request->reset_headers();
-		$this->request->set_request_header( 'OAuth-Token', $this->get_access_token( $is_member ) );
+		$this->request->set_request_header( 'OAuth-Token', $this->get_access_token( false ) );
 		$this->request->set_request_header( 'Cache-Control', 'no-cache' );
 		$this->request->get( '/Contacts/' . $member_id . '/file/picture', array(), array(), false );
 
@@ -481,9 +481,9 @@ class EASL_MZ_API {
 		);
 	}
 
-	public function get_member_profile_picture_raw( $member_id, $is_member = true ) {
+	public function get_member_profile_picture_raw( $member_id ) {
 		$this->request->reset_headers();
-		$this->request->set_request_header( 'OAuth-Token', $this->get_access_token( $is_member ) );
+		$this->request->set_request_header( 'OAuth-Token', $this->get_access_token( false ) );
 		$this->request->set_request_header( 'Cache-Control', 'no-cache' );
 		$this->request->get( '/Contacts/' . $member_id . '/file/picture', array(), array(), false );
 
@@ -506,12 +506,12 @@ class EASL_MZ_API {
 
 	}
 
-	public function update_member_picture( $member_id, $img_file, $is_member = true ) {
+	public function update_member_picture( $member_id, $img_file ) {
 		$headers = array(
 			'Content-Type' => 'multipart/form-data',
-			'OAuth-Token'  => $this->get_access_token( $is_member ),
+			'OAuth-Token'  => $this->get_access_token( false ),
 		);
-		$result  = $this->put( '/Contacts/' . $member_id . '/file/picture', $is_member, $headers, $img_file, 'body', array(), array( 200 ), false );
+		$result  = $this->put( '/Contacts/' . $member_id . '/file/picture', true, $headers, $img_file, 'body', array(), array( 200 ), false );
 		if ( ! $result ) {
 			return false;
 		}
@@ -636,13 +636,13 @@ class EASL_MZ_API {
 		return $members;
 	}
 
-	public function update_member_personal_info( $member_id, $data = array(), $is_member = true ) {
+	public function update_member_personal_info( $member_id, $data = array() ) {
 		$headers = array(
 			'Content-Type' => 'application/json',
-			'OAuth-Token'  => $this->get_access_token( $is_member ),
+			'OAuth-Token'  => $this->get_access_token( false ),
 		);
 
-		$result  = $this->put( '/Contacts/' . $member_id, $is_member, $headers, $data );
+		$result  = $this->put( '/Contacts/' . $member_id, false, $headers, $data );
 
 		if ( ! $result ) {
 			return false;
