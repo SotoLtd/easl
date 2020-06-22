@@ -702,7 +702,8 @@ class EASL_MZ_Manager {
 			'easl_mz_members_documents',
 			'easl_mz_membership_confirm_message',
 			'easl_mz_publications',
-            'easl_mz_applications'
+            'easl_mz_applications',
+            'easl_mz_member_benefits'
 		);
 
 		return $shortcodes;

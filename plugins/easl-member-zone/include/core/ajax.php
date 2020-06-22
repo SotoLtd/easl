@@ -640,7 +640,8 @@ class EASL_MZ_Ajax_Handler {
 		if ( empty($errors['email1']) && $this->api->is_member_exists( $request_data['email1'] ) ) {
 			$errors['email1'] = 'Member already exist with this email.';
 		}
-		if ( count( $errors ) > 0 ) {
+
+        if ( count( $errors ) > 0 ) {
 			$this->respond_field_errors( $errors );
 		}
 
@@ -651,7 +652,6 @@ class EASL_MZ_Ajax_Handler {
 		$request_data['portal_password1'] = $password;
 		$request_data['portal_active']    = true;
 
-
 		$this->api->get_user_auth_token();
 
 		$created_member_id = $this->api->create_member( $request_data );
@@ -659,6 +659,12 @@ class EASL_MZ_Ajax_Handler {
 		if ( ! $created_member_id ) {
 			$this->respond( 'Error!', 405 );
 		}
+
+        if ($request_data['newsletter_subscribe']) {
+            $manager = EASL_MZ_Manager::get_instance();
+            require_once $manager->path('APP_ROOT', 'include/mailchimp/mailchimp.php');
+            EASL_MZ_Mailchimp::sign_up($request_data);
+        }
 
 //		$membership_page = easl_member_new_membership_form_url( false );
 

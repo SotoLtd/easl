@@ -414,10 +414,11 @@ body .mzms-button::after {
 }
 
 .easl-member-banner {
-    background-color:#62cff5;
-    color:#fff;
-    font-size:24px;
-    padding:16px;
+    color:#004b87;
+    border-radius:3px;
+    box-shadow:0 0 4px 0 rgba(0, 0, 0, .2);
+    font-size:30px;
+    padding:20px 30px;
     margin-bottom:16px;
     overflow:hidden;
     font-weight:bold;
@@ -425,7 +426,18 @@ body .mzms-button::after {
     flex-direction:row;
     justify-content:space-between;
     align-items:center;
+    background-image: url("../images/dashboard-member-banner.jpg");
+    font-family: "KnockoutHTF51Middleweight", "Helvetica Neue", Helvetica, Arial, sans-serif;
+}
 
+.easl-mz-applications-widget .easl-member-banner {
+    font-size:14px;
+    padding:8px;
+}
+
+.easl-mz-applications-widget .easl-member-banner a {
+    font-size:14px;
+    line-height:14px;
 }
 
 .mz-member-card-inner {
@@ -473,9 +485,7 @@ body .mzms-button::after {
 }
 
 .mz-member-welcome-block .mz-member-welcome-button a,
-.mz-member-welcome-block .mz-member-welcome-button a:visited,
-.easl-member-banner a,
-.easl-member-banner a:visited {
+.mz-member-welcome-block .mz-member-welcome-button a:visited {
     font-size: 16px;
     line-height: 16px;
     color: #fff;
@@ -486,16 +496,14 @@ body .mzms-button::after {
 }
 
 .mz-member-welcome-block .mz-member-welcome-button a:hover,
-.mz-member-welcome-block .mz-member-welcome-button a:active,
-.easl-member-banner a:hover,
-.easl-member-banner a:active  {
+.mz-member-welcome-block .mz-member-welcome-button a:active {
     text-decoration: none;
     background: #62cff5;
 }
 
 .easl-member-banner a {
     font-weight:bold;
-    padding:7px 30px;
+    padding:7px 40px;
     display:inline-block;
 }
 
@@ -785,13 +793,16 @@ body .mzms-button::after {
 }
 
 /*Member Zone Section title*/
-.easl-member-zone-container .wpb_easl_events .wpb_easl_events_heading {
+.easl-member-zone-container .wpb_easl_events .wpb_easl_events_heading,
+.easl-mz-member-benefits-heading {
     font-size: 21px;
     border: 0 none;
     padding-bottom: 0;
     margin: 0 0 15px;
 }
-
+.easl-mz-member-benefits-heading {
+    border-bottom: 1px solid #202c5c;
+}
 .easl-member-zone-container .mz-section-heading,
 .easl-member-zone-container .wpb_easl_news_list .wpb_easl_news_heading {
     font-size: 28px;
@@ -801,10 +812,31 @@ body .mzms-button::after {
     margin: 0 0 18px;
 }
 
+.easl-mz-member-benefits-content * {
+    font-weight:normal;
+    font-family:inherit !important;
+}
+
+.easl-mz-member-benefits-button a {
+    text-align:center;
+    position:absolute;
+    bottom:30px;
+    left:20px;
+    right:20px;
+}
+
 /* Member Zone Upcoming Events */
-.wpb_easl_events.wpb_content_element.mz-easl-events {
+.wpb_easl_events.wpb_content_element.mz-easl-events, .easl-mz-member-benefits-widget {
     box-shadow: 0 0 4px 0 rgba(0, 0, 0, .2);
     padding: 15px 20px 35px;
+}
+
+.easl-events-list-wrap ul {
+    display:flex;
+    flex-wrap:wrap;
+}
+.easl-events-li {
+    flex-basis:50%;
 }
 
 .easl-member-zone-container .wpb_easl_events .easl-events-all-link {
@@ -822,6 +854,17 @@ body .mzms-button::after {
 
 .easl-member-zone-container .wpb_easl_events .easl-events-all-link::after {
     color: #62cff5;
+}
+
+.vc_row-o-equal-height .wpb_wrapper {
+    height:100%;
+}
+.vc_row-o-equal-height .wpb_wrapper .easl-mz-member-benefits-widget {
+    height:calc(100% - 5px);
+    position:relative;
+}
+.easl-mz-member-benefits-widget {
+    margin-bottom:5px;
 }
 
 /*Member Zone Icon widgets*/

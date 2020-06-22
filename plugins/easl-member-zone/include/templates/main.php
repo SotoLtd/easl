@@ -33,7 +33,7 @@ $add_membership_url = get_field('membership_plan_url', 'option');
                     <?php if (!easl_mz_user_is_member() && !is_page('add-a-membership') && !is_page('membership-confirm')):?>
                         <div class="easl-member-banner">
                             Become an EASL member
-                            <a href="<?php echo $add_membership_url;?>">Join today</a>
+                            <a href="<?php echo $add_membership_url;?>" class="easl-generic-button easl-color-lightblue">Join today</a>
                         </div>
                     <?php endif;?>
 					<?php the_content(); ?>
