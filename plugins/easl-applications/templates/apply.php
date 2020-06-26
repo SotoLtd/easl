@@ -1,4 +1,11 @@
 <?php
+// Prevent direct access
+if ( ! defined( 'ABSPATH' ) ) {
+    die( '-1' );
+}
+?>
+
+<?php
 $programme_id = isset($_GET['programme_id']) ? $_GET['programme_id'] : null; //12610;
 $programme = get_post($programme_id);
 $sub = new EASLAppSubmission($programme_id);

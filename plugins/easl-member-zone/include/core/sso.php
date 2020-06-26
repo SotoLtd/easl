@@ -57,7 +57,7 @@ class EASL_MZ_SSO {
 
         $response = $this->request->get_response_body();
 
-        $redirect = get_field('member_dashboard_url', 'options');
+        $redirect = strtok($_SERVER["REQUEST_URI"], '?');
 
         if (isset($response->access_token)) {
             $access_token = $response->access_token;

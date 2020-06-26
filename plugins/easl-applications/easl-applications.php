@@ -1,4 +1,8 @@
 <?php
+// Prevent direct access
+if ( ! defined( 'ABSPATH' ) ) {
+    die( '-1' );
+}
 require_once(EASLApplicationsPlugin::rootDir() . 'lib/EASLAppSubmission.php');
 require_once(EASLApplicationsPlugin::rootDir() . 'lib/EASLAppReview.php');
 /*

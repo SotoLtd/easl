@@ -1,4 +1,8 @@
 <?php
+// Prevent direct access
+if ( ! defined( 'ABSPATH' ) ) {
+    die( '-1' );
+}
 
 acf_add_local_field_group([
     'key' => 'programme-dates',

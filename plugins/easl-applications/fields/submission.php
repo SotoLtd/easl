@@ -1,6 +1,10 @@
 <?php
+// Prevent direct access
+if ( ! defined( 'ABSPATH' ) ) {
+    die( '-1' );
+}
 
-$field = new EASLApplicationField('programme', 'post')
+$field = new EASLApplicationField('programme', 'post');
 acf_add_local_field_group([
     'key' => '',
     'title' => '',

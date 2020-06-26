@@ -1,3 +1,9 @@
+<?php
+// Prevent direct access
+if ( ! defined( 'ABSPATH' ) ) {
+    die( '-1' );
+}
+?>
 <h1>Review submission: <?=$submission->post_title;?></h1>
 
 <p><a href="<?=$reviewManager->getUrl('programme', ['programmeId' => $programme->ID]);?>">&laquo; Back to all submissions</a></p>
