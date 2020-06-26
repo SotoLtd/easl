@@ -35,7 +35,26 @@ if ( $icon_post ) {
 
 // Can the logged in user access the URL?
 $can_access_url = easl_mz_user_can_access_url( $link_url );
-
+//
+//echo '<pre>';
+//echo '<br>';
+//
+//var_dump($link_url);
+//
+//foreach(easl_mz_get_restricted_urls() as $url) {
+//    var_dump($url);
+//    echo $url . '<br>';
+//    echo $link_url . '<br>';
+//    echo substr($link_url, 0, 5) . '<br>';
+//    echo substr($url, 0, 5) . '<br>';
+//    if (substr($link_url, 10, 5) == substr($url, 10, 5)) {
+//        die('got it');
+//    }
+//    if (trim($link_url) == trim($url)) {
+//        die('got it though');
+//    }
+//}
+//echo '</pre>';
 if ( $link_url ) {
 	$link_url = $can_access_url ? esc_url( $link_url ) : '#';
 }
