@@ -322,6 +322,6 @@ if ( ! $member_has_waiting_payemnt ):
 <?php else: ?>
     <div class="mz-membership-form-has-waiting-payment">
         You already have an unpaid membership request. Please
-        <a href="<?php echo $membership_button_url; ?>">complete you payment</a>.
+        <a href="<?php echo $membership_button_url; ?>">complete your payment</a>.
     </div>
 <?php endif; ?>
