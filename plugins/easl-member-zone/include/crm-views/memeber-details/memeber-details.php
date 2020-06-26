@@ -32,20 +32,22 @@ $template_base = easl_mz_get_manager()->path( 'CRM_VIEWS', '/memeber-details' );
 			<?php include $template_base . '/partials/fields-basic.php'; ?>
 			<?php include $template_base . '/partials/fields-global.php'; ?>
 
-            <div class="mzms-fields-separator"></div>
-			<?php include $template_base . '/partials/fields-communications.php'; ?>
+            <?php if (easl_mz_user_is_member()):?>
+                <div class="mzms-fields-separator"></div>
+                <?php include $template_base . '/partials/fields-communications.php'; ?>
 
-            <div class="mzms-fields-separator"></div>
-			<?php include $template_base . '/partials/fields-address.php'; ?>
-            <div class="mzms-fields-separator"></div>
-            <div class="mzms-fields-row">
-                <div class="mzms-fields-con">
-                    <label class="mzms-field-label" for="mzms_personal_profile">Personal Profile</label>
-                    <div class="mzms-field-wrap">
-                        <textarea name="description" id="mzms_personal_profile" placeholder="" autocomplete="new-password"><?php echo esc_textarea( wp_unslash($member['description'] )); ?></textarea>
+                <div class="mzms-fields-separator"></div>
+                <?php include $template_base . '/partials/fields-address.php'; ?>
+                <div class="mzms-fields-separator"></div>
+                <div class="mzms-fields-row">
+                    <div class="mzms-fields-con">
+                        <label class="mzms-field-label" for="mzms_personal_profile">Personal Profile</label>
+                        <div class="mzms-field-wrap">
+                            <textarea name="description" id="mzms_personal_profile" placeholder="" autocomplete="new-password"><?php echo esc_textarea( wp_unslash($member['description'] )); ?></textarea>
+                        </div>
                     </div>
                 </div>
-            </div>
+            <?php endif;?>
             <div class="mzms-fields-row">
                 <p>EASL can not be held responsible for the accuracy of the information published on this page. All data is provided by EASL members themselves.</p>
             </div>

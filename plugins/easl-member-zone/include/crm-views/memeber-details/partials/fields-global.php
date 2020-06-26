@@ -39,14 +39,16 @@ if ( ! defined( 'ABSPATH' ) ) {
             </div>
         </div>
     </div>
-    <div class="easl-col">
-        <div class="easl-col-inner mzms-fields-con">
-            <label class="mzms-field-label" for="mzf_title">Profession / Job Title <span class="mzms-asteric">*</span></label>
-            <div class="mzms-field-wrap">
-                <input type="text" placeholder="" name="title" id="mzf_title" value="<?php echo esc_attr( $member['title'] ); ?>" autocomplete="off">
+    <?php if (easl_mz_user_is_member()):?>
+        <div class="easl-col">
+            <div class="easl-col-inner mzms-fields-con">
+                <label class="mzms-field-label" for="mzf_title">Profession / Job Title <span class="mzms-asteric">*</span></label>
+                <div class="mzms-field-wrap">
+                    <input type="text" placeholder="" name="title" id="mzf_title" value="<?php echo esc_attr( $member['title'] ); ?>" autocomplete="off">
+                </div>
             </div>
         </div>
-    </div>
+    <?php endif;?>
 </div>
 <div class="mzms-fields-row easl-row easl-row-col-2">
     <div class="easl-col">
@@ -90,6 +92,7 @@ if ( ! defined( 'ABSPATH' ) ) {
         </div>
     </div>
 </div>
+<?php if (easl_mz_user_is_member()):?>
 <div class="mzms-fields-row easl-row easl-row-col-2">
     <div class="easl-col">
         <div class="easl-col-inner mzms-fields-con">
@@ -111,7 +114,7 @@ if ( ! defined( 'ABSPATH' ) ) {
         </div>
     </div>
 </div>
-
+<?php endif;?>
 
 <div class="mzms-fields-row easl-row easl-row-col-2">
     <div class="easl-col">
@@ -161,6 +164,17 @@ if ( ! defined( 'ABSPATH' ) ) {
                 <input type="text" placeholder="" name="" id="mzf_birthdate_fz" value="<?php echo esc_attr( $date_of_birth_formatted ); ?>" class="easl-mz-date" autocomplete="off">
                 <?php echo easl_mz_field_public_field( 'birthdate', $member['dotb_public_profile'], $member['dotb_public_profile_fields'] ); ?>
             </div>
+        </div>
+    </div>
+</div>
+
+<div class="mzms-fields-row">
+    <div class="mzms-fields-con">
+        <label class="mzms-field-label" for="mzf_email1">Email <span class="mzms-asteric">*</span></label>
+        <div class="mzms-field-wrap mzms-field-has-privacy<?php if(!easl_mz_field_is_public('email1', $member['dotb_public_profile'], $member['dotb_public_profile_fields'])){echo ' mzms-privacy-enabled';} ?>">
+            <input type="hidden" placeholder="" name="email1" id="mzf_email1" value="<?php echo esc_attr( $member['email1'] ); ?>" autocomplete="off">
+            <input type="email" placeholder="" id="mzf_email1" value="<?php echo esc_attr( $member['email1'] ); ?>" autocomplete="off" disabled="disabled" readonly="readonly">
+            <?php echo easl_mz_field_public_field('email1', $member['dotb_public_profile'], $member['dotb_public_profile_fields']); ?>
         </div>
     </div>
 </div>
