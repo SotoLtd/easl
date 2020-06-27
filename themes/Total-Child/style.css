@@ -4417,6 +4417,24 @@ body.wpb-js-composer .vc_tta-color-grey.vc_tta-style-classic .vc_tta-controls-ic
     display: block;
     margin-top: 20px;
 }
+.easl-icon-widget-tooltip {
+    background: rgba(255,255,255, .9);
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: 0;
+    bottom: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity .25s;
+}
+.easl-icon-widget-wrap.disabled:hover .easl-icon-widget-tooltip {
+    visibility: visible;
+    opacity: 1;
+}
 
 /*Footer*/
 #footer {

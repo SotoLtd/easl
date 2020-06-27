@@ -102,6 +102,9 @@ if ( $icon ):
 				<?php if ( $link_title ): ?>
                     <span class="easl-icon-widget-title"><?php echo $link_title; ?></span>
 				<?php endif; ?>
+				<?php if ( !$can_access_url ): ?>
+                    <span class="easl-icon-widget-tooltip"><span>Only available for members</span></span>
+				<?php endif; ?>
             </a>
         </div>
     </div>
