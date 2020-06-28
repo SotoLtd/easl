@@ -43,6 +43,10 @@ if ( ! $has_thumb ) {
         $logged_in = easl_mz_is_member_logged_in();
         $cpg = has_term('clinical-practice-guidelines', 'publication_category', get_the_ID());
         $needs_modal = !$logged_in && $cpg;
+        if ($needs_modal) {
+            $read_more_link = get_permalink();
+            $target = '';
+        }
 
 		?>
         <div class="scientific-publication <?php if ( ! $image_src ) {
