@@ -245,9 +245,10 @@ class EASL_MZ_Manager {
 		$this->session->unset_auth_cookie();
 		$this->api->clear_credentials();
 
-		do_action( 'easl_mz_member_logged_out' );
-
+        do_action( 'easl_mz_member_logged_out' );
+        
 		wp_redirect( site_url() );
+
 		exit();
 	}
 

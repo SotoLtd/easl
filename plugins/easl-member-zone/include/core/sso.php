@@ -38,6 +38,14 @@ class EASL_MZ_SSO {
         return $this->base_url . '/auth?' . $query_string;
     }
 
+    public function get_logout_url() {
+        $data = [
+            'redirect_uri' => site_url() . '?mz_logout=1'
+        ];
+        $query_string = build_query($data);
+        return $this->base_url . '/logout?' . $query_string;
+    }
+
     public function handle_auth_code($code) {
 
         $session = EASL_MZ_Session_Handler::get_instance();
