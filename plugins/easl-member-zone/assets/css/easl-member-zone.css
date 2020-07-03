@@ -831,12 +831,13 @@ body .mzms-button::after {
     padding: 15px 20px 35px;
 }
 
-.easl-events-list-wrap ul {
-    display:flex;
-    flex-wrap:wrap;
+.easl-member-zone-container .easl-events-list-wrap ul {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
 }
-.easl-events-li {
-    flex-basis:50%;
+.easl-member-zone-container .easl-events-li {
+    width: calc((100% - 30px)/2);
 }
 
 .easl-member-zone-container .wpb_easl_events .easl-events-all-link {
