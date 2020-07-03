@@ -67,15 +67,6 @@ class EASL_MZ_Session_Handler {
 		$this->session_db_id = $session->session_id;
 		$this->_member_login = $session->member_login;
 		$this->_data         = maybe_unserialize( $session->session_value );
-		$api_data            = $this->prepare_api_credential_data();
-
-		if ( $this->api_expired( $api_data ) ) {
-			$this->unset_auth_cookie();
-
-			return false;
-		}
-
-		easl_mz_get_manager()->getApi()->set_credentials( $api_data );
 	}
 
 	public function api_expired( $api_data ) {
@@ -196,7 +187,6 @@ class EASL_MZ_Session_Handler {
 
 	public function parse_auth_cookie() {
 		if ( empty( $_COOKIE[ $this->_cookie ] ) ) {
-//		    die('no cookiue');
 			return false;
 		}
 
@@ -204,8 +194,6 @@ class EASL_MZ_Session_Handler {
 
 		$cookie_elements = explode( '|', $cookie );
 		if ( count( $cookie_elements ) !== 4 ) {
-//		    print_r($cookie_elements);
-//		    die('nope');
 			return false;
 		}
 
@@ -218,10 +206,14 @@ class EASL_MZ_Session_Handler {
 		$defaults     = array(
 			'access_token'       => '',
 			'expires_in'         => '',
-			'scope'              => '',
 			'refresh_token'      => '',
 			'refresh_expires_in' => '',
-			'download_token'     => '',
+			'member_id'          => '',
+			'email'              => '',
+			'title'              => '',
+			'first_name'         => '',
+			'last_name'          => '',
+			'membership_status'  => '',
 			'login'              => time(),
 		);
 		$session_data = wp_parse_args( $data, $defaults );

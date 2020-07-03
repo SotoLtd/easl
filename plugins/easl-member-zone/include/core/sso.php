@@ -47,61 +47,81 @@ class EASL_MZ_SSO {
     }
 
     public function handle_auth_code($code) {
-
         $session = EASL_MZ_Session_Handler::get_instance();
 
-        $redirect_url = 'https://' . $_SERVER['HTTP_HOST'] . rtrim(strtok($_SERVER['REQUEST_URI'], '?'), '/');
+	    $redirect = 'https://' . $_SERVER['HTTP_HOST'] . rtrim(strtok($_SERVER['REQUEST_URI'], '?'), '/');
+	    $redirect = trailingslashit($redirect);
 
-        $data = [
-            'client_id' => $this->client_id,
-            'redirect_uri' => $redirect_url,
-            'client_secret' => $this->client_secret,
-            'code' => $code,
-            'grant_type' => 'authorization_code',
-            'scope' => 'profile email'
-        ];
-
-        $this->request->post('/token', $data, 'body', [], true, false);
-
-        $response = $this->request->get_response_body();
-
-        $redirect = strtok($_SERVER["REQUEST_URI"], '?');
-
-        if (isset($response->access_token)) {
-            $access_token = $response->access_token;
-
-            $this->request->set_request_header('Authorization', 'Bearer ' . $access_token);
-            $this->request->get('/userinfo');
-
-            $response = $this->request->get_response_body();
-
-            $response_data = json_decode(json_encode($response), true);
-
-            $credential_data = $this->parse_credential_data( $response_data );
-
-            if($credential_data) {
-                // Member authenticated
-                do_action( 'easl_mz_member_authenticated', $response->email, $credential_data, $redirect );
-
-                if ( $response_data['sugarcrm_userid'] ) {
-                    $session->add_data( 'member_id', $response_data['sugarcrm_userid'] );
-                    $session->save_session_data();
-                }
-            }
+        $access_token_details = $this->get_access_token_details($code);
+        // Access code is denied
+        if(!$access_token_details) {
+	        $redirect = add_query_arg(array(
+	        	'ec' => 401 //@todo some error code can be introduce to display messages on frontend  so user can know what happened
+	        ), $redirect);
+	        easl_mz_redirect($redirect);
         }
-        wp_redirect($redirect);
+        // Access code accepted, access token returned
+	    $crm_member_details = $this->get_crm_member_details($access_token_details['access_token']);
+
+        if(!$crm_member_details) {
+	        $redirect = add_query_arg(array(
+		        'ec' => 404 //@todo some error code can be introduce to display messages on frontend  so user can know what happened
+	        ), $redirect);
+	        easl_mz_redirect($redirect);
+        }
+
+	    // Member authenticated
+	    $session_details = array_merge($access_token_details, $crm_member_details);
+	    do_action( 'easl_mz_member_authenticated', $crm_member_details['email'], $session_details, $redirect );
+
+	    easl_mz_redirect($redirect);
     }
 
-	public function parse_credential_data( $response ) {
-		if ( empty( $response['sugarcrm_token'] ) || empty( $response['sugarcrm_refresh_token'] ) ) {
-			return false;
-		}
-		return array(
-			'access_token'       => $response['sugarcrm_token'],
-			'refresh_token'      => $response['sugarcrm_refresh_token'],
-			'expires_in'         => intval( $response['sugarcrm_token_expires_in'] ),
-			'refresh_expires_in' => intval( $response['sugarcrm_refresh_token_expires_in'] ),
-			'login'              => time(),
-		);
-	}
+    public function get_access_token_details($code) {
+	    $redirect_url = 'https://' . $_SERVER['HTTP_HOST'] . rtrim(strtok($_SERVER['REQUEST_URI'], '?'), '/');
+	    $data = [
+		    'client_id' => $this->client_id,
+		    'redirect_uri' => $redirect_url,
+		    'client_secret' => $this->client_secret,
+		    'code' => $code,
+		    'grant_type' => 'authorization_code',
+		    'scope' => 'profile email'
+	    ];
+
+	    $this->request->post('/token', $data, 'body', [], true, false);
+
+	    $response = $this->request->get_response_body();
+
+	    if (empty($response->access_token)) {
+	    	return false;
+	    }
+	    return array(
+		    'access_token'       => $response->access_token,
+		    'refresh_token'      => $response->refresh_token,
+		    'expires_in'         => intval( $response->expires_in ),
+		    'refresh_expires_in' => intval( $response->refresh_expires_in ),
+		    'login'              => time(),
+	    );
+    }
+    public function get_crm_member_details($access_token) {
+	    $this->request->set_request_header('Authorization', 'Bearer ' . $access_token);
+	    $this->request->get('/userinfo');
+
+	    $response = $this->request->get_response_body();
+
+	    if(empty($response->sugarcrm_userid)) {
+	    	return false;
+	    }
+
+	    $member_data = array(
+	    	'member_id' => $response->sugarcrm_userid,
+	    	'email' => $response->email,
+	    	'title' => $response->title,
+	    	'first_name' => $response->given_name,
+	    	'last_name' => $response->family_name,
+	    	'membership_status' => $response->membership_status,
+	    );
+
+	    return $member_data;
+    }
 }

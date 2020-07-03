@@ -263,14 +263,7 @@ class EASL_MZ_Manager {
 			return;
 		}
 		$current_member_id = $this->session->ge_current_member_id();
-		if ( ! $current_member_id ) {
-			$current_member_id = $this->api->get_member_id();
 
-			if ( $current_member_id ) {
-				$this->session->add_data( 'member_id', $current_member_id );
-				$this->session->save_session_data();
-			}
-		}
 		if ( ! $current_member_id || ( $current_member_id != $member_id ) ) {
 			$this->set_message( 'member_profile_picture', 'You are not allowed to change your profile picture.' );
 
@@ -339,14 +332,7 @@ class EASL_MZ_Manager {
 			return;
 		}
 		$current_member_id = $this->session->ge_current_member_id();
-		if ( ! $current_member_id ) {
-			$current_member_id = $this->api->get_member_id();
 
-			if ( $current_member_id ) {
-				$this->session->add_data( 'member_id', $current_member_id );
-				$this->session->save_session_data();
-			}
-		}
 		if ( ! $current_member_id || ( $current_member_id != $member_id ) ) {
 			$this->set_message( 'membership_error', 'You are not allowed to change your profile picture.' );
 
