@@ -41,7 +41,7 @@ if ( easl_mz_is_member_logged_in() ):
 	$api = easl_mz_get_manager()->getApi();
 	$session            = easl_mz_get_manager()->getSession();
 	$user_session_db_id = $session->get_current_session_db_id();
-	$member_id          = $session->ge_current_member_id();
+	$member_id          = $session->get_current_member_id();
 	$member             = false;
 	$membership         = false;
 

@@ -18,7 +18,7 @@ function easl_mz_is_member_logged_in() {
 }
 
 function easl_mz_get_member_data($member_id) {
-//    $member_id = EASL_MZ_Manager::get_instance()->getSession()->ge_current_member_id();
+//    $member_id = EASL_MZ_Manager::get_instance()->getSession()->get_current_member_id();
 //    print_r($member_id);
 //    if ($member_id) {
         $api = easl_mz_get_manager()->getApi();

@@ -236,7 +236,7 @@ class EASL_MZ_Session_Handler {
 		return $token;
 	}
 
-	public function ge_current_member_id() {
+	public function get_current_member_id() {
 		if ( isset( $this->_data['member_id'] ) ) {
 			return $this->_data['member_id'];
 		}
