@@ -210,6 +210,9 @@ function easl_mz_user_can_access_url($url) {
     if (easl_mz_user_is_member()) {
         return true;
     }
+	if ( 'https://learning.easl.eu/' == trailingslashit( $url ) ) {
+		return true;
+	}
 
     foreach(easl_mz_get_restricted_urls() as $restricted_url) {
         if (parse_url($restricted_url, PHP_URL_PATH) == parse_url($url, PHP_URL_PATH)) {
