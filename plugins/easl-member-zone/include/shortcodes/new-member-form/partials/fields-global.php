@@ -122,9 +122,9 @@ if ( ! defined( 'ABSPATH' ) ) {
 <div class="mzms-fields-row easl-row easl-row-col-2">
     <div class="easl-col">
         <div class="easl-col-inner mzms-fields-con">
-            <label class="mzms-field-label" for="mzf_alt_address_country">Country <span class="mzms-asteric">*</span></label>
+            <label class="mzms-field-label" for="mzf_primary_address_country">Country <span class="mzms-asteric">*</span></label>
             <div class="mzms-field-wrap">
-                <select class="easl-mz-select2" name="alt_address_country" id="mzf_alt_address_country" data-placeholder="Select an option"  style="width: 100%;">
+                <select class="easl-mz-select2" name="primary_address_country" id="mzf_primary_address_country" data-placeholder="Select an option"  style="width: 100%;">
                     <option value=""></option>
                     <?php echo easl_mz_get_crm_dropdown_items( 'countries' ); ?>
                 </select>
