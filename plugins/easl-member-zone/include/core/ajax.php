@@ -633,16 +633,15 @@ class EASL_MZ_Ajax_Handler {
             }
         }
 
-		$auth_response_status = $this->api->get_auth_token( $request_data['portal_name'], $password, true );
-		if ( ! $auth_response_status ) {
-		    //@todo redirect to SSO??
-            // Update $membership_page with the sso login url
-            $this->respond( $redirect, 401 );
-		}
 		// Member authenticated
-		$this->session->set_auth_cookie( $request_data['portal_name'], $this->api->get_credential_data( true ) );
-		$this->session->add_data( 'member_id', $created_member_id );
-		$this->session->save_session_data();
+		$session_data = array(
+			'member_id' => $created_member_id,
+			'email' => $request_data['email1'],
+			'title' => $request_data['salutation'],
+			'first_name' => $request_data['first_name'],
+			'last_name' => $request_data['last_name'],
+		);
+		$this->session->set_auth_cookie( $request_data['portal_name'], $session_data );
         easl_mz_refresh_logged_in_member_data();
 
 		$this->respond( $redirect, 200 );
