@@ -152,7 +152,7 @@ function easl_mz_validate_new_member_form($data = array()) {
         'dotb_gender',
         'email1',
         'dotb_place_of_work',
-        'alt_address_country',
+        'primary_address_country',
         'dotb_user_category',
     ];
 

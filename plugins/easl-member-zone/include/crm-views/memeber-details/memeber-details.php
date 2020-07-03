@@ -47,6 +47,19 @@ $template_base = easl_mz_get_manager()->path( 'CRM_VIEWS', '/memeber-details' );
                         </div>
                     </div>
                 </div>
+            <?php else: ?>
+                <div class="mzms-fields-row">
+                    <div class="mzms-fields-con">
+                        <label class="mzms-field-label" for="mzf_primary_address_country">Country</label>
+                        <div class="mzms-field-wrap mzms-field-has-privacy<?php if(!easl_mz_field_is_public('primary_address_country', $member['dotb_public_profile'], $member['dotb_public_profile_fields'])){echo ' mzms-privacy-enabled';} ?>">
+                            <select class="easl-mz-select2" name="primary_address_country" id="mzf_primary_address_country" data-placeholder="Select an option" style="width: 100%;">
+                                <option value=""></option>
+					            <?php echo easl_mz_get_crm_dropdown_items( 'countries', $member['primary_address_country'] ); ?>
+                            </select>
+				            <?php echo easl_mz_field_public_field('primary_address_country', $member['dotb_public_profile'], $member['dotb_public_profile_fields']); ?>
+                        </div>
+                    </div>
+                </div>
             <?php endif;?>
             <div class="mzms-fields-row">
                 <p>EASL can not be held responsible for the accuracy of the information published on this page. All data is provided by EASL members themselves.</p>
