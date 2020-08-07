@@ -369,7 +369,7 @@ class EASL_MZ_Manager {
 
 			return;
 		}
-		$current_member_id = $this->session->ge_current_member_id();
+		$current_member_id = $this->session->get_current_member_id();
 		if ( ! $current_member_id ) {
 			$current_member_id = $this->api->get_member_id();
 
