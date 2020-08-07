@@ -213,7 +213,7 @@ function easl_mz_user_can_access_url($url) {
 	if ( 'https://learning.easl.eu/' == trailingslashit( $url ) ) {
 		return true;
 	}
-	if ( 'https://easl-campus-uat.enovation.ie/' == trailingslashit( $url ) ) {
+	if ( 'https://easlcampus.eu/' == trailingslashit( $url ) ) {
 		return true;
 	}
 
