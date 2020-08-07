@@ -18,15 +18,17 @@ $template_base = easl_mz_get_manager()->path( 'CRM_VIEWS', '/memeber-details' );
 				<?php if ( $title ): ?>
                     <h2 class="mz-page-heading"><?php echo $title; ?></h2>
 				<?php endif; ?>
-                <div class="mzms-field-wrap mzms-field-wrap-public">
-                    <label for="mzms_dotb_public_profile" class="easl-custom-checkbox">
-                        <input type="checkbox" name="dotb_public_profile" id="mzms_dotb_public_profile" value="Yes" <?php checked( in_array( $member['dotb_public_profile'], array(
-							'Yes',
-							'Yes_Partial'
-						) ), true ); ?>>
-                        <span>Make my profile public</span>
-                    </label>
-                </div>
+                <?php if(easl_mz_user_is_member()): ?>
+                    <div class="mzms-field-wrap mzms-field-wrap-public">
+                        <label for="mzms_dotb_public_profile" class="easl-custom-checkbox">
+                            <input type="checkbox" name="dotb_public_profile" id="mzms_dotb_public_profile" value="Yes" <?php checked( in_array( $member['dotb_public_profile'], array(
+                                'Yes',
+                                'Yes_Partial'
+                            ) ), true ); ?>>
+                            <span>Make my profile public</span>
+                        </label>
+                    </div>
+                <?php endif; ?>
             </div>
             <div class="mzms-fields-separator"></div>
 			<?php include $template_base . '/partials/fields-basic.php'; ?>
