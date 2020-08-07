@@ -579,9 +579,6 @@
                 var $userCategory = $("#mzf_dotb_user_category", $el);
                 var $userCategoryOther = $("#mzms-fields-con-dotb_user_category_other", $el);
 
-                console.log($userCategory.length);
-                console.log($userCategoryOther.length);
-
                 if ($jobFunction.val() === "other") {
                     $jobFunctionOther.removeClass("easl-mz-hide");
                 } else {
@@ -657,8 +654,11 @@
                     mzModal.show('<div class="mz-modal-unauthorized">Failed! Please try again.</div>', 'account.create.failed');
                 }
                 if (response.Status === 401) {
-                    // Member created but login failed - go to sso
-                    window.location.href = response.Html;
+                    mzModal.init();
+                    mzModal.$el.one("mz.modal.hidden.account.create.unauthorized", function () {
+                        //may be refresh here
+                    });
+                    mzModal.show('<div class="mz-modal-unauthorized">Unauthorized! Refresh the page.</div>', 'account.create.unauthorized');
                 }
 
                 if (response.Status === 200) {
@@ -1025,10 +1025,10 @@
     };
 
     $(document).ready(function () {
-        // $(".easl-mz-header-login-button").on("click", function (event) {
-        //     event.preventDefault();
-        //     $(".easl-mz-login-form").toggleClass("easl-active");
-        // });
+        $(".easl-mz-header-login-button").on("click", function (event) {
+            event.preventDefault();
+            $(".easl-mz-login-form").toggleClass("easl-active");
+        });
         if (typeof $.fn.select2 !== "undefined") {
             $(".easl-mz-select2").length && $(".easl-mz-select2").select2({
                 closeOnSelect: true,
@@ -1041,14 +1041,9 @@
         $('.sp-modal-trigger').click(function(e) {
             var url = $(this).attr('href');
             url = url.replace(/\/$/, '');
-            console.log(url);
             e.preventDefault();
 
-            var ssoLink = $('.sso-link');
-            var ssoUrl = ssoLink.attr('href');
-            var updatedUrl = ssoUrl.replace(/(redirect_uri=)[^\&]+/, '$1' + url);
-            console.log(updatedUrl);
-            ssoLink.attr('href', updatedUrl);
+            $('.sp-modal-login-form input[name="mz_redirect_url"]').val(url);
             
             $('.sp-modal-overlay').addClass('active');
         });
@@ -1056,6 +1051,11 @@
         $('.sp-modal-close').click(function(e) {
             e.preventDefault();
             $('.sp-modal-overlay').removeClass('active');
+        });
+
+        $('.sp-login-from-trigger').click(function(e) {
+            e.preventDefault();
+            $('.sp-modal-overlay').addClass('login-form-active');
         });
     });
 

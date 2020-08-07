@@ -213,6 +213,9 @@ function easl_mz_user_can_access_url($url) {
 	if ( 'https://learning.easl.eu/' == trailingslashit( $url ) ) {
 		return true;
 	}
+	if ( 'https://easl-campus-uat.enovation.ie/' == trailingslashit( $url ) ) {
+		return true;
+	}
 
     foreach(easl_mz_get_restricted_urls() as $restricted_url) {
         if (parse_url($restricted_url, PHP_URL_PATH) == parse_url($url, PHP_URL_PATH)) {
@@ -225,4 +228,12 @@ function easl_mz_user_can_access_url($url) {
 function easl_mz_redirect($url) {
 	wp_redirect($url);
 	exit();
+}
+
+function easl_mz_get_login_form($data = array()) {
+    if ( ! is_array( $data ) ) {
+        $data = (array) $data;
+    }
+    extract( $data );
+    include easl_mz_get_manager()->path( 'CRM_VIEWS' ) . '/member-login/basic-login-form.php';
 }

@@ -160,7 +160,7 @@ class EASL_MZ_Manager {
 	 */
 	public function init() {
 		$this->add_options_page();
-		$this->handle_openid_auth_code();
+		$this->handle_member_login();
 		$this->handle_member_logout();
 		$this->handle_mz_actions();
 
@@ -168,12 +168,6 @@ class EASL_MZ_Manager {
 			add_action( 'template_redirect', array( $this, 'maybe_disable_wp_rocket_cache' ) );
 		}
 	}
-
-	public function handle_openid_auth_code() {
-	    if (isset($_GET['code'])) {
-	        EASL_MZ_SSO::get_instance()->handle_auth_code($_GET['code']);
-        }
-    }
 
 	public function memberzone_page_content() {
 		include $this->path( 'TEMPLATES_DIR', 'main.php' );
@@ -233,6 +227,43 @@ class EASL_MZ_Manager {
 		}
 	}
 
+	public function handle_member_login() {
+		if ( empty( $_POST['mz_member_login'] ) || empty( $_POST['mz_member_password'] ) ) {
+			return false;
+		}
+		$member_login    = $_POST['mz_member_login'];
+		$member_password = $_POST['mz_member_password'];
+		$redirect        = get_field( 'member_dashboard_url', 'option' );
+
+		if ( ! empty( $_POST['mz_redirect_url'] ) ) {
+			$redirect = esc_url($_POST['mz_redirect_url']);
+		}
+		$auth_response_status = $this->api->get_auth_token( $member_login, $member_password, true );
+		if ( ! $auth_response_status ) {
+			$this->set_message( 'login_error', 'Invalid username or password.' );
+
+			return false;
+		}
+		// Member authenticated
+		do_action( 'easl_mz_member_authenticated', $member_login, $this->api->get_credential_data( true ), $redirect );
+
+		$member_id = $this->api->get_member_id();
+		if ( $member_id ) {
+			$this->session->add_data( 'member_id', $member_id );
+			$this->session->save_session_data();
+		}
+
+		do_action( 'easl_mz_member_logged_id' );
+
+		if ( ! $redirect ) {
+			$redirect = site_url();
+		}
+		if ( wp_redirect( $redirect ) ) {
+			exit;
+		}
+
+	}
+
 	public function handle_member_logout() {
 		if ( empty( $_REQUEST['mz_logout'] ) ) {
 			return false;
@@ -245,8 +276,8 @@ class EASL_MZ_Manager {
 		$this->session->unset_auth_cookie();
 		$this->api->clear_credentials();
 
-        do_action( 'easl_mz_member_logged_out' );
-        
+		do_action( 'easl_mz_member_logged_out' );
+
 		wp_redirect( site_url() );
 
 		exit();
@@ -263,7 +294,14 @@ class EASL_MZ_Manager {
 			return;
 		}
 		$current_member_id = $this->session->get_current_member_id();
+		if ( ! $current_member_id ) {
+			$current_member_id = $this->api->get_member_id();
 
+			if ( $current_member_id ) {
+				$this->session->add_data( 'member_id', $current_member_id );
+				$this->session->save_session_data();
+			}
+		}
 		if ( ! $current_member_id || ( $current_member_id != $member_id ) ) {
 			$this->set_message( 'member_profile_picture', 'You are not allowed to change your profile picture.' );
 
@@ -331,8 +369,15 @@ class EASL_MZ_Manager {
 
 			return;
 		}
-		$current_member_id = $this->session->get_current_member_id();
+		$current_member_id = $this->session->ge_current_member_id();
+		if ( ! $current_member_id ) {
+			$current_member_id = $this->api->get_member_id();
 
+			if ( $current_member_id ) {
+				$this->session->add_data( 'member_id', $current_member_id );
+				$this->session->save_session_data();
+			}
+		}
 		if ( ! $current_member_id || ( $current_member_id != $member_id ) ) {
 			$this->set_message( 'membership_error', 'You are not allowed to change your profile picture.' );
 
@@ -347,13 +392,13 @@ class EASL_MZ_Manager {
 		if ( $current_end_date ) {
 			if ( strtotime( $current_end_date ) < time() ) {
 				$current_end_date = 'now';
-				$expired = true;
+				$expired          = true;
 			}
 		} else {
 			$current_end_date = 'now';
 		}
 		$initial_date = new DateTime( $current_end_date );
-		if ( !$expired && ($renew == 'yes') ) {
+		if ( ! $expired && ( $renew == 'yes' ) ) {
 			$initial_date->modify( '+1 day' );
 		}
 
@@ -648,7 +693,7 @@ class EASL_MZ_Manager {
 		}
 
 		$this->api->get_user_auth_token();
-		$image_data = $this->api->get_member_profile_picture_raw( $_REQUEST['member_id'] );
+		$image_data = $this->api->get_member_profile_picture_raw( $_REQUEST['member_id'], false );
 		if ( ! $image_data ) {
 			die();
 		}
@@ -729,7 +774,7 @@ class EASL_MZ_Manager {
 			'homeURL'        => site_url(),
 			'ajaxURL'        => admin_url( 'admin-ajax.php', $ssl_scheme ),
 			'ajaxActionName' => $this->ajax->get_action_name(),
-			'mapAPIKey' => get_field( 'mz_map_api_key', 'option' ),
+			'mapAPIKey'      => get_field( 'mz_map_api_key', 'option' ),
 			'messages'       => $this->get_messages(),
 			'mapAPIkey'      => get_field( 'mz_map_api_key', 'option' ),
 			'membershipFees' => easl_mz_get_membership_category_fees_calculation(),

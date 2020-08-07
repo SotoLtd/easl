@@ -12,8 +12,8 @@ if ( ! defined( 'ABSPATH' ) ) {
  * @var $el_class
  * @var $el_id
  * @var $css
- * Shortcode class EASL_VC_MZ_Member_Profile
- * @var $this EASL_VC_MZ_Member_Profile
+ * Shortcode class EASL_VC_MZ_Membership
+ * @var $this EASL_VC_MZ_Membership
  */
 $el_class      = '';
 $el_id         = '';

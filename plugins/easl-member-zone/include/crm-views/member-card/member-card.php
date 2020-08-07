@@ -38,7 +38,7 @@ if ( $member['last_name'] ) {
         <p class="mz-member-welcome-row">
             <span class="mz-member-name"><?php echo implode( ' ', $member_name_parts ); ?></span>
             <span class="mz-seperator">|</span>
-            <a class="mz-logout-link" href="<?php echo EASL_MZ_SSO::get_instance()->get_logout_url(); ?>">Logout</a>
+            <a class="mz-logout-link" href="<?php echo easl_member_logout_url(); ?>">Logout</a>
         </p>
         <p class="mz-member-welcome-row mz-member-welcome-button">
             <a class="mz-member-panel-button" href="<?php echo esc_url( $member_dashboard_url ); ?>"><?php echo strip_tags( $member_zone_button_title ); ?></a>

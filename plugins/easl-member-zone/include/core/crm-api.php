@@ -5,6 +5,13 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 
 class EASL_MZ_API {
+    protected $access_token;
+    protected $refresh_token;
+    protected $download_token;
+    protected $expires_in;
+    protected $refresh_expires_in;
+    protected $token_set_time;
+    protected $auth_refresh_called = false;
     protected $session_expired = false;
 
     protected $crm_user_name;
@@ -55,46 +62,76 @@ class EASL_MZ_API {
     }
 
     public function clear_credentials( $is_member = true ) {
-        $this->user_access_token       = '';
-        $this->user_refresh_token      = '';
-        $this->user_download_token     = '';
-        $this->user_expires_in         = '';
-        $this->user_refresh_expires_in = '';
-        $this->user_token_set_time     = '';
+        if ( $is_member ) {
+            $this->access_token       = '';
+            $this->refresh_token      = '';
+            $this->download_token     = '';
+            $this->expires_in         = '';
+            $this->refresh_expires_in = '';
+            $this->token_set_time     = '';
+        } else {
+            $this->user_access_token       = '';
+            $this->user_refresh_token      = '';
+            $this->user_download_token     = '';
+            $this->user_expires_in         = '';
+            $this->user_refresh_expires_in = '';
+            $this->user_token_set_time     = '';
+        }
+
     }
 
-    public function get_credential_data() {
+    public function get_credential_data( $is_member = true ) {
         return array(
-            'access_token'       => $this->get_access_token(),
-            'refresh_token'      => $this->get_refresh_token(),
-            'download_token'     => $this->get_download_token(),
-            'expires_in'         => $this->get_expires_in(),
-            'refresh_expires_in' => $this->get_refresh_expires_in(),
-            'token_set_time'     => $this->get_token_set_time(),
+            'access_token'       => $this->get_access_token( $is_member ),
+            'refresh_token'      => $this->get_refresh_token( $is_member ),
+            'download_token'     => $this->get_download_token( $is_member ),
+            'expires_in'         => $this->get_expires_in( $is_member ),
+            'refresh_expires_in' => $this->get_refresh_expires_in( $is_member ),
+            'token_set_time'     => $this->get_token_set_time( $is_member ),
         );
     }
 
-    public function set_credentials( $data = array() ) {
-        if ( isset( $data['access_token'] ) ) {
-            $this->user_access_token = $data['access_token'];
+    public function set_credentials( $data = array(), $is_member = true ) {
+        if ( $is_member ) {
+            if ( isset( $data['access_token'] ) ) {
+                $this->access_token = $data['access_token'];
+            }
+            if ( isset( $data['refresh_token'] ) ) {
+                $this->refresh_token = $data['refresh_token'];
+            }
+            if ( isset( $data['download_token'] ) ) {
+                $this->download_token = $data['download_token'];
+            }
+            if ( isset( $data['expires_in'] ) ) {
+                $this->expires_in = intval( $data['expires_in'] );
+            }
+            if ( isset( $data['refresh_expires_in'] ) ) {
+                $this->refresh_expires_in = intval( $data['refresh_expires_in'] );
+            }
+            if ( isset( $data['token_set_time'] ) ) {
+                $this->token_set_time = intval( $data['token_set_time'] );
+            }
+        } else {
+            if ( isset( $data['access_token'] ) ) {
+                $this->user_access_token = $data['access_token'];
+            }
+            if ( isset( $data['refresh_token'] ) ) {
+                $this->user_refresh_token = $data['refresh_token'];
+            }
+            if ( isset( $data['download_token'] ) ) {
+                $this->user_download_token = $data['download_token'];
+            }
+            if ( isset( $data['expires_in'] ) ) {
+                $this->user_expires_in = intval( $data['expires_in'] );
+            }
+            if ( isset( $data['refresh_expires_in'] ) ) {
+                $this->user_refresh_expires_in = intval( $data['refresh_expires_in'] );
+            }
+            if ( isset( $data['token_set_time'] ) ) {
+                $this->user_token_set_time = intval( $data['token_set_time'] );
+            }
+            $this->save_user_credentials();
         }
-        if ( isset( $data['refresh_token'] ) ) {
-            $this->user_refresh_token = $data['refresh_token'];
-        }
-        if ( isset( $data['download_token'] ) ) {
-            $this->user_download_token = $data['download_token'];
-        }
-        if ( isset( $data['expires_in'] ) ) {
-            $this->user_expires_in = intval( $data['expires_in'] );
-        }
-        if ( isset( $data['refresh_expires_in'] ) ) {
-            $this->user_refresh_expires_in = intval( $data['refresh_expires_in'] );
-        }
-        if ( isset( $data['token_set_time'] ) ) {
-            $this->user_token_set_time = intval( $data['token_set_time'] );
-        }
-        $this->save_user_credentials();
-
     }
 
     public function load_user_credentials() {
@@ -131,59 +168,63 @@ class EASL_MZ_API {
         set_transient( 'easl_mz_crm_user_credentials', $credentials, $this->user_refresh_expires_in );
     }
 
-    public function is_session_expired() {
-        return $this->user_session_expired;
+    public function is_session_expired( $is_member = true ) {
+        return $is_member ? $this->session_expired : $this->user_session_expired;
     }
 
     public function is_auth_refresh_called( $is_member = true ) {
-        return $this->user_auth_refresh_called;
+        return $is_member ? $this->auth_refresh_called : $this->user_auth_refresh_called;
     }
 
-    public function get_portal() {
-        return 'base';
+    public function get_portal( $is_member = true ) {
+        return $is_member ? 'portal' : 'base';
     }
 
-    public function get_access_token() {
-        return $this->user_access_token;
+    public function get_access_token( $is_member = true ) {
+        return $is_member ? $this->access_token : $this->user_access_token;
     }
 
-    public function get_refresh_token() {
-        return $this->user_refresh_token;
+    public function get_refresh_token( $is_member = true ) {
+        return $is_member ? $this->refresh_token : $this->user_refresh_token;
     }
 
-    public function get_download_token() {
-        return $this->user_download_token;
+    public function get_download_token( $is_member = true ) {
+        return $is_member ? $this->download_token : $this->user_download_token;
     }
 
-    public function get_expires_in() {
-        return $this->user_expires_in;
+    public function get_expires_in( $is_member = true ) {
+        return $is_member ? $this->expires_in : $this->user_expires_in;
     }
 
-    public function get_token_set_time() {
-        return $this->user_token_set_time;
+    public function get_token_set_time( $is_member = true ) {
+        return $is_member ? $this->token_set_time : $this->user_token_set_time;
     }
 
-    public function get_refresh_expires_in() {
-        return $this->user_refresh_expires_in;
+    public function get_refresh_expires_in( $is_member = true ) {
+        return $is_member ? $this->refresh_expires_in : $this->user_refresh_expires_in;
     }
 
-    public function get_auth_token() {
-        $this->clear_credentials();
-        $this->user_auth_refresh_called = true;
-        $request_body                   = array(
+    public function get_auth_token( $username, $password, $is_member = true ) {
+        $this->clear_credentials( $is_member );
+        if ( $is_member ) {
+            $this->auth_refresh_called = true;
+        } else {
+            $this->user_auth_refresh_called = true;
+        }
+        $request_body = array(
             'grant_type'    => 'password',
             'client_id'     => 'sugar',
             'client_secret' => '',
-            'username'      => $this->crm_user_name,
-            'password'      => $this->crm_password,
-            'platform'      => $this->get_portal(),
+            'username'      => $username,
+            'password'      => $password,
+            'platform'      => $this->get_portal( $is_member ),
         );
 
         $headers = array(
             'Content-Type'  => 'application/json',
             'Cache-Control' => 'no-cache'
         );
-        if ( ! $this->post( '/oauth2/token', $headers, $request_body ) ) {
+        if ( ! $this->post( '/oauth2/token', $is_member, $headers, $request_body ) ) {
             return false;
         }
 
@@ -198,13 +239,13 @@ class EASL_MZ_API {
             'token_set_time'     => time(),
         );
 
-        $this->set_credentials( $return_data );
+        $this->set_credentials( $return_data, $is_member );
 
         return true;
     }
 
     public function get_user_auth_token() {
-        $this->get_auth_token();
+        $this->get_auth_token( $this->crm_user_name, $this->crm_password, false );
     }
 
     public function maybe_get_user_auth_token() {
@@ -215,15 +256,70 @@ class EASL_MZ_API {
         if ( ( $this->user_token_set_time + $this->user_expires_in - $this->server_response_delay ) < time() ) {
             $get = true;
         }
-        if ( $get ) {
-            $this->get_auth_token();
+        if ( $get && $this->crm_user_name && $this->crm_password ) {
+            $this->get_auth_token( $this->crm_user_name, $this->crm_password, false );
         }
 
         return $get;
     }
 
-    public function refresh_auth_token() {
-        return $this->get_auth_token();
+    public function refresh_auth_token( $is_member = true ) {
+        if ( $is_member ) {
+            $this->auth_refresh_called = true;
+        } else {
+            return $this->get_auth_token( $this->crm_user_name, $this->crm_password, false );
+        }
+        $request_body = array(
+            'grant_type'    => 'refresh_token',
+            'client_id'     => 'sugar',
+            'client_secret' => '',
+            'refresh_token' => $this->get_refresh_token( true ),
+            'platform'      => $this->get_portal( true ),
+        );
+        $headers      = array(
+            'Content-Type'  => 'application/json',
+            'Cache-Control' => 'no-cache'
+        );
+
+        $this->clear_credentials( true );
+
+        if ( ! $this->post( '/oauth2/token', true, $headers, $request_body ) ) {
+            $this->session_expired = true;
+            do_action( 'easl_mz_member_token_expired', true );
+
+            return false;
+        }
+
+        $response = $this->request->get_response_body();
+
+        $return_data = array(
+            'access_token'       => $response->access_token,
+            'expires_in'         => $response->expires_in,
+            'refresh_token'      => $response->refresh_token,
+            'refresh_expires_in' => $response->refresh_expires_in,
+            'download_token'     => $response->download_token,
+            'token_set_time'     => time(),
+        );
+
+        $this->set_credentials( $return_data, $is_member );
+
+        do_action( 'easl_mz_member_token_refreshed', $return_data, $is_member );
+
+        return true;
+    }
+
+    public function maybe_refresh_member_auth_token() {
+        if ( $this->auth_refresh_called ) {
+            return false;
+        }
+        if ( ( $this->token_set_time + $this->expires_in - $this->server_response_delay ) < time() ) {
+
+            $this->refresh_auth_token( true );
+
+            return true;
+        }
+
+        return false;
     }
 
     public function maybe_refresh_user_auth_token() {
@@ -232,7 +328,7 @@ class EASL_MZ_API {
         }
         if ( ( $this->user_token_set_time + $this->user_expires_in - $this->server_response_delay ) < time() ) {
 
-            $this->refresh_auth_token();
+            $this->refresh_auth_token( false );
 
             return true;
         }
@@ -240,8 +336,8 @@ class EASL_MZ_API {
         return false;
     }
 
-    public function maybe_refresh_auth_token() {
-        return $this->maybe_refresh_user_auth_token();
+    public function maybe_refresh_auth_token( $is_member = true ) {
+        return $is_member ? $this->maybe_refresh_member_auth_token() : $this->maybe_refresh_user_auth_token();
 
     }
 
@@ -261,12 +357,31 @@ class EASL_MZ_API {
         return false;
     }
 
-    public function change_password( $data ) {
+    public function get_member_id() {
+        $headers = array(
+            'Content-Type'  => 'application/json',
+            'Cache-Control' => 'no-cache',
+            'OAuth-Token'   => $this->get_access_token( true ),
+        );
+        $result  = $this->get( '/me', true, $headers );
+        if ( ! $result ) {
+            return false;
+        }
+        $response = $this->request->get_response_body();
+        if ( empty( $response->current_user->id ) ) {
+            return false;
+        }
+
+        return $response->current_user->id;
+
+    }
+
+    public function change_password( $data, $is_member = true ) {
         $headers = array(
             'Content-Type' => 'application/json',
-            'OAuth-Token'  => $this->get_access_token(),
+            'OAuth-Token'  => $this->get_access_token( $is_member ),
         );
-        $result  = $this->put( '/me/password', $headers, $data );
+        $result  = $this->put( '/me/password', $is_member, $headers, $data );
 
         if ( ! $result ) {
             return false;
@@ -279,15 +394,13 @@ class EASL_MZ_API {
         return true;
     }
 
-    public function get_member_details( $member_id ) {
+    public function get_member_details( $member_id, $is_member = true ) {
         $headers = array(
             'Content-Type'  => 'application/json',
             'Cache-Control' => 'no-cache',
-            'OAuth-Token'   => $this->get_access_token(),
+            'OAuth-Token'   => $this->get_access_token( $is_member ),
         );
-
-        $result = $this->get( '/Contacts/' . $member_id, $headers );
-
+        $result  = $this->get( '/Contacts/' . $member_id, $is_member, $headers );
         if ( ! $result ) {
             return false;
         }
@@ -307,7 +420,7 @@ class EASL_MZ_API {
         $headers = array(
             'Content-Type'  => 'application/json',
             'Cache-Control' => 'no-cache',
-            'OAuth-Token'   => $this->get_access_token(),
+            'OAuth-Token'   => $this->get_access_token( false ),
         );
         $result  = $this->get( '/easl1_memberships/' . $membership_id, $headers );
         if ( ! $result ) {
@@ -323,9 +436,9 @@ class EASL_MZ_API {
         return $data;
     }
 
-    public function get_member_profile_picture( $member_id ) {
+    public function get_member_profile_picture( $member_id, $is_member = true ) {
         $this->request->reset_headers();
-        $this->request->set_request_header( 'OAuth-Token', $this->get_access_token() );
+        $this->request->set_request_header( 'OAuth-Token', $this->get_access_token( $is_member ) );
         $this->request->set_request_header( 'Cache-Control', 'no-cache' );
         $this->request->get( '/Contacts/' . $member_id . '/file/picture', array(), array(), false );
 
@@ -342,7 +455,7 @@ class EASL_MZ_API {
 
     public function get_membership_note_raw( $note_id ) {
         $this->request->reset_headers();
-        $this->request->set_request_header( 'OAuth-Token', $this->get_access_token() );
+        $this->request->set_request_header( 'OAuth-Token', $this->get_access_token( false ) );
         $this->request->set_request_header( 'Cache-Control', 'no-cache' );
         $this->request->get( '/Notes/' . $note_id . '/file/filename', array(), array(), false );
 
@@ -358,9 +471,9 @@ class EASL_MZ_API {
         );
     }
 
-    public function get_member_profile_picture_raw( $member_id ) {
+    public function get_member_profile_picture_raw( $member_id, $is_member = true ) {
         $this->request->reset_headers();
-        $this->request->set_request_header( 'OAuth-Token', $this->get_access_token() );
+        $this->request->set_request_header( 'OAuth-Token', $this->get_access_token( $is_member ) );
         $this->request->set_request_header( 'Cache-Control', 'no-cache' );
         $this->request->get( '/Contacts/' . $member_id . '/file/picture', array(), array(), false );
 
@@ -383,12 +496,12 @@ class EASL_MZ_API {
 
     }
 
-    public function update_member_picture( $member_id, $img_file ) {
+    public function update_member_picture( $member_id, $img_file, $is_member = true ) {
         $headers = array(
             'Content-Type' => 'multipart/form-data',
-            'OAuth-Token'  => $this->get_access_token(),
+            'OAuth-Token'  => $this->get_access_token( $is_member ),
         );
-        $result  = $this->put( '/Contacts/' . $member_id . '/file/picture', $headers, $img_file, 'body', array(), array( 200 ), false );
+        $result  = $this->put( '/Contacts/' . $member_id . '/file/picture', $is_member, $headers, $img_file, 'body', array(), array( 200 ), false );
         if ( ! $result ) {
             return false;
         }
@@ -407,9 +520,9 @@ class EASL_MZ_API {
         $headers     = array(
             'Content-Type'  => 'application/json',
             'Cache-Control' => 'no-cache',
-            'OAuth-Token'   => $this->get_access_token(),
+            'OAuth-Token'   => $this->get_access_token( false ),
         );
-        $result      = $this->get( '/Contacts/filter', $headers, $filter_args );
+        $result      = $this->get( '/Contacts/filter', false, $headers, $filter_args );
         if ( ! $result ) {
             return false;
         }
@@ -428,9 +541,9 @@ class EASL_MZ_API {
         $headers = array(
             'Content-Type'  => 'application/json',
             'Cache-Control' => 'no-cache',
-            'OAuth-Token'   => $this->get_access_token(),
+            'OAuth-Token'   => $this->get_access_token( false ),
         );
-        $result  = $this->get( '/Contacts/filter', $headers, $filter_args );
+        $result  = $this->get( '/Contacts/filter', false, $headers, $filter_args );
         if ( ! $result ) {
             return false;
         }
@@ -464,9 +577,9 @@ class EASL_MZ_API {
         $headers = array(
             'Content-Type'  => 'application/json',
             'Cache-Control' => 'no-cache',
-            'OAuth-Token'   => $this->get_access_token(),
+            'OAuth-Token'   => $this->get_access_token( false ),
         );
-        $result  = $this->get( '/Contacts/filter/count', $headers, $filter_args );
+        $result  = $this->get( '/Contacts/filter/count', false, $headers, $filter_args );
         if ( ! $result ) {
             return false;
         }
@@ -482,7 +595,7 @@ class EASL_MZ_API {
         $headers = array(
             'Content-Type'  => 'application/json',
             'Cache-Control' => 'no-cache',
-            'OAuth-Token'   => $this->get_access_token(),
+            'OAuth-Token'   => $this->get_access_token( false ),
         );
         $data    = array(
             'max_num'  => 5,
@@ -490,7 +603,7 @@ class EASL_MZ_API {
             'fields'   => 'first_name,last_name,salutation,description,picture',
 
         );
-        $result  = $this->get( '/Contacts/filter', $headers, $data );
+        $result  = $this->get( '/Contacts/filter', false, $headers, $data );
         if ( ! $result ) {
             return false;
         }
@@ -513,14 +626,12 @@ class EASL_MZ_API {
         return $members;
     }
 
-    public function update_member_personal_info( $member_id, $data = array() ) {
+    public function update_member_personal_info( $member_id, $data = array(), $is_member = true ) {
         $headers = array(
             'Content-Type' => 'application/json',
-            'OAuth-Token'  => $this->get_access_token(),
+            'OAuth-Token'  => $this->get_access_token( $is_member ),
         );
-
-        $result = $this->put( '/Contacts/' . $member_id, $headers, $data );
-
+        $result  = $this->put( '/Contacts/' . $member_id, $is_member, $headers, $data );
         if ( ! $result ) {
             return false;
         }
@@ -537,12 +648,12 @@ class EASL_MZ_API {
     public function create_member( $data = array() ) {
         $headers = array(
             'Content-Type' => 'application/json',
-            'OAuth-Token'  => $this->get_access_token(),
+            'OAuth-Token'  => $this->get_access_token( false ),
         );
 
         $this->request->init_logger();
 
-        $result = $this->post( '/Contacts', $headers, $data );
+        $result = $this->post( '/Contacts', false, $headers, $data );
 
         $this->request->close_logger();
 
@@ -561,10 +672,10 @@ class EASL_MZ_API {
     public function create_membership( $data = array() ) {
         $headers = array(
             'Content-Type' => 'application/json',
-            'OAuth-Token'  => $this->get_access_token(),
+            'OAuth-Token'  => $this->get_access_token( false ),
         );
         $this->request->init_logger();
-        $result = $this->post( '/easl1_memberships', $headers, $data );
+        $result = $this->post( '/easl1_memberships', false, $headers, $data );
         $this->request->close_logger();
         if ( ! $result ) {
             return false;
@@ -580,12 +691,12 @@ class EASL_MZ_API {
     public function update_membership( $membership_id, $data = array() ) {
         $headers = array(
             'Content-Type' => 'application/json',
-            'OAuth-Token'  => $this->get_access_token(),
+            'OAuth-Token'  => $this->get_access_token( false ),
         );
 
         $this->request->init_logger();
 
-        $result = $this->put( '/easl1_memberships/' . $membership_id, $headers, $data );
+        $result = $this->put( '/easl1_memberships/' . $membership_id, false, $headers, $data );
 
         $this->request->close_logger();
 
@@ -603,10 +714,10 @@ class EASL_MZ_API {
     public function add_membeship_to_member( $member_id, $membership_id ) {
         $headers = array(
             'Content-Type' => 'application/json',
-            'OAuth-Token'  => $this->get_access_token(),
+            'OAuth-Token'  => $this->get_access_token( false ),
         );
         $this->request->init_logger();
-        $result = $this->post( "/Contacts/{$member_id}/link/contacts_easl1_memberships_1/{$membership_id}", $headers );
+        $result = $this->post( "/Contacts/{$member_id}/link/contacts_easl1_memberships_1/{$membership_id}", false, $headers );
         $this->request->close_logger();
         if ( ! $result ) {
             return false;
@@ -619,13 +730,13 @@ class EASL_MZ_API {
     public function get_members_membership( $member_id ) {
         $headers = array(
             'Content-Type' => 'application/json',
-            'OAuth-Token'  => $this->get_access_token(),
+            'OAuth-Token'  => $this->get_access_token( false ),
         );
         $data    = array(
             'fields'   => 'id,category,start_date,end_date',
             'order_by' => 'start_date:DESC,date_entered:DESC'
         );
-        $result  = $this->get( "/Contacts/{$member_id}/link/contacts_easl1_memberships_1", $headers, $data );
+        $result  = $this->get( "/Contacts/{$member_id}/link/contacts_easl1_memberships_1", false, $headers, $data );
         if ( ! $result ) {
             return false;
         }
@@ -650,14 +761,14 @@ class EASL_MZ_API {
     public function get_members_latest_membership( $member_id ) {
         $headers = array(
             'Content-Type' => 'application/json',
-            'OAuth-Token'  => $this->get_access_token(),
+            'OAuth-Token'  => $this->get_access_token( false ),
         );
         $data    = array(
             'max_num'  => 1,
             'fields'   => 'id,status,billing_type,billing_status,start_date,end_date',
             'order_by' => 'start_date:DESC,date_entered:DESC'
         );
-        $result  = $this->get( "/Contacts/{$member_id}/link/contacts_easl1_memberships_1", $headers, $data );
+        $result  = $this->get( "/Contacts/{$member_id}/link/contacts_easl1_memberships_1", false, $headers, $data );
         if ( ! $result ) {
             return false;
         }
@@ -707,7 +818,7 @@ class EASL_MZ_API {
     public function get_membership_notes( $membership_id ) {
         $headers = array(
             'Content-Type' => 'application/json',
-            'OAuth-Token'  => $this->get_access_token(),
+            'OAuth-Token'  => $this->get_access_token( false ),
         );
         $data    = array(
             'filter'   => array(
@@ -716,7 +827,7 @@ class EASL_MZ_API {
             'fields'   => 'id,name,file_mime_type,filename,dotb_type',
             'order_by' => 'date_entered:DESC'
         );
-        $result  = $this->get( "/easl1_memberships/{$membership_id}/link/easl1_memberships_activities_1_notes", $headers, $data );
+        $result  = $this->get( "/easl1_memberships/{$membership_id}/link/easl1_memberships_activities_1_notes", false, $headers, $data );
         if ( ! $result ) {
             return false;
         }
@@ -742,9 +853,9 @@ class EASL_MZ_API {
     public function delete_member_account( $member_id ) {
         $headers = array(
             'Content-Type' => 'application/json',
-            'OAuth-Token'  => $this->get_access_token(),
+            'OAuth-Token'  => $this->get_access_token( false ),
         );
-        $result  = $this->delete( '/Contacts/' . $member_id, $headers );
+        $result  = $this->delete( '/Contacts/' . $member_id, false, $headers );
         if ( ! $result ) {
             return false;
         }
@@ -761,9 +872,9 @@ class EASL_MZ_API {
         $report_id = 'af3ab44e-167f-11ea-bf8b-005056a42212';
         $headers   = array(
             'Content-Type' => 'application/json',
-            'OAuth-Token'  => $this->get_access_token(),
+            'OAuth-Token'  => $this->get_access_token( false ),
         );
-        $result    = $this->get( '/Reports/' . $report_id . '/chart', $headers );
+        $result    = $this->get( '/Reports/' . $report_id . '/chart', false, $headers );
         if ( ! $result ) {
             return false;
         }
@@ -783,9 +894,9 @@ class EASL_MZ_API {
         $report_id = '29c3021c-16b6-11ea-9fc1-005056a42212';
         $headers   = array(
             'Content-Type' => 'application/json',
-            'OAuth-Token'  => $this->get_access_token(),
+            'OAuth-Token'  => $this->get_access_token( false ),
         );
-        $result    = $this->get( '/Reports/' . $report_id . '/chart', $headers );
+        $result    = $this->get( '/Reports/' . $report_id . '/chart', false, $headers );
         if ( ! $result ) {
             return false;
         }
@@ -805,9 +916,9 @@ class EASL_MZ_API {
         $report_id = 'af3ab44e-167f-11ea-bf8b-005056a42212';
         $headers   = array(
             'Content-Type' => 'application/json',
-            'OAuth-Token'  => $this->get_access_token(),
+            'OAuth-Token'  => $this->get_access_token( false ),
         );
-        $result    = $this->get( '/Reports/' . $report_id . '/chart', $headers );
+        $result    = $this->get( '/Reports/' . $report_id . '/chart', false, $headers );
         if ( ! $result ) {
             return false;
         }
@@ -827,9 +938,9 @@ class EASL_MZ_API {
         $report_id = 'af1aa01e-167f-11ea-8f06-005056a42212';
         $headers   = array(
             'Content-Type' => 'application/json',
-            'OAuth-Token'  => $this->get_access_token(),
+            'OAuth-Token'  => $this->get_access_token( false ),
         );
-        $result    = $this->get( '/Reports/' . $report_id . '/chart', $headers );
+        $result    = $this->get( '/Reports/' . $report_id . '/chart', false, $headers );
         if ( ! $result ) {
             return false;
         }
@@ -853,9 +964,9 @@ class EASL_MZ_API {
         $report_id = 'f25543da-053f-11ea-9412-005056a42212';
         $headers   = array(
             'Content-Type' => 'application/json',
-            'OAuth-Token'  => $this->get_access_token(),
+            'OAuth-Token'  => $this->get_access_token( false ),
         );
-        $result    = $this->get( '/Reports/' . $report_id . '/chart', $headers );
+        $result    = $this->get( '/Reports/' . $report_id . '/chart', false, $headers );
         if ( ! $result ) {
             return false;
         }
@@ -875,8 +986,11 @@ class EASL_MZ_API {
         return $speciality_count;
     }
 
-    public function post( $endpoint, $headers = array(), $data = array(), $data_format = 'body', $cookies = array(), $codes = array( 200 ) ) {
-        $this->maybe_refresh_auth_token();
+    public function post( $endpoint, $is_member = true, $headers = array(), $data = array(), $data_format = 'body', $cookies = array(), $codes = array( 200 ) ) {
+        if ( $this->is_session_expired( $is_member ) ) {
+            return false;
+        }
+        $this->maybe_refresh_auth_token( $is_member );
         $this->request->reset_headers();
         if ( is_array( $headers ) ) {
             foreach ( $headers as $key => $value ) {
@@ -885,8 +999,8 @@ class EASL_MZ_API {
         }
         $this->request->post( $endpoint, $data, $data_format, $cookies );
         if ( $this->request->is_valid_response_code( 401 ) && ! $this->is_auth_refresh_called() ) {
-            if ( $this->refresh_auth_token() ) {
-                return $this->post( $endpoint, $headers, $data, $data_format, $cookies, $codes );
+            if ( $this->refresh_auth_token( $is_member ) ) {
+                return $this->post( $endpoint, $is_member, $headers, $data, $data_format, $cookies, $codes );
             }
 
             return false;
@@ -903,8 +1017,11 @@ class EASL_MZ_API {
         return true;
     }
 
-    public function put( $endpoint, $headers = array(), $data = array(), $data_format = 'body', $cookies = array(), $codes = array( 200 ), $body_json_encode = true ) {
-        $this->maybe_refresh_auth_token();
+    public function put( $endpoint, $is_member = true, $headers = array(), $data = array(), $data_format = 'body', $cookies = array(), $codes = array( 200 ), $body_json_encode = true ) {
+        if ( $this->is_session_expired( $is_member ) ) {
+            return false;
+        }
+        $this->maybe_refresh_auth_token( $is_member );
         $this->request->reset_headers();
         if ( is_array( $headers ) ) {
             foreach ( $headers as $key => $value ) {
@@ -914,8 +1031,8 @@ class EASL_MZ_API {
         $this->request->put( $endpoint, $data, $data_format, $cookies, true, $body_json_encode );
 
         if ( $this->request->is_valid_response_code( 401 ) && ! $this->is_auth_refresh_called() ) {
-            if ( $this->refresh_auth_token() ) {
-                return $this->put( $endpoint, $headers, $data, $data_format, $cookies, $codes, $body_json_encode );
+            if ( $this->refresh_auth_token( $is_member ) ) {
+                return $this->put( $endpoint, $is_member, $headers, $data, $data_format, $cookies, $codes, $body_json_encode );
             }
 
             return false;
@@ -932,8 +1049,11 @@ class EASL_MZ_API {
         return true;
     }
 
-    public function delete( $endpoint, $headers = array(), $data = array(), $data_format = 'body', $cookies = array(), $codes = array( 200 ) ) {
-        $this->maybe_refresh_auth_token();
+    public function delete( $endpoint, $is_member = true, $headers = array(), $data = array(), $data_format = 'body', $cookies = array(), $codes = array( 200 ) ) {
+        if ( $this->is_session_expired( $is_member ) ) {
+            return false;
+        }
+        $this->maybe_refresh_auth_token( $is_member );
         $this->request->reset_headers();
         if ( is_array( $headers ) ) {
             foreach ( $headers as $key => $value ) {
@@ -943,8 +1063,8 @@ class EASL_MZ_API {
         $this->request->delete( $endpoint, $data, $data_format, $cookies );
 
         if ( $this->request->is_valid_response_code( 401 ) && ! $this->is_auth_refresh_called() ) {
-            if ( $this->refresh_auth_token() ) {
-                return $this->delete( $endpoint, $headers, $data, $data_format, $cookies, $codes );
+            if ( $this->refresh_auth_token( $is_member ) ) {
+                return $this->delete( $endpoint, $is_member, $headers, $data, $data_format, $cookies, $codes );
             }
 
             return false;
@@ -961,8 +1081,11 @@ class EASL_MZ_API {
         return true;
     }
 
-    public function get( $endpoint, $headers = array(), $data = array(), $cookies = array(), $codes = array( 200 ) ) {
-        $this->maybe_refresh_auth_token();
+    public function get( $endpoint, $is_member = true, $headers = array(), $data = array(), $cookies = array(), $codes = array( 200 ) ) {
+        if ( $this->is_session_expired( $is_member ) ) {
+            return false;
+        }
+        $this->maybe_refresh_auth_token( $is_member );
         $this->request->reset_headers();
         if ( is_array( $headers ) ) {
             foreach ( $headers as $key => $value ) {
@@ -971,8 +1094,8 @@ class EASL_MZ_API {
         }
         $this->request->get( $endpoint, $data, $cookies );
         if ( $this->request->is_valid_response_code( 401 ) && ! $this->is_auth_refresh_called() ) {
-            if ( $this->refresh_auth_token() ) {
-                return $this->get( $endpoint, $headers, $data, $cookies, $codes );
+            if ( $this->refresh_auth_token( $is_member ) ) {
+                return $this->get( $endpoint, $is_member, $headers, $data, $cookies, $codes );
             }
 
             return false;

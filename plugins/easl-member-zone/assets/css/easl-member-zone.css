@@ -2938,6 +2938,15 @@ li.menu-item.review-applications {
 .sp-modal-close:hover {
     text-decoration:none;
 }
+.login-form-active .sp-modal-content {
+    display: none;
+}
+.sp-modal-login-form {
+    display: none;
+}
+.login-form-active .sp-modal-login-form {
+    display: block;
+}
 
 @media (max-width:767px) {
     .s-modal {
