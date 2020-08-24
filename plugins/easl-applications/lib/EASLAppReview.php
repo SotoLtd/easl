@@ -412,7 +412,7 @@ class EASLAppReview {
     public function getProgrammesUserCanReview($email) {
 
         $programmes = get_posts(['post_type' => 'programme', 'numberposts' => -1]);
-        return array_filter($programmes, function($p) use ($email) {
+        return array_values(array_filter($programmes, function($p) use ($email) {
             $reviewers = $this->getProgrammeReviewers($p->ID);
             if (!$reviewers) return false;
 
@@ -423,7 +423,7 @@ class EASLAppReview {
                 return false;
             }
             return true;
-        });
+        }));
     }
 
     public function programmePage($programmeId = null) {
@@ -457,7 +457,11 @@ class EASLAppReview {
     }
 
     protected function getProgrammeReviewers($programmeId) {
-        return get_post_meta($programmeId, 'reviewers', true);
+        $reviewers = get_post_meta($programmeId, 'reviewers', true);
+        if(!$reviewers) {
+            $reviewers = [];
+        }
+        return $reviewers;
     }
 
     protected function renderTemplate($file, $vars) {
