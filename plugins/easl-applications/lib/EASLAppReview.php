@@ -26,6 +26,7 @@ class EASLAppReview {
         $this->isAdmin = $isAdmin;
 
         $this->handleInviteReviewerFormSubmit();
+        $this->handleRemoveReviewer();
     }
 
     public function configureAdminPages() {
@@ -141,6 +142,10 @@ class EASLAppReview {
         $submissions = [];
 
         $reviewers = $this->getProgrammeReviewers($programmeId);
+
+        if (!is_array($reviewers)) {
+            $reviewers = [];
+        }
 
         $scoringCriteria = get_field('scoring_criteria', $programmeId);
 
@@ -488,6 +493,13 @@ class EASLAppReview {
         }
     }
 
+    public function handleRemoveReviewer() {
+        if (isset($_GET['remove_reviewer_email']) && isset($_GET['programmeId'])) {
+            $email = $_GET['remove_reviewer_email'];
+            $this->removeReviewer($email, $_GET['programmeId']);
+        }
+    }
+
     protected function inviteReviewer($email, $programmeId) {
         $api = easl_mz_get_manager()->getApi();
         $filterArgs = [
@@ -530,6 +542,19 @@ class EASLAppReview {
         } else {
             $this->error = 'No MyEASL account was found for ' . $email;
         }
+    }
+
+    protected function removeReviewer($email, $programmeId) {
+        $reviewers = array_filter($this->getProgrammeReviewers($programmeId), function($reviewer) use ($email) {
+//            echo $email . '<br>';
+//            echo $reviewer['email'] . '<br>';
+//            print_r($reviewer);
+//            die();
+            return $reviewer['email'] != $email;
+        });
+
+        update_post_meta($programmeId, 'reviewers', $reviewers);
+        wp_redirect($this->getUrl(self::PAGE_PROGRAMME, ['programmeId' => $programmeId, 'tab' => 'reviewers']));
     }
 
     protected function sendReviewerInviteEmail($email, $memberData, $programmeId) {

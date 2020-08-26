@@ -66,6 +66,7 @@ if ( ! defined( 'ABSPATH' ) ) {
             <tr>
                 <th>Name</th>
                 <th>Email address</th>
+                <th></th>
             </tr>
             </thead>
             <tbody>
@@ -73,6 +74,9 @@ if ( ! defined( 'ABSPATH' ) ) {
                 <tr>
                     <td><?=$reviewer['name'];?></td>
                     <td><?=$reviewer['email'];?></td>
+                    <td>
+                        <a href="<?=EASLAppReview::getUrl(EASLAppReview::PAGE_PROGRAMME, ['programmeId' => $programme->ID, 'tab' => 'reviewers', 'remove_reviewer_email' => $reviewer['email']]);?>" class="wp-core ui-button">Remove reviewer</a>
+                    </td>
                 </tr>
             <?php endforeach;?>
             </tbody>

@@ -2885,6 +2885,9 @@ span.mzms-field-file-button {
     border:1px solid #aaa;
 }
 
+.review-submission-table th {
+    width:40%;
+}
 .review-programmes-table td a.programme-name {
     font-weight:bold;
 }
