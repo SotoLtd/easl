@@ -11,7 +11,6 @@ $programme = get_post($programme_id);
 $sub = new EASLAppSubmission($programme_id);
 $valid = $sub->setup();
 
-
 $apps = EASLApplicationsPlugin::getInstance();
 $fieldContainer = $apps->getProgrammeFieldSetContainer($programme_id);
 

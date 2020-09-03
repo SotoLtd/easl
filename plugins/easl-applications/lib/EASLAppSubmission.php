@@ -63,7 +63,7 @@ class EASLAppSubmission
         return $this->submissionId;
     }
 
-    protected function getExistingSubmissionForMember($memberId) {
+    public function getExistingSubmissionForMember($memberId) {
 
         $submissions = get_posts([
             'post_type' => 'submission',
@@ -132,8 +132,7 @@ class EASLAppSubmission
         $existingSubmission = $this->getExistingSubmissionForMember($this->memberId);
 
         if ($existingSubmission) {
-            $memberData = get_post_meta($existingSubmission->ID, 'member_data', true);
-            $this->submissionId = $existingSubmission->ID;
+            return false;
         } else {
             $this->createSubmission();
         }

@@ -573,7 +573,7 @@ class EASLAppReview {
             'reviewDeadline' => $reviewDeadline
         ]);
 
-        $headers = ['Content-Type: text/html; charset=UTF-8'];
+        $headers = ['Content-Type: text/html; charset=UTF-8', 'Bcc: fellowships@easloffice.eu'];
         wp_mail($email, 'Invitation to Review EASL Applications', $message, $headers);
     }
 }
