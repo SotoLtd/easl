@@ -430,6 +430,16 @@ body .mzms-button::after {
     font-family: "KnockoutHTF51Middleweight", "Helvetica Neue", Helvetica, Arial, sans-serif;
 }
 
+.easl-application-submitted-notice {
+    padding:10px 15px;
+    margin-bottom:16px;
+    color:#004b87;
+    border-radius:3px;
+    box-shadow:0 0 4px 0 rgba(0, 0, 0, .2);
+    background-color:#d0d0d0;
+    font-weight:bold;
+}
+
 .easl-mz-applications-widget .easl-member-banner {
     font-size:14px;
     padding:8px;

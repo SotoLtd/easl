@@ -94,13 +94,12 @@ class EASLAppReview {
                 $fields[$fieldKey] = $field;
             }
         }
-
         if ($forCSV) {
             foreach($fields as $key => $field) {
                 $data = get_field($key, $submission->ID);
 
                 if ($field->type === 'file') {
-                    $data = wp_get_attachment_url($data);
+                    $data = $data['url'];
                 }
 
                 $out[$field->name] = $data;
@@ -185,8 +184,8 @@ class EASLAppReview {
         $fp = fopen('php://output', 'wb');
         fputcsv($fp, $headerFields);
 
-        foreach($submissions as $submission) {
-            fputcsv($fp, $submission);
+        foreach($submissions as $s) {
+            fputcsv($fp, $s);
         }
 
         fclose($fp);
@@ -223,7 +222,7 @@ class EASLAppReview {
             return $errors;
         }
 
-        if ($formData['review_id']) {
+        if (isset($formData['review_id'])) {
             $reviewId = $formData['review_id'];
             $reviewerEmail = get_post_meta($reviewId, 'reviewer_email', true);
             if ($reviewerEmail !== $loggedInUserData['email1']) {
@@ -248,6 +247,9 @@ class EASLAppReview {
         update_post_meta($reviewId, 'total_score', $totalScore);
 
         update_post_meta($reviewId, 'scoring', $formData['category']);
+
+        $programmeId = get_post_meta($submissionId, 'programme_id', true);
+        wp_redirect($this->getUrl(self::PAGE_PROGRAMME, ['programmeId' => $programmeId]) . '&review_submitted=1');
     }
 
     protected function getSubmissionReviews($submissionId) {
@@ -573,7 +575,11 @@ class EASLAppReview {
             'reviewDeadline' => $reviewDeadline
         ]);
 
-        $headers = ['Content-Type: text/html; charset=UTF-8', 'Bcc: fellowships@easloffice.eu'];
+        $headers = [
+            'Content-Type: text/html; charset=UTF-8',
+            'Bcc: fellowships@easloffice.eu',
+            'From: EASL Applications <fellowships@easloffice.eu>'
+        ];
         wp_mail($email, 'Invitation to Review EASL Applications', $message, $headers);
     }
 }

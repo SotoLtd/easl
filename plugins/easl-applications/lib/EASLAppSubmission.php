@@ -132,7 +132,8 @@ class EASLAppSubmission
         $existingSubmission = $this->getExistingSubmissionForMember($this->memberId);
 
         if ($existingSubmission) {
-            return false;
+            $redirect = get_field( 'member_dashboard_url', 'option' );
+            wp_redirect($redirect . '?application_submitted=1');
         } else {
             $this->createSubmission();
         }
@@ -155,7 +156,10 @@ class EASLAppSubmission
             ]);
             update_post_meta($postId, self::SUBMISSION_DATE_META_KEY, time());
             $email = $memberData['email1'];
-            $headers = ['Content-Type: text/html; charset=UTF-8'];
+            $headers = [
+                'Content-Type: text/html; charset=UTF-8',
+                'From: EASL Applications <fellowships@easloffice.eu>'
+            ];
             wp_mail($email, 'EASL Application Confirmation', $message, $headers);
         }
 

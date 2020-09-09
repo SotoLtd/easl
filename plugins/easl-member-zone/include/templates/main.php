@@ -36,6 +36,12 @@ $add_membership_url = get_field('membership_plan_url', 'option');
                             <a href="<?php echo $add_membership_url;?>" class="easl-generic-button easl-color-lightblue">Join today</a>
                         </div>
                     <?php endif;?>
+
+                    <?php if (isset($_GET['application_submitted'])):?>
+                        <div class="easl-application-submitted-notice">
+                            Thank you for submitting your application. We will be in touch soon.
+                        </div>
+                    <?php endif;?>
 					<?php the_content(); ?>
                 </div>
             </div>
