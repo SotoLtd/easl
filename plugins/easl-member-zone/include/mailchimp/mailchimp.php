@@ -1,10 +1,15 @@
 <?php
 class EASL_MZ_Mailchimp {
 
-    const API_KEY = 'cb740386de6e8a4cc0227bd7dc2723fb-us1';
-    const LIST_ID = '0cdeadc620';
-
     public static function sign_up($request_data) {
+    
+        $api_key = get_field( 'mz_mailchimp_api_key', 'options' );
+        $list_id = get_field( 'mz_mailchimp_list_id', 'options' );
+    
+        if ( ! $api_key || $list_id ) {
+            return false;
+        }
+        
         $email = $request_data['email1'];
         $json = json_encode([
             'email_address' => $email,
@@ -15,10 +20,10 @@ class EASL_MZ_Mailchimp {
             ]
         ]);
 
-        $url = 'https://us1.api.mailchimp.com/3.0/lists/' . self::LIST_ID . '/members';
+        $url = 'https://us1.api.mailchimp.com/3.0/lists/' . $list_id . '/members';
 
         $ch = curl_init($url);
-        curl_setopt($ch, CURLOPT_USERPWD, 'user:' . self::API_KEY);
+        curl_setopt($ch, CURLOPT_USERPWD, 'user:' . $api_key);
         curl_setopt($ch, CURLOPT_HTTPHEADER, ['Content-Type: application/json']);
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
         curl_setopt($ch, CURLOPT_TIMEOUT, 10);
