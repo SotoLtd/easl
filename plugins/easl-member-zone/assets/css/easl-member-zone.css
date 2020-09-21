@@ -841,12 +841,12 @@ body .mzms-button::after {
     padding: 15px 20px 35px;
 }
 
-.easl-member-zone-container .easl-events-list-wrap ul {
+.mz-easl-events .easl-events-list-wrap ul {
     display: flex;
     flex-wrap: wrap;
     justify-content: space-between;
 }
-.easl-member-zone-container .easl-events-li {
+.mz-easl-events .easl-events-li {
     width: calc((100% - 30px)/2);
 }
 

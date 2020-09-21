@@ -649,6 +649,12 @@ class EASL_MZ_Ajax_Handler {
 			$this->respond( 'Error!', 405 );
 		}
 
+        if ($request_data['newsletter_subscribe']) {
+            $manager = EASL_MZ_Manager::get_instance();
+            require_once $manager->path('APP_ROOT', 'include/mailchimp/mailchimp.php');
+            EASL_MZ_Mailchimp::sign_up($request_data);
+        }
+
         //Redirect to the dashboard
         $redirect = get_field( 'member_dashboard_url', 'option' );
         if ($request_data['skip_dashboard']) {

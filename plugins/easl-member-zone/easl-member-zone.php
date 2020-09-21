@@ -70,6 +70,9 @@ class EASL_MZ_Manager {
 		add_filter( 'body_class', array( $this, 'body_class' ) );
 
 		add_action( 'eals_mz_daily_checklist', array( $this, 'daily_scheduled_tasks' ) );
+		
+		add_filter('vc_shortcode_output', array($this, 'vc_membership_check_on_output'), 100, 4);
+		add_action('vc_after_init', array($this, 'vc_membership_check_field'));
 
 		$this->cron_init();
 	}
@@ -148,6 +151,66 @@ class EASL_MZ_Manager {
 	public function daily_scheduled_tasks() {
 		$this->session->clean_expired_session();
 	}
+    
+    public function vc_membership_check_field() {
+        $attribute = array(
+            'type'       => 'dropdown',
+            'heading'    => "Display to",
+            'param_name' => 'mz_member_restriction',
+            'value'      => array(
+                __( 'Any one', 'total-child' )                      => '',
+                __( 'Non logged in visitor', 'total-child' )        => 'non_logged_in',
+                __( 'Any members', 'total-child' )                  => 'logged_in',
+                __( 'Free members', 'total-child' )                 => 'free',
+                __( 'Free members & non logged in', 'total-child' ) => 'free_non_logged_in',
+                __( 'Paid members', 'total-child' )                 => 'paid',
+            ),
+            'group'      => __( 'Membership', 'total' ),
+        );
+        foreach ( $this->restricted_vc_shortcodes() as $sc_tag ) {
+            vc_add_param( $sc_tag, $attribute );
+        }
+    }
+    
+    public function vc_membership_check_on_output( $output, $sc, $prepared_atts, $sc_tag ) {
+        if ( ! in_array( $sc_tag, $this->restricted_vc_shortcodes() ) ) {
+            return $output;
+        }
+        $restriction = isset( $prepared_atts['mz_member_restriction'] ) ? $prepared_atts['mz_member_restriction'] : '';
+        
+        if ( ! $restriction ) {
+            return $output;
+        }
+        switch ( $restriction ) {
+            case 'non_logged_in' :
+                if ( is_user_logged_in() ) {
+                    $output = '';
+                }
+                break;
+            case 'logged_in' :
+                if ( ! is_user_logged_in() ) {
+                    $output = '';
+                }
+                break;
+            case 'free' :
+                if ( ! is_user_logged_in() || easl_mz_user_is_member() ) {
+                    $output = '';
+                }
+                break;
+            case 'free_non_logged_in' :
+                if ( is_user_logged_in() && easl_mz_user_is_member() ) {
+                    $output = '';
+                }
+                break;
+            case 'paid' :
+                if ( ! is_user_logged_in() || ! easl_mz_user_is_member() ) {
+                    $output = '';
+                }
+                break;
+        }
+        
+        return $output;
+    }
 
 
 	/**
@@ -741,6 +804,14 @@ class EASL_MZ_Manager {
 
 		return $shortcodes;
 	}
+	
+	public function  restricted_vc_shortcodes() {
+	    return array(
+            'vc_row',
+            'easl_mz_member_benefits',
+            'easl_events',
+        );
+    }
 
 	/**
 	 * Load shortcodes for visual composer

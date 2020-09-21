@@ -48,6 +48,11 @@ if ( ! $member['alt_address_street'] || ! $member['alt_address_postalcode'] || !
 if ( ! $member_has_waiting_payemnt ):
 	?>
     <div class="easl-mz-new-membership-form-inner">
+
+        <div class="easl-mz-page-intro">
+            <p>Complete this form to create a free MyEASL account. With your MyEASL account you manage your EASL profile,  get access to the EASL Clinical Practice Guidelines (CPGs) and the EASL Campus, sign-up or renew your EASL Membership.</p>
+        </div>
+        
         <form action="" method="post" enctype="multipart/form-data">
 
 			<?php if ( isset( $messages['membership_error'] ) && count( $messages['membership_error'] ) > 0 ): ?>
@@ -62,6 +67,72 @@ if ( ! $member_has_waiting_payemnt ):
             <input type="hidden" name="mz_member_name" value="<?php echo implode( ' ', $member_name_parts ); ?>">
             <input type="hidden" name="mz_member_fname" value="<?php echo $member['first_name']; ?>">
             <input type="hidden" name="mz_member_lname" value="<?php echo $member['last_name']; ?>">
+
+            <div class="mzms-fields-row easl-row easl-row-col-2">
+                <div class="easl-col">
+                    <div class="easl-col-inner mzms-fields-con">
+                        <label class="mzms-field-label" for="mzf_membership_category">Membership Category</label>
+                        <div class="mzms-field-wrap">
+                            <?php
+                    
+                            $allowed_cats = easl_mz_get_members_allowed_categories( $member );
+                            ?>
+                            <select class="easl-mz-select2" name="membership_category" id="mzf_membership_category" data-placeholder="Select an category" style="width: 100%;">
+                                <option value=""></option>
+                                <?php
+                                foreach ( $allowed_cats as $cat_key => $cat_name ):
+                                    ?>
+                                    <option value="<?php echo $cat_key ?>"<?php selected( $cat_key, $member['dotb_mb_category'], true ); ?>><?php echo $cat_name; ?>
+                                        ( <?php echo easl_mz_get_membership_fee( $cat_key, true ); ?> )
+                                    </option>
+                                <?php endforeach; ?>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+                <div class="easl-col">
+                    <div class="easl-col-inner mzms-fields-con">
+                        <label class="mzms-field-label" for="mzf_membership_payment_type">Payment Type</label>
+                        <div class="mzms-field-wrap">
+                            <select class="easl-mz-select2" name="membership_payment_type" id="mzf_membership_payment_type" style="width: 100%;">
+                                <option value="ingenico_epayments" selected="selected">Online</option>
+                                <option value="offline_payment">Offline</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="mzms-fields-row easl-row easl-row-col-2">
+                <div class="easl-col">
+                    <div class="easl-col-inner mzms-fields-con">
+                        <label class="mzms-field-label" for="mzf_membership_payment_type">Billing Address</label>
+                        <div class="mzms-field-wrap">
+                            <select class="easl-mz-select2" name="billing_mode" id="mzf_billing_mode" style="width: 100%;">
+                                <option value="c1" selected="selected">Institution</option>
+                                <?php if ( $member_has_home_address ): ?>
+                                    <option value="c2">Home</option><?php endif; ?>
+                                <option value="other">or other?</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+                <div class="easl-col">
+                    <div class="easl-col-inner mzms-fields-con">
+                        <div id="mzf_jhephardcopy_recipient_wrapper">
+                            <label class="mzms-field-label" for="mzf_jhephardcopy_recipient">JHEP - Where?</label>
+                            <div class="mzms-field-wrap">
+                                <select class="easl-mz-select2" name="jhephardcopy_recipient" id="mzf_jhephardcopy_recipient" style="width: 100%;">
+                                    <option value="c1" selected="selected">Institution</option>
+                                    <?php if ( $member_has_home_address ): ?>
+                                        <option value="c2">Home</option><?php endif; ?>
+                                    <option value="other">or other?</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="mzms-fields-separator"></div>
 
 <!--            --><?php //include $template_base . '/partials/fields-add-membership.php'; ?>
 <!--            <div class="mzms-fields-separator"></div>-->
@@ -106,72 +177,6 @@ if ( ! $member_has_waiting_payemnt ):
                     <label class="mzms-field-label" for="mzms_personal_profile">Personal Profile</label>
                     <div class="mzms-field-wrap">
                         <textarea name="description" id="mzms_personal_profile" placeholder=""></textarea>
-                    </div>
-                </div>
-            </div>
-            <div class="mzms-fields-separator"></div>
-
-            <div class="mzms-fields-row easl-row easl-row-col-2">
-                <div class="easl-col">
-                    <div class="easl-col-inner mzms-fields-con">
-                        <label class="mzms-field-label" for="mzf_membership_category">Membership Category</label>
-                        <div class="mzms-field-wrap">
-							<?php
-
-							$allowed_cats = easl_mz_get_members_allowed_categories( $member );
-							?>
-                            <select class="easl-mz-select2" name="membership_category" id="mzf_membership_category" data-placeholder="Select an category" style="width: 100%;">
-                                <option value=""></option>
-								<?php
-								foreach ( $allowed_cats as $cat_key => $cat_name ):
-									?>
-                                    <option value="<?php echo $cat_key ?>"<?php selected( $cat_key, $member['dotb_mb_category'], true ); ?>><?php echo $cat_name; ?>
-                                        ( <?php echo easl_mz_get_membership_fee( $cat_key, true ); ?> )
-                                    </option>
-								<?php endforeach; ?>
-                            </select>
-                        </div>
-                    </div>
-                </div>
-                <div class="easl-col">
-                    <div class="easl-col-inner mzms-fields-con">
-                        <label class="mzms-field-label" for="mzf_membership_payment_type">Payment Type</label>
-                        <div class="mzms-field-wrap">
-                            <select class="easl-mz-select2" name="membership_payment_type" id="mzf_membership_payment_type" style="width: 100%;">
-                                <option value="ingenico_epayments" selected="selected">Online</option>
-                                <option value="offline_payment">Offline</option>
-                            </select>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="mzms-fields-row easl-row easl-row-col-2">
-                <div class="easl-col">
-                    <div class="easl-col-inner mzms-fields-con">
-                        <label class="mzms-field-label" for="mzf_membership_payment_type">Billing Address</label>
-                        <div class="mzms-field-wrap">
-                            <select class="easl-mz-select2" name="billing_mode" id="mzf_billing_mode" style="width: 100%;">
-                                <option value="c1" selected="selected">Institution</option>
-								<?php if ( $member_has_home_address ): ?>
-                                    <option value="c2">Home</option><?php endif; ?>
-                                <option value="other">or other?</option>
-                            </select>
-                        </div>
-                    </div>
-                </div>
-                <div class="easl-col">
-                    <div class="easl-col-inner mzms-fields-con">
-                        <div id="mzf_jhephardcopy_recipient_wrapper">
-                            <label class="mzms-field-label" for="mzf_jhephardcopy_recipient">JHEP - Where?</label>
-                            <div class="mzms-field-wrap">
-                                <select class="easl-mz-select2" name="jhephardcopy_recipient" id="mzf_jhephardcopy_recipient" style="width: 100%;">
-                                    <option value="c1" selected="selected">Institution</option>
-									<?php if ( $member_has_home_address ): ?>
-                                        <option value="c2">Home</option><?php endif; ?>
-                                    <option value="other">or other?</option>
-                                </select>
-                            </div>
-                        </div>
                     </div>
                 </div>
             </div>

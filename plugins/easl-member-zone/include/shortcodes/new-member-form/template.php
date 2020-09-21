@@ -56,6 +56,9 @@ if ( ! easl_mz_is_member_logged_in() ):
                 <?php endif;?>
 
                 <h1>MyEASL Account Creation</h1>
+                <div class="easl-mz-page-intro">
+                    <p>Complete this form to create a free MyEASL account. With your MyEASL account you manage your EASL profile,  get access to the EASL Clinical Practice Guidelines (CPGs) and the EASL Campus, sign-up or renew your EASL Membership.</p>
+                </div>
 
 				<?php include $template_base . '/partials/fields-basic.php'; ?>
                 <div class="mzms-fields-separator"></div>
