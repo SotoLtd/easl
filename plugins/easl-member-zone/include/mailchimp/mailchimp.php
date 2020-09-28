@@ -6,7 +6,7 @@ class EASL_MZ_Mailchimp {
         $api_key = get_field( 'mz_mailchimp_api_key', 'options' );
         $list_id = get_field( 'mz_mailchimp_list_id', 'options' );
     
-        if ( ! $api_key || $list_id ) {
+        if ( ! $api_key || !$list_id ) {
             return false;
         }
         

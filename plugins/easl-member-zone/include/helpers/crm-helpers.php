@@ -167,7 +167,7 @@ function easl_mz_validate_new_member_form($data = array()) {
     if ( ! empty( $data['dotb_easl_specialty'] ) && in_array( 'other', $data['dotb_easl_specialty'] ) && empty( $data['dotb_easl_specialty_other'] ) ) {
         $errors['dotb_easl_specialty_other'] = 'Mandatory field';
     }
-    if ( ! empty( $data['dotb_user_category'] ) && in_array( 'other', $data['dotb_user_category'] ) && empty( $data['dotb_user_category_other'] ) ) {
+    if ( ! empty( $data['dotb_user_category'] ) && ( 'other' == $data['dotb_user_category'] ) && empty( $data['dotb_user_category_other'] ) ) {
         $errors['dotb_user_category_other'] = 'Mandatory field';
     }
     if ( ! empty( $data['birthdate'] ) && ! preg_match( "/^[0-9]{4}-(0[1-9]|1[0-2])-(0[1-9]|[1-2][0-9]|3[0-1])$/", $data['birthdate'] ) ) {

@@ -50,7 +50,7 @@ if ( ! $member_has_waiting_payemnt ):
     <div class="easl-mz-new-membership-form-inner">
 
         <div class="easl-mz-page-intro">
-            <p>Complete this form to create a free MyEASL account. With your MyEASL account you manage your EASL profile,  get access to the EASL Clinical Practice Guidelines (CPGs) and the EASL Campus, sign-up or renew your EASL Membership.</p>
+            <p>Select your membership category, payment type, and complete this form to sign-up for EASL Membership. Benefits include online access to the Journal of Hepatology, reduced fees to the International Liver Congress, and more.</p>
         </div>
         
         <form action="" method="post" enctype="multipart/form-data">
@@ -105,7 +105,7 @@ if ( ! $member_has_waiting_payemnt ):
             <div class="mzms-fields-row easl-row easl-row-col-2">
                 <div class="easl-col">
                     <div class="easl-col-inner mzms-fields-con">
-                        <label class="mzms-field-label" for="mzf_membership_payment_type">Billing Address</label>
+                        <label class="mzms-field-label" for="mzf_billing_mode">Billing Address</label>
                         <div class="mzms-field-wrap">
                             <select class="easl-mz-select2" name="billing_mode" id="mzf_billing_mode" style="width: 100%;">
                                 <option value="c1" selected="selected">Institution</option>
@@ -316,7 +316,7 @@ if ( ! $member_has_waiting_payemnt ):
                 </div>
                 <div class="mzms-fields-separator"></div>
                 <div style="text-align: right;">
-                    <button class="mzms-button mzms-add-membership-submit mzms-modal-submit" href="#">Go ahead</button>
+                    <button class="mzms-button mzms-add-membership-submit mzms-modal-submit">Go ahead</button>
                 </div>
             </div>
         </form>

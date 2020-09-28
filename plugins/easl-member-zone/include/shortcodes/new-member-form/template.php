@@ -76,8 +76,8 @@ if ( ! easl_mz_is_member_logged_in() ):
                 <div class="mzms-fields-row">
                     <div class="mzms-fields-con">
                         <div class="mzms-field-wrap mzms-inline-checkbox">
-                            <label for="mzf_newsletter_subscribe" class="easl-custom-checkbox">
-                                <input type="checkbox" name="newsletter_subscribe" id="mzf_newsletter_subscribe" value="1">
+                            <label for="mzf_dotb_easl_newsletter_agree" class="easl-custom-checkbox">
+                                <input type="checkbox" name="dotb_easl_newsletter_agree" id="mzf_dotb_easl_newsletter_agree" value="1">
                                 <span>I agree to receive EASL news</span>
                             </label>
                         </div>

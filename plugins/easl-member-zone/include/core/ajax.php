@@ -633,13 +633,20 @@ class EASL_MZ_Ajax_Handler {
 		if ( count( $errors ) > 0 ) {
 			$this->respond_field_errors( $errors );
 		}
-
-		$request_data['description'] = wp_unslash( $request_data['description'] );
-
+        if(isset($request_data['description'])) {
+            $request_data['description'] = wp_unslash( $request_data['description'] );
+        }
+        
 		$request_data['portal_name']      = $request_data['email1'];
 		$request_data['portal_password']  = $password;
 		$request_data['portal_password1'] = $password;
 		$request_data['portal_active']    = true;
+		
+		if(!empty($request_data['dotb_easl_newsletter_agree'])) {
+            $request_data['dotb_easl_newsletter_agree'] = true;
+        }else{
+            $request_data['dotb_easl_newsletter_agree'] = false;
+        }
 
 		$this->api->get_user_auth_token();
 
@@ -649,7 +656,7 @@ class EASL_MZ_Ajax_Handler {
 			$this->respond( 'Error!', 405 );
 		}
 
-        if ($request_data['newsletter_subscribe']) {
+        if (!empty($request_data['dotb_easl_newsletter_agree'])) {
             $manager = EASL_MZ_Manager::get_instance();
             require_once $manager->path('APP_ROOT', 'include/mailchimp/mailchimp.php');
             EASL_MZ_Mailchimp::sign_up($request_data);
@@ -657,7 +664,7 @@ class EASL_MZ_Ajax_Handler {
 
         //Redirect to the dashboard
         $redirect = get_field( 'member_dashboard_url', 'option' );
-        if ($request_data['skip_dashboard']) {
+        if (!empty($request_data['skip_dashboard'])) {
             $redirect = get_field('membership_plan_url', 'option');
         }
 
