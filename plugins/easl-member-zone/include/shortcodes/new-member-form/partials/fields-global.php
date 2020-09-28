@@ -20,7 +20,7 @@ if ( ! defined( 'ABSPATH' ) ) {
         <div class="easl-col-inner mzms-fields-con" id="mzms-fields-con-dotb_job_function_other">
             <label class="mzms-field-label" for="mzf_dotb_job_function_other">Job function - Other <span class="mzms-asteric">*</span></label>
             <div class="mzms-field-wrap">
-                <input type="text" placeholder="" name="dotb_job_function_other" id="mzf_mzms_first_name" value="" autocomplete="off">
+                <input type="text" placeholder="" name="dotb_job_function_other" id="mzf_dotb_job_function_other" value="" autocomplete="off">
             </div>
         </div>
     </div>
