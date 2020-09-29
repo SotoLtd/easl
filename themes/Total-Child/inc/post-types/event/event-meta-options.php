@@ -61,6 +61,18 @@ return array(
 				'description' => esc_html__( 'Enter the end date of the event.', 'total' ),
 
 			),
+            'date_display_format' => array(
+                'title' => esc_html__( 'Date Display Format', 'total' ),
+                'id' => $prefix . 'date_display_format',
+                'type' => 'select',
+                'description' => esc_html__( 'Select the format of date display.', 'total' ),
+                'options' => array(
+                    '' => __('Day, Month, Year', 'total-child'),
+                    'mY' => __('Month, Year', 'total-child'),
+                    'Y' => __('Year', 'total-child'),
+                ),
+                'value' => 'venue|city,contury'
+            ),
             'event_website_url' => array(
                 'title' => esc_html__( 'Event Website URL', 'total' ),
                 'id' => $prefix . 'website_url',
@@ -79,18 +91,18 @@ return array(
                 'type' => 'text',
                 'description' => esc_html__( 'Enter the Notification URL.', 'total' ),
             ),
-            'submit_abstract' => array(
-                'title' => esc_html__( 'Submit Abstract', 'total' ),
-                'id' => $prefix . 'submit_abstract_url',
-                'type' => 'text',
-                'description' => esc_html__( 'Enter the Abstract Submission URL.', 'total' ),
-            ),
-            'register' => array(
-                'title' => esc_html__( 'Register', 'total' ),
-                'id' => $prefix . 'register_url',
-                'type' => 'text',
-                'description' => esc_html__( 'Enter the Registration URL.', 'total' ),
-            ),
+//            'submit_abstract' => array(
+//                'title' => esc_html__( 'Submit Abstract', 'total' ),
+//                'id' => $prefix . 'submit_abstract_url',
+//                'type' => 'text',
+//                'description' => esc_html__( 'Enter the Abstract Submission URL.', 'total' ),
+//            ),
+//            'register' => array(
+//                'title' => esc_html__( 'Register', 'total' ),
+//                'id' => $prefix . 'register_url',
+//                'type' => 'text',
+//                'description' => esc_html__( 'Enter the Registration URL.', 'total' ),
+//            ),
 			'application' => array(
 				'title' => esc_html__( 'Application URL', 'total' ),
 				'id' => $prefix . 'application_url',

@@ -160,6 +160,21 @@ function easl_event_topics_name($id = null, $first = true, $seperator = ', '){
 	}
 	return implode( $seperator, $topic_names );
 }
+
+function easl_get_event_topic_obj($id = null){
+	if(!$id){
+		$id = get_the_ID();
+	}
+	$args  = array(
+		'orderby' => 'name',
+		'order' => 'ASC',
+	);
+	$topics = wp_get_post_terms($id, EASL_Event_Config::get_topic_slug(), $args);
+	if( !$topics || is_wp_error( $topics )){
+		return '';
+	}
+	return $topics[0];
+}
 function easl_publications_topics_name($id = null, $first = true, $seperator = ', '){
 	if(!$id){
 		$id = get_the_ID();
@@ -594,7 +609,7 @@ function easl_is_future_event($event_id) {
 	return false;
 }
 
-function easl_get_event_date_parts( $event_id = false ) {
+function easl_get_event_date_parts( $event_id = false, $day_format='d', $month_format = 'M', $year_format='Y' ) {
 	if ( ! $event_id ) {
 		$event_id = get_the_ID();
 	}
@@ -604,12 +619,12 @@ function easl_get_event_date_parts( $event_id = false ) {
 	if ( ! $event_start_date ) {
 		return false;
 	}
-	$event_start_day = date( 'd', $event_start_date );
+	$event_start_day = date( $day_format, $event_start_date );
 	if ( ! $event_start_date ) {
 		return false;
 	}
 	if ( $event_end_date > $event_start_date ) {
-		$event_start_day .= '-' . date( 'd', $event_end_date );
+		$event_start_day .= '-' . date( $day_format, $event_end_date );
 	}
 	$date_parts       = array(
 		'day'   => '',
@@ -618,10 +633,10 @@ function easl_get_event_date_parts( $event_id = false ) {
 	);
 	$date_parts['day'] = $event_start_day;
 
-	$event_start_month = date( 'M', $event_start_date );
+	$event_start_month = date( $month_format, $event_start_date );
 	$event_end_month   = '';
 	if ( $event_end_date ) {
-		$event_end_month = date( 'M', $event_end_date );
+		$event_end_month = date( $month_format, $event_end_date );
 	}
 	if ( $event_start_month ) {
 		$date_parts['month'] = $event_start_month;
@@ -629,7 +644,7 @@ function easl_get_event_date_parts( $event_id = false ) {
 	if ( $event_start_month && $event_end_month && ( $event_start_month != $event_end_month ) ) {
 		$date_parts['month'] .= '/' . $event_end_month;
 	}
-	$event_start_year = date( 'Y', $event_start_date );
+	$event_start_year = date( $year_format, $event_start_date );
 	if ( $event_start_year ) {
 		$date_parts['year'] = $event_start_year;
 	}
@@ -714,4 +729,14 @@ function easl_get_formatted_event_location( $event_id = false ) {
 	}
 
 	return $event_location_display;
+}
+
+function easl_is_event_template_format($format = ''){
+	$template_format = get_the_terms(wpex_get_the_id(), EASL_Event_Config::get_format_slug());
+	if($template_format) {
+		$template_format = $template_format[0]->slug;
+	}else{
+		$template_format = '';
+	}
+	return $template_format == $format;
 }

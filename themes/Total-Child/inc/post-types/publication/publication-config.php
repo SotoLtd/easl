@@ -5,6 +5,7 @@ class Publication_Config {
     protected static $slugs = array(
         'publication' => 'publication',
         'topic' => 'publication_topic',
+        'tag' => 'publication_tag',
     );
 
     /**
@@ -14,6 +15,7 @@ class Publication_Config {
         add_action( 'init', array( 'Publication_Config', 'register_post_type' ), 0 );
         add_action( 'init', array( 'Publication_Config', 'register_categories' ), 0 );
         add_action( 'init', array( 'Publication_Config', 'register_topics' ), 0 );
+        add_action( 'init', array( 'Publication_Config', 'register_tags' ), 0 );
         if ( is_admin() ) {
             // Add settings metabox to event
             add_filter( 'wpex_main_metaboxes_post_types', array( 'Publication_Config', 'meta_array' ), 20 );
@@ -31,6 +33,10 @@ class Publication_Config {
 
     public static function get_topic_slug(){
         return self::$slugs['topic'];
+    }
+
+    public static function get_tag_slug(){
+        return self::$slugs['tag'];
     }
 
 
@@ -106,9 +112,9 @@ class Publication_Config {
     public static function register_topics() {
         $args = array(
             'labels' => array(
-                'name' => __( 'Topic', 'total' ),
+                'name' => __( 'Topics', 'total' ),
                 'singular_name' => __( 'Topic', 'total' ),
-                'menu_name' => __( 'Topic', 'total' ),
+                'menu_name' => __( 'Topics', 'total' ),
                 'search_items' => __( 'Search','total' ),
                 'popular_items' => __( 'Popular', 'total' ),
                 'all_items' => __( 'All', 'total' ),
@@ -135,8 +141,37 @@ class Publication_Config {
         register_taxonomy( self::get_topic_slug(), array( self::get_publication_slug() ), $args );
     }
 
+    public static function register_tags() {
+        $args = array(
+            'labels' => array(
+                'name' => __( 'Tags', 'total' ),
+                'singular_name' => __( 'Tag', 'total' ),
+                'menu_name' => __( 'Tags', 'total' ),
+                'search_items' => __( 'Search','total' ),
+                'popular_items' => __( 'Popular', 'total' ),
+                'all_items' => __( 'All', 'total' ),
+                'parent_item' => __( 'Parent', 'total' ),
+                'parent_item_colon' => __( 'Parent', 'total' ),
+                'edit_item' => __( 'Edit', 'total' ),
+                'update_item' => __( 'Update', 'total' ),
+                'add_new_item' => __( 'Add New', 'total' ),
+                'new_item_name' => __( 'New', 'total' ),
+                'separate_items_with_commas' => __( 'Separate with commas', 'total' ),
+                'add_or_remove_items' => __( 'Add or remove', 'total' ),
+                'choose_from_most_used' => __( 'Choose from the most used', 'total' ),
+            ),
+            'public' => true,
+            'show_in_nav_menus' => true,
+            'show_ui' => true,
+            'show_admin_column' => true,
+            'show_tagcloud' => false,
+            'hierarchical' => false,
+            'rewrite' => array( 'slug' => 'publication_tag', 'with_front' => false ),
+            'query_var' => true,
+        );
 
-
+        register_taxonomy( self::get_tag_slug(), array( self::get_publication_slug() ), $args );
+    }
 
 }
 

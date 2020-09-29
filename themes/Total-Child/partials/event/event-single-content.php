@@ -30,8 +30,14 @@ $event_sections                = get_field( 'event_sections' );
 $about_easl_schools            = get_field( 'about_easl_schools' );
 $about_easl_school_title       = wpex_get_mod( 'about_easl_schools_title' );
 $about_easl_school_content     = wpex_get_mod( 'about_easl_schools_content' );
+$event_accreditation_image     = wpex_get_mod( 'event_accreditation_image' );
+$event_accreditation_text      = wpex_get_mod( 'event_accreditation_text' );
 $event_bottom_sections         = get_field( 'event_bottom_sections' );
 $event_accreditation           = get_field( 'event_accreditation' );
+
+if($event_accreditation_image) {
+	$event_accreditation_image = wp_get_attachment_image_url($event_accreditation_image, 'full');
+}
 
 
 ?>
@@ -214,12 +220,16 @@ $event_accreditation           = get_field( 'event_accreditation' );
 			<?php if ( $event_accreditation ): ?>
                 <div class="event-seperator"></div>
                 <div class="event-image-box event-image-box-border-tb">
+                    <?php if($event_accreditation_image): ?>
                     <div class="eib-image">
-                        <img alt="" src="<?php echo EASL_HOME_URL; ?>/wp-content/uploads/2018/09/cme.jpg"/>
+                        <img alt="" src="<?php echo $event_accreditation_image; ?>"/>
                     </div>
+                    <?php endif; ?>
+                    <?php if($event_accreditation_text): ?>
                     <div class="eib-text">
-                        <h3>An application has been made to the EACCME® for CME accreditation of this event.</h3>
+                        <h3><?php echo $event_accreditation_text; ?></h3>
                     </div>
+                    <?php endif; ?>
                 </div>
                 <div class="event-seperator"></div>
 			<?php endif; ?>

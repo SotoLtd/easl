@@ -25,6 +25,32 @@ $add_membership_url = get_field('membership_plan_url', 'option');
 					remove_filter('nav_menu_link_attributes', 'easl_mz_menu_attrs');
 					?>
                 </div>
+	            <?php if ( have_rows( 'mz_sb_banners', 'option' ) ): ?>
+                    <div class="easl-mz-page-banners">
+			            <?php
+			            while ( have_rows( 'mz_sb_banners', 'option' ) ):
+				            the_row();
+				            $img     = get_sub_field( 'image' );
+				            $link    = get_sub_field( 'link' );
+				            $new_tab = get_sub_field( 'new_tab' );
+				            if ( ! $img ) {
+					            continue;
+				            }
+				            $banner_html = '<img src="' . $img . '" alt="">';
+
+				            if ( $link && $new_tab ) {
+					            $new_tab = ' target="_blank"';
+				            }
+				            if ( $link ) {
+					            $banner_html = '<a href="' . esc_url( $link ) . '"' . $new_tab . '>' . $banner_html . '</a>';
+				            }
+				            ?>
+                            <div class="easl-mz-sb-banner">
+					            <?php echo $banner_html; ?>
+                            </div>
+			            <?php endwhile; ?>
+                    </div>
+	            <?php endif; ?>
             </div>
         </div>
         <div class="wpb_column vc_column_container vc_col-sm-12 vc_col-lg-9 vc_col-md-10">

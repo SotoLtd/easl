@@ -24,6 +24,7 @@ $css_animation = '';
 $limit         = '';
 $include_categories = '';
 $exclude_categories = '';
+$show_excerpt = '';
 $excerpt_length = '';
 
 $atts          = vc_map_get_attributes( $this->getShortcode(), $atts );
@@ -100,18 +101,24 @@ if ( $news_query->have_posts() ):
 					if ( ! has_post_thumbnail() ) {
 						continue;
 					}
+					$news_link = trim(wpex_get_custom_permalink());
+					if(!$news_link){
+						$news_link = get_permalink();
+					}
 					?>
                     <div class="easl-news-col easl-col easl-col-3">
                         <div class="easl-col-inner">
                             <article class="easl-news-item">
                                 <figure>
-                                    <a href="<?php the_permalink(); ?>">
+                                    <a href="<?php echo $news_link; ?>">
 		                                <?php the_post_thumbnail( 'news_list' ); ?>
                                     </a>
                                 </figure>
                                 <p class="easl-news-date"><?php echo wpex_date_format( array( 'id'     => get_the_ID(),'format' => 'd M, Y', ) ); ?></p>
-                                <h3><a href="<?php the_permalink() ?>"><?php the_title(); ?></a></h3>
-                                <div class="eeasl-news-excerpt"><?php echo wpex_get_excerpt( array( 'length' => $excerpt_length ) ); ?></div>
+                                <h3><a href="<?php echo $news_link; ?>"><?php the_title(); ?></a></h3>
+                                <?php if($show_excerpt == 'true'): ?>
+                                    <div class="eeasl-news-excerpt"><?php echo wpex_get_excerpt( array( 'length' => $excerpt_length ) ); ?></div>
+                                <?php endif; ?>
                             </article>
                         </div>
                     </div>

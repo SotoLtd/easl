@@ -28,10 +28,15 @@ get_header(); ?>
 
 				<?php
 				// Start loop
-				while ( have_posts() ) : the_post();
-
-					// Single Event
-					get_template_part('partials/event/event-single-layout');
+                while ( have_posts() ) : the_post();
+                    $template_format = get_the_terms( get_the_ID(), EASL_Event_Config::get_format_slug() );
+                    if ( $template_format ) {
+                        $template_format = $template_format[0]->slug;
+                    } else {
+                        $template_format = '';
+                    }
+                    // Single Event
+                    get_template_part( 'partials/event/base-layout', $template_format );
 					
 
 				endwhile; ?>

@@ -115,7 +115,11 @@ if('venue|city,contury' == $event_location_display_format){
 
 $event_color = easl_get_events_topic_color($event_id);
 
-$current_events_month = date('F Y', $event_start_date);
+if(11766 == get_the_ID()){
+	$current_events_month = date('Y', $event_start_date);
+}else{
+    $current_events_month = date('F Y', $event_start_date);
+}
 
 $new_month_row = false;
 if($previous_events_month !== $current_events_month){
@@ -164,10 +168,21 @@ $event_highlights = wp_parse_args($event_highlights, array(
 				</p>
 				<?php endif; ?>
 				<h3><a href="<?php the_permalink(); ?>"><?php the_title(); ?></a></h3>
-				<p class="ec-dates" href="">
-                    <span class="ecd-day"><?php echo $event_date_days; ?></span>
-                    <span class="ecd-mon"><?php echo $event_date_month; ?></span>
-                    <span class="ecd-year"><?php echo date('Y', $event_start_date); ?></span><i class="ticon ticon-play" aria-hidden="true"></i></p>
+                <?php
+                $date_parts_format = easl_get_event_date_format(get_the_ID());
+                ?>
+				<p class="ec-dates">
+                    <?php if('Y' == $date_parts_format): ?>
+                        <span class="ecd-year" style="font-size: 20px;line-height: 20px;margin-top: 25px;"><?php echo date('Y', $event_start_date); ?></span>
+                    <?php elseif ('mY' == $date_parts_format):?>
+                        <span class="ecd-mon" style="margin-top: 13px;"><?php echo $event_date_month; ?></span>
+                        <span class="ecd-year" style="font-size: 20px;line-height: 20px;"><?php echo date('Y', $event_start_date); ?></span>
+                    <?php else: ?>
+                        <span class="ecd-day"><?php echo $event_date_days; ?></span>
+                        <span class="ecd-mon"><?php echo $event_date_month; ?></span>
+                        <span class="ecd-year" ><?php echo date('Y', $event_start_date); ?></span>
+                    <?php endif; ?>
+                    <i class="ticon ticon-play" aria-hidden="true"></i></p>
 			</header>
 			<p class="ec-location">
 				<span class="ec-loc-name"><?php echo easl_meeting_type_name($event_id); ?></span>
@@ -274,13 +289,39 @@ $event_highlights = wp_parse_args($event_highlights, array(
 
                             endswitch;
                             $kd_start_date = !empty($date['event_key_start_date']) ? trim($date['event_key_start_date']): '';
+	                        $kd_end_date = ! empty( $date['event_key_end_date'] ) ? trim( $date['event_key_end_date'] ) : '';
+	                        
 	                        $kd_start_date = DateTime::createFromFormat('d/m/Y', $kd_start_date);
-                            if(false === $kd_start_date){
-                                continue;
-                            }
+	                        $kd_end_date   = DateTime::createFromFormat( 'd/m/Y', $kd_end_date );
+	                        if ( false === $kd_start_date ) {
+		                        continue;
+	                        }
+
+	                        $date_parts        = array();
+	                        $date_parts['d'][] = $kd_start_date->format( 'd' );
+	                        $date_parts['m'][] = $kd_start_date->format( 'M' );
+	                        $date_parts['y'][] = $kd_start_date->format( 'Y' );
+	                        if ( false !== $kd_end_date ) {
+		                        $date_parts['d'][] = $kd_end_date->format( 'd' );
+		                        $date_parts['m'][] = $kd_end_date->format( 'M' );
+		                        $date_parts['y'][] = $kd_end_date->format( 'Y' );
+	                        }
+	                        $date_parts['y'] = array_unique( $date_parts['y'] );
+	                        $formatted_date  = '';
+	                        if ( count( $date_parts['y'] ) > 1 ) {
+		                        $formatted_date = "{$date_parts['d'][0]} {$date_parts['m'][0]}, {$date_parts['y'][0]} - {$date_parts['d'][1]} {$date_parts['m'][1]}, {$date_parts['y'][1]}";
+	                        } else {
+		                        $date_parts['m'] = array_unique( $date_parts['m'] );
+		                        if ( count( $date_parts['m'] ) > 1 ) {
+			                        $formatted_date = "{$date_parts['d'][0]} {$date_parts['m'][0]} - {$date_parts['d'][1]} {$date_parts['m'][1]}, {$date_parts['y'][0]}";
+		                        } else {
+			                        $date_parts['d'] = array_unique( $date_parts['d'] );
+			                        $formatted_date = implode( ' - ', $date_parts['d'] ) . " {$date_parts['m'][0]}, {$date_parts['y'][0]}";
+		                        }
+	                        }
                             ?>
                             <li class="app-process-key <?php echo $addon_class;?>">
-                                <span class="event-kd-date"><?php echo $kd_start_date->format('d M, Y');?></span>
+                                <span class="event-kd-date"><?php echo $formatted_date;?></span>
                                 <span class="event-kd-title"><?php echo strip_tags($date['event_key_deadline_description'], '<br>');?></span>
                             </li>
                             <?php $counter++;?>

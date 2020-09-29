@@ -37,7 +37,6 @@ $carousel_options = array(
 	'infinite_loop' => true,
 	'center' => 'false',
 	'animation_speed' => 150,
-	'animation_speed' => 250,
 	'items' => 1,
 	'items_scroll' => 1,
 	'timeout_duration' => 5000,

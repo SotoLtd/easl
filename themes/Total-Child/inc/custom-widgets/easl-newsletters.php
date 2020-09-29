@@ -79,7 +79,7 @@ if ( ! class_exists( 'EASL_Newsletters_Widget' ) ) {
                 <select id="<?php echo esc_attr( $this->get_field_id( 'year' ) ); ?>"
                        name="<?php echo esc_attr( $this->get_field_name( 'year' ) ); ?>"
                         value="<?php echo esc_attr( $title ); ?>">
-                    <option value="">All Year</option>
+                    <option value=""><?php __('All Year', 'total-child'); ?></option>
                     <?php foreach ($years as $y): ?>
                         <option value="<?php echo $y; ?>" <?php selected($year, $y, true) ?>><?php echo $y; ?></option>
                     <?php endforeach; ?>

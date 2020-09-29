@@ -152,4 +152,9 @@ jQuery(function($) {
     if(window.location.hash && $('.easl-msc-content-wrap .easl-staff-details-button[href="'+ window.location.hash +'"]').length){
         $('.easl-msc-content-wrap .easl-staff-details-button[href="'+ window.location.hash +'"]').eq(0).trigger('click');
     }
+    if(window.location.hash) {
+        console.log('[data-section="'+ window.location.hash.substr(1) +'"]');
+        $('.easl-msc-filterable-con').not('[data-section="'+ window.location.hash.substr(1) +'"]').hide();
+        $('[data-section="'+ window.location.hash.substr(1) +'"]').show();
+    }
 });

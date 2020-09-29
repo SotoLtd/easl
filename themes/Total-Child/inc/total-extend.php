@@ -65,6 +65,7 @@ function easl_vc_button_grid_icons() {
 		__( 'LiverTree', 'total' )        => 'livertree',
 		__( 'e-Learning', 'total-child' ) => 'elearning',
 		__( 'Liverscreen', 'total-child' ) => 'liverscreen',
+		__( 'Decision', 'total-child' ) => 'decision',
 	);
 }
 
@@ -374,6 +375,38 @@ function easl_get_news_page_header_bg( $post_id ) {
 	return $image;
 }
 
+function easl_get_publication_tag_header_style() {
+	$style   = get_post_meta( 2015, 'wpex_post_title_style', true );
+	$style   = ( 'default' == $style ) ? '' : $style;
+
+	return $style;
+}
+
+function easl_get_publication_tag_header_height() {
+	$title_height = get_post_meta( 2015, 'wpex_post_title_height', true );
+	$title_height = $title_height ? $title_height : wpex_get_mod( 'page_header_table_height' );
+
+	return $title_height;
+}
+
+function easl_get_publication_tag_header_overlay_style() {
+	$style   = get_post_meta( 2015, 'wpex_post_title_background_overlay', true );
+	$style   = $style == 'none' ? '' : $style;
+
+	return $style;
+}
+function easl_get_publication_tag_header_bg() {
+	$new_meta = get_post_meta( 2015, 'wpex_post_title_background_redux', true );
+	$image    = '';
+	if ( is_array( $new_meta ) && ! empty( $new_meta['url'] ) ) {
+		$image = isset( $new_meta['url'] ) ? $new_meta['url'] : $image;
+	} else {
+		$image = $new_meta ? $new_meta : $image;
+	}
+
+	return $image;
+}
+
 function easl_get_events_page_header_bg( $event_id ) {
 	$term_id = easl_meeting_type_id( $event_id );
 	if ( ! $term_id ) {
@@ -415,8 +448,11 @@ function easl_get_publication_page_header_bg( $pub_id ) {
 }
 
 function easl_page_header_style( $style ) {
-	if ( is_single() ) {
+	if ( is_single() || is_tag() ) {
 		return easl_get_news_page_header_style();
+	}
+	if(is_tax(Publication_Config::get_tag_slug())) {
+		return easl_get_publication_tag_header_style();
 	}
 	if ( is_search() ) {
 		return 'background-image';
@@ -443,8 +479,11 @@ function easl_page_header_style( $style ) {
 add_filter( 'wpex_page_header_style', 'easl_page_header_style', 20 );
 
 function easl_page_header_title_height( $height ) {
-	if ( is_single() ) {
+	if ( is_single() || is_tag() ) {
 		return easl_get_news_page_header_height();
+	}
+	if(is_tax(Publication_Config::get_tag_slug())) {
+		return easl_get_publication_tag_header_height();
 	}
 	if ( is_search() || is_singular( 'event', Publication_Config::get_publication_slug() ) ) {
 		return 220;
@@ -457,8 +496,11 @@ function easl_page_header_title_height( $height ) {
 add_filter( 'wpex_post_title_height', 'easl_page_header_title_height', 20 );
 
 function easl_page_header_overlay_style( $style ) {
-	if ( is_single() ) {
+	if ( is_single() || is_tag() ) {
 		return easl_get_news_page_header_overlay_style();
+	}
+	if(is_tax(Publication_Config::get_tag_slug())) {
+		return easl_get_publication_tag_header_overlay_style();
 	}
 	if ( is_search() || is_singular( 'event', Publication_Config::get_publication_slug() ) ) {
 		return '';
@@ -475,8 +517,11 @@ function easl_page_header_bg( $image, $post_id ) {
 	if ( is_search() ) {
 		$cusotm_bg = get_stylesheet_directory_uri() . '/images/header-blue-pattern.jpg';
 	}
-	if ( is_single() ) {
+	if ( is_single() || is_tag() ) {
 		$cusotm_bg = easl_get_news_page_header_bg( $post_id );
+	}
+	if(is_tax(Publication_Config::get_tag_slug())) {
+		return easl_get_publication_tag_header_bg();
 	}
 	if ( is_singular( 'event' ) ) {
 		$cusotm_bg = easl_get_events_page_header_bg( $post_id );
@@ -700,3 +745,28 @@ function easl_singular_default_header_background_image() {
 
 	return '<img class="easl-page-header-bg-img" alt="' . $img_alt . '" src="' . $image_url . '"/>';
 }
+
+function easl_local_scroll_offset_header($classes) {
+	$classes[] = 'wpex-ls-offset';
+	return $classes;
+}
+add_filter('wpex_header_classes', 'easl_local_scroll_offset_header');
+
+function easl_index_loop_type($loop_type) {
+	if(is_tag()) {
+		$loop_type = 'tag';
+	}
+	if(is_tax(Publication_Config::get_tag_slug())) {
+		$loop_type = 'publication-tag';
+	}
+	return $loop_type;
+}
+add_filter('wpex_get_index_loop_type', 'easl_index_loop_type');
+
+function easl_sidebar_override($sidebar) {
+	if(is_tax(Publication_Config::get_tag_slug())) {
+		$sidebar = 'publicationssidebar';
+	}
+	return $sidebar;
+}
+add_filter('wpex_get_sidebar', 'easl_sidebar_override');

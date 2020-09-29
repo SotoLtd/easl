@@ -17,7 +17,10 @@ $el_class				 = '';
 $css					 = '';
 $css_animation			 = '';
 $widget_title			 = '';
+$enable_section_link	 = '';
 $staffs_number			 = '';
+$query_type              = '';
+$include_staffs		     = '';
 $include_categories		 = '';
 $cat_relation			 = '';
 $order					 = '';
@@ -47,37 +50,54 @@ if($widget_title && empty($atts[ 'el_id' ])){
 }
 
 if ( !empty( $atts[ 'el_id' ] ) ) {
-	$wrapper_attributes[] = 'id="' . esc_attr( $atts[ 'el_id' ] ) . '"';
+	$wrapper_attributes[] = 'id="section-' . esc_attr( $atts[ 'el_id' ] ) . '"';
 }
 if ( $css_class ) {
 	$wrapper_attributes[] = 'class="' . esc_attr( $css_class ) . '"';
 }
+
+$section_slug = sanitize_title_with_dashes($widget_title);
+if($section_slug){
+    $wrapper_attributes[] = 'data-section="'. sanitize_title_with_dashes($section_slug) .'"]';
+}
+if('true' != $enable_section_link) {
+    $section_slug = '';
+}
+
 // Build Query
 $query_args		 = array(
 	'post_type'		 => 'staff',
 	'posts_per_page' => -1,
 );
-$staffs_number	 = absint( $staffs_number );
-if ( $staffs_number ) {
-	$query_args[ 'posts_per_page' ] = $staffs_number;
-}
-$order = strtoupper( $order );
-if ( in_array( $order, array( 'ASC', 'DESC' ) ) ) {
-	$query_args[ 'order' ] = $order;
-}
-if ( in_array( $orderby,  array('ID', 'title', 'menu_order')) ) {
-	$query_args[ 'orderby' ] = $orderby;
-}
-if ( in_array( $orderby,  array('first_name', 'last_name')) ) {
-	$query_args[ 'orderby' ] = 'meta_value';
-	$query_args['meta_key'] = $orderby;
+
+if ( $query_type == 'include' ) {
+    $include_staffs         = $this->string_to_array( $include_staffs );
+    $query_args['post__in'] = $include_staffs;
+    $query_args['orderby']  = 'post__in';
+}else{
+    $staffs_number	 = absint( $staffs_number );
+    if ( $staffs_number ) {
+        $query_args[ 'posts_per_page' ] = $staffs_number;
+    }
+    $order = strtoupper( $order );
+    if ( in_array( $order, array( 'ASC', 'DESC' ) ) ) {
+        $query_args[ 'order' ] = $order;
+    }
+    if ( in_array( $orderby,  array('ID', 'title', 'menu_order')) ) {
+        $query_args[ 'orderby' ] = $orderby;
+    }
+    if ( in_array( $orderby,  array('first_name', 'last_name')) ) {
+        $query_args[ 'orderby' ] = 'meta_value';
+        $query_args['meta_key'] = $orderby;
+    }
+
+    $cats_query = $this->build_category_query( $include_categories, $cat_relation );
+
+    if ( $cats_query ) {
+        $query_args[ 'tax_query' ] = $cats_query;
+    }
 }
 
-$cats_query = $this->build_category_query( $include_categories, $cat_relation );
-
-if ( $cats_query ) {
-	$query_args[ 'tax_query' ] = $cats_query;
-}
 $staff_query = new WP_Query( $query_args );
 
 if ( $staff_query->have_posts() ) {
@@ -86,15 +106,22 @@ if ( $staff_query->have_posts() ) {
 	$count		 = 0;
 	if($widget_title && class_exists('EASL_VC_Menu_Stacked_content') && EASL_VC_Menu_Stacked_content::$enable_right_menu_data ){
 		EASL_VC_Menu_Stacked_content::$right_menu_data[] = array(
-			'title' => $widget_title,
+			'title' => esc_html( $widget_title ),
 			'id' => $atts[ 'el_id' ],
 		);
 	}
 	?>
 	<div <?php echo implode( ' ', $wrapper_attributes ); ?>>
 		<?php if ( $widget_title ): ?>
+            <?php
+            if($section_slug) {
+                $widget_title_formatted = '<a href="#'. $section_slug .'">' . esc_html( $widget_title ) . '</a>';
+            }else {
+                $widget_title_formatted = esc_html( $widget_title );
+            }
+            ?>
 			<div class="easl-staffs-widget-title">
-				<h2><?php echo esc_html( $widget_title ); ?></h2>
+				<h2><?php echo $widget_title_formatted; ?></h2>
 			</div>
 		<?php endif; ?>
 		<?php if ( $content ): ?>

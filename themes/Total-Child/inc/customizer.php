@@ -123,6 +123,23 @@ function easl_customizer_sections($sections) {
 					'type' => 'text',
 				),
 			),
+			array(
+				'id' => 'event_accreditation_image',
+				'control' => array(
+					'label' => esc_html__( 'Event Accreditation Image', 'total-child' ),
+					'type' => 'media',
+					'mime_type' => 'image'
+				),
+			),
+			array(
+				'id' => 'event_accreditation_text',
+				'transport' => 'partialRefresh',
+				'default' => '',
+				'control' => array(
+					'label' => __('Event Accreditation Text', 'total-child'),
+					'type' => 'textarea',
+				),
+			),
 		)
 	);
 	$sections['easl_fellowship_single'] = array(

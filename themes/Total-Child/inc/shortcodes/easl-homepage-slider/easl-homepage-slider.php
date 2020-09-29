@@ -51,6 +51,11 @@ class EASL_VC_Homepage_Slider extends WPBakeryShortCode {
 				'class' => array(),
 				'id'    => array(),
 			),
+			'em'     => array(
+				'style' => array(),
+				'class' => array(),
+				'id'    => array(),
+			),
 			'sup'     => array(
 				'style' => array(),
 				'class' => array(),

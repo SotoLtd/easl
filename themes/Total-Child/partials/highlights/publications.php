@@ -22,15 +22,11 @@ $topic_color = easl_get_publication_topic_color(get_the_ID());
 $read_more_to_permalink = true;
 $target = '';
 
-if(has_term(104, 'publication_category', get_the_ID())){
-	$read_more_to_permalink = false;
-}
-
-if($read_more_to_permalink){
+$read_more_link = get_field('link_to_journal_hepatology');
+$target = ' target="_blank"';
+if(!$read_more_link){
 	$read_more_link =  get_permalink();
-}else{
-	$read_more_link = get_field('link_to_journal_hepatology');
-	$target = ' target="_blank"';
+	$target = '';
 }
 
 ?>

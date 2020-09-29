@@ -58,28 +58,3 @@ class EASL_History_Config {
 }
 
 new EASL_History_Config();
-
-
-if(isset($_GET['mmm2222'])) {
-	$secretery_generals = get_posts( array(
-		'post_type'      => 'post',
-		'posts_per_page' => - 1,
-		'post_status'    => 'any',
-		'category' => 24,
-	));
-	foreach($secretery_generals as $sec_post) {
-		echo get_the_title($sec_post). ' - ';
-
-		$iiii_id = wp_update_post(array(
-			'ID' => $sec_post->ID,
-			'post_type' => 'easl_history'
-		));
-		if($iiii_id){
-			echo 'Done!';
-		}else{
-			echo 'Fail!';
-		}
-		echo '<br/>';
-	}
-	die();
-}

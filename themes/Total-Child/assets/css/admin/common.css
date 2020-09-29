@@ -1,3 +1,9 @@
 .vc_element-icon.easl-yt-player-icon {
     background-color: #FF0000!important;
 }
+.vc_element-icon.easl-no-default-container-icon[data-is-container=true] {
+    background-image: none!important;
+}
+#event_formatdiv, #tagsdiv-publication_tag {
+    display: none!important;
+}

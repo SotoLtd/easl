@@ -29,6 +29,19 @@ if($topics){
 
 $topic_color = easl_get_publication_topic_color(get_the_ID());
 
+$publication_date = get_field('publication_raw_date');
+$publication_date_format = get_field('publication_date_format');
+$custom_date_text = get_field('custom_date_text');
+if(!$publication_date_format){
+    $publication_date_format = 'Y';
+}
+if($publication_date_format == 'custom'){
+    $publication_date = $custom_date_text;
+}elseif($publication_date){
+    $publication_date = DateTime::createFromFormat('d/m/Y', $publication_date);
+    $publication_date = $publication_date->format($publication_date_format);
+}
+
 wp_enqueue_script('publication-detailed-item-script',
     get_stylesheet_directory_uri() . '/assets/js/publication_detailed.js',
     ['jquery'],
@@ -61,7 +74,9 @@ $needs_modal = !$logged_in && $cpg;
                                 <div class="vc_column-inner">
                                     <div class="pub-content">
                                         <p class="sp-meta">
-                                            <span class="sp-meta-date"><?php echo get_field('publication_date');?></span>
+                                            <?php if($publication_date): ?>
+                                                <span class="sp-meta-date"><?php echo $publication_date; ?></span>
+                                            <?php endif; ?>
                                             <span class=sp-meta-sep"> | </span>
                                             <span class="sp-meta-type">Topic:</span>
                                             <span class="sp-meta-value"><?php echo $topic_str;?></span>
@@ -81,16 +96,15 @@ $needs_modal = !$logged_in && $cpg;
                                             </div>
                                         </div>
                                         <?php endif;?>
-
-                                        <div class="vc_row wpb_row vc_row-fluid">
-                                            <div class="wpb_column vc_column_container vc_col-sm-12">
-                                                <div class="vc_column-inner " style="margin-bottom: 0">
-                                                    <div class="wpb_wrapper">
-                                                        <?php easl_social_share_icons(); ?>
-                                                    </div>
-                                                </div>
-                                            </div>
+                                        <?php
+                                        $tags = get_the_term_list( get_the_ID(), Publication_Config::get_tag_slug() );
+                                        if($tags):
+                                        ?>
+                                        <div class="easl-tags publication-tags">
+                                            <?php echo $tags; ?>
                                         </div>
+                                        <?php endif; ?>
+	                                    <?php easl_social_share_icons(); ?>
                                     </div>
                                 </div>
                             </div>
@@ -168,4 +182,3 @@ $needs_modal = !$logged_in && $cpg;
     </div>
 
 </article><!-- #single-blocks -->
-<?php require_once(__DIR__ . '/publication-modal.php');

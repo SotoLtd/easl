@@ -39,28 +39,18 @@ if ( ! $has_thumb ) {
 			$target         = '';
 		}
 		$publication_date = get_field( 'publication_date' );
-
-        $logged_in = easl_mz_is_member_logged_in();
-        $cpg = has_term('clinical-practice-guidelines', 'publication_category', get_the_ID());
-        $needs_modal = !$logged_in && $cpg;
-        if ($needs_modal) {
-            $read_more_link = get_permalink();
-            $target = '';
-        }
-
 		?>
         <div class="scientific-publication <?php if ( ! $image_src ) {
 			echo 'sp-has-no-thumb';
 		} ?> easl-sprow-color-<?php echo easl_get_publication_topic_color(); ?> clr">
 			<?php if ( $image_src ): ?>
                 <div class="sp-thumb">
-                    <a href="<?php echo $read_more_link; ?>" title=""<?php $target; ?> class="<?php if ($needs_modal):?> sp-modal-trigger<?php endif;?>">
+                    <a href="<?php echo $read_more_link; ?>" title=""<?php $target; ?>>
                         <img alt="" src="<?php echo $image_src; ?>"/>
                     </a>
                 </div>
 			<?php endif; ?>
-            <div class="
-            scientific-publication-content  sp-content">
+            <div class="scientific-publication-content  sp-content">
                 <div class="sp-item-meta-title">
                     <p class="sp-meta">
 						<?php if ( $publication_date ): ?>
@@ -74,12 +64,12 @@ if ( ! $has_thumb ) {
                             <span class="sp-meta-value"><?php echo $topics; ?></span>
 						<?php endif; ?>
                     </p>
-                    <h3><a href="<?php echo $read_more_link; ?>" <?php echo $target; ?> class="<?php if ($needs_modal):?> sp-modal-trigger<?php endif;?>"><?php the_title(); ?></a></h3>
+                    <h3><a href="<?php echo $read_more_link; ?>" <?php echo $target; ?>><?php the_title(); ?></a></h3>
                 </div>
 				<?php if ( has_excerpt() ): ?>
                     <p class="sp-excerpt"><?php the_excerpt(); ?></p>
 				<?php endif; ?>
-                <a class="easl-button<?php if ($needs_modal):?> sp-modal-trigger<?php endif;?>" href="<?php echo $read_more_link; ?>" <?php echo $target; ?>><?php _e('Read More', 'total-child'); ?> <span class="easl-generic-button-icon"><span class="ticon ticon-chevron-right"></span></span></a>
+                <a class="easl-button" href="<?php echo $read_more_link; ?>" <?php echo $target; ?>><?php _e('Read More', 'total-child'); ?> <span class="easl-generic-button-icon"><span class="ticon ticon-chevron-right"></span></span></a>
             </div>
         </div>
     <?php } else { ?>
@@ -97,4 +87,3 @@ if ( ! $has_thumb ) {
 			?></div>
 	<?php } ?>
 </article>
-<?php require_once(__DIR__ . '/../publication/publication-modal.php');

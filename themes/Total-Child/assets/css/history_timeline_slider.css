@@ -1,16 +1,13 @@
 #timeline {
     width: 100%;
     max-width: 1125px;
-    /*height: 350px;*/
     overflow: hidden;
     margin: 76px auto;
     position: relative;
-    /*background: url('../images/dot.gif') left 45px repeat-x;*/
 }
 #dates {
     width: calc( 100% - 200px );
     height: 60px;
-    /*overflow: hidden;*/
     margin: 0;
     float: left;
     display: flex;
@@ -27,7 +24,6 @@
     text-align: center;
     background-color: #80c4e5;
     position: relative;
-    /*background: url('../images/biggerdot.png') center bottom no-repeat;*/
 }
 #dates li::before{
     content: '';
@@ -73,21 +69,12 @@
     right: 10%;
     margin-top: -1px;
 }
-/*#dates li:first-child,*/
-/*#dates li:last-child*/
-/*{*/
-    /*background-color: #135289;*/
-/*}*/
 #dates a {
     line-height: 50px;
     width: 100%;
     display: block;
     height: 100%;
 }
-/*#dates li:first-child a,*/
-/*#dates li:last-child a{*/
-    /*color: #ffffff;*/
-/*}*/
 #dates a.selected{
     font-size: 50px;
     position: absolute;
@@ -145,7 +132,6 @@
 }
 #issues li img {
     float: left;
-    /*margin: 10px 30px 10px 50px;*/
     margin: 0px 15px 0px 0px;
     background: transparent;
     -ms-filter: "progid:DXImageTransform.Microsoft.gradient(startColorstr=#00FFFFFF,endColorstr=#00FFFFFF)"; /* IE 8 */
@@ -157,17 +143,14 @@
     transform: scale(0.9,0.85);
 }
 #issues li h1 {
-    /*color: #ffcc00;*/
     font-size: 30px;
     margin: 20px 0 0;
-    /*text-shadow: #000 1px 1px 2px;*/
 }
 #issues li p {
     font-size: 14px;
     margin-right: 70px;
     font-weight: normal;
     line-height: 22px;
-    /*text-shadow: #000 1px 1px 2px;*/
 }
 
 #grad_left,
@@ -179,11 +162,9 @@
 }
 #grad_left {
     left: 0;
-    /*background: url('../images/grad_left.png') repeat-y;*/
 }
 #grad_right {
     right: 0;
-    /*background: url('../images/grad_right.png') repeat-y;*/
 }
 
 #next,
@@ -191,26 +172,17 @@
     position: absolute;
     top: 0;
     font-size: 70px;
-    /*top: 170px;*/
     width: 22px;
-    /*height: 38px;*/
     color: #135389;
-    /*background-position: 0 0;*/
-    /*background-repeat: no-repeat;*/
-    /*text-indent: -9999px;*/
-    /*overflow: hidden;*/
 }
 #next:hover,
 #prev:hover {
-    /*background-position: 0 -76px;*/
 }
 #next {
     right: 0;
-    /*background-image: url('../images/next.png');*/
 }
 #prev {
     right: 100px;
-    /*background-image: url('../images/prev.png');*/
 }
 #next.disabled,
 #prev.disabled {
@@ -251,10 +223,6 @@
 .ui-slider-horizontal .ui-slider-handle {
     top: -.55em;
     margin-left: -.6em;
-}
-
-element.style {
-    left: 0%;
 }
 #content .wpb_alert p:last-child,
 #content .wpb_text_column :last-child,

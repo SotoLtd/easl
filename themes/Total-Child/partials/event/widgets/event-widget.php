@@ -5,7 +5,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 $widget_id  = get_sub_field( 'event_widget' );
 $widget_obj = get_post( $widget_id );
-if ( $widget_obj ):
+if ( $widget_obj && ($widget_obj->post_status == 'publish') ):
 	/**
 	 * @todo add more widget types
 	 */

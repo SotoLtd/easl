@@ -609,6 +609,7 @@ body .mzms-button::after {
 .easl-mz-page-menu {
     background: #004b87;
     padding: 15px;
+    margin-bottom: 25px;
 }
 
 .easl-mz-page-menu .easl-mz-page-menu-title {
@@ -681,6 +682,15 @@ body .mzms-button::after {
     visibility: visible;
     opacity: 1;
 }
+/* Memberzone Sidebar banners */
+.easl-mz-sb-banner {
+    margin-bottom: 25px;
+}
+
+.easl-mz-sb-banner img {
+    display: block;
+}
+
 
 /* Shortcode: featured member */
 .wpb_easl_mz_featured_members {

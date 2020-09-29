@@ -78,12 +78,23 @@ return array(
 			'group'				 => __( 'Query', 'total-child' ),
 		),
 		array(
+			'type'       => 'vcex_ofswitch',
+			'std'        => 'false',
+			'heading'    => __( 'Show Excerpt', 'total-child' ),
+			'param_name' => 'show_excerpt',
+			'group'		 => __( 'View', 'total-child' ),
+		),
+		array(
 			'type'			 => 'textfield',
 			'heading'		 => __( 'Excerpt Length', 'total-child' ),
 			'param_name'	 => 'excerpt_length',
 			'value'			 => '28',
 			'description'	 => __( 'Enter excerpt words limit.', 'total-child' ),
 			'group'				 => __( 'View', 'total-child' ),
+			'dependency'  => array(
+				'element' => 'show_excerpt',
+				'value'   => array( 'true' ),
+			),
 		),
 		vc_map_add_css_animation(),
 		array(

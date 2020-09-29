@@ -49,11 +49,17 @@ extract( wp_parse_args( $args, array(
 if ( empty( $string ) ) {
 	return;
 }
-
-if (is_page('apply')) {
+if ( is_page( 'apply' ) ) {
     //@todo maybe make this more robust, so it doesn't depend on the page having the slug "apply"
     return;
 }
+if(is_tag()) {
+	$string = 'News on <span>'. $string .'</span>';
+}
+if(is_tax(Publication_Config::get_tag_slug())) {
+	$string = 'Publications on <span>'. $string .'</span>';
+}
+
 // Sanitize
 $html_tag = wp_strip_all_tags( $html_tag );
 
@@ -80,9 +86,10 @@ echo '<' . $html_tag . ' class="page-header-title wpex-clr"' . $schema_markup . 
 		$back_url = wpex_get_mod( 'fellowship_header_back_button', '');
 	}elseif(is_singular(Publication_Config::get_publication_slug())){
 		$back_url = wpex_get_mod( 'publications_header_back_button', '');
-	}elseif(is_single()){
+	}elseif(is_single() || is_tag()){
 		$back_url = get_the_permalink(wpex_get_mod( 'blog_page', 5626));
-		echo '<a class="easl-title-back-link" href="'. get_the_permalink($page_id) .'"><span class="ticon ticon-angle-left" aria-hidden="true"></span> ' . __('Back', 'total-child') . '</a>';
+	}elseif (is_tax(Publication_Config::get_tag_slug())){
+		$back_url = get_the_permalink(2015);
 	}
 	if($back_url){
 		echo '<a class="easl-title-back-link" href="'. esc_url($back_url) .'"><span class="ticon ticon-angle-left" aria-hidden="true"></span> ' . __('Back', 'total-child') . '</a>';

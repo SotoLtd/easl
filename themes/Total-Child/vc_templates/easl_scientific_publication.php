@@ -298,9 +298,9 @@ $next_arrow = is_rtl() ? 'ticon ticon-' . $arrow_style . '-left' : 'ticon ticon-
 $prev_text = '<span class="' . $prev_arrow . '" aria-hidden="true"></span><span class="screen-reader-text">' . esc_html__( 'Previous', 'total' ) . '</span>';
 // Next text
 $next_text = '<span class="' . $next_arrow . '" aria-hidden="true"></span><span class="screen-reader-text">' . esc_html__( 'Next', 'total' ) . '</span>';
-
+$big = 999999999;
 $args = array(
-    'base' => preg_replace('/\?.*/', '/', get_pagenum_link()) . '%_%',
+    'base'               => str_replace( $big, '%#%', get_pagenum_link( $big ) ),
     'format'             => '?paged=%#%',
     'total'              => $easl_query->max_num_pages,
     'current'            => $paged,
@@ -328,7 +328,7 @@ $not_found_text = $has_filter ? 'Nothing has been found' : 'content is coming so
 		<?php endif; ?>
 		<?php echo $pagination; ?>
 		<div class="easl-scientific-publication-inner">
-			<?php 
+			<?php
 			if ( $easl_query->have_posts() ){
 				while ( $easl_query->have_posts() ):
 					$easl_query->the_post();
@@ -395,8 +395,8 @@ $not_found_text = $has_filter ? 'Nothing has been found' : 'content is coming so
 			<?php
 				endwhile;
 				wp_reset_query();
-				
-			}else{ 
+
+			}else{
 			?>
 			<div class="easl-no-scientific-publication"><?php echo $not_found_text; ?></div>
 			<?php } ?>

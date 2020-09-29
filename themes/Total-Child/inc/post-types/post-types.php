@@ -19,6 +19,8 @@ require_once EASL_INC_DIR . 'post-types/membership-category/membership-category-
 require_once EASL_INC_DIR . 'post-types/easl-widget/easl-widget-config.php';
 require_once EASL_INC_DIR . 'post-types/icon-widget/icon-widget-config.php';
 require_once EASL_INC_DIR . 'post-types/home-page-slider/home-page-slider.php';
+require_once EASL_INC_DIR . 'post-types/popup-template/popup-template.php';
+require_once EASL_INC_DIR . 'post-types/event-subpage/event-subpage.php';
 
 function easl_change_pt_labels_post($labels) {
 	$labels = array(

@@ -20,6 +20,13 @@ return array(
 			'param_name'  => 'widget_title',
 			'admin_label' => true,
 		),
+        array(
+            'type'       => 'vcex_ofswitch',
+            'std'        => 'false',
+            'heading'    => __( 'Enable Section Link', 'total-child' ),
+            'param_name' => 'enable_section_link',
+            'admin_label' => false,
+        ),
 		array(
 			'type'        => 'textarea_html',
 			'heading'     => __( 'Introduction', 'js_composer' ),
@@ -38,14 +45,51 @@ return array(
 			'param_name'  => 'el_class',
 		),
 		vcex_vc_map_add_css_animation(),
+        array(
+            'type'       => 'dropdown',
+            'heading'    => __( 'Query Type', 'total-child' ),
+            'param_name' => 'query_type',
+            'group'      => __( 'Query', 'total-child' ),
+            'value'      => array(
+                __( 'Default', 'total' )  => 'default',
+                __( 'Include', 'total' )  => 'include',
+            ),
+        ),
 		array(
 			'type'        => 'textfield',
 			'heading'     => __( 'Number of staff', 'total' ),
 			'param_name'  => 'staffs_number',
 			'value'       => '',
+			'std'       => 'default',
 			'description' => __( 'Enter the limit of staff to show. Leave empty to show all.', 'total' ),
+            'dependency'         => array(
+                'element' => 'query_type',
+                'value'   => array( 'default' ),
+            ),
 			'group'       => __( 'Query', 'total' ),
 		),
+        array(
+            'type'               => 'autocomplete',
+            'heading'            => __( 'Include Staffs', 'total' ),
+            'param_name'         => 'include_staffs',
+            'param_holder_class' => 'vc_not-for-custom',
+            'admin_label'        => true,
+            'settings'           => array(
+                'multiple'       => true,
+                'min_length'     => 1,
+                'groups'         => false,
+                'unique_values'  => true,
+                'display_inline' => false,
+                'delay'          => 0,
+                'sortable'       => true,
+                'auto_focus'     => true,
+            ),
+            'dependency'         => array(
+                'element' => 'query_type',
+                'value'   => array( 'include' ),
+            ),
+            'group'              => __( 'Query', 'total' ),
+        ),
 		array(
 			'type'               => 'autocomplete',
 			'heading'            => __( 'Include Categories', 'total' ),
@@ -61,6 +105,10 @@ return array(
 				'delay'          => 0,
 				'auto_focus'     => true,
 			),
+            'dependency'         => array(
+                'element' => 'query_type',
+                'value'   => array( 'default' ),
+            ),
 			'group'              => __( 'Query', 'total' ),
 		),
 		array(
@@ -68,6 +116,10 @@ return array(
 			'heading'    => __( 'Multiple Category Relation', 'total' ),
 			'param_name' => 'cat_relation',
 			'group'      => __( 'Query', 'total' ),
+            'dependency'         => array(
+                'element' => 'query_type',
+                'value'   => array( 'default' ),
+            ),
 			'value'      => array(
 				__( 'IN', 'total' )         => 'IN',
 				__( 'NOT IN', 'total' )     => 'NOT IN',
@@ -81,6 +133,10 @@ return array(
 			'heading'    => __( 'Order', 'total' ),
 			'param_name' => 'order',
 			'group'      => __( 'Query', 'total' ),
+            'dependency'         => array(
+                'element' => 'query_type',
+                'value'   => array( 'default' ),
+            ),
 			'value'      => array(
 				__( 'Default', 'total' ) => '',
 				__( 'DESC', 'total' )    => 'DESC',
@@ -99,6 +155,10 @@ return array(
 				__( 'ID', 'total-child' )         => 'ID',
 				__( 'Menu Order', 'total-child' ) => 'menu_order',
 			),
+            'dependency'         => array(
+                'element' => 'query_type',
+                'value'   => array( 'default' ),
+            ),
 			'group'      => __( 'Query', 'total' ),
 		),
 		// Staff item Layout

@@ -1,6 +1,6 @@
 <?php
 
-define('EASL_THEME_VERSION', '1.2.6.1');
+define('EASL_THEME_VERSION', '2020.09.20.04');
 //define( 'EASL_THEME_VERSION', time() );
 
 if ( ! defined( 'EASL_INC_DIR' ) ) {
@@ -11,12 +11,16 @@ if ( ! defined( 'EASL_HOME_URL' ) ) {
 	define( 'EASL_HOME_URL', get_home_url() );
 }
 
+require_once EASL_INC_DIR . 'helpers.php';
 require_once EASL_INC_DIR . 'custom-tax-news-source.php';
 require_once EASL_INC_DIR . 'post-types/post-types.php';
+require_once EASL_INC_DIR . 'rewrites.php';
 require_once EASL_INC_DIR . 'customizer.php';
 require_once EASL_INC_DIR . 'total-extend.php';
 require_once EASL_INC_DIR . 'shortcodes.php';
 require_once EASL_INC_DIR . 'widgets.php';
+require_once EASL_INC_DIR . 'settings.php';
+require_once EASL_INC_DIR . 'sticky-footer.php';
 
 function easl_theme_setup() {
 	load_theme_textdomain( 'total-child' );
@@ -71,7 +75,8 @@ function easl_custom_scripts() {
 add_action( 'wp_enqueue_scripts', 'easl_custom_scripts', 20 );
 
 function easl_admin_custom_scripts() {
-	wp_enqueue_style( 'easl-admin-common', get_stylesheet_directory_uri() . '/assets/css/admin/common.css' );
+	wp_enqueue_style( 'easl-admin-common', get_stylesheet_directory_uri() . '/assets/css/admin/common.css', array(), EASL_THEME_VERSION );
+	//wp_enqueue_script( 'easl-admin-common', get_stylesheet_directory_uri() . '/assets/js/admin/common.js', array( 'jquery' ), EASL_THEME_VERSION, true );
 }
 
 add_action( 'admin_enqueue_scripts', 'easl_admin_custom_scripts' );

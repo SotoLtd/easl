@@ -44,6 +44,9 @@ if ( $annual_reports->have_posts() ) {
 	while ( $annual_reports->have_posts() ) {
 
 		$annual_reports->the_post();
+		$download_link = get_field( 'annual_reports_pdf_file' );
+		$online_link = $download_link;
+            //'download="' . basename( parse_url( $url, PHP_URL_PATH ) ) . '"'
 		$image = has_post_thumbnail( get_the_ID() ) ?
 			wp_get_attachment_image_src( get_post_thumbnail_id( get_the_ID() ), 'single-post-thumbnail' ) : '';
 		if ( $counter < 3 ):
@@ -73,27 +76,18 @@ if ( $annual_reports->have_posts() ) {
 			             '<h2 style="font-size: 20px;text-align: left" class="vc_custom_heading" >' . get_the_title() . '</h2>' .
 			             '<div class="vc_custom_1535647240328 wpex-clr" style="margin-top: 20px; margin-bottom: 5px;">' .
 			             '<div class="theme-button-block-wrap theme-button-wrap clr">' .
-			             '<a href="' . get_field( 'annual_reports_pdf_file' ) . '" ' .
+			             '<a href="' . $download_link . '" target="_blank"' .
 			             'class="vcex-button theme-button block animate-on-hover" ' .
-			             'style="color:#ffffff;width:100%;font-family:KnockoutHTF51Middleweight;" download>' .
+			             'style="color:#ffffff;width:100%;font-family:KnockoutHTF51Middleweight;"' .
+			             '>' .
 			             '<span class="theme-button-inner">' .
-			             '<span class="vcex-icon-wrap theme-button-icon-left">' .
-			             '<span class="ticon ticon-download"></span>' .
-			             '</span>Download PDF</span>' .
+			             '</span>View and download report</span>' .
+			             '<span class="vcex-icon-wrap theme-button-icon-right">' .
+			             '<span class="ticon ticon-angle-right"></span>' .
 			             '</a>' .
 			             '</div>' .
 			             '</div>' .
 			             '<div class="vc_custom_1535647249115 wpex-clr" style="margin-top: 20px; margin-bottom: 5px;">' .
-			             '<div class="theme-button-block-wrap theme-button-wrap clr">' .
-			             '<a href="' . get_field( 'annual_reports_pdf_file' ) . '" ' .
-			             'class="vcex-button theme-button block animate-on-hover" ' .
-			             'target="_blank" style="width:100%;font-family:KnockoutHTF51Middleweight;">' .
-			             '<span class="theme-button-inner">' .
-			             '<span class="vcex-icon-wrap theme-button-icon-left">' .
-			             '<span class="ticon ticon-newspaper-o"></span>' .
-			             '</span>View Online</span>' .
-			             '</a>' .
-			             '</div>' .
 			             '</div>' .
 			             '</div>' .
 			             '</div>' .

@@ -22,12 +22,20 @@ $event_application_url     = trim( get_field( 'event_application_url' ) );
                 <div class="event-dates-meta-wrap wpb_wrapper easl-flex-con easl-flex-align-center clr">
 					<?php
 					if ( $event_date_parts ):
+                        $date_parts_format = easl_get_event_date_format(get_the_ID());
 						?>
                         <div class="event-dates-wrap">
                             <div class="event-dates">
-                                <span class="event-day"><?php echo $event_date_parts['day']; ?></span>
-                                <span class="event-mon"><?php echo $event_date_parts['month']; ?></span>
-                                <span class="event-year"><?php echo $event_date_parts['year']; ?></span>
+                                <?php if('Y' == $date_parts_format): ?>
+                                    <span class="event-year" style="font-size: 20px;line-height: 20px;margin-top: 25px;"><?php echo $event_date_parts['year']; ?></span>
+                                <?php elseif ('mY' == $date_parts_format):?>
+                                    <span class="event-mon" style="margin-top: 7px;"><?php echo $event_date_parts['month']; ?></span>
+                                    <span class="event-year" style="font-size: 20px;line-height: 20px;" ><?php echo $event_date_parts['year']; ?></span>
+                                <?php else: ?>
+                                    <span class="event-day"><?php echo $event_date_parts['day']; ?></span>
+                                    <span class="event-mon"><?php echo $event_date_parts['month']; ?></span>
+                                    <span class="event-year" ><?php echo $event_date_parts['year']; ?></span>
+                                <?php endif; ?>
                             </div>
                         </div>
 					<?php endif; ?>

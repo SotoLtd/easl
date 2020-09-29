@@ -6,7 +6,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 return array(
 	'name'                    => __( 'EASL Staff Accordion', 'total-child' ),
-	'base'                    => 'easl_staff_accordion',
+	'base'                    => 'easl_staffs_accordion',
 	'is_container'            => false,
 	'show_settings_on_create' => true,
 	'category'                => __( 'EASL', 'total' ),

@@ -45,6 +45,43 @@ return array(
 			'group' => __( 'Query', 'total-child' ),
 		),
 		array(
+			'type'		 => 'dropdown',
+			'heading'	 => __( 'Title type', 'total-child' ),
+			'param_name' => 'title_type',
+			'group'		 => __( 'Query', 'total-child' ),
+			'value'		 => array(
+				__( 'Image', 'total-child' )	 => 'image',
+				__( 'Text', 'total-child' )	 => 'text',
+			),
+			'group' => __( 'View', 'total-child' ),
+		),
+		array(
+			'type' => 'attach_image',
+			'heading' => __( 'Title Image', 'total-child' ),
+			'param_name' => 'title_image',
+			'value' => '',
+			'description' => __( 'Select image from media library.', 'total-child' ),
+			'admin_label' => false,
+			'group' => __( 'View', 'total-child' ),
+			'dependency' => array(
+				'element'	 => 'title_type',
+				'value'		 => array( 'image' ),
+			),
+		),
+		array(
+			'type'			 => 'textfield',
+			'heading'		 => __( 'Title Text', 'total-child' ),
+			'param_name'	 => 'title_text',
+			'value'			 => '',
+			'description'	 => __( 'Enter title text.', 'total-child' ),
+			'admin_label' => false,
+			'group' => __( 'View', 'total-child' ),
+			'dependency' => array(
+				'element'	 => 'title_type',
+				'value'		 => array( 'text' ),
+			),
+		),
+		array(
 			'type' => 'css_editor',
 			'heading' => __( 'CSS box', 'total-child' ),
 			'param_name' => 'css',

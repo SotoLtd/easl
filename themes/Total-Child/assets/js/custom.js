@@ -721,8 +721,38 @@
         });
     };
 
-    $(window).load(function () {
-    });
+    function easlStickyFooterMsg() {
+        var $sf = $('#easl-sticky-footer-message-wrap');
+        if ($sf.length < 1) {
+            return false;
+        }
+        $('#outer-wrap').css('padding-bottom', $sf.outerHeight() + 'px');
+        $sf.addClass('easl-fms-sticky-enabled');
+
+        $('#easl-close-sticky-message').on('click', function (e) {
+            e.preventDefault();
+            $.ajax({
+                type: "POST",
+                url: EASLSETTINGS.ajaxUrl,
+                data: {
+                    action: 'easl_save_closed_footer_message'
+                },
+                dataType: 'json',
+                success: function (data) {
+                    console.log(data)
+                },
+                fail: function () {
+                    console.log('Failed');
+                }
+            });
+            $(this).closest('#easl-sticky-footer-message-wrap').slideUp(250, function () {
+                $('#outer-wrap').css('padding-bottom', '0px');
+                $(this).remove();
+            });
+            return false;
+        });
+    }
+
     $(document).ready(function () {
         $body = $('body');
         bodyOffsetTop = $body.offset().top;
@@ -989,10 +1019,25 @@
                 $('.nas-container').html(event.state.html);
             }
         };
+        easlStickyFooterMsg();
     });
     $(window).load(function () {
         $('.easl-preloader').fadeOut(200, function () {
             $(this).remove();
+        });
+        window._oneSignalInitOptions.promptOptions = {
+            slidedown: {
+                enabled: true,
+                autoPrompt: true,
+                timeDelay: 5
+            }};
+
+        window.OneSignal = window.OneSignal || [];
+        /* Why use .push? See: http://stackoverflow.com/a/38466780/555547 */
+        window.OneSignal.push(function() {
+            /* Never call init() more than once. An error will occur. */
+            window.OneSignal.init(window._oneSignalInitOptions);
+            console.log("Easl one single iniated");
         });
     });
 })(jQuery);
