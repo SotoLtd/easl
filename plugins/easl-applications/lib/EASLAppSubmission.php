@@ -131,10 +131,11 @@ class EASLAppSubmission
 
         $existingSubmission = $this->getExistingSubmissionForMember($this->memberId);
 
-        if ($existingSubmission) {
+        if ($existingSubmission && $existingSubmission->post_status == 'publish') {
             $redirect = get_field( 'member_dashboard_url', 'option' );
             wp_redirect($redirect . '?application_submitted=1');
         } else {
+            $this->submissionId = $existingSubmission->ID;
             $this->createSubmission();
         }
 
@@ -149,18 +150,20 @@ class EASLAppSubmission
 
         if (!$submittedAlready) {
             $apps = EASLApplicationsPlugin::getInstance();
+
+            $from = EASLApplicationsPlugin::getContactEmail($programmeId);
+
             $message = EASLApplicationsPlugin::renderEmail($apps->templateDir . 'email/application_confirmation.php', [
                 'firstName' => $memberData['first_name'],
                 'lastName' => $memberData['last_name'],
-                'programmeName' => $programme->post_title
+                'programmeName' => $programme->post_title,
+                'from' => $from
             ]);
             update_post_meta($postId, self::SUBMISSION_DATE_META_KEY, time());
             $email = $memberData['email1'];
-            $headers = [
-                'Content-Type: text/html; charset=UTF-8',
-                'From: EASL Applications <fellowships@easloffice.eu>'
-            ];
-            wp_mail($email, 'EASL Application Confirmation', $message, $headers);
+
+            $subject = 'EASL Application Confirmation';
+            EASLApplicationsPlugin::sendEmail($email, $subject, $message, $from);
         }
 
         wp_update_post(['ID' => $postId, 'post_status' => 'publish']);

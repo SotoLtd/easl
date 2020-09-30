@@ -3,12 +3,6 @@
 if ( ! defined( 'ABSPATH' ) ) {
     die( '-1' );
 }
-/**
- * @var array $submissions,
- * @var WP_Post $programme
- * @var EASLAppReview $reviewManager
- * @var $validProgrammes
- */
 ?>
 
 <?php if (isset($error)):?>
@@ -17,6 +11,12 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 <?php elseif ($programme):?>
 
+    <?php if (isset($_GET['review_submitted'])):?>
+        <div class="easl-application-submitted-notice">
+            Thank you, your review has been submitted.
+        </div>
+    <?php endif;?>
+    <h1><?=$programme->post_title;?></h1>
     <table>
         <thead>
         <tr>

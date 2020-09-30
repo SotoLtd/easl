@@ -284,7 +284,7 @@ class EASLAppReview {
         $matchingReviews = array_filter($reviews, function($review) use ($reviewerEmail) {
             return $review['reviewer_email'] === $reviewerEmail;
         });
-        return count($matchingReviews) > 0 ? $matchingReviews[0] : null;
+        return count($matchingReviews) > 0 ? current($matchingReviews) : null;
     }
 
     public function reviewSubmissionPage($submissionId) {
@@ -572,14 +572,13 @@ class EASLAppReview {
             'lastName' => $memberData['last_name'],
             'programmeName' => $programme->post_title,
             'guidelinesLink' => $guidelinesLink,
-            'reviewDeadline' => $reviewDeadline
+            'reviewDeadline' => $reviewDeadline,
+            'from' => $from
         ]);
 
-        $headers = [
-            'Content-Type: text/html; charset=UTF-8',
-            'Bcc: fellowships@easloffice.eu',
-            'From: EASL Applications <fellowships@easloffice.eu>'
-        ];
-        wp_mail($email, 'Invitation to Review EASL Applications', $message, $headers);
+        $subject = 'Invitation to Review EASL Applications';
+        $from = EASLApplicationsPlugin::getContactEmail($programmeId);
+
+        EASLApplicationsPlugin::sendEmail($email, $subject, $message, $from);
     }
 }

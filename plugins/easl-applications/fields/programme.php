@@ -35,6 +35,13 @@ acf_add_local_field_group([
             'return_format' => 'd/m/Y',
             'required' => true,
             'instructions' => 'When should reviewers complete their reviews of applications for this programme?'
+        ],
+        [
+            'key' => 'hide',
+            'label' => 'Hide programme',
+            'name' => 'hide',
+            'type' => 'true_false',
+            'instructions' => 'Hide this programme?'
         ]
     ],
     'location' => EASLApplicationsPlugin::acfPostTypeLocation('programme')

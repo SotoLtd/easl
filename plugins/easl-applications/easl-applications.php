@@ -258,6 +258,18 @@ class EASLApplicationsPlugin {
         return $out;
     }
 
+    public static function getContactEmail($programmeId) {
+        $categories = wp_get_post_terms($programmeId, 'programme-category');
+
+        $from = 'fellowships@easloffice.eu';
+        foreach($categories as $category) {
+            if ($category->slug == 'schools-masterclasses') {
+                $from = 'schools@easloffice.eu';
+            }
+        }
+        return $from;
+    }
+
     public static function renderEmail($templatePath, $vars = []) {
         ob_start();
         extract($vars);
@@ -265,6 +277,15 @@ class EASLApplicationsPlugin {
         $output = ob_get_contents();
         ob_end_clean();
         return $output;
+    }
+
+    public static function sendEmail($to, $subject, $message, $from = 'fellowships@easloffice.eu') {
+        $headers = [
+            'Content-Type: text/html; charset=UTF-8',
+            'Bcc: ' . $from,
+            'From: EASL Applications <' . $from . '>'
+        ];
+        wp_mail($to, $subject, $message, $headers);
     }
 
     public static function findInArray($array, callable $callable) {
