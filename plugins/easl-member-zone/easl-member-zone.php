@@ -262,6 +262,7 @@ class EASL_MZ_Manager {
 		if ( ! defined( 'DONOTROCKETOPTIMIZE' ) ) {
 			define( 'DONOTROCKETOPTIMIZE', true );
 		}
+        add_filter( 'do_rocket_generate_caching_files', '__return_false' );
 
 		return true;
 	}
