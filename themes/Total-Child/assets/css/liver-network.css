@@ -1,0 +1,9 @@
+#main header .page-header-title {
+    color: #114f85;
+}
+.easl-card{
+    padding: 0;
+}
+.easl-card.easl-ilf .easl-card-btn:hover .easl-card-btn-icon-wrapper{
+    /*background-color: #ffffff;*/
+}

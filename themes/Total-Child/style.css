@@ -5559,6 +5559,36 @@ body.tax-publication_tag {
     padding: 15px;
     background: #fff;
 }
+
+.single-publication .sp-modal-overlay {
+    display: block;
+    position: relative;
+    z-index: auto;
+    background-color: transparent;
+    margin-top: 50px;
+}
+.single-publication .sp-modal {
+    background-color: #fff;
+    box-shadow: 0 0px 20px 0 rgba(0,0,0,.2);
+    display: block;
+    position: relative;
+    left: auto;
+    top: auto;
+    width: 600px;
+    margin: 0 auto;
+}
+.single-publication  .sp-modal .sp-modal-close {
+    display: none;
+}
+.sp-modal-content h3 {
+    font-family: "KnockoutHTF51Middleweight", "Helvetica Neue", Helvetica, Arial, sans-serif;
+    color: #004b87;
+    font-size: 21px;
+    line-height: 1.5em;
+    font-weight: 400;
+    margin: 0 0 20px;
+    padding: 0;
+}
 /* Industry Partnership */
 .easl-ip-topblue-row {
     color: #ffff;

@@ -111,7 +111,7 @@ $add_membership_url = get_field('membership_plan_url', 'option');
             <button class="easl-generic-button easl-color-lightblue mz-reset-pass-button">Reset Password</button>
         </div>
         <div class="mz-forgot-pass-row clr">
-            <a class="mz-become-member-link" href="https://easl.eu/become-a-member/">Become a member</a>
+            <a class="mz-become-member-link" href="https://easl.eu/join-my-easl/?skip_dashboard=1">Become a member</a>
             <a class="mz-forgot-password" href="#">Forgot your password?</a>
         </div>
 

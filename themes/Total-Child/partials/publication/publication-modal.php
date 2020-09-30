@@ -1,5 +1,4 @@
 <div class="sp-modal-overlay">
-
     <div class="sp-modal">
         <a class="sp-modal-close" href="#">&times;</a>
         <div class="sp-modal-inner">
@@ -15,7 +14,7 @@
                 </ul>
 
                 <p>
-                    <a href="/become-a-member" class="easl-button easl-color-lightblue">Create account
+                    <a href="https://easl.eu/join-my-easl/?skip_dashboard=1" class="easl-button easl-color-lightblue">Create account
                         <span class="easl-generic-button-icon"><span class="ticon ticon-chevron-right"></span></span>
                     </a>
                 </p>

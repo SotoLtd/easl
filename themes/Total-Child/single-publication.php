@@ -29,10 +29,14 @@ get_header(); ?>
 				<?php
 				// Start loop
 				while ( have_posts() ) : the_post();
-
-					// Single Event
-					get_template_part('partials/publication/publication-single-layout');
-					
+                    if ( easl_mz_user_can_access_memberzone_page( get_the_ID() ) ) {
+                        // Single publication
+                        get_template_part( 'partials/publication/publication-single-layout' );
+                    } elseif ( easl_mz_is_member_logged_in() ) {
+                        echo '<script>window.location.href='. esc_url(get_field('membership_plan_url', 'option')) .'</script>';
+                    }else{
+                        get_template_part('partials/publication/publication-modal');
+                    }
 
 				endwhile; ?>
 
