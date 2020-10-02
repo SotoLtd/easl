@@ -5,4 +5,4 @@
 .env.production.local
 /.idea
 /uploads
-themes/Total-Child/assets/gulp-minify
+/themes/Total-Child/assets/gulp-minify/
