@@ -663,9 +663,13 @@ class EASL_MZ_Ajax_Handler {
         }
 
         //Redirect to the dashboard
-        $redirect = get_field( 'member_dashboard_url', 'option' );
-        if (!empty($request_data['skip_dashboard'])) {
-            $redirect = get_field('membership_plan_url', 'option');
+        if ( ! empty( $request_data['redirect'] ) ) {
+            $redirect = esc_url( $request_data['redirect'] );
+        } else {
+            $redirect = get_field( 'member_dashboard_url', 'option' );
+            if ( ! empty( $request_data['skip_dashboard'] ) ) {
+                $redirect = get_field( 'membership_plan_url', 'option' );
+            }
         }
 
         if ( ! $redirect ) {

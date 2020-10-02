@@ -54,6 +54,9 @@ if ( ! easl_mz_is_member_logged_in() ):
                 <?php if (!empty($_GET['skip_dashboard'])):?>
                     <input type="hidden" name="skip_dashboard" value="1">
                 <?php endif;?>
+                <?php if (!empty($_GET['redirect'])):?>
+                    <input type="hidden" name="redirect" value="<?php echo esc_url($_GET['redirect']); ?>">
+                <?php endif;?>
 
                 <h1>MyEASL Account Creation</h1>
                 <div class="easl-mz-page-intro">

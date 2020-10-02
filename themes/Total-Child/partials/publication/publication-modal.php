@@ -1,3 +1,14 @@
+<?php
+// Prevent direct access
+if ( ! defined( 'ABSPATH' ) ) {
+	die( '-1' );
+}
+$new_member_url = 'https://easl.eu/join-my-easl/';
+$redirect_url = get_permalink(get_queried_object_id());
+if($redirect_url) {
+    $new_member_url = add_query_arg(array('redirect' => $redirect_url), $new_member_url);
+}
+?>
 <div class="sp-modal-overlay">
     <div class="sp-modal">
         <a class="sp-modal-close" href="#">&times;</a>
@@ -14,7 +25,7 @@
                 </ul>
 
                 <p>
-                    <a href="https://easl.eu/join-my-easl/?skip_dashboard=1" class="easl-button easl-color-lightblue">Create account
+                    <a href="<?php echo $new_member_url; ?>" class="easl-button easl-color-lightblue">Create account
                         <span class="easl-generic-button-icon"><span class="ticon ticon-chevron-right"></span></span>
                     </a>
                 </p>

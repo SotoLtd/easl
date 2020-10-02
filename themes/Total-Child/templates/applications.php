@@ -40,3 +40,13 @@ get_header(); ?>
                 <?php wpex_hook_content_bottom(); ?>
 
             </div><!-- #content -->
+    
+            <?php wpex_hook_content_after(); ?>
+
+        </div><!-- #primary -->
+    
+        <?php wpex_hook_primary_after(); ?>
+
+    </div><!-- .container -->
+
+<?php get_footer(); ?>
