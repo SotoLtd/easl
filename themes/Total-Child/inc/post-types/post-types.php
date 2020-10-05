@@ -91,6 +91,7 @@ function easl_menu_order($menu_order) {
 		'edit.php?post_type=staff', // People
 		'edit.php?post_type=secretary_generals', // Secretary General
 		'edit.php?post_type=slide_decks', // Slide Decks
+        'edit.php?post_type=testimonials', // Testimonial
 	);
 	foreach ($front_end_menus as $menu_id) {
 		$position = array_search($menu_id, $menu_order);
