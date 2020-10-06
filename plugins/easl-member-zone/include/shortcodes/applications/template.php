@@ -50,7 +50,7 @@ foreach($programme_categories as $i => $category):
                 $more_info_link = get_field('more_info_link', $programme->ID);?>
                 <div class="applications-widget-programme">
                     <div class="programme-title"><?=$programme->post_title;?></div>
-                    <div>
+                    <div class="applications-widget-programme-buttons">
                         <?php if ($more_info_link):?>
                             <a class="easl-generic-button easl-color-blue" href="<?=$more_info_link;?>">
                                 More info

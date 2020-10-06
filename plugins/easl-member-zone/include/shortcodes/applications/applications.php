@@ -46,7 +46,13 @@ class EASL_VC_MZ_Applications extends EASL_MZ_Shortcode {
         }
 
         $submission = new EASLAppSubmission($programme_id);
-        return !!$submission->getExistingSubmissionForMember($sessionData['member_id']);
+        $existingSubmission = $submission->getExistingSubmissionForMember( $sessionData['member_id'] );
+        // check if submission is not completed
+        if ( $existingSubmission && $existingSubmission->post_status == 'publish' ) {
+            return true;
+        }
+    
+        return false;
     }
     
     public function get_apply_link($programme_id) {
