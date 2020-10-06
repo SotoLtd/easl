@@ -2883,9 +2883,21 @@ span.mzms-field-file-button {
 }
 
 .applications-widget-programme .programme-title {
+    width: calc(100% - 300px);
     font-weight:bold;
 }
 
+.applications-widget-programme-buttons {
+    display: flex;
+    width: 290px;
+}
+.applications-widget-programme-buttons .easl-generic-button:last-child {
+    margin-right: 0;
+}
+.applications-widget-programme-buttons .easl-generic-button {
+    width: 140px;
+    margin-right: 10px;
+}
 .applications-widget-closed {
     color: #333333;
     background-color:#f5f5f5;
