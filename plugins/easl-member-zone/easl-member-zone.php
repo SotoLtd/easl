@@ -2,7 +2,7 @@
 /*
 Plugin Name: EASL Member Zone
 Description: The plugin contains the functionality for EASL Member zone
-Version: 1.1.6.5
+Version: 1.2.1
 Author: Soto
 Author URI: http://www.gosoto.co/
 Text Domain: easlmz
@@ -14,7 +14,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 
 //die();
-define( 'EASL_MZ_VERSION', '1.1.6.5' );
+define( 'EASL_MZ_VERSION', '1.2.1' );
 
 //define( 'EASL_MZ_VERSION', time() );
 
@@ -245,9 +245,13 @@ class EASL_MZ_Manager {
 	}
 
 	public function logged_member_actions() {
-		if ( easl_mz_is_member_logged_in() ) {
-			add_action( 'wpex_hook_main_before', array( $this, 'expiring_message' ) );
-		}
+		if ( !easl_mz_is_member_logged_in() ) {
+		    return false;
+        }
+		if(easl_mz_is_member_zone_page()) {
+            add_action( 'wpex_hook_main_before', array( $this, 'expiring_message' ) );
+        }
+		
 	}
 
 	public function expiring_message() {

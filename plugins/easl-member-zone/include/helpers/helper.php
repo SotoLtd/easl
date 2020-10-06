@@ -17,6 +17,10 @@ function easl_mz_is_member_logged_in() {
 	return EASL_MZ_Manager::get_instance()->getSession()->has_member_active_session();
 }
 
+function easl_mz_is_member_zone_page() {
+    return is_page_template('templates/member-zone.php');
+}
+
 function easl_mz_get_member_data($member_id) {
 //    $member_id = EASL_MZ_Manager::get_instance()->getSession()->get_current_member_id();
 //    print_r($member_id);

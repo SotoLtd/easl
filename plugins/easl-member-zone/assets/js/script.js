@@ -1011,7 +1011,7 @@
             this.getMembershipForm();
             this.getMemberDocuments();
             this.getNewMembershipForm();
-            //this.getMembershipBanner();
+            this.getMembershipBanner();
             this.initMemberDirectory();
             this.initMemberStatistics();
         },
