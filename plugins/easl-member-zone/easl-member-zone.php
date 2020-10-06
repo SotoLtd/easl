@@ -644,7 +644,7 @@ class EASL_MZ_Manager {
 
 	public function handle_payment_feedback() {
 		$shaw_string = '';
-		$passphrase  = 'am1709xtwrn18cmbm24tw3';
+		$passphrase  = get_field( 'mz_ingenico_shaw_out_pass_phrase', 'options' );;
 		$ingore_keys = array(
 			'mz_action',
 			'mzsts',

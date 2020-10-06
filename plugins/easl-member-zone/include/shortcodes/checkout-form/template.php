@@ -56,6 +56,9 @@ if ( easl_mz_is_member_logged_in() ):
 			$billing_type           = $members_latest_membership['billing_type'];
 		}
 	}
+	if(!$billing_type) {
+        $billing_type = 'online_cc_indiv';
+    }
 
 	if ( ( 'online_cc_indiv' == $billing_type ) && $membership_checkout_id ) {
 		$api->get_user_auth_token();
@@ -101,9 +104,9 @@ if ( easl_mz_is_member_logged_in() ):
 
 			$billing_address_title = easl_mz_get_formatted_address( $billing_address );
 		}
-
-		$pspid              = 'EASLEvent2';
-		$saw_in_pass_phrase = 'Omj010159gj061148dsm190384';
+        
+        $pspid              = get_field( 'mz_ingenico_pspid', 'options' );
+        $saw_in_pass_phrase = get_field( 'mz_ingenico_shaw_in_pass_phrase', 'options' );
 		$sha_string         = '';
 
 		?>

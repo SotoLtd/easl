@@ -422,7 +422,7 @@ class EASL_MZ_API {
             'Cache-Control' => 'no-cache',
             'OAuth-Token'   => $this->get_access_token( false ),
         );
-        $result  = $this->get( '/easl1_memberships/' . $membership_id, $headers );
+        $result  = $this->get( '/easl1_memberships/' . $membership_id, false, $headers );
         if ( ! $result ) {
             return false;
         }
