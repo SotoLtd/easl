@@ -5,7 +5,7 @@ class EASL_MZ_Mailchimp {
     public static function get_date_formatted( $date ) {
         $date = explode( '-', $date );
         if ( count( $date ) === 3 ) {
-            return $date[2] . '/' . $date[1] . '/' . $date[0];
+            return $date[1] . '/' . $date[2] . '/' . $date[0];
         }
         
         return '';
@@ -381,6 +381,10 @@ class EASL_MZ_Mailchimp {
     }
     
     public static function sign_up( $request_data ) {
+        
+        $api = easl_mz_get_manager()->getApi();
+        $api->get_request_object()->init_logger();
+        
         $api_key = get_field( 'mz_mailchimp_api_key', 'options' );
         $list_id = get_field( 'mz_mailchimp_list_id', 'options' );
         
@@ -402,6 +406,10 @@ class EASL_MZ_Mailchimp {
             $data['interests'] = $interests;
         }
         $json = json_encode( $data );
+        $api->get_request_object()->add_log( date( 'c', time() ) . ' :: Subscribe member to Mailchimp ' );
+        $api->get_request_object()->add_log( 'Request Data:' );
+        $api->get_request_object()->add_log( print_r( $data, true ) );
+        $api->get_request_object()->add_log( $json );
         
         $url = 'https://us1.api.mailchimp.com/3.0/lists/' . $list_id . '/members';
         
@@ -417,6 +425,12 @@ class EASL_MZ_Mailchimp {
         $result   = curl_exec( $ch );
         $httpCode = curl_getinfo( $ch, CURLINFO_HTTP_CODE );
         curl_close( $ch );
+    
+    
+        $api->get_request_object()->add_log( 'Response Code: ' . $httpCode );
+        $api->get_request_object()->add_log( 'Response Body: ' );
+        $api->get_request_object()->add_log( print_r( json_decode($result), true ) );
+        $api->get_request_object()->close_logger();
         
         return $httpCode;
     }
