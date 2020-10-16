@@ -143,6 +143,9 @@ class EASLAppSubmission
     }
 
     public static function onSavePost($postId) {
+        if('submission' != get_post_type($postId)) {
+            return null;
+        }
         $submittedAlready = get_post_meta($postId, self::SUBMISSION_DATE_META_KEY, true);
         $memberData = get_post_meta($postId, 'member_data', true);
         $programmeId = get_post_meta($postId, 'programme_id', true);
