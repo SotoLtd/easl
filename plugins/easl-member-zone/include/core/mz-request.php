@@ -84,6 +84,15 @@ class EASL_MZ_Request {
 			$this->add_log( print_r( $headers, true ) );
 		}
 		if ( is_array( $data ) && count( $data ) > 1 ) {
+            if(isset($data['password'])) {
+                $data['password'] = '*****';
+            }
+            if(isset($data['portal_password'])) {
+                $data['portal_password'] = '*****';
+            }
+            if(isset($data['portal_password1'])) {
+                $data['portal_password1'] = '*****';
+            }
 			$this->add_log( 'Data:' );
 			$this->add_log( print_r( $data, true ) );
 		}
