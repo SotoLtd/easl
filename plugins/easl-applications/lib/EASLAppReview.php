@@ -566,6 +566,7 @@ class EASLAppReview {
 
         $guidelinesLink = get_field('guidelines_link', $programmeId);
         $reviewDeadline = get_field('review_deadline', $programmeId);
+        $from = EASLApplicationsPlugin::getContactEmail($programmeId);
 
         $message = EASLApplicationsPlugin::renderEmail($apps->templateDir . 'email/invite_reviewer.php', [
             'firstName' => $memberData['first_name'],
@@ -577,7 +578,6 @@ class EASLAppReview {
         ]);
 
         $subject = 'Invitation to Review EASL Applications';
-        $from = EASLApplicationsPlugin::getContactEmail($programmeId);
 
         EASLApplicationsPlugin::sendEmail($email, $subject, $message, $from);
     }
