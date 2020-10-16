@@ -279,11 +279,11 @@ class EASLApplicationsPlugin {
         return $output;
     }
 
-    public static function sendEmail($to, $subject, $message, $from = 'fellowships@easloffice.eu') {
+    public static function sendEmail($to, $subject, $message, $bcc='fellowships@easloffice.eu') {
         $headers = [
             'Content-Type: text/html; charset=UTF-8',
-            'Bcc: ' . $from,
-            'From: EASL Applications <' . $from . '>'
+            'Bcc: ' . $bcc,
+            'From: EASL Applications <no-reply@easl.eu>'
         ];
         wp_mail($to, $subject, $message, $headers);
     }

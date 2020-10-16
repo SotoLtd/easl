@@ -153,20 +153,20 @@ class EASLAppSubmission
 
         if (!$submittedAlready) {
             $apps = EASLApplicationsPlugin::getInstance();
-
-            $from = EASLApplicationsPlugin::getContactEmail($programmeId);
+    
+            $contactEmail = EASLApplicationsPlugin::getContactEmail($programmeId);
 
             $message = EASLApplicationsPlugin::renderEmail($apps->templateDir . 'email/application_confirmation.php', [
                 'firstName' => $memberData['first_name'],
                 'lastName' => $memberData['last_name'],
                 'programmeName' => $programme->post_title,
-                'from' => $from
+                'contactEmail' => $contactEmail
             ]);
             update_post_meta($postId, self::SUBMISSION_DATE_META_KEY, time());
             $email = $memberData['email1'];
 
             $subject = 'EASL Application Confirmation';
-            EASLApplicationsPlugin::sendEmail($email, $subject, $message, $from);
+            EASLApplicationsPlugin::sendEmail($email, $subject, $message, $contactEmail);
         }
 
         wp_update_post(['ID' => $postId, 'post_status' => 'publish']);
