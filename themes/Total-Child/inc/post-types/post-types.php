@@ -104,3 +104,30 @@ function easl_menu_order($menu_order) {
 
 }
 add_filter( 'menu_order', 'easl_menu_order' );
+
+function easl_testimonials_args( $args ) {
+    $args['public']      = false;
+    $args['show_ui']     = true;
+    $args['has_archive'] = false;
+    $args['rewrite']     = false;
+    
+    return $args;
+}
+
+add_filter( 'wpex_testimonials_args', 'easl_testimonials_args' );
+function easl_testimonials_category_args( $args ) {
+    $args['public']            = false;
+    $args['show_ui']           = true;
+    $args['show_in_nav_menus'] = false;
+    $args['show_tagcloud']     = false;
+    $args['query_var']         = false;
+    $args['rewrite']     = false;
+    
+    return $args;
+}
+add_filter( 'wpex_taxonomy_testimonials_category_args', 'easl_testimonials_category_args' );
+
+function easl_post_type_editor_types($types) {
+    return array();
+}
+add_filter('wpex_post_type_editor_types', 'easl_post_type_editor_types');
