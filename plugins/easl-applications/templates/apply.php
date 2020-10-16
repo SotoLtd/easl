@@ -8,19 +8,25 @@ if ( ! defined( 'ABSPATH' ) ) {
 <?php
 $programme_id = isset($_GET['programme_id']) ? $_GET['programme_id'] : null; //12610;
 $programme = get_post($programme_id);
-$sub = new EASLAppSubmission($programme_id);
-$valid = $sub->setup();
 
-$apps = EASLApplicationsPlugin::getInstance();
-$fieldContainer = $apps->getProgrammeFieldSetContainer($programme_id);
-
-$fieldSetKeys = $fieldContainer->getFieldSetKeys();
+if($programme && 'programme' == get_post_type($programme)):
+    
+    $sub = new EASLAppSubmission($programme_id);
+    $valid = $sub->setup();
 ?>
 
 <h1><?=$programme->post_title;?>: Your application</h1>
 <div><?=$programme->post_content;?></div>
 
-<?php if ($valid):?>
+<?php
+if ($valid):
+    
+    $apps = EASLApplicationsPlugin::getInstance();
+    $fieldContainer = $apps->getProgrammeFieldSetContainer($programme_id);
+    
+    $fieldSetKeys = $fieldContainer->getFieldSetKeys();
+    
+    ?>
     <?php
     $args =
         [
@@ -35,4 +41,7 @@ $fieldSetKeys = $fieldContainer->getFieldSetKeys();
 <?php else:?>
     <h2>An error occurred</h2>
     <p>An error occurred trying to apply for this programme.  Perhaps the link you followed is out of date.</p>
+<?php endif;?>
+<?php else:?>
+<p>Invalid programme</p>
 <?php endif;?>
