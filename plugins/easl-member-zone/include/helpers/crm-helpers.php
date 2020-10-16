@@ -157,6 +157,19 @@ function easl_mz_validate_new_member_form($data = array()) {
     ];
 
     $errors = validate_required_fields($required_fields, $data);
+    
+    if ( empty( $errors['first_name'] ) && is_numeric( $data['first_name'] ) ) {
+        $errors['first_name'] = 'First name must not be numeric';
+    }
+    if ( empty( $errors['last_name'] ) && is_numeric( $data['last_name'] ) ) {
+        $errors['last_name'] = 'Last name must not be numeric';
+    }
+    if ( empty( $errors['first_name'] ) && strlen( preg_replace( '/[^a-zA-Z]/', '', $data['first_name'] ) ) < 2 ) {
+        $errors['first_name'] = 'First name must contain at least 2 letters';
+    }
+    if ( empty( $errors['last_name'] ) && strlen( preg_replace( '/[^a-zA-Z]/', '', $data['last_name'] ) ) < 2 ) {
+        $errors['last_name'] = 'Last name must contain at least 2 letters';
+    }
 
     if ( isset( $data['title'] ) && empty( $data['title'] ) ) {
         $errors['title'] = 'Mandatory field';

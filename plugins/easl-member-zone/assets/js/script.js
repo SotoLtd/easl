@@ -471,9 +471,7 @@
                 $form.closest(".wpb_easl_mz_membership").removeClass("easl-mz-form-processing").find(".easl-mz-membership-loader").remove();
                 if (response.Status === 200) {
                     mzModal.init();
-                    mzModal.$el.one("mz.modal.hidden.account.update.ok", function () {
-                        _this.getMembershipForm();
-                    });
+                    _this.getMembershipForm();
                     mzModal.show('<div class="mz-modal-password-changed">Your profile updated successfully!</div>', 'account.update.ok');
                 }
                 if (response.Status === 400) {
@@ -509,7 +507,8 @@
                         $("body").trigger("mz_reload_custom_fields");
                         $(".easl-mz-select2", $(this)).select2({
                             closeOnSelect: true,
-                            allowClear: true
+                            allowClear: true,
+                            maximumSelectionLength: 4
                         });
                         $("#mzf_birthdate_fz", $(this)).datepicker({
                             dateFormat: "dd.mm.yy",
@@ -561,7 +560,8 @@
             if ($el.length) {
                 $(".easl-mz-select2", $el).select2({
                     closeOnSelect: true,
-                    allowClear: true
+                    allowClear: true,
+                    maximumSelectionLength: 4
                 });
                 $(".easl-mz-date", $el).datepicker({
                     dateFormat: "dd.mm.yy",
@@ -743,7 +743,6 @@
             });
         },
         getNewMembershipForm: function () {
-            console.log('here');
             var _this = this;
             var $el = $(".easl-mz-new-membership-form");
             if ($el.length) {
@@ -753,7 +752,8 @@
                     $("body").trigger("mz_reload_custom_fields");
                     $(".easl-mz-select2", $(this)).select2({
                         closeOnSelect: true,
-                        allowClear: true
+                        allowClear: true,
+                        maximumSelectionLength: 4
                     });
                     _this.customFileInput($el);
                     _this.newMembershipFormEvents($el);
@@ -1032,7 +1032,8 @@
         if (typeof $.fn.select2 !== "undefined") {
             $(".easl-mz-select2").length && $(".easl-mz-select2").select2({
                 closeOnSelect: true,
-                allowClear: true
+                allowClear: true,
+                maximumSelectionLength: 4
             });
         }
 

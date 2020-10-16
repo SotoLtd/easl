@@ -549,6 +549,59 @@ class EASL_MZ_Ajax_Handler {
 		if ( count( $errors ) > 0 ) {
 			$this->respond_field_errors( $errors );
 		}
+		
+		$uc_fied_data = array();
+        
+        $request_data['first_name'] = ucfirst( $request_data['first_name'] );
+        $request_data['last_name']  = ucfirst( $request_data['last_name'] );
+        $uc_fied_data['first_name'] = $request_data['first_name'];
+        $uc_fied_data['last_name'] = $request_data['last_name'];
+        
+        if ( ! empty( $request_data['dotb_job_function_other'] ) ) {
+            $request_data['dotb_job_function_other'] = ucfirst( $request_data['dotb_job_function_other'] );
+            $uc_fied_data['dotb_job_function_other'] = $request_data['dotb_job_function_other'];
+        }
+        if ( ! empty( $request_data['dotb_easl_specialty_other'] ) ) {
+            $request_data['dotb_easl_specialty_other'] = ucfirst( $request_data['dotb_easl_specialty_other'] );
+            $uc_fied_data['dotb_easl_specialty_other'] = $request_data['dotb_easl_specialty_other'];
+        }
+        if ( ! empty( $request_data['dotb_user_category_other'] ) ) {
+            $request_data['dotb_user_category_other'] = ucfirst( $request_data['dotb_user_category_other'] );
+            $uc_fied_data['dotb_user_category_other'] = $request_data['dotb_user_category_other'];
+        }
+        if ( ! empty( $request_data['title'] ) ) {
+            $request_data['title'] = ucfirst( $request_data['title'] );
+            $uc_fied_data['title'] = $request_data['title'];
+        }
+        if ( ! empty( $request_data['department'] ) ) {
+            $request_data['department'] = ucfirst( $request_data['department'] );
+            $uc_fied_data['department'] = $request_data['department'];
+        }
+        if ( ! empty( $request_data['dotb_tmp_account'] ) ) {
+            $request_data['dotb_tmp_account'] = ucfirst( $request_data['dotb_tmp_account'] );
+            $uc_fied_data['dotb_tmp_account'] = $request_data['dotb_tmp_account'];
+        }
+        if ( ! empty( $request_data['primary_address_city'] ) ) {
+            $request_data['primary_address_city'] = ucfirst( $request_data['primary_address_city'] );
+            $uc_fied_data['primary_address_city'] = $request_data['primary_address_city'];
+        }
+        if ( ! empty( $request_data['primary_address_state'] ) ) {
+            $request_data['primary_address_state'] = ucfirst( $request_data['primary_address_state'] );
+            $uc_fied_data['primary_address_state'] = $request_data['primary_address_state'];
+        }
+        if ( ! empty( $request_data['alt_address_state'] ) ) {
+            $request_data['alt_address_state'] = ucfirst( $request_data['alt_address_state'] );
+            $uc_fied_data['alt_address_state'] = $request_data['alt_address_state'];
+        }
+        if ( ! empty( $request_data['assistant'] ) ) {
+            $request_data['assistant'] = ucfirst( $request_data['assistant'] );
+            $uc_fied_data['assistant'] = $request_data['assistant'];
+        }
+        if ( ! empty( $request_data['description'] ) ) {
+            $request_data['description'] = ucfirst( $request_data['description'] );
+            $uc_fied_data['description'] = $request_data['description'];
+        }
+		
 		if ( ! isset( $request_data['dotb_public_profile'] ) ) {
 			$request_data['dotb_public_profile'] = 'No';
 		}
@@ -563,7 +616,7 @@ class EASL_MZ_Ajax_Handler {
 		if ( ! $updated ) {
 			$this->respond( 'Error!', 405 );
 		}
-		$this->respond( 'Your profile updated successfully!', 200 );
+		$this->respond( 'Your profile updated successfully!', 200, $uc_fied_data );
 	}
 
 	public function change_member_password() {
