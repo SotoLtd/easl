@@ -11,7 +11,7 @@ class EmergingLeaderAwardFieldContainer extends AbstractFieldContainer {
         $hostInstituteFieldSet = $this->makeFieldSet(
             'host_institute', 'Host institute',
             [
-                new EASLApplicationField('host_institute', 'Host Institute', 'text'),
+                new EASLApplicationField('host_institute', 'Institute', 'text'),
                 new EASLApplicationField('street', 'Street', 'text'),
                 new EASLApplicationField('city', 'City', 'text'),
                 new EASLApplicationField('state', 'State', 'text'),
@@ -42,9 +42,9 @@ class EmergingLeaderAwardFieldContainer extends AbstractFieldContainer {
             ]
         );
         
-        $additionalInformationFieldSet = $this->makeAdditionalInformationFields('Have you applied to an EASL Fellowship Programme in the past?', 'How did you find out about EASL Fellowships?');
+        $additionalInformationFieldSet = $this->makeAdditionalInformationFields('Have you applied to the EASL Emerging Leader Award in the past?', 'How did you find out about the EASL Emerging Leader Award');
         
-        $confirmationFieldSet = $this->makeConfirmationStatementFields('I confirm that I have read and understood the guidelines of the EASL Fellowship Programme and the above information is true and accurate.');
+        $confirmationFieldSet = $this->makeConfirmationStatementFields('I confirm that I have read and understood the guidelines of the EASL Fellowship Programme and the above information is true and accurate. - Update to: “I confirm that I have read and understood the guidelines of the EASL Emering Leader Award and the above information is true and accurate');
         
         $this->fieldSets = [
             $hostInstituteFieldSet,
