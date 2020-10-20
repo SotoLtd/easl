@@ -75,6 +75,7 @@ class EASLAppReview {
             'Email' => $memberData['email1'],
             'Phone' => $memberData['phone_work'],
             'Date of birth' => $memberData['birthdate'],
+            'Country' => easl_mz_get_country_name($memberData['primary_address_country']),
             'Application submitted' => $submittedDate->format('Y-m-d')
         ];
         if ($forCSV) {
@@ -85,21 +86,19 @@ class EASLAppReview {
 
         $fieldSets = $fieldSetContainer->getFieldSets();
         $fields = [];
-        $has_birthday_field = false;
+        
         foreach ($fieldSets as $fieldSet) {
             foreach ($fieldSet->fields as $field) {
                 if ($field->hideFromOutput) {
                     continue;
                 }
                 $fieldKey = $fieldSet->getFieldKey($field);
-                $fields[$fieldKey] = $field;
                 if('date_of_birth' == $field->key) {
-                    $has_birthday_field = true;
+                    $out['Date of birth'] = get_field($fieldKey, $submission->ID);
+                }else{
+                    $fields[$fieldKey] = $field;
                 }
             }
-        }
-        if($has_birthday_field) {
-            unset($out['Date of birth']);
         }
         
         if ($forCSV) {
@@ -108,6 +107,8 @@ class EASLAppReview {
 
                 if ($field->type === 'file') {
                     $data = $data['url'];
+                }elseif ( in_array($field->type, ['select', 'radio', 'checkbox']) && isset($field->settings['choices'][$data])){
+                    $data = $field->settings['choices'][$data];
                 }
 
                 $out[$field->name] = $data;
@@ -128,7 +129,7 @@ class EASLAppReview {
     public function exportCSV($programmeId, $fieldSetContainer) {
 
         //Get an array of fields that we are going to want to export
-        $headerFields = ['ID', 'Title', 'Name', 'Email', 'Phone number', 'Date of Birth', 'Application date'];
+        $headerFields = ['ID', 'Title', 'Name', 'Email', 'Phone number', 'Date of Birth', 'Country', 'Application date'];
         $fieldSets = $fieldSetContainer->getFieldSets();
         $fields = [];
 
@@ -137,9 +138,11 @@ class EASLAppReview {
                 if ($field->hideFromOutput) {
                     continue;
                 }
-                $headerFields[] = $field->name;
-                $fieldKey = $fieldSet->getFieldKey($field);
-                $fields[$fieldKey] = $field;
+                if('date_of_birth' != $field->key) {
+                    $headerFields[] = $field->name;
+                    $fieldKey = $fieldSet->getFieldKey($field);
+                    $fields[$fieldKey] = $field;
+                }
             }
         }
 
