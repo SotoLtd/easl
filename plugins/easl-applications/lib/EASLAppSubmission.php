@@ -134,8 +134,12 @@ class EASLAppSubmission
         if ($existingSubmission && $existingSubmission->post_status == 'publish') {
             $redirect = get_field( 'member_dashboard_url', 'option' );
             wp_redirect($redirect . '?application_submitted=1');
-        } else {
+            die();
+        }
+    
+        if($existingSubmission) {
             $this->submissionId = $existingSubmission->ID;
+        }else{
             $this->createSubmission();
         }
 
