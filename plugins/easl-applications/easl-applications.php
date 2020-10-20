@@ -22,7 +22,9 @@ class EASLApplicationsPlugin {
         'easl-schools' => 'EASL Schools',
         'sponsorship' => 'Sponsorship',
         'mentorship' => 'Mentorship',
-        'registry-grant' => 'Registry Grant'
+        'registry-grant' => 'Registry Grant',
+        'daniel-alagille-award' => 'Daniel Alagille Award',
+        'emerging-leader-award' => 'Emerging Leader Award',
     ];
 
     /**
@@ -184,7 +186,9 @@ class EASLApplicationsPlugin {
             'registry-grant' => 'RegistryGrantFieldContainer',
             'sponsorship' => 'EndorsementFieldContainer',
             'easl-schools' => 'EASLSchoolsFieldContainer',
-            'masterclass' => 'MasterclassFieldContainer'
+            'masterclass' => 'MasterclassFieldContainer',
+            'daniel-alagille-award' => 'DanielAlagilleAwardFieldContainer',
+            'emerging-leader-award' => 'EmergingLeaderAwardFieldContainer',
         ];
         foreach($fieldsets as $key => $className) {
             require_once($this->dir . 'fields/fieldsets/' . $className . '.php');

@@ -13,6 +13,10 @@ class EASLSchoolsFieldContainer extends AbstractFieldContainer {
             'project_information',
             'Project information',
             [
+                new EASLApplicationField('date_of_birth', 'Date of birth', 'date_picker', [
+                    'display_format' => 'd/m/Y',
+                    'return_format' => 'd/m/Y'
+                ]),
                 new EASLApplicationField('applicant_profile', 'Applicant profile: "I am a"', 'select', [
                     'choices' => [
                         'clinical_practitioner' => 'Clinical Practitioner',
@@ -30,6 +34,8 @@ class EASLSchoolsFieldContainer extends AbstractFieldContainer {
                 ]),
                 new EASLApplicationField('training', 'Training', 'text'),
                 new EASLApplicationField('anticipated_year_of_completion', 'Anticipated year of completion', 'text'),
+                new EASLApplicationField('referee_name', 'Name of referee', 'text'),
+                new EASLApplicationField('referee_email', 'Email address of referee', 'text'),
                 new EASLApplicationField('english_language_skills', 'How would you qualify your English language skills', 'select', [
                     'choices' => [
                         'native' => 'Native speaker',
@@ -38,8 +44,10 @@ class EASLSchoolsFieldContainer extends AbstractFieldContainer {
                         'basic' => 'Basic communication skills'
                     ]
                 ]),
-                new EASLApplicationField('referee_name', 'Name of referee', 'text'),
-                new EASLApplicationField('referee_email', 'Email address of referee', 'text'),
+                new EASLApplicationField('abstracts_at_easl_events_year', 'Abstracts presented at EASL events: Presentation year', 'text'),
+                new EASLApplicationField('abstracts_at_easl_events_title', 'Abstracts presented at EASL events: Titles of publications / abstracts', 'text'),
+                new EASLApplicationField('abstracts_at_non_easl_events_year', 'Abstracts presented at non-EASL events: Presentation year', 'text'),
+                new EASLApplicationField('abstracts_at_non_easl_events_title', 'Abstracts presented at non-EASL events: Titles of publications / abstracts', 'text'),
             ]
         );
 

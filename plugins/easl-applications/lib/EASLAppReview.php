@@ -85,6 +85,7 @@ class EASLAppReview {
 
         $fieldSets = $fieldSetContainer->getFieldSets();
         $fields = [];
+        $has_birthday_field = false;
         foreach ($fieldSets as $fieldSet) {
             foreach ($fieldSet->fields as $field) {
                 if ($field->hideFromOutput) {
@@ -92,8 +93,15 @@ class EASLAppReview {
                 }
                 $fieldKey = $fieldSet->getFieldKey($field);
                 $fields[$fieldKey] = $field;
+                if('date_of_birth' == $field->key) {
+                    $has_birthday_field = true;
+                }
             }
         }
+        if($has_birthday_field) {
+            unset($out['Date of birth']);
+        }
+        
         if ($forCSV) {
             foreach($fields as $key => $field) {
                 $data = get_field($key, $submission->ID);

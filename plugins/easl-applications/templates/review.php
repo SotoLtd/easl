@@ -3,6 +3,14 @@
 if ( ! defined( 'ABSPATH' ) ) {
     die( '-1' );
 }
+/**
+ * @var EASLAppReview $reviewManager
+ * @var boolean $isAdmin
+ * @var WP_Post $submission
+ * @var array $reviews
+ * @var array $fields
+ * @var array $scoringCriteria
+ */
 ?>
 <h1>Review submission: <?=$submission->post_title;?></h1>
 
