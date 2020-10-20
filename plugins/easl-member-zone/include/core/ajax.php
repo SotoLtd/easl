@@ -697,6 +697,48 @@ class EASL_MZ_Ajax_Handler {
 		if ( count( $errors ) > 0 ) {
 			$this->respond_field_errors( $errors );
 		}
+        
+        
+        
+        $uc_fied_data = array();
+        
+        $request_data['first_name'] = ucfirst( $request_data['first_name'] );
+        $request_data['last_name']  = ucfirst( $request_data['last_name'] );
+        
+        if ( ! empty( $request_data['dotb_job_function_other'] ) ) {
+            $request_data['dotb_job_function_other'] = ucfirst( $request_data['dotb_job_function_other'] );
+        }
+        if ( ! empty( $request_data['dotb_easl_specialty_other'] ) ) {
+            $request_data['dotb_easl_specialty_other'] = ucfirst( $request_data['dotb_easl_specialty_other'] );
+        }
+        if ( ! empty( $request_data['dotb_user_category_other'] ) ) {
+            $request_data['dotb_user_category_other'] = ucfirst( $request_data['dotb_user_category_other'] );
+        }
+        if ( ! empty( $request_data['title'] ) ) {
+            $request_data['title'] = ucfirst( $request_data['title'] );
+        }
+        if ( ! empty( $request_data['department'] ) ) {
+            $request_data['department'] = ucfirst( $request_data['department'] );
+        }
+        if ( ! empty( $request_data['dotb_tmp_account'] ) ) {
+            $request_data['dotb_tmp_account'] = ucfirst( $request_data['dotb_tmp_account'] );
+        }
+        if ( ! empty( $request_data['primary_address_city'] ) ) {
+            $request_data['primary_address_city'] = ucfirst( $request_data['primary_address_city'] );
+        }
+        if ( ! empty( $request_data['primary_address_state'] ) ) {
+            $request_data['primary_address_state'] = ucfirst( $request_data['primary_address_state'] );
+        }
+        if ( ! empty( $request_data['alt_address_state'] ) ) {
+            $request_data['alt_address_state'] = ucfirst( $request_data['alt_address_state'] );
+        }
+        if ( ! empty( $request_data['assistant'] ) ) {
+            $request_data['assistant'] = ucfirst( $request_data['assistant'] );
+        }
+        if ( ! empty( $request_data['description'] ) ) {
+            $request_data['description'] = ucfirst( $request_data['description'] );
+        }
+		
         if(isset($request_data['description'])) {
             $request_data['description'] = wp_unslash( $request_data['description'] );
         }
