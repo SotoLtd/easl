@@ -516,7 +516,7 @@
                             altField: "#mzf_birthdate",
                             changeMonth: true,
                             changeYear: true,
-                            yearRange: "1900:-00",
+                            yearRange: "1900:-18",
                             maxDate: "-0D"
                         });
                         _this.membershipFormEvents($el);
@@ -569,7 +569,7 @@
                     altField: "#mzf_birthdate",
                     changeMonth: true,
                     changeYear: true,
-                    yearRange: "1900:-00",
+                    yearRange: "1900:-18",
                     maxDate: "-0D"
                 });
                 var $jobFunction = $("#mzf_dotb_job_function", $el);
