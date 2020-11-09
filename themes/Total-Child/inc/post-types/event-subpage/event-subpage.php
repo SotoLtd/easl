@@ -8,6 +8,7 @@ class EASL_Event_Subpage_Config {
 
 	protected static $slugs = array(
 		'type' => 'event_subpage',
+		'group' => 'event_subpage_group',
 	);
 
 	/**
@@ -15,6 +16,7 @@ class EASL_Event_Subpage_Config {
 	 */
 	public function __construct() {
 		add_action( 'init', array( 'EASL_Event_Subpage_Config', 'register_post_type' ), 0 );
+        add_action( 'init', array( 'EASL_Event_Subpage_Config', 'register_group' ), 0 );
 	}
 
 	/**
@@ -23,6 +25,14 @@ class EASL_Event_Subpage_Config {
 	 */
 	public static function get_slug() {
 		return self::$slugs['type'];
+	}
+
+	/**
+	 * Get post type slug
+	 * @return string
+	 */
+	public static function get_group_slug() {
+		return self::$slugs['group'];
 	}
 
 	/**
@@ -61,6 +71,39 @@ class EASL_Event_Subpage_Config {
 			),
 		) );
 	}
+    
+    public static function register_group() {
+        
+        // Define args and apply filters for child theming
+        $args = array(
+            
+            'labels' => array(
+                'name' => __( 'Event Subpage Group', 'total' ),
+                'singular_name' => __( 'Event subpage group', 'total' ),
+                'add_new' => __( 'Add New', 'total' ),
+                'add_new_item' => __( 'Add New Item', 'total' ),
+                'edit_item' => __( 'Edit Item', 'total' ),
+                'new_item' => __( 'Add New Item', 'total' ),
+                'view_item' => __( 'View Item', 'total' ),
+                'search_items' => __( 'Search Items', 'total' ),
+                'not_found' => __( 'No Items Found', 'total' ),
+                'not_found_in_trash' => __( 'No Items Found In Trash', 'total' )
+            ),
+            'public' => false,
+            'show_in_nav_menus' => false,
+            'show_ui' => true,
+            'show_admin_column' => true,
+            'show_tagcloud' => false,
+            'hierarchical' => true,
+            'rewrite' => false,
+            'query_var' => false
+        );
+        
+        // Register the staff category taxonomy
+        register_taxonomy( self::get_group_slug(), array( self::get_slug() ), $args );
+        
+    }
+    
 }
 
 new EASL_Event_Subpage_Config();

@@ -7,3 +7,6 @@
 #event_formatdiv, #tagsdiv-publication_tag {
     display: none!important;
 }
+.post-type-event_subpage .wpb_switch-to-front-composer {
+    display: none!important;
+}
