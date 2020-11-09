@@ -28,6 +28,11 @@ if ( $member['first_name'] ) {
 if ( $member['last_name'] ) {
 	$member_name_parts[] = $member['last_name'];
 }
+if ( empty( $member['dotb_mb_id'] ) || ! in_array( $member['dotb_mb_current_status'], array( 'expired', 'active' ) ) ) {
+    $member_profile_url = easl_member_new_membership_form_url( false );
+} elseif ( $member['dotb_mb_current_status'] === 'expired' ) {
+    $member_profile_url = easl_member_new_membership_form_url( true );
+}
 ?>
 <div class="mz-member-card-inner">
     <div class="mz-member-avatar">
