@@ -133,7 +133,7 @@ class EASLAppSubmission
 
         if ($existingSubmission && $existingSubmission->post_status == 'publish') {
             $redirect = get_field( 'member_dashboard_url', 'option' );
-            wp_redirect($redirect . '?application_submitted=1');
+            wp_redirect($redirect . '?application_submitted=' . $existingSubmission->ID);
             die();
         }
     
@@ -164,7 +164,8 @@ class EASLAppSubmission
                 'firstName' => $memberData['first_name'],
                 'lastName' => $memberData['last_name'],
                 'programmeName' => $programme->post_title,
-                'contactEmail' => $contactEmail
+                'contactEmail' => $contactEmail,
+                'programmeId' => $programmeId
             ]);
             update_post_meta($postId, self::SUBMISSION_DATE_META_KEY, time());
             $email = $memberData['email1'];
