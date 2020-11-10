@@ -163,9 +163,13 @@ function easl_mz_menu_attrs( $atts ) {
 	}
 
     $has_membership = easl_mz_user_is_member();
+    $has_membership = easl_mz_user_is_member();
 
     $restricted_urls = easl_mz_get_restricted_urls();
-
+    
+    if ( '/my-membership/' == parse_url(trailingslashit($atts['href']), PHP_URL_PATH) && easl_mz_user_can_access_profile_page() ) {
+        return $atts;
+    }
     if ( in_array($atts['href'], $restricted_urls) && !$has_membership ) {
         $atts['href'] = '#';
         $atts['class'] = 'disabled';
@@ -217,7 +221,13 @@ function easl_mz_user_can_access_url($url) {
 	if ( 'https://learning.easl.eu/' == trailingslashit( $url ) ) {
 		return true;
 	}
+	if ( 'https://learning.easl.eu/' == trailingslashit( $url ) ) {
+		return true;
+	}
 	if ( 'https://easlcampus.eu/' == trailingslashit( $url ) ) {
+		return true;
+	}
+	if ( '/my-membership/' == parse_url(trailingslashit($url), PHP_URL_PATH) && easl_mz_user_can_access_profile_page() ) {
 		return true;
 	}
 
@@ -227,6 +237,11 @@ function easl_mz_user_can_access_url($url) {
         }
     }
     return true;
+}
+
+function easl_mz_user_can_access_profile_page(){
+    $member = easl_mz_get_logged_in_member_data();
+    return $member && !empty( $member['dotb_mb_id'] ) && in_array( $member['dotb_mb_current_status'], array( 'expired', 'active' ) );
 }
 
 function easl_mz_redirect($url) {
