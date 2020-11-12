@@ -17,6 +17,7 @@ foreach ( $events_subpages as $subpage ) {
 }
 ?>
 <div class="ste-content-wrap">
+    <?php get_template_part('partials/event/structured-event/buttons'); ?>
     <?php if ( $current_sub_page ): ?>
         <div class="ste-content">
             <?php

@@ -8188,6 +8188,20 @@ ul.suggestions {
     visibility: visible;
     opacity: 1;
 }
+.ste-buttons-wrap {
+    display: block;
+    margin-bottom: 25px;
+    text-align: right;
+}
+.ste-buttons-wrap .event-button {
+    display: inline-block;
+    min-width: 220px;
+    margin-right: 15px;
+    text-align: left;
+}
+.ste-buttons-wrap .event-button:last-child {
+    margin-right: 0;
+}
 /* Social Shares */
 .easl-social-share-icons {
 }
@@ -11870,7 +11884,9 @@ body #onesignal-bell-container.onesignal-reset.onesignal-bell-container-bottom-r
 }
 
 @media only screen and (max-width: 959px) and (min-width: 768px) {
-
+    .ste-buttons-wrap .event-button {
+        min-width: 178px;
+    }
 }
 
 @media only screen and (min-width: 768px) {
@@ -12929,6 +12945,29 @@ body #onesignal-bell-container.onesignal-reset.onesignal-bell-container-bottom-r
 
     .easl-events-top-buttons {
         justify-content: flex-start;
+    }
+
+    .ste-wrap {
+        display: block;
+    }
+
+    .ste-menu-wrap {
+        width: 100%;
+        margin: 0 0 30px;
+    }
+
+    .ste-content-wrap {
+        width: 100%;
+    }
+
+    .ste-buttons-wrap {
+        text-align: left;
+    }
+
+    .ste-buttons-wrap .event-button {
+        width: 100%;
+        display: block;
+        margin: 0 0 15px;
     }
 
     /*Footer*/
