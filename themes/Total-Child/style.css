@@ -8148,7 +8148,16 @@ ul.suggestions {
     padding: 0 0 20px;
     font-size: 16px;
     font-weight: normal;
-
+    width: 265px;
+    max-width: 100%;
+    z-index: 1;
+}
+.ste-sticky-menu-enabled .ste-menu {
+    position: fixed;
+    top: 102px;
+}
+.admin-bar .ste-sticky-menu-enabled .ste-menu {
+    top: 134px;
 }
 
 .ste-menu li a {
