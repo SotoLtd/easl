@@ -112,17 +112,10 @@ class EASL_MZ_Ajax_Handler {
         }
 		$current_member_id = $this->session->get_current_member_id();
 		if ( ! $current_member_id ) {
-			$current_member_id = $this->api->get_member_id();
-
-			if ( $current_member_id ) {
-				$this->session->add_data( 'member_id', $current_member_id );
-				$this->session->save_session_data();
-			} else {
-				$this->session->unset_auth_cookie( true );
-				$this->respond( 'Member not found!', 404 );
-			}
+			$this->session->unset_auth_cookie( true );
+			$this->respond( 'Member not found!', 404 );
 		}
-		$this->api->get_user_auth_token();
+
 		$member_details = $this->api->get_member_details( $current_member_id, false );
 
 		if ( ! $member_details ) {
@@ -296,15 +289,8 @@ class EASL_MZ_Ajax_Handler {
         }
 		$current_member_id = $this->session->get_current_member_id();
 		if ( ! $current_member_id ) {
-			$current_member_id = $this->api->get_member_id();
-
-			if ( $current_member_id ) {
-				$this->session->add_data( 'member_id', $current_member_id );
-				$this->session->save_session_data();
-			} else {
-				$this->session->unset_auth_cookie( true );
-				$this->respond( 'Member not found!', 404 );
-			}
+			$this->session->unset_auth_cookie( true );
+			$this->respond( 'Member not found!', 404 );
 		}
 		$this->api->get_user_auth_token();
 		$memberships = $this->api->get_members_membership( $current_member_id );
@@ -391,18 +377,11 @@ class EASL_MZ_Ajax_Handler {
             $this->respond( 'Member not logged in!', 401 );
         }
 		$current_member_id = $this->session->get_current_member_id();
-		if ( ! $current_member_id ) {
-			$current_member_id = $this->api->get_member_id();
 
-			if ( $current_member_id ) {
-				$this->session->add_data( 'member_id', $current_member_id );
-				$this->session->save_session_data();
-			}
-		}
 		if ( ! $current_member_id ) {
 			$this->respond( 'Member not found!', 404 );
 		}
-		$member_details = $this->api->get_member_details( $current_member_id );
+		$member_details = $this->api->get_member_details( $current_member_id, false );
 		if ( ! $member_details ) {
 			$this->respond( 'Member ' . $current_member_id . ' not found!', 404 );
 		}
@@ -433,18 +412,11 @@ class EASL_MZ_Ajax_Handler {
             $this->respond( 'Member not logged in!', 401 );
         }
         $current_member_id = $this->session->get_current_member_id();
-        if ( ! $current_member_id ) {
-            $current_member_id = $this->api->get_member_id();
-            
-            if ( $current_member_id ) {
-                $this->session->add_data( 'member_id', $current_member_id );
-                $this->session->save_session_data();
-            }
-        }
+        
         if ( ! $current_member_id ) {
             $this->respond( 'Member not found!', 404 );
         }
-        $member_details = $this->api->get_member_details( $current_member_id );
+        $member_details = $this->api->get_member_details( $current_member_id, false );
         if ( ! $member_details ) {
             $this->respond( 'Member ' . $current_member_id . ' not found!', 404 );
         }
@@ -471,17 +443,9 @@ class EASL_MZ_Ajax_Handler {
         }
 		$current_member_id = $this->session->get_current_member_id();
 		if ( ! $current_member_id ) {
-			$current_member_id = $this->api->get_member_id();
-
-			if ( $current_member_id ) {
-				$this->session->add_data( 'member_id', $current_member_id );
-				$this->session->save_session_data();
-			}
-		}
-		if ( ! $current_member_id ) {
 			$this->respond( 'Member not found!', 404 );
 		}
-		$member_details = $this->api->get_member_details( $current_member_id );
+		$member_details = $this->api->get_member_details( $current_member_id, false );
 		if ( ! $member_details ) {
 			$this->respond( 'Member ' . $current_member_id . ' not found!', 404 );
 		}
@@ -532,14 +496,7 @@ class EASL_MZ_Ajax_Handler {
 		$member_id = $request_data['id'];
 
 		$current_member_id = $this->session->get_current_member_id();
-		if ( ! $current_member_id ) {
-			$current_member_id = $this->api->get_member_id();
 
-			if ( $current_member_id ) {
-				$this->session->add_data( 'member_id', $current_member_id );
-				$this->session->save_session_data();
-			}
-		}
 		if ( ! $current_member_id || ( $current_member_id != $member_id ) ) {
 			$this->respond( 'Member not found!', 404 );
 		}
@@ -782,14 +739,16 @@ class EASL_MZ_Ajax_Handler {
             $redirect = get_site_url();
         }
 
-        $auth_response_status = $this->api->get_auth_token( $request_data['portal_name'], $password, true );
-        if ( ! $auth_response_status ) {
-            $this->respond_file( 'member-login/basic-login-form.php', array( 'redirect_url' => $redirect ), 201 );
-        }
 		// Member authenticated
-		$this->session->set_auth_cookie( $request_data['portal_name'], $this->api->get_credential_data( true ) );
-		$this->session->add_data( 'member_id', $created_member_id );
-		$this->session->save_session_data();
+		$session_data = array(
+			'member_id' => $created_member_id,
+			'email' => $request_data['email1'],
+			'title' => $request_data['salutation'],
+			'first_name' => $request_data['first_name'],
+			'last_name' => $request_data['last_name'],
+		);
+		$this->session->set_auth_cookie( $request_data['portal_name'], $session_data );
+        easl_mz_refresh_logged_in_member_data();
 
 		$this->respond( $redirect, 200 );
 	}
@@ -808,9 +767,7 @@ class EASL_MZ_Ajax_Handler {
 		$member_id = $request_data['id'];
 
 		$current_member_id = $this->session->get_current_member_id();
-		if ( ! $current_member_id ) {
-			$current_member_id = $this->api->get_member_id();
-		}
+
 		if ( ! $current_member_id || ( $current_member_id != $member_id ) ) {
 			$this->respond( 'Member not found!', 404 );
 		}

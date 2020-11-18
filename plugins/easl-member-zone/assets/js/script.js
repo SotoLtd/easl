@@ -654,11 +654,8 @@
                     mzModal.show('<div class="mz-modal-unauthorized">Failed! Please try again.</div>', 'account.create.failed');
                 }
                 if (response.Status === 401) {
-                    mzModal.init();
-                    mzModal.$el.one("mz.modal.hidden.account.create.unauthorized", function () {
-                        //may be refresh here
-                    });
-                    mzModal.show('<div class="mz-modal-unauthorized">Unauthorized! Refresh the page.</div>', 'account.create.unauthorized');
+                    // Member created but login failed - go to sso
+                    window.location.href = response.Html;
                 }
 
                 if (response.Status === 200) {
@@ -1025,10 +1022,10 @@
     };
 
     $(document).ready(function () {
-        $(".easl-mz-header-login-button").on("click", function (event) {
-            event.preventDefault();
-            $(".easl-mz-login-form").toggleClass("easl-active");
-        });
+        // $(".easl-mz-header-login-button").on("click", function (event) {
+        //     event.preventDefault();
+        //     $(".easl-mz-login-form").toggleClass("easl-active");
+        // });
         if (typeof $.fn.select2 !== "undefined") {
             $(".easl-mz-select2").length && $(".easl-mz-select2").select2({
                 closeOnSelect: true,
@@ -1044,7 +1041,11 @@
             url = url.replace(/\/$/, '');
             e.preventDefault();
 
-            $('.sp-modal-login-form input[name="mz_redirect_url"]').val(url);
+            var ssoLink = $('.sso-link');
+            var ssoUrl = ssoLink.attr('href');
+            var updatedUrl = ssoUrl.replace(/(redirect_uri=)[^\&]+/, '$1' + url);
+            console.log(updatedUrl);
+            ssoLink.attr('href', updatedUrl);
             
             $('.sp-modal-overlay').addClass('active');
         });

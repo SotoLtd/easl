@@ -67,18 +67,10 @@ class EASL_MZ_Session_Handler {
 		$this->session_db_id = $session->session_id;
 		$this->_member_login = $session->member_login;
 		$this->_data         = maybe_unserialize( $session->session_value );
-		$api_data            = $this->prepare_api_credential_data();
-
-		if ( $this->api_expired( $api_data ) ) {
-			$this->unset_auth_cookie();
-
-			return false;
-		}
-		easl_mz_get_manager()->getApi()->set_credentials( $api_data );
 	}
 
 	public function api_expired( $api_data ) {
-		if ( empty( $api_data['access_token'] ) || empty( $api_data['refresh_token'] ) || empty( $api_data['expires_in'] ) || empty( $api_data['refresh_expires_in'] ) || empty( $api_data['token_set_time'] ) ) {
+		if ( empty( $api_data['access_token'] )) {
 			return true;
 		}
 		if ( ( $api_data['token_set_time'] + $api_data['refresh_expires_in'] - 10 ) < time() ) {
@@ -88,6 +80,7 @@ class EASL_MZ_Session_Handler {
 		return false;
 	}
 
+	//Currently, we are only getting access_token back from the SSO endpoint, so the others will be empty.  But leaving this code in in case that changes in future.
 	public function prepare_api_credential_data() {
 		$data = array(
 			'access_token'       => '',
@@ -212,10 +205,14 @@ class EASL_MZ_Session_Handler {
 		$defaults     = array(
 			'access_token'       => '',
 			'expires_in'         => '',
-			'scope'              => '',
 			'refresh_token'      => '',
 			'refresh_expires_in' => '',
-			'download_token'     => '',
+			'member_id'          => '',
+			'email'              => '',
+			'title'              => '',
+			'first_name'         => '',
+			'last_name'          => '',
+			'membership_status'  => '',
 			'login'              => time(),
 		);
 		$session_data = wp_parse_args( $data, $defaults );
