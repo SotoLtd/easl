@@ -68,7 +68,8 @@ function easl_admin_bar_menu_change($wp_admin_bar) {
     if(!is_singular('event')) {
         return;
     }
-    $template_format = get_the_terms(get_the_ID(), EASL_Event_Config::get_format_slug());
+    $event_id = get_queried_object_id();
+    $template_format = get_the_terms($event_id, EASL_Event_Config::get_format_slug());
     if($template_format) {
         $template_format = $template_format[0]->slug;
     }else{
@@ -78,7 +79,8 @@ function easl_admin_bar_menu_change($wp_admin_bar) {
         return;
     }
     $current_sub_page_slug = get_query_var( 'easl_event_subpage' );
-    $events_subpages       = get_field( 'event_subpages' );
+    $events_subpages       = get_field( 'event_subpages', $event_id );
+    
     if ( ! $events_subpages ) {
         $events_subpages = array();
     }

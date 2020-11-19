@@ -21,7 +21,21 @@ if ( ! empty( $newsletter['target'] ) ) {
 ?>
 <div class="easl-content-share-row">
 	<div class="easl-sss-share-wrap">
-		<?php echo do_shortcode('[Sassy_Social_Share title="Share"]'); ?>
+		<?php
+        $custom_share_url = '';
+        if(is_singular('event')) {
+            $current_sub_page_slug = get_query_var( 'easl_event_subpage' );
+            if($current_sub_page_slug){
+                $custom_share_url = trailingslashit( untrailingslashit( get_permalink( get_the_ID() ) ) . '/' . $current_sub_page_slug );
+            }
+        }
+        if($custom_share_url){
+            echo do_shortcode('[Sassy_Social_Share title="Share" url="'. $custom_share_url .'"]');
+        }else{
+            echo do_shortcode('[Sassy_Social_Share title="Share"]');
+        }
+        
+		?>
 	</div>
     <?php if ($newsletter_link): ?>
 	<div class="easl-newsletter-wrap">

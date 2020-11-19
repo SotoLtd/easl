@@ -21,6 +21,7 @@ require_once EASL_INC_DIR . 'shortcodes.php';
 require_once EASL_INC_DIR . 'widgets.php';
 require_once EASL_INC_DIR . 'settings.php';
 require_once EASL_INC_DIR . 'sticky-footer.php';
+require_once EASL_INC_DIR . 'wp-seo-extend.php';
 
 function easl_theme_setup() {
 	load_theme_textdomain( 'total-child' );

@@ -68,6 +68,7 @@ class EASL_Event_Subpage_Config {
 			'supports'        => array(
 				'title',
 				'editor',
+                'thumbnail',
 			),
 		) );
 	}

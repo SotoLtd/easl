@@ -78,3 +78,82 @@ function easl_get_template_part( $name, $args = array() ) {
     }
     include $located;
 }
+
+function easl_get_the_event_subpage_id() {
+    if(!is_singular('event')) {
+        return null;
+    }
+    $template_format = get_the_terms(get_the_ID(), EASL_Event_Config::get_format_slug());
+    if($template_format) {
+        $template_format = $template_format[0]->slug;
+    }else{
+        $template_format = '';
+    }
+    if('structured-event' != $template_format) {
+        return null;
+    }
+    $current_sub_page_slug = get_query_var( 'easl_event_subpage' );
+    $events_subpages       = get_field( 'event_subpages' );
+    if ( ! $events_subpages ) {
+        $events_subpages = array();
+    }
+    $current_sub_page = false;
+    foreach ( $events_subpages as $subpage ) {
+        if ( isset( $subpage['slug'] ) && trim( $subpage['slug'] ) == $current_sub_page_slug ) {
+            $current_sub_page = $subpage;
+            break;
+        }
+    }
+    if(!$current_sub_page) {
+        return null;
+    }
+    if ( 'subpage' != $current_sub_page['content_source'] ) {
+        return null;
+    }
+    $subpage_post = get_post( $current_sub_page['subpage'] );
+    if ( !$subpage_post ) {
+        return null;
+    }
+    return $subpage_post->ID;
+}
+
+/**
+ * @return WP_Post|null
+ */
+function easl_get_the_event_subpage() {
+    if(!is_singular('event')) {
+        return null;
+    }
+    $template_format = get_the_terms(get_the_ID(), EASL_Event_Config::get_format_slug());
+    if($template_format) {
+        $template_format = $template_format[0]->slug;
+    }else{
+        $template_format = '';
+    }
+    if('structured-event' != $template_format) {
+        return null;
+    }
+    $current_sub_page_slug = get_query_var( 'easl_event_subpage' );
+    $events_subpages       = get_field( 'event_subpages' );
+    if ( ! $events_subpages ) {
+        $events_subpages = array();
+    }
+    $current_sub_page = false;
+    foreach ( $events_subpages as $subpage ) {
+        if ( isset( $subpage['slug'] ) && trim( $subpage['slug'] ) == $current_sub_page_slug ) {
+            $current_sub_page = $subpage;
+            break;
+        }
+    }
+    if(!$current_sub_page) {
+        return null;
+    }
+    if ( 'subpage' != $current_sub_page['content_source'] ) {
+        return null;
+    }
+    $subpage_post = get_post( $current_sub_page['subpage'] );
+    if ( !$subpage_post ) {
+        return null;
+    }
+    return $subpage_post;
+}
