@@ -25,6 +25,17 @@ $event_submit_abstract_url = trim( get_field( 'event_submit_abstract_url', $even
 $event_register_url        = trim( get_field( 'event_register_url', $event_id ) );
 $event_application_url     = trim( get_field( 'event_application_url', $event_id ) );
 
+
+$event_submit_abstract_title = trim( get_field( 'event_submit_abstract_title', $event_id ) );
+$event_register_title        = trim( get_field( 'event_register_title', $event_id ) );
+
+if ( ! $event_submit_abstract_title ) {
+    $event_submit_abstract_title = __( 'Submit Abstract', 'total-child' );
+}
+if ( ! $event_register_title ) {
+    $event_register_title = __( 'Register', 'total-child' );
+}
+
 $event_abs_btn_sch_type   = get_field( 'event_abs_btn_sch_type', $event_id );
 $event_abs_btn_sch_date_1 = get_field( 'event_abs_btn_sch_date_1', $event_id );
 $event_abs_btn_sch_date_2 = get_field( 'event_abs_btn_sch_date_2', $event_id );
@@ -99,12 +110,11 @@ if ( $header_style ) {
                     </p>
                     <div class="easl-hps-caption-cta-wrap">
 						<?php if ( $abstract_button_show && $event_submit_abstract_url ): ?>
-                            <a class="easl-generic-button easl-color-lightblue" href="<?php echo esc_url( $event_submit_abstract_url ); ?>" target="_blank">Submit
-                                Abstract
+                            <a class="easl-generic-button easl-color-lightblue" href="<?php echo esc_url( $event_submit_abstract_url ); ?>" target="_blank"><?php echo $event_submit_abstract_title ?>
                                 <span class="easl-generic-button-icon"><span class="ticon ticon-chevron-right"></span></span></a>
 						<?php endif; ?>
 						<?php if ( $event_submit_abstract_url && $register_button_show ): ?>
-                            <a class="easl-generic-button easl-color-lightblue" href="<?php echo esc_url( $event_register_url ); ?>" target="_blank">Register
+                            <a class="easl-generic-button easl-color-lightblue" href="<?php echo esc_url( $event_register_url ); ?>" target="_blank"><?php echo $event_register_title; ?>
                                 <span class="easl-generic-button-icon"><span class="ticon ticon-chevron-right"></span></span></a>
 						<?php endif; ?>
                     </div>

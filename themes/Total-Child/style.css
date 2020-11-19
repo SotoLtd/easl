@@ -8198,9 +8198,10 @@ ul.suggestions {
     opacity: 1;
 }
 .ste-buttons-wrap {
-    display: block;
-    margin-bottom: 25px;
-    text-align: right;
+    display: flex;
+    margin-bottom: 10px;
+    justify-content: flex-end;
+    flex-wrap: nowrap;
 }
 .ste-buttons-wrap .event-button {
     display: inline-block;
@@ -12971,6 +12972,7 @@ body #onesignal-bell-container.onesignal-reset.onesignal-bell-container-bottom-r
 
     .ste-buttons-wrap {
         text-align: left;
+        display: block;
     }
 
     .ste-buttons-wrap .event-button {
