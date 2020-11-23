@@ -124,7 +124,7 @@ function easl_get_the_event_subpage() {
     if(!is_singular('event')) {
         return null;
     }
-    $template_format = get_the_terms(get_the_ID(), EASL_Event_Config::get_format_slug());
+    $template_format = get_the_terms($event_id, EASL_Event_Config::get_format_slug());
     if($template_format) {
         $template_format = $template_format[0]->slug;
     }else{
@@ -134,7 +134,13 @@ function easl_get_the_event_subpage() {
         return null;
     }
     $current_sub_page_slug = get_query_var( 'easl_event_subpage' );
-    $events_subpages       = get_field( 'event_subpages' );
+    return easl_get_event_subpage_by_slug(get_the_ID(), $current_sub_page_slug);
+}
+
+
+function easl_get_event_subpage_by_slug($event_id, $current_sub_page_slug) {
+    
+    $events_subpages       = get_field( 'event_subpages', $event_id );
     if ( ! $events_subpages ) {
         $events_subpages = array();
     }
@@ -157,3 +163,4 @@ function easl_get_the_event_subpage() {
     }
     return $subpage_post;
 }
+
