@@ -1565,22 +1565,22 @@ ul.sidr-class-sub-menu > .sidr-class-easl-hide-mobile-submenu {
 
 .easl-page-title-color-blue .page-header.background-image-page-header .page-header-title,
 .easl-page-title-color-blue .page-header.easl-page-header-no-bg .page-header-title {
-    color: #004b87;
+    color: #004b87!important;
 }
 
 .easl-page-title-color-light-blue .page-header.background-image-page-header .page-header-title,
-.easl-page-title-color-blue .page-header.easl-page-header-no-bg .page-header-title {
-    color: #80c4e5;
+.easl-page-title-color-light-blue .page-header.easl-page-header-no-bg .page-header-title {
+    color: #80c4e5!important;
 }
 
 .easl-page-title-color-black .page-header.background-image-page-header .page-header-title,
 .easl-page-title-color-black .page-header.easl-page-header-no-bg .page-header-title {
-    color: #000;
+    color: #000!important;
 }
 
 .easl-page-title-color-white .page-header.background-image-page-header .page-header-title,
 .easl-page-title-color-white .page-header.easl-page-header-no-bg .page-header-title {
-    color: #fff;
+    color: #fff!important;
 }
 
 .page-hedaer-has-title-icon {
@@ -7017,6 +7017,18 @@ ul.suggestions {
     left: 0;
     color: #fff;
 }
+.easl-page-title-color-blue .page-header-title .easl-title-back-link{
+    color: #004b87;
+}
+.easl-page-title-color-light-blue .page-header-title .easl-title-back-link {
+    color: #80c4e5;
+}
+.easl-page-title-color-black .page-header-title .easl-title-back-link {
+    color: #000;
+}
+.easl-page-title-color-white .page-header-title .easl-title-back-link {
+    color: #fff;
+}
 
 .page-header-title .easl-title-back-link .ticon {
     color: #71c5e8;
@@ -7027,7 +7039,7 @@ ul.suggestions {
 }
 
 .page-header-title .easl-title-back-link:hover {
-    color: #71c5e8;
+    color: #71c5e8!important;
     text-decoration: none;
 }
 
