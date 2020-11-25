@@ -986,6 +986,7 @@
 
         function easlResizeEvent() {
             setCardBlockHeight();
+            $(window).trigger('easl_resize_sampled');
         }
 
         function easlScrollEvent() {

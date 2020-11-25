@@ -1,6 +1,6 @@
 <?php
 
-define('EASL_THEME_VERSION', '2020.11.23.03');
+define('EASL_THEME_VERSION', '2020.11.24.01');
 //define( 'EASL_THEME_VERSION', time() );
 
 if ( ! defined( 'EASL_INC_DIR' ) ) {
@@ -18,6 +18,7 @@ require_once EASL_INC_DIR . 'rewrites.php';
 require_once EASL_INC_DIR . 'customizer.php';
 require_once EASL_INC_DIR . 'total-extend.php';
 require_once EASL_INC_DIR . 'shortcodes.php';
+require_once EASL_INC_DIR . 'shortcodes-v2/shortcodes.php';
 require_once EASL_INC_DIR . 'widgets.php';
 require_once EASL_INC_DIR . 'settings.php';
 require_once EASL_INC_DIR . 'sticky-footer.php';
