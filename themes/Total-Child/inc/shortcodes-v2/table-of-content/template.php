@@ -77,14 +77,15 @@ $item_classes[] = $this->get_shape_class( $item_shape );
 $item_classes   = implode( ' ', $item_classes );
 
 if ( count( $items ) > 0 ):
-    
-    wp_enqueue_script(
-        'toc-scripts',
-        get_stylesheet_directory_uri() . '/assets/js/toc.js',
-        array( 'jquery' ),
-        time(),
-        true
-    );
+    if ( 'true' == $sticky_on_scroll ) {
+        wp_enqueue_script(
+            'toc-scripts',
+            get_stylesheet_directory_uri() . '/assets/js/toc.js',
+            array( 'jquery' ),
+            time(),
+            true
+        );
+    }
     ?>
     <div <?php echo $wrapper_attributes; ?>>
         <?php if ( $heading ): ?>
