@@ -10,3 +10,32 @@
 .post-type-event_subpage .wpb_switch-to-front-composer {
     display: none!important;
 }
+
+body .vc_colored-dropdown .blue {
+    background-color: #004b87!important;
+    color: #fff!important;
+}
+.vc_colored-dropdown .lightblue {
+    background-color: #80c4e5!important;
+    color: #fff!important;
+}
+.vc_colored-dropdown .red {
+    background-color: #de2a57!important;
+    color: #fff!important;
+}
+.vc_colored-dropdown .teal {
+    background-color: #189790!important;
+    color: #fff!important;
+}
+.vc_colored-dropdown .orange {
+    background-color: #f26827!important;
+    color: #fff!important;
+}
+.vc_colored-dropdown .grey {
+    background-color: #7e6a73!important;
+    color: #fff!important;
+}
+.vc_colored-dropdown .yellow {
+    background-color: #f9bc49!important;
+    color: #fff!important;
+}

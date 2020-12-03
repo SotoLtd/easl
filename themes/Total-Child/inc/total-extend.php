@@ -294,21 +294,6 @@ function easl_vc_add_params() {
 			'group'      => __( 'Over Image Link', 'total' ),
 		),
 	) );
-	$tour_styles                                     = WPBMap::getParam( 'vc_tta_tour', 'style' );
-	$tour_styles                                     = $tour_styles['value'];
-	$tour_styles[ __( 'EASL Flat', 'total-child' ) ] = 'easl-flat';
-	vc_update_shortcode_param( 'vc_tta_tour', array(
-		'param_name' => 'style',
-		'value'      => $tour_styles
-	) );
-
-	$toggle_styles                                       = WPBMap::getParam( 'vc_toggle', 'style' );
-	$toggle_styles                                       = $toggle_styles['value'];
-	$toggle_styles[ __( 'EASL Toggle', 'total-child' ) ] = 'easl-toggle';
-	vc_update_shortcode_param( 'vc_toggle', array(
-		'param_name' => 'style',
-		'value'      => $toggle_styles
-	) );
 }
 
 add_action( 'vc_after_init', 'easl_vc_add_params', 40 );

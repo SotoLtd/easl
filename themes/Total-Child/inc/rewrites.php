@@ -24,6 +24,9 @@ function easl_event_subpage_checks( $posts, $query ) {
     $found_subpage   = false;
     $subpage_request = $query->get( 'easl_event_subpage' );
     foreach ( $events_subpage_slugs as $subpage ) {
+        if(!current_user_can('edit_posts' ) && !empty($subpage['status']) && 'draft' == $subpage['status']) {
+            continue;
+        }
         if ( ! empty( $subpage['slug'] ) && trim( $subpage['slug'] ) == $subpage_request ) {
             $found_subpage = true;
             break;

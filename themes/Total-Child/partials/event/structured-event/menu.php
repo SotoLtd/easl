@@ -12,6 +12,9 @@ $draft_or_pending = get_post_status( get_the_ID() ) && in_array( get_post_status
         <ul class="ste-menu">
             <?php while ( have_rows( 'event_subpages' ) ):
                 the_row( 'event_subpages' );
+                if ( ! current_user_can( 'edit_posts' ) && 'draft' == get_sub_field( 'status' ) ) {
+                    continue;
+                }
                 $title = get_sub_field( 'title' );
                 if ( ! $title ) {
                     continue;

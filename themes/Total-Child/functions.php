@@ -1,6 +1,6 @@
 <?php
 
-define('EASL_THEME_VERSION', '2020.11.24.01');
+define('EASL_THEME_VERSION', '2020.11.26.07');
 //define( 'EASL_THEME_VERSION', time() );
 
 if ( ! defined( 'EASL_INC_DIR' ) ) {
@@ -16,6 +16,7 @@ require_once EASL_INC_DIR . 'custom-tax-news-source.php';
 require_once EASL_INC_DIR . 'post-types/post-types.php';
 require_once EASL_INC_DIR . 'rewrites.php';
 require_once EASL_INC_DIR . 'customizer.php';
+require_once EASL_INC_DIR . 'page-builder-extend.php';
 require_once EASL_INC_DIR . 'total-extend.php';
 require_once EASL_INC_DIR . 'shortcodes.php';
 require_once EASL_INC_DIR . 'shortcodes-v2/shortcodes.php';
@@ -56,6 +57,7 @@ function total_child_enqueue_parent_theme_style() {
 			EASL_THEME_VERSION
 		);
 	}
+    wp_register_style( 'vc_tta_style', get_stylesheet_directory_uri() . '/assets/css/js_composer_tta.css', false, EASL_THEME_VERSION );
 }
 
 add_action( 'wp_enqueue_scripts', 'total_child_enqueue_parent_theme_style' );

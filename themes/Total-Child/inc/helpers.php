@@ -124,6 +124,7 @@ function easl_get_the_event_subpage() {
     if(!is_singular('event')) {
         return null;
     }
+    $event_id = get_queried_object_id();
     $template_format = get_the_terms($event_id, EASL_Event_Config::get_format_slug());
     if($template_format) {
         $template_format = $template_format[0]->slug;
@@ -134,7 +135,7 @@ function easl_get_the_event_subpage() {
         return null;
     }
     $current_sub_page_slug = get_query_var( 'easl_event_subpage' );
-    return easl_get_event_subpage_by_slug(get_the_ID(), $current_sub_page_slug);
+    return easl_get_event_subpage_by_slug($event_id, $current_sub_page_slug);
 }
 
 
