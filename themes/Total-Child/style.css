@@ -1354,7 +1354,7 @@ body #site-navigation .dropdown-menu a {
 }
 
 #site-navigation .dropdown-menu > li > a {
-    padding: 0 15px;
+    padding: 0 13px;
     height: 40px;
     line-height: 40px;
 }
@@ -5417,7 +5417,7 @@ ul.event-links-list li:before {
 .pub-content .single-publication-title {
     font-size: 26px;
     line-height: 30px;
-    margin: 0 0 0px;
+    margin: 0 0 15px;
 }
 
 .pub-content .pub-section-title {
