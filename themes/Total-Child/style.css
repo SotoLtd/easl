@@ -8202,6 +8202,110 @@ ul.suggestions {
 .ste-buttons-wrap .event-button:last-child {
     margin-right: 0;
 }
+.ste-twitter-feed {
+
+}
+.ste-twitter-feed #ctf .ctf-header {
+    padding: 0;
+}
+.ste-twitter-feed #ctf .ctf-header-name {
+    padding-top: 14px;
+    display: inline-block;
+}
+
+.ste-twitter-feed-bg #ctf {
+    padding-top: 15px;
+}
+.ste-twitter-feed-bg #ctf .ctf-item,
+.ste-twitter-feed-bg #ctf .ctf-header{
+    padding-left: 10px;
+    padding-right: 10px;
+}
+.ste-twitter-feed-bg #ctf .ctf-header{
+    padding-bottom: 10px;
+}
+
+.ste-twitter-feed #ctf .ctf-header .ctf-header-link .ctf-header-follow {
+    margin: 0;
+}
+.ste-twitter-feed-blue .ctf-tweet-text a,
+.ste-twitter-feed-blue #ctf.ctf-narrow .ctf-corner-logo,
+.ste-twitter-feed-blue #ctf .ctf-header-name,
+.ste-twitter-feed-blue #ctf .ctf-author-name {
+    color: #004b87!important;
+}
+.ste-twitter-feed-lightblue .ctf-tweet-text a,
+.ste-twitter-feed-lightblue #ctf.ctf-narrow .ctf-corner-logo,
+.ste-twitter-feed-lightblue #ctf .ctf-header-name,
+.ste-twitter-feed-lightblue #ctf .ctf-author-name {
+    color: #80c4e5!important;
+}
+.ste-twitter-feed-red .ctf-tweet-text a,
+.ste-twitter-feed-red #ctf.ctf-narrow .ctf-corner-logo,
+.ste-twitter-feed-red #ctf .ctf-header-name,
+.ste-twitter-feed-red #ctf .ctf-author-name {
+    color: #de2a57!important;
+}
+.ste-twitter-feed-teal .ctf-tweet-text a,
+.ste-twitter-feed-teal #ctf.ctf-narrow .ctf-corner-logo,
+.ste-twitter-feed-teal #ctf .ctf-header-name,
+.ste-twitter-feed-teal #ctf .ctf-author-name {
+    color: #189790!important;
+}
+.ste-twitter-feed-orange .ctf-tweet-text a,
+.ste-twitter-feed-orange #ctf.ctf-narrow .ctf-corner-logo,
+.ste-twitter-feed-orange #ctf .ctf-header-name,
+.ste-twitter-feed-orange #ctf .ctf-author-name {
+    color: #f26827!important;
+}
+.ste-twitter-feed-grey .ctf-tweet-text a,
+.ste-twitter-feed-grey #ctf.ctf-narrow .ctf-corner-logo,
+.ste-twitter-feed-grey #ctf .ctf-header-name,
+.ste-twitter-feed-grey #ctf .ctf-author-name {
+    color: #7e6a73!important;
+}
+.ste-twitter-feed-yellow .ctf-tweet-text a,
+.ste-twitter-feed-yellow #ctf.ctf-narrow .ctf-corner-logo,
+.ste-twitter-feed-yellow #ctf .ctf-header-name,
+.ste-twitter-feed-yellow #ctf .ctf-author-name {
+    color: #f9bc49!important;
+}
+
+.ste-twitter-feed-blue #ctf .ctf-header .ctf-header-follow,
+.ste-twitter-feed-blue #ctf .ctf-header-generic-icon,
+.ste-twitter-feed-blue #ctf .ctf-header-img-hover {
+    background-color: #004b87!important;
+}
+.ste-twitter-feed-lightblue #ctf .ctf-header .ctf-header-follow,
+.ste-twitter-feed-lightblue #ctf .ctf-header-generic-icon,
+.ste-twitter-feed-lightblue #ctf .ctf-header-img-hover {
+    background-color: #80c4e5!important;
+}
+.ste-twitter-feed-red #ctf .ctf-header .ctf-header-follow,
+.ste-twitter-feed-red #ctf .ctf-header-generic-icon,
+.ste-twitter-feed-red #ctf .ctf-header-img-hover {
+    background-color: #de2a57!important;
+}
+.ste-twitter-feed-teal #ctf .ctf-header .ctf-header-follow,
+.ste-twitter-feed-teal #ctf .ctf-header-generic-icon,
+.ste-twitter-feed-teal #ctf .ctf-header-img-hover {
+    background-color: #189790!important;
+}
+.ste-twitter-feed-orange #ctf .ctf-header .ctf-header-follow,
+.ste-twitter-feed-orange #ctf .ctf-header-generic-icon,
+.ste-twitter-feed-orange #ctf .ctf-header-img-hover {
+    background-color: #f26827!important;
+}
+.ste-twitter-feed-grey #ctf .ctf-header .ctf-header-follow,
+.ste-twitter-feed-grey #ctf .ctf-header-generic-icon,
+.ste-twitter-feed-grey #ctf .ctf-header-img-hover {
+    background-color: #7e6a73!important;
+}
+.ste-twitter-feed-yellow #ctf .ctf-header .ctf-header-follow,
+.ste-twitter-feed-yellow #ctf .ctf-header-generic-icon,
+.ste-twitter-feed-yellow #ctf .ctf-header-img-hover {
+    background-color: #f9bc49!important;
+}
 /* Social Shares */
 .easl-social-share-icons {
 }
@@ -10272,12 +10376,12 @@ body .easl-nas-contribute-form .gform_wrapper img.ui-datepicker-trigger {
     background-color: #7e6a73;
 }
 
-.easl-bgtext-box.easl-bg-color-light-gray {
+.easl-bgtext-box.easl-bg-color-gray {
     background-color: #f5f5f5;
     color: #004b87;
 }
 
-.easl-bgtext-box.easl-bg-color-light-yellow {
+.easl-bgtext-box.easl-bg-color-yellow {
     background-color: #f9bc49;
     color: #004b87;
 }
