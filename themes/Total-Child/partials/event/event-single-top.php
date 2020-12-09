@@ -84,15 +84,13 @@ if ( ! $event_register_title ) {
                     <div class="wpb_wrapper">
                         <div class="easl-events-top-buttons">
 							<?php if ( $event_application_url ): ?>
-                                <a class="event-button event-button-wide event-button-icon event-button-icon-person event-button-apply" style="padding-top: 8px;
-                                                      padding-bottom: 8px;" href="<?php echo esc_url( $event_application_url ); ?>" target="_blank">Apply</a>
+                                <a class="event-button event-button-wide event-button-icon event-button-icon-person event-button-apply" href="<?php echo esc_url( $event_application_url ); ?>" target="_blank">Apply</a>
 							<?php else: ?>
 								<?php if ( $event_submit_abstract_url ): ?>
-                                    <a class="event-button event-button-wide event-button-icon event-button-icon-application" style="padding-top: 8px; padding-bottom: 8px;" href="<?php echo esc_url( $event_submit_abstract_url ); ?>" target="_blank"><?php echo $event_submit_abstract_title; ?></a>
+                                    <a class="event-button event-button-wide event-button-icon event-button-icon-application"  href="<?php echo esc_url( $event_submit_abstract_url ); ?>" target="_blank"><?php echo $event_submit_abstract_title; ?></a>
 								<?php endif; ?>
 								<?php if ( $event_register_url ): ?>
-                                    <a class="event-button event-button-wide event-button-icon event-button-icon-person" style="padding-top: 8px;
-                                                      padding-bottom: 8px;" href="<?php echo esc_url( $event_register_url ); ?>" target="_blank"><?php echo $event_register_title; ?></a>
+                                    <a class="event-button event-button-wide event-button-icon event-button-icon-person" href="<?php echo esc_url( $event_register_url ); ?>" target="_blank"><?php echo $event_register_title; ?></a>
 								<?php endif; ?>
 							<?php endif; ?>
                         </div>

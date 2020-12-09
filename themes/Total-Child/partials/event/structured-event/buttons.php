@@ -33,11 +33,10 @@ $register_button_show = easl_validate_schedule( $event_reg_btn_sch_type, $event_
 
 	<div class="ste-buttons-wrap">
 		<?php if ( $abstract_button_show && $event_submit_abstract_url ): ?>
-			<a class="event-button event-button-icon event-button-icon-application" style="padding-top: 8px; padding-bottom: 8px;" href="<?php echo esc_url( $event_submit_abstract_url ); ?>" target="_blank"><?php echo $event_submit_abstract_title; ?></a>
+			<a class="event-button event-button-icon event-button-icon-application" href="<?php echo esc_url( $event_submit_abstract_url ); ?>" target="_blank"><?php echo $event_submit_abstract_title; ?></a>
 		<?php endif; ?>
 		<?php if ( $event_register_url && $register_button_show ): ?>
-			<a class="event-button event-button-icon event-button-icon-person" style="padding-top: 8px;
-                                                      padding-bottom: 8px;" href="<?php echo esc_url( $event_register_url ); ?>" target="_blank"><?php echo $event_register_title; ?></a>
+			<a class="event-button event-button-icon event-button-icon-person" href="<?php echo esc_url( $event_register_url ); ?>" target="_blank"><?php echo $event_register_title; ?></a>
 		<?php endif; ?>
 	</div>
 <?php endif; ?>
