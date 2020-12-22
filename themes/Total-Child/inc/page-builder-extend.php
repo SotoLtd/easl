@@ -7,6 +7,8 @@ if ( ! defined( 'ABSPATH' ) ) {
 add_action( 'vc_after_init', 'easl_vc_modify_existing_shortcode_params', 40 );
 add_filter( 'vc_tta_accordion_general_classes', 'easl_tta_sc_css_classes', 20, 3 );
 add_filter( 'vc_shortcodes_custom_css', 'easl_vc_shortcodes_custom_css', 20, 2 );
+add_filter( 'vc-tta-get-params-tabs-list', 'easl_vc_tta_tabs_list', 20, 4 );
+add_filter( 'tiny_mce_before_init', 'easl_tiny_mce_settings', 20, 2 );
 
 function easl_tta_sc_css_classes( $classes, $atts ) {
     if ( in_array( 'vc_tta-tabs', $classes ) && ! empty( $atts['tab_position'] ) && in_array( $atts['tab_position'], array(
@@ -148,6 +150,24 @@ function easl_vc_modify_existing_shortcode_params() {
             'param_name'       => 'title',
             'edit_field_class' => 'vc_col-sm-12',
         ) );
+        // vc_tta_section
+        vc_add_param( 'vc_tta_section', array(
+            'type'  => 'dropdown',
+            'param_name'  => 'color',
+            'heading'     => esc_html__( 'Section or Tab Title Color', 'js_composer' ),
+            'value'       => array(
+                __( 'Default', 'total-child' )               => '',
+                __( 'Primary(Blue)', 'total-child' )         => 'blue',
+                __( 'Secondary(Light Blue)', 'total-child' ) => 'lightblue',
+                __( 'Red', 'total-child' )                   => 'red',
+                __( 'Teal', 'total-child' )                  => 'teal',
+                __( 'Orange', 'total-child' )                => 'orange',
+                __( 'Grey', 'total-child' )                  => 'grey',
+                __( 'Yellow', 'total-child' )                => 'yellow',
+            ),
+            'description' => esc_html__( 'Select section/tab title bg color.', 'js_composer' ),
+            'weight' => 1,
+        ) );
     } catch ( Exception $e ) {
         unset( $e );
     }
@@ -162,4 +182,62 @@ function easl_vc_shortcodes_custom_css($custom_css, $post_id) {
         return $custom_css;
     }
     return $custom_css . get_metadata( 'post', $event_subpage->ID, '_wpb_shortcodes_custom_css', true );
+}
+
+function easl_vc_tta_tabs_list($html, $atts, $content, $sc_instance) {
+    $isPageEditabe = vc_is_page_editable();
+    $html = array();
+    $html[] = '<div class="vc_tta-tabs-container">';
+    $html[] = '<ul class="vc_tta-tabs-list">';
+    if ( ! $isPageEditabe ) {
+        $active_section = $sc_instance->getActiveSection( $atts, false );
+        
+        foreach ( WPBakeryShortCode_Vc_Tta_Section::$section_info as $nth => $section ) {
+            $classes = array( 'vc_tta-tab' );
+            if ( ( $nth + 1 ) === $active_section ) {
+                $classes[] = $sc_instance->activeClass;
+            }
+            
+            if(!empty($section['color'])) {
+                $classes[] = 'easl-color-' . $section['color'];
+            }
+            
+            $title = '<span class="vc_tta-title-text">' . $section['title'] . '</span>';
+            if ( 'true' === $section['add_icon'] ) {
+                $icon_html = $sc_instance->constructIcon( $section );
+                if ( 'left' === $section['i_position'] ) {
+                    $title = $icon_html . $title;
+                } else {
+                    $title = $title . $icon_html;
+                }
+            }
+            $a_html = '<a href="#' . $section['tab_id'] . '" data-vc-tabs data-vc-container=".vc_tta">' . $title . '</a>';
+            $html[] = '<li class="' . implode( ' ', $classes ) . '" data-vc-tab>' . $a_html . '</li>';
+        }
+    }
+    
+    $html[] = '</ul>';
+    $html[] = '</div>';
+    return $html;
+}
+
+
+function easl_tiny_mce_settings($mceInit, $editor_id) {
+    //textcolor_map, $mceInit, $editor_id
+    $mceInit['textcolor_map'] = json_encode(array(
+        '5BC2E7', 'Light Blue',
+        '004B87', 'Blue',
+        '523178', 'Purple',
+        '101820', 'Black',
+        'A2ACAB', 'Grey',
+        'EF3340', 'Red 1',
+        'FF6720', 'Orange',
+        '508541', 'Green',
+        '826B6A', 'Brown',
+        'DB0B5B', 'Red 2',
+        '1A9586', 'Teal',
+        'FFBF3F', 'Yellow'
+    ));
+    
+    return $mceInit;
 }

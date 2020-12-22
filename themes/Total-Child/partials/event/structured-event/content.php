@@ -33,3 +33,7 @@ foreach ( $events_subpages as $subpage ) {
         </div>
     <?php endif; ?>
 </div>
+<div class="ste-mobile-content easl-hide-desktop">
+    <?php get_template_part('partials/event/structured-event/menu-bellow-widgets'); ?>
+    <?php get_template_part('partials/event/structured-event/twitter-feed'); ?>
+</div>

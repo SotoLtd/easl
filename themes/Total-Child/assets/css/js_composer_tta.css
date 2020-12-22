@@ -227,48 +227,45 @@
 
 }
 
-.vc_tta-color-blue .vc_tta-panel .vc_tta-panel-title > a {
+.vc_tta-color-blue .vc_tta-panel .vc_tta-panel-title > a,
+.vc_tta-panel .vc_tta-panel-heading.easl-color-blue .vc_tta-panel-title > a  {
     background-color: #004b87;
     color: #fff
 }
 
 
-.vc_tta-color-lightblue .vc_tta-panel .vc_tta-panel-title > a {
+.vc_tta-color-lightblue .vc_tta-panel .vc_tta-panel-title > a,
+.vc_tta-panel .vc_tta-panel-heading.easl-color-lightblue .vc_tta-panel-title > a {
     background-color: #80c4e5;
     color: #fff
 }
 
-.vc_tta-color-red .vc_tta-panel .vc_tta-panel-title > a {
+.vc_tta-color-red .vc_tta-panel .vc_tta-panel-title > a,
+.vc_tta-panel .vc_tta-panel-heading.easl-color-red .vc_tta-panel-title > a {
     background-color: #de2a57;
     color: #fff
 }
 
-.vc_tta-color-red .vc_tta-tab > a {
-    background-color: #de2a57;
-    color: #fff
-}
-
-.vc_tta-color-teal .vc_tta-panel .vc_tta-panel-title > a {
+.vc_tta-color-teal .vc_tta-panel .vc_tta-panel-title > a,
+.vc_tta-panel .vc_tta-panel-heading.easl-color-teal .vc_tta-panel-title > a {
     background-color: #189790;
     color: #fff
 }
 
-.vc_tta-color-teal .vc_tta-tab > a {
-    background-color: #189790;
-    color: #fff
-}
-
-.vc_tta-color-orange .vc_tta-panel .vc_tta-panel-title > a {
+.vc_tta-color-orange .vc_tta-panel .vc_tta-panel-title > a,
+.vc_tta-panel .vc_tta-panel-heading.easl-color-orange .vc_tta-panel-title > a {
     background-color: #f26827;
     color: #fff
 }
 
-.vc_tta-color-grey .vc_tta-panel .vc_tta-panel-title > a {
+.vc_tta-color-grey .vc_tta-panel .vc_tta-panel-title > a,
+.vc_tta-panel .vc_tta-panel-heading.easl-color-grey.vc_tta-panel-title > a {
     background-color: #7e6a73;
     color: #fff
 }
 
-.vc_tta-color-yellow .vc_tta-panel .vc_tta-panel-title > a {
+.vc_tta-color-yellow .vc_tta-panel .vc_tta-panel-title > a,
+.vc_tta-panel .vc_tta-panel-heading.easl-color-yellow .vc_tta-panel-title > a {
     background-color: #f9bc49;
     color: #fff
 }
@@ -334,32 +331,39 @@
     border: 0 none;
 }
 
-.vc_tta-color-blue.vc_tta-style-outline .vc_tta-panel .vc_tta-panel-title > a {
+.vc_tta-color-blue.vc_tta-style-outline .vc_tta-panel .vc_tta-panel-title > a,
+.vc_tta-style-outline .vc_tta-panel .vc_tta-panel-heading.easl-color-blue .vc_tta-panel-title > a {
     color: #004b87
 }
 
 
-.vc_tta-color-lightblue.vc_tta-style-outline .vc_tta-panel .vc_tta-panel-title > a {
+.vc_tta-color-lightblue.vc_tta-style-outline .vc_tta-panel .vc_tta-panel-title > a,
+.vc_tta-style-outline .vc_tta-panel .vc_tta-panel-heading.easl-color-lightblue .vc_tta-panel-title > a {
     color: #80c4e5
 }
 
-.vc_tta-color-red.vc_tta-style-outline .vc_tta-panel .vc_tta-panel-title > a {
+.vc_tta-color-red.vc_tta-style-outline .vc_tta-panel .vc_tta-panel-title > a,
+.vc_tta-style-outline .vc_tta-panel .vc_tta-panel-heading.easl-color-red .vc_tta-panel-title > a {
     color: #de2a57
 }
 
-.vc_tta-color-teal.vc_tta-style-outline .vc_tta-panel .vc_tta-panel-title > a {
+.vc_tta-color-teal.vc_tta-style-outline .vc_tta-panel .vc_tta-panel-title > a,
+.vc_tta-style-outline .vc_tta-panel .vc_tta-panel-heading.easl-color-teal .vc_tta-panel-title > a {
     color: #189790
 }
 
-.vc_tta-color-orange.vc_tta-style-outline .vc_tta-panel .vc_tta-panel-title > a {
+.vc_tta-color-orange.vc_tta-style-outline .vc_tta-panel .vc_tta-panel-title > a,
+.vc_tta-style-outline .vc_tta-panel .vc_tta-panel-heading.easl-color-orange .vc_tta-panel-title > a {
     color: #f26827
 }
 
-.vc_tta-color-grey.vc_tta-style-outline .vc_tta-panel .vc_tta-panel-title > a {
+.vc_tta-color-grey.vc_tta-style-outline .vc_tta-panel .vc_tta-panel-title > a,
+.vc_tta-style-outline .vc_tta-panel .vc_tta-panel-heading.easl-color-grey .vc_tta-panel-title > a {
     color: #7e6a73
 }
 
-.vc_tta-color-yellow.vc_tta-style-outline .vc_tta-panel .vc_tta-panel-title > a {
+.vc_tta-color-yellow.vc_tta-style-outline .vc_tta-panel .vc_tta-panel-title > a,
+.vc_tta-style-outline .vc_tta-panel .vc_tta-panel-heading.easl-color-yellow .vc_tta-panel-title > a {
     color: #f9bc49;
 }
 
@@ -388,10 +392,6 @@
     margin: 0
 }
 
-.vc_tta.vc_tta-o-no-fill.vc_tta-tabs-position-bottom .vc_tta-panel-body, .vc_tta.vc_tta-o-no-fill.vc_tta-tabs-position-top .vc_tta-panel-body {
-    padding-left: 0;
-    padding-right: 0
-}
 
 .vc_tta.vc_tta-o-no-fill.vc_tta-tabs-position-left .vc_tta-panel-body, .vc_tta.vc_tta-o-no-fill.vc_tta-tabs-position-right .vc_tta-panel-body {
     padding-top: 0;
@@ -747,61 +747,108 @@
 .vc_tta-color-yellow.vcsc_tta-tab .vc_tta-tabs-container {
     border-color: #f9bc49;
 }
+.vc_tta.vc_general.vcsc_tta-tab-top .vc_tta-tabs-list{
+    margin-bottom: -4px;
+}
 .vcsc_tta-tab .vc_tta-tab > a {
     background-color: #80c4e5;
     color: #fff;
     margin-right: 4px;
+    margin-bottom: 4px;
     display: block;
     font-family: "KnockoutHTF51Middleweight";
     font-size: 17px;
     line-height: 23px;
     padding: 15px 12px 13px;
 }
-.vcsc_tta-tab .vc_tta-tab.vc_active > a,
-.vcsc_tta-tab .vc_tta-tab > a:hover {
-    background-color: #004b87!important;
-}
 
 .vcsc_tta-tab .vc_tta-tab:last-child > a {
     margin-right: 0;
 }
 
-.vc_tta-color-blue.vcsc_tta-tab .vc_tta-tab > a {
+.vc_tta-color-blue.vcsc_tta-tab .vc_tta-tab > a,
+.vcsc_tta-tab.vc_tta .vc_tta-tab.easl-color-blue > a {
     background-color: #004b87;
 }
 
 
-.vc_tta-color-lightblue.vcsc_tta-tab .vc_tta-tab > a {
+.vc_tta-color-lightblue.vcsc_tta-tab .vc_tta-tab > a,
+.vcsc_tta-tab.vc_tta .vc_tta-tab.easl-color-lightblue > a {
     background-color: #80c4e5;
 }
-.vc_tta-color-lightblue.vcsc_tta-tab .vc_tta-tab.vc_active > a,
-.vc_tta-color-lightblue.vcsc_tta-tab .vc_tta-tab > a:hover {
-    background-color: #004b87!important;;
-}
 
-.vc_tta-color-red.vcsc_tta-tab .vc_tta-tab > a{
+.vc_tta-color-red.vcsc_tta-tab .vc_tta-tab > a,
+.vcsc_tta-tab.vc_tta .vc_tta-tab.easl-color-red > a{
     background-color: #de2a57;
 }
 
-.vc_tta-color-teal.vcsc_tta-tab .vc_tta-tab > a {
+.vc_tta-color-teal.vcsc_tta-tab .vc_tta-tab > a,
+.vcsc_tta-tab.vc_tta .vc_tta-tab.easl-color-teal > a {
     background-color: #189790;
 }
 
-.vc_tta-color-teal.vcsc_tta-tab .vc_tta-tab > a {
-    background-color: #189790;
-}
-
-.vc_tta-color-orange.vcsc_tta-tab .vc_tta-tab > a {
+.vc_tta-color-orange.vcsc_tta-tab .vc_tta-tab > a,
+.vcsc_tta-tab.vc_tta .vc_tta-tab.easl-color-orange > a {
     background-color: #f26827;
 }
 
-.vc_tta-color-grey.vcsc_tta-tab .vc_tta-tab > a {
+.vc_tta-color-grey.vcsc_tta-tab .vc_tta-tab > a,
+.vcsc_tta-tab.vc_tta .vc_tta-tab.easl-color-grey > a {
     background-color: #7e6a73;
 }
 
-.vc_tta-color-yellow.vcsc_tta-tab .vc_tta-tab > a{
+.vc_tta-color-yellow.vcsc_tta-tab .vc_tta-tab > a,
+.vcsc_tta-tab.vc_tta .vc_tta-tab.easl-color-yellow > a{
     background-color: #f9bc49;
 }
+.vcsc_tta-tab.vc_tta .vc_tta-tab.vc_active > a,
+.vcsc_tta-tab.vc_tta.vc_general .vc_tta-tab > a:hover {
+    background-color: #e1e1e1;;
+    color: #004b87;
+}
+
+.vc_tta-color-blue.vcsc_tta-tab.vc_tta .vc_tta-tab.vc_active > a,
+.vcsc_tta-tab.vc_tta.vc_general .vc_tta-tab.easl-color-blue.vc_active > a,
+.vcsc_tta-tab.vc_tta.vc_general .vc_tta-tab.easl-color-blue > a:hover {
+    color: #004b87;
+}
+
+.vc_tta-color-lightblue.vcsc_tta-tab.vc_tta .vc_tta-tab.vc_active > a,
+.vcsc_tta-tab.vc_tta.vc_general .vc_tta-tab.easl-color-lightblue.vc_active > a,
+.vcsc_tta-tab.vc_tta.vc_general .vc_tta-tab.easl-color-lightblue > a:hover {
+    color: #80c4e5;
+}
+
+.vc_tta-color-red.vcsc_tta-tab.vc_tta .vc_tta-tab.vc_active > a,
+.vcsc_tta-tab.vc_tta.vc_general .vc_tta-tab.easl-color-red.vc_active > a,
+.vcsc_tta-tab.vc_tta.vc_general .vc_tta-tab.easl-color-red > a:hover {
+    color: #de2a57;
+}
+
+.vc_tta-color-teal.vcsc_tta-tab.vc_tta .vc_tta-tab.vc_active > a,
+.vcsc_tta-tab.vc_tta.vc_general .vc_tta-tab.easl-color-teal.vc_active > a,
+.vcsc_tta-tab.vc_tta.vc_general .vc_tta-tab.easl-color-teal > a:hover {
+    color: #189790;
+}
+
+.vc_tta-color-orange.vcsc_tta-tab.vc_tta .vc_tta-tab.vc_active > a,
+.vcsc_tta-tab.vc_tta.vc_general .vc_tta-tab.easl-color-orange.vc_active > a,
+.vcsc_tta-tab.vc_tta.vc_general .vc_tta-tab.easl-color-orange > a:hover {
+    color: #f26827;
+}
+
+.vc_tta-color-grey.vcsc_tta-tab.vc_tta .vc_tta-tab.vc_active > a,
+.vcsc_tta-tab.vc_tta.vc_general .vc_tta-tab.easl-color-grey.vc_active > a,
+.vcsc_tta-tab.vc_tta.vc_general .vc_tta-tab.easl-color-grey > a:hover {
+    color: #7e6a73;
+}
+
+.vc_tta-color-yellow.vcsc_tta-tab.vc_tta .vc_tta-tab.vc_active > a,
+.vcsc_tta-tab.vc_tta.vc_general .vc_tta-tab.easl-color-yellow.vc_active > a,
+.vcsc_tta-tab.vc_tta.vc_general .vc_tta-tab.easl-color-yellow > a:hover {
+    color: #f9bc49;
+}
+
 .vc_tta-o-no-fill.vcsc_tta-tab .vc_tta-panel-body {
     padding-left: 20px;
     padding-right: 20px;
@@ -973,36 +1020,43 @@
     padding: 15px 12px 13px;
 }
 
-.vc_tta-color-blue.vcsc_tta-tour .vc_tta-tab > a {
+.vc_tta-color-blue.vcsc_tta-tour .vc_tta-tab > a,
+.vcsc_tta-tour.vc_tta .vc_tta-tab.easl-color-blue > a {
     color: #004b87;
 }
 
-.vc_tta-color-lightblue.vcsc_tta-tour .vc_tta-tab > a {
+.vc_tta-color-lightblue.vcsc_tta-tour .vc_tta-tab > a,
+.vcsc_tta-tour.vc_tta .vc_tta-tab.easl-color-lightblue > a {
     color: #80c4e5;
 }
 
-.vc_tta-color-red.vcsc_tta-tour .vc_tta-tab > a {
+.vc_tta-color-red.vcsc_tta-tour .vc_tta-tab > a,
+.vcsc_tta-tour.vc_tta .vc_tta-tab.easl-color-red > a {
     color: #de2a57;
 }
 
-.vc_tta-color-teal.vcsc_tta-tour .vc_tta-tab > a {
+.vc_tta-color-teal.vcsc_tta-tour .vc_tta-tab > a,
+.vcsc_tta-tour.vc_tta .vc_tta-tab.easl-color-teal > a {
     color: #189790;
 }
 
-.vc_tta-color-orange.vcsc_tta-tour .vc_tta-tab > a {
+.vc_tta-color-orange.vcsc_tta-tour .vc_tta-tab > a,
+.vcsc_tta-tour.vc_tta .vc_tta-tab.easl-color-orange > a {
     color: #f26827;
 }
 
-.vc_tta-color-grey.vcsc_tta-tour .vc_tta-tab > a {
+.vc_tta-color-grey.vcsc_tta-tour .vc_tta-tab > a,
+.vcsc_tta-tour.vc_tta .vc_tta-tab.easl-color-grey > a {
     color: #7e6a73;
 }
 
-.vc_tta-color-yellow.vcsc_tta-tour .vc_tta-tab > a {
+.vc_tta-color-yellow.vcsc_tta-tour .vc_tta-tab > a,
+.vcsc_tta-tour.vc_tta .vc_tta-tab.easl-color-yellow > a {
     color: #f9bc49;
 }
 
-.vcsc_tta-tour .vc_tta-tab.vc_active > a,
-.vcsc_tta-tour .vc_tta-tab > a:hover {
+.vcsc_tta-tour.vc_tta .vc_tta-tab.vc_active > a,
+.vcsc_tta-tour.vc_tta .vc_tta-tab > a:hover {
     background-color: #e1e1e1;
     text-decoration: none;
 }

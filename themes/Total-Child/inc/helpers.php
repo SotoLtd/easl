@@ -165,3 +165,20 @@ function easl_get_event_subpage_by_slug($event_id, $current_sub_page_slug) {
     return $subpage_post;
 }
 
+
+function easl_vc_get_brand_colors() {
+    return array(
+        __( 'Light Blue', 'total-child' ) => 'lightblue',
+        __( 'Blue', 'total-child' )       => 'blue',
+        __( 'Purple', 'total-child' )     => 'purple',
+        __( 'Black', 'total-child' )      => 'black',
+        __( 'Grey', 'total-child' )       => 'grey',
+        __( 'Red 1', 'total-child' )      => 'red',
+        __( 'Red 2', 'total-child' )      => 'red2',
+        __( 'Green', 'total-child' )      => 'green',
+        __( 'Brown', 'total-child' )      => 'brown',
+        __( 'Teal', 'total-child' )       => 'teal',
+        __( 'Orange', 'total-child' )     => 'orange',
+        __( 'Yellow', 'total-child' )     => 'yellow',
+    );
+}

@@ -14,6 +14,11 @@ $this->resetVariables( $atts, $content );
 WPBakeryShortCode_VC_Tta_Section::$self_count ++;
 WPBakeryShortCode_VC_Tta_Section::$section_info[] = $atts;
 $isPageEditable = vc_is_page_editable();
+$heading_class = '';
+
+if(!empty($atts['color'])) {
+    $heading_class = ' easl-color-' . $atts['color'];
+}
 
 
 $heading = $this->getTemplateVariable( 'heading' );
@@ -24,7 +29,7 @@ $output = '';
 $output .= '<div class="' . esc_attr( $this->getElementClasses() ) . '"';
 $output .= ' id="' . esc_attr( $this->getTemplateVariable( 'tab_id' ) ) . '"';
 $output .= ' data-vc-content=".vc_tta-panel-body">';
-$output .= '<div class="vc_tta-panel-heading">';
+$output .= '<div class="vc_tta-panel-heading'. $heading_class .'">';
 $output .= $heading;
 $output .= '</div>';
 $output .= '<div class="vc_tta-panel-body">';
