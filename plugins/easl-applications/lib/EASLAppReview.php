@@ -343,6 +343,7 @@ class EASLAppReview {
         return get_posts([
             'post_type' => 'submission',
             'post_status' => 'any',
+            'posts_per_page' => -1,
             'meta_query' => [
                 [
                     'key' => 'programme_id',
