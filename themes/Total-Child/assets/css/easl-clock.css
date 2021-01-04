@@ -1,0 +1,286 @@
+.easl-clock-wrap {
+    padding: 20px;
+    background-repeat: no-repeat;
+    background-position: center center;
+    background-size: cover;
+    position: relative;
+    overflow: hidden;
+}
+
+.easl-clock-inner {
+}
+
+.easl-clock-countdown {
+
+}
+
+.easl-clock-content {
+
+}
+
+.easl-clock-wrap .easl-clock-share-button {
+    position: absolute;
+    border: none;
+    background: transparent;
+    padding: 0;
+    bottom: 10px;
+    right: 20px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+}
+
+.easl-clock-wrap .easl-clock-share-button:focus,
+.easl-clock-wrap .easl-clock-share-button:active {
+    outline: none;
+    border: none;
+}
+.easl-clock-wrap .easl-clock-share-button > span {
+    font-family: "KnockoutHTF51Middleweight", "Helvetica Neue", Helvetica, Arial, sans-serif;
+    font-weight: normal;
+    font-size: 16px;
+    line-height: 1.17em;
+    color: #004B87;
+    margin-right: 8px;
+}
+.easl-clock-share-button svg {
+    width: 26px;
+    height: 24px;
+}
+
+@media only screen and (min-width: 768px) {
+    .easl-clock-wrap.easl-clock-landscape .easl-clock-inner {
+        display: flex;
+        align-items: stretch;
+    }
+
+    .easl-clock-wrap.easl-clock-landscape .easl-clock-countdown {
+        width: 564px;
+        order: 2;
+        padding-top: 6px;
+    }
+
+    .easl-clock-wrap.easl-clock-portrait .easl-clock-countdown {
+        margin-bottom: 25px;
+    }
+
+    .easl-clock-wrap.easl-clock-landscape .easl-clock-content {
+        width: calc(100% - 596px);
+        margin-right: 32px;
+        order: 0;
+    }
+}
+
+
+.easl-clock-content > h2 {
+    font-family: "KnockoutHTF51Middleweight", "Helvetica Neue", Helvetica, Arial, sans-serif;
+    font-size: 35px;
+    font-weight: normal;
+    color: #fff;
+    line-height: 1.17em;
+    margin: 0 0 25px;
+}
+
+.easl-clock-logos {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: stretch;
+    justify-content: flex-start;
+    margin-bottom: 10px;
+}
+
+.easl-clock-logo {
+    width: calc((100% - 24px) / 4);
+    margin-right: 8px;
+    margin-bottom: 8px;
+    border-radius: 8px;
+    background: #fff;
+    padding: 7px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+
+.easl-clock-logo:nth-child(4n) {
+    margin-right: 0;
+}
+
+.easl-clock-logo img {
+    display: block;
+    max-width: calc(100% - 14px);
+    height: auto;
+}
+
+.easl-clock-desc {
+    font-family: "KnockoutHTF51Middleweight", "Helvetica Neue", Helvetica, Arial, sans-serif;
+    font-weight: normal;
+    font-size: 17px;
+    line-height: 1.17em;
+    color: #004B87;
+}
+
+.easl-clock-desc p {
+    margin: 0 0 15px;
+}
+
+.easl-clock-desc > *:last-child {
+    margin-bottom: 0;
+}
+
+.easl-clock-countdown .countdown-row {
+    display: flex;
+    align-items: stretch;
+    justify-content: space-between;
+}
+
+.easl-clock-countdown .countdown-row .countdown-section {
+    width: calc((100% - 32px) / 5);
+    background-color: #fff;
+    padding: 20px 15px;
+    text-align: center;
+    box-shadow: 0 10px 10px 0 rgba(181, 126, 23, .5);
+}
+
+.easl-clock-countdown .countdown-amount {
+    display: block;
+    position: relative;
+
+    font-family: "KnockoutHTF51Middleweight", "Helvetica Neue", Helvetica, Arial, sans-serif;
+    font-weight: normal;
+    font-size: 42px;
+    line-height: 1.17em;
+    color: #004B87;
+    margin: 0 0 17px;
+    padding-bottom: 17px;
+}
+
+.easl-clock-countdown .countdown-amount::after {
+    content: '';
+    width: 30px;
+    height: 2px;
+    background: #7FC4E5;
+    position: absolute;
+    bottom: 0;
+    left: 50%;
+    transform: translateX(-50%);
+}
+
+.easl-clock-countdown .countdown-period {
+    display: block;
+
+    font-family: "KnockoutHTF51Middleweight", "Helvetica Neue", Helvetica, Arial, sans-serif;
+    font-weight: normal;
+    font-size: 14px;
+    line-height: 1.17em;
+    color: #004B87;
+    text-transform: uppercase;
+}
+
+.easl-clock-share-content {
+    background: #454545;
+    position: absolute;
+    right: 0;
+    bottom: 0;
+    width: 320px;
+    top: 0;
+    max-width: 100%;
+    padding: 15px;
+    transform: translateX(100%);
+    transition: transform .25s;
+}
+
+.easl-clock-show-share-content .easl-clock-share-content {
+    transform: translateX(0);
+}
+
+.easl-clock-share-code {
+    margin-bottom: 15px;
+}
+
+.easl-clock-share-code div {
+    color: #fff;
+    font-size: 14px;
+    margin-bottom: 10px;
+}
+
+.easl-clock-share-content .easl-clock-share-code textarea {
+    width: 100%;
+    height: 55px;
+    font-size: 10px;
+    line-height: 12px;
+    color: #ccc;
+    background: #777;
+    border: 0;
+    overflow: hidden;
+    resize: none;
+    border-radius: 0;
+    margin-bottom: 10px;
+    padding: 4px 7px;
+}
+
+.easl-clock-share-content .easl-clock-share-code button {
+    position: relative;
+    padding: 5px;
+    text-transform: uppercase;
+    background: #fff;
+    color: #666;
+    border-radius: 2px;
+    border: none;
+    font-size: 12px;
+    line-height: 12px;
+    cursor: pointer;
+}
+.easl-clock-share-content .easl-clock-share-code button.easl-clock-share-close {
+    position: absolute;
+    right: 1px;
+    top: 1px;
+    font-size: 10px;
+}
+.easl-clock-share-content .easl-clock-share-code button:focus,
+.easl-clock-share-content .easl-clock-share-code button:active {
+    outline: none;
+    border: none;
+}
+
+@media only screen and (max-width: 767px) {
+    .easl-clock-countdown {
+        margin-bottom: 25px;
+    }
+
+    .easl-clock-countdown .countdown-row .countdown-section {
+        padding: 12px 0;
+    }
+
+    .easl-clock-countdown .countdown-amount {
+        font-size: 24px;
+        padding-bottom: 10px;
+        margin-bottom: 10px;
+    }
+
+    .easl-clock-countdown .countdown-amount::after {
+        width: 24px;
+    }
+
+    .easl-clock-countdown .countdown-period {
+        font-size: 10px;
+    }
+
+    .easl-clock-content > h2 {
+        font-size: 18px;
+        text-align: center;
+    }
+
+    .easl-clock-desc {
+        font-size: 14px;
+    }
+
+    .easl-clock-logo {
+        width: calc((100% - 16px) / 3);
+        margin-right: 8px;
+    }
+
+    .easl-clock-logo:nth-child(3n) {
+        margin-right: 0;
+    }
+}

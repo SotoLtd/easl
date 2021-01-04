@@ -1,0 +1,166 @@
+
+@font-face {
+    font-family: 'KnockoutHTF91UltmtMiddlewt';
+    src: url('../../fonts/KnockoutHTF91UltmtMiddlewt.eot');
+    src: url('../../fonts/KnockoutHTF91UltmtMiddlewt.eot') format('embedded-opentype'),
+    url('../../fonts/KnockoutHTF91UltmtMiddlewt.woff2') format('woff2'),
+    url('../../fonts/KnockoutHTF91UltmtMiddlewt.woff') format('woff'),
+    url('../../fonts/KnockoutHTF91UltmtMiddlewt.ttf') format('truetype'),
+    url('../../fonts/KnockoutHTF91UltmtMiddlewt.svg#KnockoutHTF91UltmtMiddlewt') format('svg');
+}
+
+@font-face {
+    font-family: 'KnockoutHTF51Middleweight';
+    src: url('../../fonts/KnockoutHTF51Middleweight.eot');
+    src: url('../../fonts/KnockoutHTF51Middleweight.eot') format('embedded-opentype'),
+    url('../../fonts/KnockoutHTF51Middleweight.woff2') format('woff2'),
+    url('../../fonts/KnockoutHTF51Middleweight.woff') format('woff'),
+    url('../../fonts/KnockoutHTF51Middleweight.ttf') format('truetype'),
+    url('../../fonts/KnockoutHTF51Middleweight.svg#KnockoutHTF51Middleweight') format('svg');
+}
+
+@font-face {
+    font-family: 'KnockoutHTF31JuniorMiddlewt';
+    src: url('../../fonts/KnockoutHTF31JuniorMiddlewt.eot');
+    src: url('../../fonts/KnockoutHTF31JuniorMiddlewt.eot') format('embedded-opentype'),
+    url('../../fonts/KnockoutHTF31JuniorMiddlewt.woff2') format('woff2'),
+    url('../../fonts/KnockoutHTF31JuniorMiddlewt.woff') format('woff'),
+    url('../../fonts/KnockoutHTF31JuniorMiddlewt.ttf') format('truetype'),
+    url('../../fonts/KnockoutHTF31JuniorMiddlewt.svg#KnockoutHTF31JuniorMiddlewt') format('svg');
+}
+@font-face {
+    font-family: 'fontello';
+    src: url('../../fonts/clock/fontello.eot?78290631');
+    src: url('../../fonts/clock/fontello.eot?78290631#iefix') format('embedded-opentype'),
+    url('../../fonts/clock/fontello.woff2?78290631') format('woff2'),
+    url('../../fonts/clock/fontello.woff?78290631') format('woff'),
+    url('../../fonts/clock/fontello.ttf?78290631') format('truetype'),
+    url('../../fonts/clock/fontello.svg?78290631#fontello') format('svg');
+    font-weight: normal;
+    font-style: normal;
+}
+
+
+html,body,div,span,h1,h2,h3,h4,h5,h6,p,em,img,strong,sub,sup,ol,ul,li,form,label {
+    margin: 0;
+    padding: 0;
+    border: 0;
+    outline: 0;
+    font-size: 100%;
+    font: inherit;
+    vertical-align: baseline;
+    font-family: inherit;
+    font-style: inherit;
+    font-weight: inherit
+}
+*,*:before,*:after {
+    -webkit-box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    box-sizing: border-box
+}
+html, body {
+    height: 100%;
+}
+body {
+    background: transparent;
+    line-height: 1;
+    font-family: Arial, sans-serif;
+    font-size: 14px;
+    display: flex;
+    align-items: center;
+    height: 100vh;
+}
+
+a {
+    -webkit-transition: all 0.25s linear;
+    -moz-transition: all 0.25s linear;
+    transition: all 0.25s linear;
+}
+img {
+    max-width: 100%;
+    height: auto;
+}
+.iframe-wrapper {
+    width: 100%;
+    max-width: 1125px;
+    margin: 0 auto;
+}
+
+
+/* Share icons row*/
+
+.heateor_sss_sharing_container {
+    margin-bottom: 0;
+}
+.heateor_sss_sharing_title {
+    display: none;
+}
+
+.heateor_sss_sharing_container .heateor_sss_sharing_ul {
+    float: none;
+    width: 100%;
+}
+
+.heateor_sss_sharing_container .heateorSssSharing {
+    float: left;
+    border: none;
+    line-height: 40px;
+    background: #f9f9f9 !important;
+    font-size: 14px;
+    font-style: normal;
+    height: 40px !important;
+    width: 40px !important;
+    margin: 0 5px 0 0;
+    text-align: center;
+    transition: opacity .25s;
+}
+.heateor_sss_sharing_container ul li:last-child .heateorSssSharing {
+    margin-right: 0;
+}
+
+.heateor_sss_sharing_container .heateorSssSharing:hover {
+    opacity: .5;
+}
+
+.heateor_sss_sharing_container .heateorSssSharing a:hover {
+    text-decoration: none;
+}
+
+.heateor_sss_sharing_container .heateorSssSharing .heateorSssSharingSvg {
+    background: transparent;
+    display: inline-block;
+    font-family: "fontello";
+    font-size: inherit;
+    text-rendering: auto;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+}
+
+.heateor_sss_sharing_container .heateorSssSharing .heateorSssFacebookSvg::after {
+    content: "\f09a";
+    color: #3e5b98;
+}
+
+.heateor_sss_sharing_container .heateorSssSharing .heateorSssTwitterSvg::after {
+    content: "\f099";
+    color: #4da7de;
+}
+
+.heateor_sss_sharing_container .heateorSssSharing .heateorSssLinkedinSvg::after {
+    content: "\f0e1";
+    color: #0274b3;
+}
+
+.heateor_sss_sharing_container .heateorSssSharing .heateorSssWhatsappSvg::after {
+    content: "\f232";
+    color: #60b82d;
+}
+
+.heateor_sss_sharing_container .heateorSssSharing .heateorSssEmailSvg::after {
+    content: "\f0e0";
+    color: #454545;
+}
+
+.heateor_sss_sharing_container a {
+    text-decoration: none;
+}

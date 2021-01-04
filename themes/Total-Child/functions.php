@@ -1,6 +1,6 @@
 <?php
 
-define('EASL_THEME_VERSION', '2020.12.10.04');
+define('EASL_THEME_VERSION', '2020.12.31.01');
 //define( 'EASL_THEME_VERSION', time() );
 
 if ( ! defined( 'EASL_INC_DIR' ) ) {
@@ -24,6 +24,7 @@ require_once EASL_INC_DIR . 'widgets.php';
 require_once EASL_INC_DIR . 'settings.php';
 require_once EASL_INC_DIR . 'sticky-footer.php';
 require_once EASL_INC_DIR . 'wp-seo-extend.php';
+require_once EASL_INC_DIR . 'easl-clock.php';
 
 function easl_theme_setup() {
 	load_theme_textdomain( 'total-child' );

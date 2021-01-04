@@ -4,6 +4,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 function easl_vc_get_shortcodes() {
 	$shortcodes = array(
+		'easl_clock',
 		'easl_table_of_content',
 	);
 
