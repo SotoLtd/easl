@@ -1,6 +1,6 @@
 <?php
 
-define('EASL_THEME_VERSION', '2020.12.31.01');
+define('EASL_THEME_VERSION', '2021.01.04.06');
 //define( 'EASL_THEME_VERSION', time() );
 
 if ( ! defined( 'EASL_INC_DIR' ) ) {
