@@ -110,6 +110,7 @@
     display: block;
     max-width: calc(100% - 14px);
     height: auto;
+    max-height: 42px;
 }
 
 .easl-clock-desc {

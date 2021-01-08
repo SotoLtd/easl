@@ -5,7 +5,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 
 class EASL_VC_EASL_Clock extends EASL_ShortCode {
-    public static $clock_version = '1.0';
+    public static $clock_version = '1.1';
     private static $clock_count = 0;
     public static function get_clock_count() {
         return self::$clock_count;
