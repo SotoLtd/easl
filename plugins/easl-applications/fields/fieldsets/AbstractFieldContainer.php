@@ -4,7 +4,7 @@ if ( ! defined( 'ABSPATH' ) ) {
     die( '-1' );
 }
 
-abstract class AbstractFieldContainer {
+abstract class getProgrammeFieldSetContainer {
 
     /**
      * @var EASLApplicationFieldSet[]

@@ -41,7 +41,10 @@ if ( ! defined( 'ABSPATH' ) ) {
                 <td><?=$submission['date']->format('Y-m-d');?></td>
                 <td><?=$submission['numberReviews'];?></td>
                 <td><?=$submission['averageScore'] ? $submission['averageScore'] : '-';?></td>
-                <td><a href="<?=$reviewManager->getUrl(EASLAppReview::PAGE_SUBMISSION, ['submissionId' => $submission['id']]);?>" class="button">Review</a></td>
+                <td>
+                    <a href="<?=$reviewManager->getUrl(EASLAppReview::PAGE_SUBMISSION, ['submissionId' => $submission['id']]);?>" class="button">Review</a>
+                    <a href="<?= get_edit_post_link($submission['id']); ?>" class="button">Edit</a>
+                </td>
             </tr>
         <?php endforeach;?>
         </tbody>

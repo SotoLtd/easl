@@ -52,12 +52,17 @@ class EASLApplicationsPlugin {
         $this->createFields();
 
         add_action('init', [$this, 'init']);
+        add_action('add_meta_boxes', [$this, 'registerSubmissionMetaBox']);
         add_action('easl_applications_page_content', [$this, 'pageContent']);
         add_action('admin_menu', [$this, 'adminMenu']);
         add_action('acf/save_post', [EASLAppSubmission::class, 'onSavePost'], 10, 1);
         add_action('acf/init', [$this, 'addOptionsFields']);
 
         add_filter('wp_nav_menu_items', [$this, 'addReviewMenuItem'], 10, 2);
+        add_action( 'admin_enqueue_scripts', [$this, 'admin_scripts'] );
+        
+        add_action('wp_ajax_sync_submission_member_data', [$this, 'sync_submission_member_data']);
+        add_action('wp_ajax_nopriv_sync_submission_member_data', [$this, 'sync_submission_member_data']);
 
         $this->dir =  dirname( __FILE__ ) . '/';
         $this->templateDir =$this->dir . 'templates/';
@@ -205,7 +210,6 @@ class EASLApplicationsPlugin {
      */
     public function getProgrammeFieldSetContainer($programmeId) {
         $programmeCategory = get_field('programme-category', $programmeId);
-        $fieldset = $this->submissionFieldSets[$programmeCategory];
         return $this->submissionFieldSets[$programmeCategory];
     }
 
@@ -291,7 +295,72 @@ class EASLApplicationsPlugin {
         ];
         wp_mail($to, $subject, $message, $headers);
     }
-
+    
+    public function registerSubmissionMetaBox(){
+        add_meta_box('sbmb_member_details', 'Member Details', [$this, 'submissionMemberDetailsMetaBox'], ['submission'], 'advanced','high');
+    }
+    public function submissionMemberDetailsMetaBox($post) {
+        $member_data = get_post_meta($post->ID, 'member_data', true);
+        echo '<div class="sub-member-details-wrap">';
+        echo '<table id="sub-member-details-table" class="widefat" style="margin-bottom: 20px">';
+        foreach(EASLAppSubmission::MEMBER_DATA_FIELDS as $key => $label) {
+            $value = '';
+            if(!empty($member_data[$key])) {
+                $value = $member_data[$key];
+            }
+            echo '<tr>';
+            echo '<td>' . $label . '</td>';
+            echo '<td>'. $value .'</td>';
+            echo '</tr>';
+        }
+        echo '</table>';
+        echo '<a href="#" id="sync-member-data-button" class="button" data-id="'. $post->ID .'" data-nonce="'. wp_create_nonce('sync_member_data_for_sub_' . $post->ID) .'">Sync member data from CRM</a>';
+        echo '</div>';
+    }
+    public function admin_scripts(){
+        $screen = get_current_screen();
+        if(!empty($screen->post_type) && 'submission' == $screen->post_type) {
+            wp_enqueue_script('submission-admin', plugin_dir_url(__FILE__) . '/assets/js/admin/submissions.js', ['jquery'], time(), true);
+        }
+    }
+    
+    public function sync_submission_member_data() {
+        if ( empty( $_POST['_wpnonce'] ) || empty( $_POST['sub_id'] ) ) {
+            die( '' );
+        }
+        if ( ! wp_verify_nonce( $_POST['_wpnonce'], 'sync_member_data_for_sub_' . $_POST['sub_id'] ) ) {
+            die( '' );
+        }
+        $sub_id = $_POST['sub_id'];
+        $member_id = get_post_meta($sub_id, 'member_id', true);
+        if(!$member_id) {
+            die('');
+        }
+        $member_data = easl_mz_get_member_data($member_id);
+        if(!$member_data) {
+            die('');
+        }
+        $member_data_to_save = array();
+        $output = '';
+        foreach(EASLAppSubmission::MEMBER_DATA_FIELDS as $key => $label) {
+            $value = '';
+            if(!empty($member_data[$key])) {
+                $value = $member_data[$key];
+            }
+            $member_data_to_save[$key] = $value;
+            $output .= '<tr>';
+            $output .= '<td>' . $label . '</td>';
+            $output .= '<td>'. $value .'</td>';
+            $output .= '</tr>';
+        }
+        update_post_meta($sub_id, 'member_data', $member_data_to_save);
+        wp_update_post([
+            'ID' => $sub_id,
+            'post_title' => $member_data_to_save['first_name'] . ' ' . $member_data_to_save['last_name']
+        ]);
+        echo $output;
+        die();
+    }
     public static function findInArray($array, callable $callable) {
         $matches = array_filter($array, $callable);
         if ($matches) {
