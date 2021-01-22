@@ -13,38 +13,11 @@ $list_tag = 'li';
 if(is_search()){
     $list_tag = 'div';
 }
-
-$event_start_date = '';
-$event_end_date = '';
-if ( ! empty( $event_data['event_start_date'][0] ) ) {
-	$event_start_date = $event_data['event_start_date'][0];
-}
-if ( ! empty( $event_data['event_end_date'][0] ) ) {
-	$event_end_date = $event_data['event_end_date'][0];
-}
+$event_date_parts        = easl_get_event_date_parts( get_the_ID() );
 $event_color = easl_get_events_topic_color(get_the_ID());
 $event_meeting_type_name = easl_meeting_type_name(get_the_ID());
 $event_location_display = easl_get_event_location(get_the_ID(), 'city,contury');
 
-$event_date_days = date('d', $event_start_date);
-if($event_end_date > $event_start_date){
-	$event_date_days .= '-' . date('d', $event_end_date);
-}
-$event_date_month = '';
-$event_start_month = '';
-$event_end_month = '';
-if($event_start_date){
-	$event_start_month = date('M', $event_start_date);
-}
-if($event_end_date){
-	$event_end_month = date('M', $event_end_date);
-}
-if($event_start_month){
-	$event_date_month = $event_start_month;
-}
-if($event_end_month && ($event_start_month != $event_end_month)){
-	$event_date_month .= '/' . $event_end_month;
-}
 ?>
 <<?php echo $list_tag; ?> class="easl-events-li easl-event-li-<?php echo $event_color; ?>">
     <?php if(is_search()):
@@ -69,9 +42,17 @@ if($event_end_month && ($event_start_month != $event_end_month)){
     <?php endif; ?>
     <h3><a title="" href="<?php the_permalink(); ?>"><?php the_title(); ?></a></h3>
     <a class="events-li-date" href="<?php the_permalink(); ?>">
-        <span class="eld-day"><?php echo $event_date_days; ?></span>
-        <span class="eld-mon"><?php echo $event_date_month; ?></span>
-        <span class="eld-year"><?php echo date('Y', $event_start_date); ?></span>
+        <?php $date_parts_format = easl_get_event_date_format(get_the_ID()); ?>
+        <?php if ( 'Y' == $date_parts_format ): ?>
+            <span class="eld-year" style="font-size: 20px;line-height: 20px;margin-top: 25px;"><?php echo $event_date_parts['year']; ?></span>
+        <?php elseif ( 'mY' == $date_parts_format ): ?>
+            <span class="eld-mon" style="margin-top: 7px;"><?php echo $event_date_parts['month']; ?></span>
+            <span class="eld-year" style="font-size: 20px;line-height: 20px;"><?php echo $event_date_parts['year']; ?></span>
+        <?php else: ?>
+            <span class="eld-day"><?php echo $event_date_parts['day']; ?></span>
+            <span class="eld-mon"><?php echo $event_date_parts['month']; ?></span>
+            <span class="eld-year"><?php echo $event_date_parts['year']; ?></span>
+        <?php endif; ?>
         <i class="ticon ticon-play" aria-hidden="true"></i>
     </a>
 	<?php if ( $event_meeting_type_name || $event_location_display ): ?>
