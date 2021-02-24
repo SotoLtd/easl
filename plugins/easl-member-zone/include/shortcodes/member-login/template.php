@@ -17,8 +17,6 @@ $el_class = $el_id = $css_animation = $css = '';
 $atts     = vc_map_get_attributes( $this->getShortcode(), $atts );
 extract( $atts );
 
-$sso = EASL_MZ_SSO::get_instance();
-
 $css_animation = $this->getCSSAnimation( $css_animation );
 
 $member_dashboard_url     = get_field( 'member_dashboard_url', 'option' );
@@ -48,11 +46,35 @@ if ( ! easl_mz_is_member_logged_in() ):
 		$buttons_to_display[] = sprintf( $button_html_format, esc_url( $button_url ), $button_new_tab, strip_tags( $button_title ) );
 	}
 	if ( $member_login_link_title ) {
-		$buttons_to_display[] = '<a href="' . $sso->get_login_url() . '" class="easl-header-mz-buttons easl-mz-header-login-button">' . $member_login_link_title . '</a>';
+		$buttons_to_display[] = '<a href="#" class="easl-header-mz-buttons easl-mz-header-login-button">' . $member_login_link_title . '</a>';
 	}
 	?>
     <div class="header-aside-buttons mz-loggedout-buttons">
 		<?php echo implode( '<span class="mz-buttonsep">|</span>', $buttons_to_display ); ?>
+        <div class="<?php echo $login_form_class; ?>">
+            <form action="" method="post" class="clr">
+				<?php if ( $login_error_messages ): ?>
+                    <div class="mz-login-row mz-login-errors">
+						<?php echo implode( '', $login_error_messages ); ?>
+                    </div>
+				<?php endif; ?>
+                <div class="mz-login-row">
+                    <input type="text" name="mz_member_login" value="" placeholder="Username">
+                </div>
+                <div class="mz-login-row">
+                    <input type="password" name="mz_member_password" value="" placeholder="Password">
+                </div>
+                <div class="mz-login-row">
+                    <input type="hidden" name="mz_redirect_url" value="<?php echo esc_url( $member_dashboard_url ); ?>">
+                    <button class="easl-generic-button easl-color-lightblue">Login</button>
+                </div>
+            </form>
+            <div class="mz-forgot-pass-fields clr">
+                <input class="mz-reset-pass-email" type="text" value="" placeholder="Your email address">
+                <button class="easl-generic-button easl-color-lightblue mz-reset-pass-button">Reset Password</button>
+            </div>
+            <div class="mz-forgot-pass-row"><a class="mz-forgot-password" href="#">Forgot your password?</a></div>
+        </div>
     </div>
 <?php else: ?>
     <div class="easl-mz-header-member-card">

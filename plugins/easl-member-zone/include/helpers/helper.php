@@ -26,7 +26,7 @@ function easl_mz_get_member_data($member_id) {
 //    print_r($member_id);
 //    if ($member_id) {
         $api = easl_mz_get_manager()->getApi();
-        return $api->get_member_details($member_id);
+        return $api->get_member_details($member_id, false);
 //    }
 //    return null;
 }
@@ -83,7 +83,7 @@ function easl_mz_refresh_logged_in_member_data() {
     }
     $member_id = $session_data['member_id'];
     $api = EASL_MZ_API::get_instance();
-    $member_data = $api->get_member_details($member_id);
+    $member_data = $api->get_member_details($member_id, false);
 
 	if (!$member_data) {
 		return null;
@@ -166,7 +166,7 @@ function easl_mz_menu_attrs( $atts ) {
     $has_membership = easl_mz_user_is_member();
 
     $restricted_urls = easl_mz_get_restricted_urls();
-    
+
     if ( '/my-membership/' == parse_url(trailingslashit($atts['href']), PHP_URL_PATH) && easl_mz_user_can_access_profile_page() ) {
         return $atts;
     }

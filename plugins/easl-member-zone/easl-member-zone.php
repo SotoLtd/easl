@@ -14,7 +14,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 
 //die();
-define( 'EASL_MZ_VERSION', '1.2.6' );
+define( 'EASL_MZ_VERSION', '1.2.7' );
 
 //define( 'EASL_MZ_VERSION', time() );
 
@@ -223,21 +223,14 @@ class EASL_MZ_Manager {
 	 */
 	public function init() {
 		$this->add_options_page();
-		$this->handle_openid_auth_code();
+		$this->handle_member_login();
 		$this->handle_member_logout();
-		$this->handle_member_iframe_logout();
 		$this->handle_mz_actions();
 
 		if ( easl_mz_is_member_logged_in() ) {
 			add_action( 'template_redirect', array( $this, 'maybe_disable_wp_rocket_cache' ) );
 		}
 	}
-
-	public function handle_openid_auth_code() {
-	    if (isset($_GET['code'])) {
-	        EASL_MZ_SSO::get_instance()->handle_auth_code($_GET['code']);
-        }
-    }
 
 	public function memberzone_page_content() {
 		include $this->path( 'TEMPLATES_DIR', 'main.php' );
@@ -301,26 +294,44 @@ class EASL_MZ_Manager {
 				break;
 		}
 	}
-    
-    public function handle_member_iframe_logout() {
-        if ( empty( $_REQUEST['slo_iframe'] ) ) {
-            return false;
-        }
-        header('Cache-Control: no-cache, no-store');
-        header('Pragma: no-cache');
-        if ( ! easl_mz_is_member_logged_in() ) {
-            echo 'Member already logged out!';
-            exit();
-        }
-        do_action( 'easl_mz_member_before_log_out' );
-    
-        $this->session->unset_auth_cookie();
-        $this->api->clear_credentials();
-    
-        do_action( 'easl_mz_member_logged_out' );
-        echo 'Member logged out!';
-        exit();
-    }
+
+	public function handle_member_login() {
+		if ( empty( $_POST['mz_member_login'] ) || empty( $_POST['mz_member_password'] ) ) {
+			return false;
+		}
+		$member_login    = $_POST['mz_member_login'];
+		$member_password = $_POST['mz_member_password'];
+		$redirect        = get_field( 'member_dashboard_url', 'option' );
+
+		if ( ! empty( $_POST['mz_redirect_url'] ) ) {
+			$redirect = esc_url($_POST['mz_redirect_url']);
+		}
+		$auth_response_status = $this->api->get_auth_token( $member_login, $member_password, true );
+		if ( ! $auth_response_status ) {
+			$this->set_message( 'login_error', 'Invalid username or password.' );
+
+			return false;
+		}
+		// Member authenticated
+		do_action( 'easl_mz_member_authenticated', $member_login, $this->api->get_credential_data( true ), $redirect );
+
+		$member_id = $this->api->get_member_id();
+		if ( $member_id ) {
+			$this->session->add_data( 'member_id', $member_id );
+			$this->session->save_session_data();
+		}
+
+		do_action( 'easl_mz_member_logged_id' );
+
+		if ( ! $redirect ) {
+			$redirect = site_url();
+		}
+		if ( wp_redirect( $redirect ) ) {
+			exit;
+		}
+
+	}
+
 	public function handle_member_logout() {
 		if ( empty( $_REQUEST['mz_logout'] ) ) {
 			return false;
@@ -348,20 +359,27 @@ class EASL_MZ_Manager {
 		if ( ! easl_mz_is_member_logged_in() ) {
 			$this->set_message( 'member_profile_picture', 'You are not allowed to change your profile picture.' );
 
-			return false;
+			return;
 		}
 		$current_member_id = $this->session->get_current_member_id();
+		if ( ! $current_member_id ) {
+			$current_member_id = $this->api->get_member_id();
 
+			if ( $current_member_id ) {
+				$this->session->add_data( 'member_id', $current_member_id );
+				$this->session->save_session_data();
+			}
+		}
 		if ( ! $current_member_id || ( $current_member_id != $member_id ) ) {
 			$this->set_message( 'member_profile_picture', 'You are not allowed to change your profile picture.' );
 
-			return false;
+			return;
 		}
 		$file_data = file_get_contents( $_FILES['mz_picture_file']['tmp_name'] );
 		if ( ! $this->api->update_member_picture( $member_id, $file_data ) ) {
 			$this->set_message( 'member_profile_picture', 'Could not update profile picture.' );
 
-			return false;
+			return;
 		}
 		$this->set_message( 'member_profile', 'Profile picture updated.' );
 	}
@@ -420,7 +438,14 @@ class EASL_MZ_Manager {
 			return;
 		}
 		$current_member_id = $this->session->get_current_member_id();
+		if ( ! $current_member_id ) {
+			$current_member_id = $this->api->get_member_id();
 
+			if ( $current_member_id ) {
+				$this->session->add_data( 'member_id', $current_member_id );
+				$this->session->save_session_data();
+			}
+		}
 		if ( ! $current_member_id || ( $current_member_id != $member_id ) ) {
 			$this->set_message( 'membership_error', 'You are not allowed to change your profile picture.' );
 
@@ -736,7 +761,7 @@ class EASL_MZ_Manager {
 		}
 
 		$this->api->get_user_auth_token();
-		$image_data = $this->api->get_member_profile_picture_raw( $_REQUEST['member_id'] );
+		$image_data = $this->api->get_member_profile_picture_raw( $_REQUEST['member_id'], false );
 		if ( ! $image_data ) {
 			die();
 		}

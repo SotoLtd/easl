@@ -29,5 +29,12 @@ if ( ! defined( 'ABSPATH' ) ) {
 <?php wpex_outer_wrap_after(); ?>
 
 <?php wp_footer(); ?>
+<script>
+  window.addEventListener('load',function(){
+    jQuery('body').on('click','[href*="www.m-anage.com/Home/Index/Event/livercancersummit21"]',function(){
+      __gaTracker('send','event','button','click','early-fee')
+    })    
+  })
+</script>
 </body>
 </html>

@@ -1,0 +1,117 @@
+h2.app-tlt,
+h4.app-tlt {
+    background-color: #454545;
+    color: #ffffff;
+    margin-bottom: 0;
+    font-family:'KnockoutHTF51Middleweight';
+    padding-left: 15px;
+}
+h2.app-tlt{
+    font-size: 30px;
+    padding-top: 3px;
+}
+h4.app-tlt{
+    padding-top: 0px;
+    padding-bottom: 10px;
+}
+.easl-button-with-arrow{
+    background-color: #80c4e5;
+    text-align: left;
+}
+.app-process{
+    display: none;
+}
+
+.app-process ul li{
+    position: relative;
+
+}
+.app-process ul li:before {
+    display: block;
+    content: '';
+    position: absolute;
+    top: 11px;
+    width: 2px;
+    background-color: #71c5e8;
+    height: 100%;
+    left: -14px;
+}
+.app-process ul li.active:before{
+    background-color: #cbcbcb;
+}
+.app-process ul li.active,
+.app-process ul li.active h4,
+.app-process ul li.active p{
+    color:#cbcbcb;
+    font-family: 'KnockoutHTF51Middleweight';
+}
+.app-process ul li h4{
+    margin-bottom: 0;
+    font-size: 20px;
+}
+.app-process ul li p{
+    margin-bottom: 0;
+    font-size: 20px;
+    line-height: 24px;
+    padding-bottom: 60px;
+}
+.app-process ul li:last-child:before{
+    background-color: transparent;
+}
+.app-process ul{
+    list-style: none
+}
+.app-process ul li:after{
+    content: '\f111';
+    position: absolute;
+    top: 0;
+    left: -18px;
+    color: #71c5e8;
+    font-size: 14px;
+    display: block;
+    font-family: FontAwesome;
+}
+.app-process ul li.active:after{
+    color:#cbcbcb;
+}
+
+body .vc_tta.vc_general .vc_tta-panels-container .vc_tta-panels .vc_tta-panel.vc_active .vc_tta-panel-title > a,
+body .vc_tta.vc_general .vc_tta-panels-container .vc_tta-panels .vc_tta-panel:hover .vc_tta-panel-title > a {
+    background-color: #71c5e8;
+}
+body .vc_tta.vc_general .vc_tta-panels-container .vc_tta-panels .vc_tta-panel .vc_tta-panel-title > a {
+    background-color: #71c5e8;
+}
+.emt-year {
+    background: #71c5e8;
+}
+.archive-wrapper{
+    background-color: #e9e9e9;
+    padding: 4px 15px;
+}
+.archive-wrapper a{
+    color: #004b87;
+    font-family:'KnockoutHTF51Middleweight';
+    font-size: 18px;
+}
+.wpex-social-share{
+    display: none;
+}
+.display-block{
+    display: block;
+}
+.show-more{
+    background-color: #104f85;
+    font-size: 16px;
+    font-family: 'KnockoutHTF51Middleweight';
+    border-radius: 0;
+    padding: 8px 24px;
+}
+h3.easl-title-28{
+    font-size: 27px;
+}
+.emt-intro img {
+    width: 100%;
+    border-radius: 0;
+    display: block;
+}
