@@ -60,7 +60,14 @@ foreach($programme_categories as $i => $category):
                         <?php if ($this->applications_open($programme->ID)):?>
                             <?php if (easl_mz_user_is_member()):?>
                                 <?php if ($this->memberHasAlreadyApplied($programme->ID)):?>
-                                    <span class="applications-widget-closed easl-generic-button">Already applied</span>
+                                    <?php if ( $this->memberApplicationHasReviews( $programme->ID ) ): ?>
+                                        <span class="applications-widget-closed easl-generic-button">Already applied</span>
+                                    <?php else: ?>
+                                        <a class="easl-generic-button easl-color-blue" href="<?=$this->get_apply_link($programme->ID);?>">
+                                            Edit application
+                                            <span class="easl-generic-button-icon"><span class="ticon ticon-chevron-right"></span></span>
+                                        </a>
+                                    <?php endif; ?>
                                 <?php else:?>
                                     <a class="easl-generic-button easl-color-blue" href="<?=$this->get_apply_link($programme->ID);?>">
                                         Apply now

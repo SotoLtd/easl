@@ -159,7 +159,14 @@ class EASL_MZ_Session_Handler {
 
 		$auth_cookie = $this->generate_auth_cookie( $expiration, $token );
 
-		setcookie( $this->_cookie, $auth_cookie, $expiration, COOKIEPATH, COOKIE_DOMAIN, true, true );
+		setcookie( $this->_cookie, $auth_cookie, array(
+		    'expires' => $expiration,
+		    'path' => COOKIEPATH,
+		    'domain' => COOKIE_DOMAIN,
+		    'secure' => true,
+		    'httponly' => true,
+		    'samesite' => 'None',
+        ) );
 	}
 
 	public function generate_auth_cookie( $expiration, $token ) {

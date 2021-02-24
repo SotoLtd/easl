@@ -225,6 +225,7 @@ class EASL_MZ_Manager {
 		$this->add_options_page();
 		$this->handle_openid_auth_code();
 		$this->handle_member_logout();
+		$this->handle_member_iframe_logout();
 		$this->handle_mz_actions();
 
 		if ( easl_mz_is_member_logged_in() ) {
@@ -300,7 +301,26 @@ class EASL_MZ_Manager {
 				break;
 		}
 	}
-
+    
+    public function handle_member_iframe_logout() {
+        if ( empty( $_REQUEST['slo_iframe'] ) ) {
+            return false;
+        }
+        header('Cache-Control: no-cache, no-store');
+        header('Pragma: no-cache');
+        if ( ! easl_mz_is_member_logged_in() ) {
+            echo 'Member already logged out!';
+            exit();
+        }
+        do_action( 'easl_mz_member_before_log_out' );
+    
+        $this->session->unset_auth_cookie();
+        $this->api->clear_credentials();
+    
+        do_action( 'easl_mz_member_logged_out' );
+        echo 'Member logged out!';
+        exit();
+    }
 	public function handle_member_logout() {
 		if ( empty( $_REQUEST['mz_logout'] ) ) {
 			return false;

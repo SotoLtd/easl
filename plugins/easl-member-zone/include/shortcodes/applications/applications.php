@@ -54,6 +54,20 @@ class EASL_VC_MZ_Applications extends EASL_MZ_Shortcode {
     
         return false;
     }
+
+    public function memberApplicationHasReviews($programme_id) {
+
+        $sessionData = easl_mz_get_current_session_data();
+
+        if (!isset($sessionData['member_id'])) {
+            return false;
+        }
+
+        $submission = new EASLAppSubmission($programme_id);
+        $existingSubmission = $submission->getExistingSubmissionForMember( $sessionData['member_id'] );
+        
+        return $existingSubmission && $submission->submissionHasReviews($existingSubmission->ID);
+    }
     
     public function get_apply_link($programme_id) {
         $applyPage = get_field('apply_page', 'option');

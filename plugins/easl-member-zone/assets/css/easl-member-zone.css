@@ -2982,7 +2982,10 @@ li.menu-item.review-applications {
 .login-form-active .sp-modal-login-form {
     display: block;
 }
-
+.acf-actions .acf-icon.-cancel::before {
+    content: "\f00d";
+    font-family: 'ticons';
+}
 @media (max-width:767px) {
     .s-modal {
         width:100vw;
