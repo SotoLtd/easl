@@ -6,6 +6,7 @@ function easl_vc_get_shortcodes() {
 	$shortcodes = array(
 		'easl_clock',
 		'easl_table_of_content',
+		'easl_toggle',
 	);
 
 	return $shortcodes;

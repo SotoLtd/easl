@@ -37,8 +37,6 @@ require_once get_stylesheet_directory() . '/inc/shortcodes/class-vc-membership-c
 require_once get_stylesheet_directory() . '/inc/shortcodes/class-vc-sitemap.php';
 
 
-require_once get_stylesheet_directory() . '/inc/shortcodes/utility/easl-toggle.php';
-
 function easl_vc_shortcodes_lean_maps(){
 	vc_lean_map( 'easl_button', null, get_theme_file_path('/inc/shortcodes/config/easl-button.php') );
 	vc_lean_map( 'easl_generic_button', null, get_theme_file_path('/inc/shortcodes/config/easl-generic-button.php') );

@@ -39,3 +39,24 @@ body .vc_colored-dropdown .blue {
     background-color: #f9bc49!important;
     color: #fff!important;
 }
+.vc_shortcodes_container.wpb_easl_toggle > .controls_column:first-child {
+
+}
+.vc_shortcodes_container.wpb_easl_toggle >.wpb_element_wrapper>.vc_container_for_children {
+    margin-left: 0;
+    margin-bottom: 1px;
+}
+.wpb_easl_toggle > .wpb_element_wrapper {
+    padding-left: 10px;
+}
+.wpb_easl_toggle > .wpb_element_wrapper .vc_toggle_title {
+    font-size: 1em;
+    margin: 0!important;
+    line-height: inherit;
+    cursor: pointer;
+    background: url(vc-images/plus.png) left 3px no-repeat;
+    padding-left: 20px!important;
+}
+.wpb_easl_toggle > .wpb_element_wrapper .vc_toggle_title_active {
+    background-image: url(vc-images/minus.png);
+}

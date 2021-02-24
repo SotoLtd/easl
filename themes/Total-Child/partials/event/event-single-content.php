@@ -135,7 +135,6 @@ if($event_accreditation_image) {
                 </ul>
                 <div style="clear: both"></div>
             </div>
-			<?php if ( $event_time_type != 'past' ): ?>
 				<?php if ( $event_why_attend ): ?>
                     <div class="event-text-block">
 						<?php if ( $event_why_attend_title ): ?>
@@ -152,7 +151,6 @@ if($event_accreditation_image) {
 						<?php echo do_shortcode( $event_who_should_attend ); ?>
                     </div>
 				<?php endif; ?>
-			<?php endif; ?>
 			<?php if ( $event_topic_covered ): ?>
                 <div class="event-text-block">
 					<?php if ( $event_topic_covered_title ): ?>

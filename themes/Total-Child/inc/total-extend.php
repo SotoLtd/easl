@@ -1,4 +1,39 @@
 <?php
+// Prevent direct access
+if ( ! defined( 'ABSPATH' ) ) {
+	die( '-1' );
+}
+add_action('wpex_hook_main_top', 'easl_primary_before_open', 100);
+add_action('wpex_hook_main_bottom', 'easl_primary_before_close', 100);
+//add_action('wpex_hook_primary_before', 'easl_primary_before_open');
+//add_action('wpex_hook_primary_after', 'easl_primary_before_close');
+function easl_primary_before_open() {
+    $post_id = wpex_get_current_post_id();
+    $content_bg = get_field('content_background_image', $post_id);
+    if(!$content_bg) {
+        return '';
+    }
+    $bg_pos = get_field('content_background_position', $post_id);
+    $styles = array(
+        "background-image: url('{$content_bg}')"
+    );
+    if($bg_pos == 'top') {
+        $styles[] = 'background-position: center top';
+    }elseif($bg_pos == 'middle') {
+        $styles[] = 'background-position: center center';
+    }elseif($bg_pos == 'bottom') {
+        $styles[] = 'background-position: center bottom';
+    }
+    echo '<div class="easl-primary-wrap" style="'. implode('; ', $styles) .'">';
+}
+function easl_primary_before_close() {
+    $post_id = wpex_get_current_post_id();
+    $content_bg = get_field('content_background_image', $post_id);
+    if(!$content_bg) {
+        return '';
+    }
+    echo '</div><!-- esal pr-->';
+}
 function easlenqueueTtaScript() {
 	if ( ! defined( 'WPB_VC_VERSION' ) ) {
 		return;
