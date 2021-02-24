@@ -131,7 +131,7 @@ class EASLAppSubmission
 
         $existingSubmission = $this->getExistingSubmissionForMember($this->memberId);
 
-        if ($existingSubmission && $existingSubmission->post_status == 'publish') {
+        if ($existingSubmission && $existingSubmission->post_status == 'publish' && $this->submissionHasReviews($existingSubmission->ID)) {
             $redirect = get_field( 'member_dashboard_url', 'option' );
             wp_redirect($redirect . '?application_submitted=' . $existingSubmission->ID);
             die();
@@ -175,5 +175,17 @@ class EASLAppSubmission
         }
 
         wp_update_post(['ID' => $postId, 'post_status' => 'publish']);
+    }
+    
+    public function submissionHasReviews($sub_id) {
+        $review_query = new WP_Query( array(
+            'post_type'   => 'submission-review',
+            'post_status' => 'any',
+            'meta_key'    => 'submission_id',
+            'meta_value'  => $sub_id,
+            'fields'      => 'ids',
+        ) );
+        
+        return $review_query->have_posts();
     }
 }
