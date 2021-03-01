@@ -98,6 +98,7 @@ class EASLApplicationsPlugin {
             acf_add_options_page( array(
                 'page_title' => 'Application system options',
                 'menu_slug'  => self::OPTIONS_PAGE_SLUG,
+                'parent_slug'  => 'edit.php?post_type=programme',
                 'capability' => 'manage_options',
                 'redirect'   => false,
             ) );
@@ -133,18 +134,26 @@ class EASLApplicationsPlugin {
         register_post_type('programme', [
             'labels' => [
                 'name' => 'Programmes',
-                'singular_name' => 'Programme'
+                'singular_name' => 'Programme',
+                'add_new' => 'Add New Programme',
             ],
             'supports' => ['title', 'editor', 'excerpt'],
-            'public' => true,
-            'publicly_queryable' => true
+            'public' => false,
+            'show_ui' => true,
+            'show_in_menu' => true,
+            'rewrite' => false,
+            'menu_icon' => 'dashicons-calendar',
         ]);
 
         register_post_type('submission-review', [
             'labels' => [
                 'name' => 'Reviews',
                 'singular_name' => 'Review'
-            ]
+            ],
+            'public' => false,
+            'show_ui' => false,
+            'show_in_menu' => false,
+            'rewrite' => false,
         ]);
 
         register_post_type('submission', [
@@ -152,8 +161,10 @@ class EASLApplicationsPlugin {
                 'name' => 'Submissions',
                 'singular_name' => 'Submission'
             ],
-            'publicly_queryable' => true,
-            'public' => true
+            'public' => false,
+            'show_ui' => true,
+            'show_in_menu' => 'edit.php?post_type=programme',
+            'rewrite' => false,
         ]);
     }
 
@@ -162,7 +173,12 @@ class EASLApplicationsPlugin {
                 'labels' => [
                     'name' => 'Programme category'
                 ],
-                'hierarchical' => true
+                'hierarchical' => true,
+                'publicly_queryable' => false,
+                'show_ui' => true,
+                'show_in_menu' => true,
+                'show_in_nav_menus' => false,
+                'rewrite' => false,
             ]
         );
     }
