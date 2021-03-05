@@ -11,11 +11,13 @@
     display: none!important;
 }
 
-body .vc_colored-dropdown .blue {
+body .vc_colored-dropdown .blue,
+body .vc_colored-dropdown .primary{
     background-color: #004b87!important;
     color: #fff!important;
 }
-.vc_colored-dropdown .lightblue {
+.vc_colored-dropdown .lightblue,
+.vc_colored-dropdown .secondary {
     background-color: #80c4e5!important;
     color: #fff!important;
 }
@@ -31,7 +33,8 @@ body .vc_colored-dropdown .blue {
     background-color: #f26827!important;
     color: #fff!important;
 }
-.vc_colored-dropdown .grey {
+.vc_colored-dropdown .grey,
+.vc_colored-dropdown .gray {
     background-color: #7e6a73!important;
     color: #fff!important;
 }
