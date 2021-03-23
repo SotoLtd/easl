@@ -528,6 +528,11 @@ hr.in-the-bottom {
     margin-left: 10px;
     font-size: 0.85em;
 }
+.egb-icon-left .easl-generic-button-icon {
+    margin-left: 0;
+    margin-right: 8px;
+}
+
 
 .easl-generic-button-right-icon .easl-generic-button-icon {
     position: absolute;
@@ -3448,12 +3453,20 @@ body .wpb_single_image a.easl-vc-image-over:after {
     width: 150px;
 }
 
+.easl-card-btn-icon.atango-icon {
+    height: 49px;
+    width: 195px;
+}
+
 .easl-gbtn:hover .easl-gbtn-icon.easl-gbtn-microb-predict {
     background-position: 0px 0px;
 }
 
 .easl-card-btn:hover .easl-card-btn-icon.microb-predict-icon {
     background-position: 0px -30px;
+}
+.easl-card-btn:hover .easl-card-btn-icon.atango-icon {
+    background-position: 0px -49px;
 }
 
 .easl-gbtn:hover .easl-gbtn-icon.easl-gbtn-ueg {
@@ -3478,6 +3491,10 @@ body .wpb_single_image a.easl-vc-image-over:after {
 
 .easl-gbtn:hover .easl-gbtn-icon.liverscreen-icon {
     background-position: 0px -75px;
+}
+
+.easl-gbtn:hover .easl-gbtn-icon.atango-icon {
+    background-position: 0px -49px;
 }
 
 .easl-gbtn-awards,
@@ -3574,6 +3591,11 @@ body .wpb_single_image a.easl-vc-image-over:after {
 .aliver-green-icon,
 .easl-gbtn-aliver-green {
     background-image: url("images/icons/aliver-green.png");
+}
+
+.atango-icon,
+.easl-gbtn-atango {
+    background-image: url("images/icons/atango.png");
 }
 
 .microb-predict-icon,
@@ -8306,6 +8328,53 @@ ul.suggestions {
 
 .ste-menu li.easl-active a,
 .ste-menu li a:hover {
+    color: #004b87;
+}
+
+.ste-menu-wrap .ste-menu-blue {
+    background: #004b87;
+}
+.ste-menu-wrap .ste-menu-lightblue {
+    background: #80c4e5;
+}
+.ste-menu-wrap .ste-menu-red {
+    background: #de2a57;
+}
+.ste-menu-wrap .ste-menu-teal {
+    background: #189790;
+}
+.ste-menu-wrap .ste-menu-orange {
+    background: #f26827;
+}
+.ste-menu-wrap .ste-menu-grey {
+    background: #7e6a73;
+}
+.ste-menu-wrap .ste-menu-yellow {
+    background: #f9bc49;
+}
+.ste-menu-blue li a {
+    border-bottom-color: #336f9f;
+}
+.ste-menu-lightblue li a {
+    border-bottom-color: #5a89a0;
+}
+.ste-menu-red li a {
+    border-bottom-color: #b22246;
+}
+.ste-menu-teal li a {
+    border-bottom-color: #137973;
+}
+.ste-menu-orange li a {
+    border-bottom-color: #c2531f;
+}
+.ste-menu-grey li a {
+    border-bottom-color: #65555c;
+}
+.ste-menu-yellow li a {
+    border-bottom-color: #c7963a;
+}
+.ste-menu-blue li.easl-active a,
+.ste-menu-blue li a:hover {
     color: #62cff5;
 }
 
