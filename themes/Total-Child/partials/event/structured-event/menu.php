@@ -6,10 +6,23 @@ if ( ! defined( 'ABSPATH' ) ) {
 $current_sub_page = get_query_var( 'easl_event_subpage' );
 
 $draft_or_pending = get_post_status( get_the_ID() ) && in_array( get_post_status( get_the_ID() ), array( 'draft', 'pending', 'auto-draft', 'future' ) );
+
+$menu_bg_color = get_field('menu_background_color');
+if(!$menu_bg_color) {
+    $menu_bg_color = 'blue';
+}
+$menu_bg_custom_color = '';
+if('custom' == $menu_bg_color) {
+    $menu_bg_custom_color = get_field('menu_background_custom_color');
+}
+$custom_color_style = '';
+if($menu_bg_custom_color) {
+    $custom_color_style = 'style="background-color: '. $menu_bg_custom_color .'"';
+}
 ?>
 <div class="ste-menu-wrap">
     <?php if ( have_rows( 'event_subpages' ) ): ?>
-        <ul class="ste-menu">
+        <ul class="ste-menu ste-menu-<?php echo $menu_bg_color; ?>"<?php echo $custom_color_style; ?>>
             <?php while ( have_rows( 'event_subpages' ) ):
                 the_row( 'event_subpages' );
                 if ( ! current_user_can( 'edit_posts' ) && 'draft' == get_sub_field( 'status' ) ) {
