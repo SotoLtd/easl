@@ -66,6 +66,7 @@ function easl_vc_button_grid_icons() {
 	return array(
 		__( 'No Icon', 'total' )          => '',
 		__( 'Awards', 'total' )           => 'awards',
+		__( 'A-Tango', 'total' )           => 'atango',
 		__( 'Bursaries', 'total' )        => 'bursaries',
 		__( 'Calendar', 'total' )         => 'calendar',
 		__( 'Education', 'total' )        => 'education',

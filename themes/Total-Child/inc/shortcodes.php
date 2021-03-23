@@ -1,8 +1,8 @@
 <?php
 
 require_once get_stylesheet_directory() . '/inc/shortcodes/class-vc-button.php';
-require_once get_stylesheet_directory() . '/inc/shortcodes/class-vc-generic-button.php';
-require_once get_stylesheet_directory() . '/inc/shortcodes/class-vc-generic-button-container.php';
+//require_once get_stylesheet_directory() . '/inc/shortcodes/class-vc-generic-button.php';
+//require_once get_stylesheet_directory() . '/inc/shortcodes/class-vc-generic-button-container.php';
 require_once get_stylesheet_directory() . '/inc/shortcodes/class-vc-button-grid.php';
 require_once get_stylesheet_directory() . '/inc/shortcodes/class-vc-gbutton.php';
 require_once get_stylesheet_directory() . '/inc/shortcodes/class-vc-events.php';
@@ -18,7 +18,7 @@ require_once get_stylesheet_directory() . '/inc/shortcodes/class-vc-cag-members.
 require_once get_stylesheet_directory() . '/inc/shortcodes/class-vc-menu-stacked-content.php';
 require_once get_stylesheet_directory() . '/inc/shortcodes/class-vc-post-type-grid.php';
 require_once get_stylesheet_directory() . '/inc/shortcodes/class-vc-users-grid.php';
-require_once get_stylesheet_directory() . '/inc/shortcodes/class-vc-card-button.php';
+//require_once get_stylesheet_directory() . '/inc/shortcodes/class-vc-card-button.php';
 //require_once get_stylesheet_directory() . '/inc/shortcodes/class-vc-associations.php';
 require_once get_stylesheet_directory() . '/inc/shortcodes/class-vc-highlights.php';
 require_once get_stylesheet_directory() . '/inc/shortcodes/class-vc-staffs-accordion.php';
@@ -39,8 +39,8 @@ require_once get_stylesheet_directory() . '/inc/shortcodes/class-vc-sitemap.php'
 
 function easl_vc_shortcodes_lean_maps(){
 	vc_lean_map( 'easl_button', null, get_theme_file_path('/inc/shortcodes/config/easl-button.php') );
-	vc_lean_map( 'easl_generic_button', null, get_theme_file_path('/inc/shortcodes/config/easl-generic-button.php') );
-	vc_lean_map( 'easl_generic_button_container', null, get_theme_file_path('/inc/shortcodes/config/easl-generic-button-container.php') );
+	//vc_lean_map( 'easl_generic_button', null, get_theme_file_path('/inc/shortcodes/config/easl-generic-button.php') );
+	//vc_lean_map( 'easl_generic_button_container', null, get_theme_file_path('/inc/shortcodes/config/easl-generic-button-container.php') );
 	vc_lean_map( 'easl_button_grid', null, get_theme_file_path('/inc/shortcodes/config/easl-button-grid.php'));
 	vc_lean_map( 'easl_gbutton', null, get_theme_file_path('/inc/shortcodes/config/easl-gbutton.php') );
 	vc_lean_map( 'easl_events', null, get_theme_file_path() . '/inc/shortcodes/config/easl-events.php' );
@@ -53,7 +53,7 @@ function easl_vc_shortcodes_lean_maps(){
 	//vc_lean_map( 'easl_mentors_table', null, get_theme_file_path('/inc/shortcodes/config/easl-mentors-table.php' ));
 	vc_lean_map( 'easl_cag_members', null, get_theme_file_path('/inc/shortcodes/config/easl-cag-members.php') );
 	vc_lean_map( 'easl_menu_stacked_content', null, get_theme_file_path('/inc/shortcodes/config/easl-menu-stacked-content.php' ));
-	vc_lean_map( 'easl_card_button', null, get_theme_file_path('/inc/shortcodes/config/easl-card-button.php' ));
+	//vc_lean_map( 'easl_card_button', null, get_theme_file_path('/inc/shortcodes/config/easl-card-button.php' ));
 	vc_lean_map( 'easl_staffs_accordion', null, get_theme_file_path('/inc/shortcodes/config/easl-staffs-accordion.php') );
 	vc_lean_map( 'easl_scientific_publication', null, get_theme_file_path('/inc/shortcodes/config/easl-scientific-publication.php') );
 	//vc_lean_map( 'easl_awardees', null, get_theme_file_path('/inc/shortcodes/config/easl-awardees.php') );
@@ -77,8 +77,8 @@ add_action( 'vc_after_init', 'easl_vc_shortcodes_lean_maps', 40 );
 function easl_map_vc_shortcodes() {
 	require_once get_theme_file_path('inc/shortcodes/youtube-video/youtube-video.php');
 	require_once get_theme_file_path('inc/shortcodes/easl-staffs/easl-staffs.php');
-	require_once get_theme_file_path('inc/shortcodes/easl-icon-widget-grid/easl-icon-widget-grid.php');
-	require_once get_theme_file_path('inc/shortcodes/easl-icon-widget/easl-icon-widget.php');
+	//require_once get_theme_file_path('inc/shortcodes/easl-icon-widget-grid/easl-icon-widget-grid.php');
+	//require_once get_theme_file_path('inc/shortcodes/easl-icon-widget/easl-icon-widget.php');
 	require_once get_theme_file_path('inc/shortcodes/easl-annual-reports/easl-annual-reports.php');
 	require_once get_theme_file_path('inc/shortcodes/easl-history-slide/easl-history-slide.php');
 	require_once get_theme_file_path('inc/shortcodes/easl-national-associations/easl-national-associations.php');
