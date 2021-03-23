@@ -119,11 +119,13 @@ function easl_mz_parse_crm_membership_data( $response ) {
 		'jhep_hardcopy'                       => $response->jhep_hardcopy,
 		'jhephardcopy_recipient'              => $response->jhephardcopy_recipient,
 		'jhephardcopyotheraddress_street'     => $response->jhephardcopyotheraddress_street,
-		'jhephardcopyotheraddress_postalcode' => $response->jhephardcopyotheraddress_postalcode,
-		'jhephardcopyotheraddress_city'       => $response->jhephardcopyotheraddress_city,
-		'jhephardcopyotheraddress_state'      => $response->jhephardcopyotheraddress_state,
-		'jhephardcopyotheraddress_country'    => $response->jhephardcopyotheraddress_country,
-		'jhephardcopyotheraddress_georeg'     => $response->jhephardcopyotheraddress_georeg,
+        'jhephardcopyotheraddress_postalcode' => $response->jhephardcopyotheraddress_postalcode,
+        'jhephardcopyotheraddress_city'       => $response->jhephardcopyotheraddress_city,
+        'jhephardcopyotheraddress_state'      => $response->jhephardcopyotheraddress_state,
+        'jhephardcopyotheraddress_country'    => $response->jhephardcopyotheraddress_country,
+        'jhephardcopyotheraddress_georeg'     => $response->jhephardcopyotheraddress_georeg,
+        'eilf_donation'                       => !empty($response->eilf_donation) ? $response->eilf_donation : false,
+        'eilf_amount'                         => !empty($response->eilf_amount) ? $response->eilf_amount : 0,
 	);
 
 	return $data;

@@ -2060,8 +2060,44 @@ span.mzms-field-file-button {
     width: 110px;
     text-align: center;
 }
-
-/*Member Zone: Members Document*/
+#mzf_eilf_amount_wrapper {
+    visibility: hidden;
+    opacity: 0;
+    transition: opacity .25s;
+}
+#mzf_eilf_amount_wrapper.easl-active {
+    visibility: visible;
+    opacity: 1;
+}
+#mzf_eilf_amount_wrapper > .easl-col-inner {
+    display: flex;
+    flex-wrap: nowrap;
+    align-items: flex-end;
+    justify-content: space-between;
+}
+#mzf_eilf_amount_wrapper > .easl-col-inner > .mzms-fields-con {
+    transition: width .25s;
+}
+#mzf_eilf_amount_pd_wrapper {
+    width: 100%;
+}
+#mzf_eilf_amount_other_wrapper {
+    width: 0;
+    overflow: hidden;
+}
+#mzf_eilf_amount_wrapper.easl-other-active #mzf_eilf_amount_pd_wrapper,
+#mzf_eilf_amount_wrapper.easl-other-active #mzf_eilf_amount_other_wrapper {
+    width: calc((100% - 30px) / 2);
+}
+#mzf_eilf_amount_other_wrapper input {
+    padding-right: 25px;
+}
+#mzf_eilf_amount_other_wrapper span {
+    position: absolute;
+    right: 8px;
+    bottom: 8px;
+}
+    /*Member Zone: Members Document*/
 .easl-mz-mydocs-inner {
     min-height: 220px;
 }

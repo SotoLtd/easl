@@ -67,6 +67,9 @@ if ( easl_mz_is_member_logged_in() ):
 	}
 	if ( $member && $membership ):
 		$billing_amount = intval( $membership['fee'] * 100 );
+        if($membership['eilf_donation'] && $membership['eilf_amount']) {
+            $billing_amount += intval( $membership['eilf_amount'] * 100 );
+        }
 
 		$member_name_parts = array();
 		if ( $member['salutation'] ) {
@@ -241,6 +244,16 @@ if ( easl_mz_is_member_logged_in() ):
                             <span class="mzcheckout-summery-label">Billing address:</span>
                             <span class="mzcheckout-summery-value"><?php echo $billing_address_title; ?></span>
                         </div>
+                        <?php if($membership['eilf_donation'] && $membership['eilf_amount']) : ?>
+                            <div class="mzcheckout-summery-row">
+                                <span class="mzcheckout-summery-label">EASL-ILF Donation:</span>
+                                <span class="mzcheckout-summery-value"><?php echo $membership['eilf_amount']; ?>€</span>
+                            </div>
+                            <div class="mzcheckout-summery-row">
+                                <span class="mzcheckout-summery-label">Total Amount:</span>
+                                <span class="mzcheckout-summery-value"><?php echo $membership['fee'] + $membership['eilf_amount']; ?>€</span>
+                            </div>
+                        <?php endif; ?>
                     </div>
                     <div class="mz-checkout-submit-row">
                         <span class="mz-input-submit-wrap mzms-button"><input type="submit" value="Submit" id="submit2" name="submit2"></span>

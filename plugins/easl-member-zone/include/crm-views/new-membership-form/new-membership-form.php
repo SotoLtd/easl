@@ -104,6 +104,44 @@ if ( ! $member_has_waiting_payemnt ):
             </div>
             <div class="mzms-fields-row easl-row easl-row-col-2">
                 <div class="easl-col">
+                    <div class="mzms-fields-con">
+                        <div class="mzms-field-wrap mzms-inline-checkbox" style="margin-bottom: 10px;">
+                            <label for="mzf_eilf_donation" class="easl-custom-checkbox">
+                                <input type="checkbox" name="eilf_donation" id="mzf_eilf_donation" value="1">
+                                <span>Donate to the EASL International Liver Foundation</span>
+                            </label>
+                        </div>
+                        <div>
+                            <a href="https://easl-ilf.org/" target="_blank">Learn more about the EASL International Liver Foundation</a>
+                        </div>
+                    </div>
+                </div>
+                <div class="easl-col" id="mzf_eilf_amount_wrapper">
+                    <div class="easl-col-inner">
+                        <div id="mzf_eilf_amount_pd_wrapper" class="mzms-fields-con">
+                            <label class="mzms-field-label" for="mzf_eilf_amount_pd">Amount</label>
+                            <div class="mzms-field-wrap">
+                                <select class="easl-mz-select2" name="eilf_amount_pd" id="mzf_eilf_amount_pd" style="width: 100%;">
+                                    <option value="20" selected="selected">20€</option>
+                                    <option value="30">30€</option>
+                                    <option value="50">50€</option>
+                                    <option value="60">60€</option>
+                                    <option value="100">100€</option>
+                                    <option value="other">Other</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div  id="mzf_eilf_amount_other_wrapper" class="mzms-fields-con">
+                            <div class="mzms-field-wrap">
+                                <input type="text" placeholder="" name="eilf_amount_other" id="mzf_eilf_amount_other" autocomplete="off">
+                                <span>€</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="mzms-fields-row easl-row easl-row-col-2">
+                <div class="easl-col">
                     <div class="easl-col-inner mzms-fields-con">
                         <label class="mzms-field-label" for="mzf_billing_mode">Billing Address</label>
                         <div class="mzms-field-wrap">
@@ -305,7 +343,7 @@ if ( ! $member_has_waiting_payemnt ):
                     <div class="mzms-field-wrap mzms-inline-checkbox">
                         <label for="mzf_terms_condition" class="easl-custom-checkbox">
                             <input type="checkbox" name="terms_condition" id="mzf_terms_condition" value="1">
-                            <span>I agree to <a href="https://easl.eu/terms-conditions/" target="+_blank">terms and conditions</a></span>
+                            <span>I agree to <a href="https://easl.eu/terms-conditions/" target="_blank">terms and conditions</a></span>
                         </label>
                     </div>
                 </div>

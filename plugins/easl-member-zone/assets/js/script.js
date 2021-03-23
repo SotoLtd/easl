@@ -677,6 +677,10 @@
             var $mzf_billing_mode = $("#mzf_billing_mode", $el);
             var $mzf_jhephardcopy_recipient = $("#mzf_jhephardcopy_recipient", $el);
             var $mzf_supporting_docs = $("#mzf_supporting_docs", $el);
+            var $mzf_eilf_donation = $("#mzf_eilf_donation", $el);
+            var $mzf_eilf_amount_wrapper = $("#mzf_eilf_amount_wrapper", $el);
+            var $mzf_eilf_amount_pd = $("#mzf_eilf_amount_pd", $el);
+            var $mzf_eilf_amount_other= $("#mzf_eilf_amount_other", $el);
 
             if (-1 !== requireProof.indexOf($mzf_membership_category.val())) {
                 $("#mzms-support-docs-wrap").addClass("easl-active");
@@ -719,6 +723,16 @@
                     $("#mz-membership-jhe-pother-address-wrap").removeClass("easl-active");
                 }
             });
+            $mzf_eilf_donation.on('click', function (e){
+                this.checked ? $mzf_eilf_amount_wrapper.addClass('easl-active') : $mzf_eilf_amount_wrapper.removeClass('easl-active');
+            });
+            $mzf_eilf_amount_pd.on("change", function (event) {
+                if ('other' === $mzf_eilf_amount_pd.val()) {
+                    $mzf_eilf_amount_wrapper.addClass('easl-other-active')
+                } else {
+                    $mzf_eilf_amount_wrapper.removeClass('easl-other-active');
+                }
+            });
             var $termsCondition = $("#mzf_terms_condition", $el);
             $("form", $el).on("submit", function (event) {
                 var hasError = false;
@@ -733,6 +747,13 @@
                     _this.showFieldError("supporting_docs", "Please upload  supporting document.", $el);
                 } else {
                     _this.clearSingleFieldError("supporting_docs", $el);
+                }
+                
+                if($mzf_eilf_donation.prop("checked") && ('other' === $mzf_eilf_amount_pd.val()) && !$mzf_eilf_amount_other.val()) {
+                    hasError = true;
+                    _this.showFieldError("eilf_amount_other", "Please enter an amount.", $el);
+                }else{
+                    _this.clearSingleFieldError("eilf_amount_other", $el);
                 }
 
                 if (hasError) {
@@ -764,7 +785,6 @@
 
                 url = new URL(window.location.href);
                 var skipDashboard = url.searchParams.get('skip_dashboard');
-                console.log(skipDashboard);
                 this.request(this.methods.newMembershipForm, $el, {
                     'renew': $el.data('paymenttype'),
                     'messages': _this.messages,

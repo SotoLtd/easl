@@ -13,8 +13,8 @@ if ( ! defined( 'ABSPATH' ) ) {
 	die( '-1' );
 }
 
-//die();
-define( 'EASL_MZ_VERSION', '1.2.7' );
+
+define( 'EASL_MZ_VERSION', '1.2.8' );
 
 //define( 'EASL_MZ_VERSION', time() );
 
@@ -517,6 +517,17 @@ class EASL_MZ_Manager {
 			'billing_mode'   => $billing_mode,
 			//'billing_amount' => $membership_cat_fee,
 		);
+        $eilf_donation_amount = '';
+        if ( ! empty( $_POST['eilf_donation'] ) ) {
+            $eilf_donation_amount = $_POST['eilf_amount_pd'];
+            if ( 'other' == $eilf_donation_amount ) {
+                $eilf_donation_amount = $_POST['eilf_amount_other'];
+            }
+        }
+        if ( $eilf_donation_amount ) {
+            $membership_api_data['eilf_donation'] = true;
+            $membership_api_data['eilf_amount']   = $eilf_donation_amount;
+        }
 
 		if ( $billing_mode == 'other' ) {
 			$membership_api_data['billing_address_street']     = ! empty( $_POST['billing_address_street'] ) ? $_POST['billing_address_street'] : '';
