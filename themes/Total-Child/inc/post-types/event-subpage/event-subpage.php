@@ -17,6 +17,7 @@ class EASL_Event_Subpage_Config {
 	public function __construct() {
 		add_action( 'init', array( 'EASL_Event_Subpage_Config', 'register_post_type' ), 0 );
         add_action( 'init', array( 'EASL_Event_Subpage_Config', 'register_group' ), 0 );
+        add_action( 'admin_init',  array($this, 'setup_hooks') );
 	}
 
 	/**
@@ -103,6 +104,62 @@ class EASL_Event_Subpage_Config {
         // Register the staff category taxonomy
         register_taxonomy( self::get_group_slug(), array( self::get_slug() ), $args );
         
+    }
+    
+    public function events_dropdown() {
+	    $current_event_filter = !empty($_GET['es_event']) ? $_GET['es_event'] : '';
+        $events_query = get_posts( array(
+            'post_type'      => 'event',
+            'posts_per_page' => - 1,
+            'post_status'    => 'any',
+            'order'          => 'SC',
+            'orderby'        => 'title',
+            'tax_query' => array(
+                array(
+                    'taxonomy' => 'event_format',
+                    'field'    => 'slug',
+                    'terms'    => 'structured-event',
+                ),
+            ),
+        ) );
+        echo '<label class="screen-reader-text" for="es_event">' . __( 'Filter by event' ) . '</label>';
+        echo '<select name="es_event" id="es_event">';
+        echo '<option value="">All events</option>';
+        foreach ( $events_query as $event_object ) {
+            echo '<option value="' . $event_object->ID . '" '. selected($current_event_filter, $event_object->ID, false) .'>' . get_the_title( $event_object ) . 's</option>';
+        }
+        echo '</select>';
+    }
+    
+    public function restrict_manage_posts( $post_type ) {
+        if ( self::get_slug() != $post_type ) {
+            return '';
+        }
+        
+        $this->events_dropdown();
+    }
+    
+    public function filter_by_event( $vars ) {
+        $current_event_filter = ! empty( $_GET['es_event'] ) ? $_GET['es_event'] : '';
+        if ( ! $current_event_filter ) {
+            return $vars;
+        }
+        $event_subpage_ids = array();
+        $events_subpages   = get_field( 'event_subpages', $current_event_filter );
+        if ( $events_subpages ) {
+            foreach ( $events_subpages as $events_subpage ) {
+                if ( $events_subpage['subpage'] ) {
+                    $event_subpage_ids[] = intval( $events_subpage['subpage'] );
+                }
+            }
+        }
+        $vars['post__in'] = $event_subpage_ids ? $event_subpage_ids : array(-1);
+        
+        return $vars;
+    }
+    public function setup_hooks() {
+        add_action( 'restrict_manage_posts', array( $this, 'restrict_manage_posts' ) );
+        add_filter( 'request',  array($this, 'filter_by_event') );
     }
     
 }
