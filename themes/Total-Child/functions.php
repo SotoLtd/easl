@@ -1,7 +1,7 @@
 <?php
 
-define('EASL_THEME_VERSION', '2021.03.17.02');
-//define( 'EASL_THEME_VERSION', time() );
+//define('EASL_THEME_VERSION', '2021.03.17.02');
+define( 'EASL_THEME_VERSION', time() );
 
 if ( ! defined( 'EASL_INC_DIR' ) ) {
 	define( 'EASL_INC_DIR', trailingslashit( get_stylesheet_directory() ) . 'inc/' );
@@ -253,6 +253,16 @@ function register_custom_sidebar() {
 		'before_title'  => '<h2 class="widget-title">',
 		'after_title'   => '</h2>',
 	) );
+
+	register_sidebar( array(
+		'name'          => ( 'Blog Sidebar' ),
+		'id'            => 'blog-sidebar',
+		'description'   => ( 'Widgets in this area will be shown on blog pages.' ),
+		'before_widget' => '<div id="%1$s" class="sidebar-box widget %2$s">',
+		'after_widget'  => '</div>',
+		'before_title'  => '<h2 class="widget-title">',
+		'after_title'   => '</h2>',
+	) );
 }
 
 add_action( 'widgets_init', 'register_custom_sidebar' );
@@ -416,6 +426,12 @@ function easl_body_classes( $classes ) {
 	$post_id = get_queried_object_id();
 	if ( is_singular( 'event' ) ) {
 		$classes[] = 'event-color-' . easl_get_events_topic_color( $post_id );
+	}
+	if ( is_singular( 'blog' ) ) {
+		$classes[] = 'single-post';
+	}
+	if ( is_tax( 'blog_category' ) ) {
+		$classes[] = 'tag';
 	}
 	if ( is_singular( Publication_Config::get_publication_slug() ) ) {
 		$classes[] = 'publication-color-' . easl_get_publication_topic_color( $post_id );

@@ -366,9 +366,23 @@ function easl_get_news_page_header_style() {
 
 	return $style;
 }
+function easl_get_blog_page_header_style() {
+	$page_id = wpex_get_mod( 'blog_page', 5626 );
+	$style   = get_post_meta( $page_id, 'wpex_post_title_style', true );
+	$style   = ( 'default' == $style ) ? '' : $style;
+
+	return $style;
+}
 
 function easl_get_news_page_header_height() {
 	$page_id      = wpex_get_mod( 'blog_page', 5626 );
+	$title_height = get_post_meta( $page_id, 'wpex_post_title_height', true );
+	$title_height = $title_height ? $title_height : wpex_get_mod( 'page_header_table_height' );
+
+	return $title_height;
+}
+function easl_get_blog_page_header_height() {
+	$page_id      = wpex_get_mod( 'blog_page', 17781 );
 	$title_height = get_post_meta( $page_id, 'wpex_post_title_height', true );
 	$title_height = $title_height ? $title_height : wpex_get_mod( 'page_header_table_height' );
 
@@ -383,8 +397,29 @@ function easl_get_news_page_header_overlay_style() {
 	return $style;
 }
 
+function easl_get_blog_page_header_overlay_style() {
+	$page_id = wpex_get_mod( 'blog_page', 17781 );
+	$style   = get_post_meta( $page_id, 'wpex_post_title_background_overlay', true );
+	$style   = $style == 'none' ? '' : $style;
+
+	return $style;
+}
+
 function easl_get_news_page_header_bg( $post_id ) {
 	$page_id  = wpex_get_mod( 'blog_page', 5626 );
+	$new_meta = get_post_meta( $page_id, 'wpex_post_title_background_redux', true );
+	$image    = '';
+	if ( is_array( $new_meta ) && ! empty( $new_meta['url'] ) ) {
+		$image = isset( $new_meta['url'] ) ? $new_meta['url'] : $image;
+	} else {
+		$image = $new_meta ? $new_meta : $image;
+	}
+
+	return $image;
+}
+
+function easl_get_blog_page_header_bg( $post_id ) {
+	$page_id  = wpex_get_mod( 'blog_page', 17781 );
 	$new_meta = get_post_meta( $page_id, 'wpex_post_title_background_redux', true );
 	$image    = '';
 	if ( is_array( $new_meta ) && ! empty( $new_meta['url'] ) ) {
@@ -472,6 +507,9 @@ function easl_page_header_style( $style ) {
 	if ( is_single() || is_tag() ) {
 		return easl_get_news_page_header_style();
 	}
+	if ( is_singular('blog') || is_tax('blog_category') ) {
+		return easl_get_blog_page_header_style();
+	}
 	if(is_tax(Publication_Config::get_tag_slug())) {
 		return easl_get_publication_tag_header_style();
 	}
@@ -503,6 +541,9 @@ function easl_page_header_title_height( $height ) {
 	if ( is_single() || is_tag() ) {
 		return easl_get_news_page_header_height();
 	}
+    if ( is_singular('blog') || is_tax('blog_category') ) {
+		return easl_get_blog_page_header_height();
+	}
 	if(is_tax(Publication_Config::get_tag_slug())) {
 		return easl_get_publication_tag_header_height();
 	}
@@ -519,6 +560,9 @@ add_filter( 'wpex_post_title_height', 'easl_page_header_title_height', 20 );
 function easl_page_header_overlay_style( $style ) {
 	if ( is_single() || is_tag() ) {
 		return easl_get_news_page_header_overlay_style();
+	}
+    if ( is_singular('blog') || is_tax('blog_category') ) {
+		return easl_get_blog_page_header_overlay_style();
 	}
 	if(is_tax(Publication_Config::get_tag_slug())) {
 		return easl_get_publication_tag_header_overlay_style();
@@ -540,6 +584,9 @@ function easl_page_header_bg( $image, $post_id ) {
 	}
 	if ( is_single() || is_tag() ) {
 		$cusotm_bg = easl_get_news_page_header_bg( $post_id );
+	}
+    if ( is_singular('blog') || is_tax('blog_category') ) {
+		$cusotm_bg = easl_get_blog_page_header_bg( $post_id );
 	}
 	if(is_tax(Publication_Config::get_tag_slug())) {
 		return easl_get_publication_tag_header_bg();
@@ -788,6 +835,23 @@ function easl_sidebar_override($sidebar) {
 	if(is_tax(Publication_Config::get_tag_slug())) {
 		$sidebar = 'publicationssidebar';
 	}
+	if(is_singular('blog') ||is_tax('blog_category')) {
+		$sidebar = 'blog-sidebar';
+	}
 	return $sidebar;
 }
 add_filter('wpex_get_sidebar', 'easl_sidebar_override');
+
+add_filter('wpex_single_blocks', 'easl_single_blocks', 20, 2);
+function easl_single_blocks($blocks, $post_type) {
+    if('blog' != $post_type) {
+        return $blocks;
+    }
+    return array(
+        'meta',
+        'title',
+        'media',
+        'content',
+        'comments'
+    );
+}

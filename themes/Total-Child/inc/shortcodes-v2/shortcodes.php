@@ -8,6 +8,7 @@ function easl_vc_get_shortcodes() {
 	    'easl_generic_button_container',
 	    'easl_card_button',
         'easl_clock',
+        'easl_blog_list',
         'easl_icon_widget',
 	    'easl_icon_widget_grid',
 		'easl_table_of_content',

@@ -21,6 +21,7 @@ require_once EASL_INC_DIR . 'post-types/icon-widget/icon-widget-config.php';
 require_once EASL_INC_DIR . 'post-types/home-page-slider/home-page-slider.php';
 require_once EASL_INC_DIR . 'post-types/popup-template/popup-template.php';
 require_once EASL_INC_DIR . 'post-types/event-subpage/event-subpage.php';
+require_once EASL_INC_DIR . 'post-types/blog/blog-config.php';
 
 function easl_change_pt_labels_post($labels) {
 	$labels = array(
@@ -74,6 +75,7 @@ function easl_menu_order($menu_order) {
 	$front_end_menus = array(
 		'edit.php?post_type=annual_reports', // Annual Reports
 		'edit.php?post_type=award', // Awards
+		'edit.php?post_type=blog', // Awards
 		'edit.php?post_type=event', // Events
 		'edit.php?post_type=easl_widget', // Events
 		'edit.php?post_type=fellowship', // Fellowship

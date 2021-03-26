@@ -1,5 +1,6 @@
 <?php
 function easl_customizer_panels($panels) {
+    $panels['blog'] = 'News';
 	$panels['events'] = array(
 		'title' => __('Events', 'total-child'),
 		'condition' => '__return_true',
