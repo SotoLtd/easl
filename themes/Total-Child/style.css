@@ -1454,7 +1454,7 @@ body #site-navigation .dropdown-menu a {
 }
 
 #site-navigation .dropdown-menu > li > a {
-    padding: 0 13px;
+    padding: 0 8px;
     height: 40px;
     line-height: 40px;
 }
@@ -12046,7 +12046,7 @@ body #onesignal-bell-container.onesignal-reset.onesignal-bell-container-bottom-r
 
 @media only screen and (max-width: 1199px) and (min-width: 1100px) {
     #site-navigation .dropdown-menu > li > a {
-        padding: 0 12px;
+        padding: 0 7px;
     }
 }
 
