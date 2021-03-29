@@ -9,6 +9,9 @@ add_filter( 'vc_tta_accordion_general_classes', 'easl_tta_sc_css_classes', 20, 3
 add_filter( 'vc_shortcodes_custom_css', 'easl_vc_shortcodes_custom_css', 20, 2 );
 add_filter( 'vc-tta-get-params-tabs-list', 'easl_vc_tta_tabs_list', 20, 4 );
 add_filter( 'tiny_mce_before_init', 'easl_tiny_mce_settings', 20, 2 );
+add_filter( 'vc_map_get_attributes', 'easl_vc_map_get_attributes', 20, 2 );
+
+add_action('vc_backend_editor_enqueue_js_css', 'easl_vc_backend_scripts');
 
 function easl_tta_sc_css_classes( $classes, $atts ) {
     if ( in_array( 'vc_tta-tabs', $classes ) && ! empty( $atts['tab_position'] ) && in_array( $atts['tab_position'], array(
@@ -240,4 +243,18 @@ function easl_tiny_mce_settings($mceInit, $editor_id) {
     ));
     
     return $mceInit;
+}
+function easl_vc_map_get_attributes($atts, $tag ) {
+    if('vc_tta_section' != $tag) {
+        return $atts;
+    }
+    $tab_id = !empty($atts['tab_id']) ? $atts['tab_id'] : strtolower(sanitize_html_class($atts['title']));
+    if(!empty(EASL_VC_EASL_Toggle::$current_tab_id )) {
+        $atts['tab_id'] = EASL_VC_EASL_Toggle::$current_tab_id .'__' . $tab_id;
+    }
+    
+    return $atts;
+}
+function easl_vc_backend_scripts() {
+    wp_enqueue_script('easl_vc_scripts', get_stylesheet_directory_uri() . '/assets/js/admin/vc-custom-views.js', array(), EASL_THEME_VERSION, true);
 }

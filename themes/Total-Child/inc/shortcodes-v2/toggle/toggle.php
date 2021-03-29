@@ -5,7 +5,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 
 class EASL_VC_EASL_Toggle extends EASL_ShortCode_Container {
-    
+    static $current_tab_id = null;
     /**
      * @param $atts
      * @return string
@@ -63,4 +63,5 @@ class EASL_VC_EASL_Toggle extends EASL_ShortCode_Container {
     public function containerContentClass() {
         return 'wpb_column_container vc_container_for_children vc_toggle_content vc_clearfix';
     }
+    
 }

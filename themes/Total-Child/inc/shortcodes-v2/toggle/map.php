@@ -15,7 +15,7 @@ return array(
     'description'               => __( 'Customise toggle element.', 'total-child' ),
     'php_class_name'            => 'EASL_VC_EASL_Toggle',
     //'js_view'                   => 'VcColumnView',
-    'js_view'                   => 'VcToggleView',
+    'js_view'                   => 'EASLVcToggleView',
     'params'                    => array(
         array(
             'type'             => 'textfield',
@@ -26,6 +26,15 @@ return array(
             'value'            => esc_html__( 'Toggle title', 'js_composer' ),
             'description'      => esc_html__( 'Enter title of toggle block.', 'js_composer' ),
             'edit_field_class' => 'vc_col-sm-9',
+        ),
+        array(
+            'type' => 'el_id',
+            'param_name' => 'tab_id',
+            'settings' => array(
+                'auto_generate' => true,
+            ),
+            'heading' => esc_html__( 'Toggle ID', 'js_composer' ),
+            'description' => sprintf( esc_html__( 'Enter toggle ID (Note: make sure it is unique and valid according to %sw3c specification%s).', 'js_composer' ), '<a href="https://www.w3schools.com/tags/att_global_id.asp" target="_blank">', '</a>' ),
         ),
         array(
             'type'               => 'dropdown',
@@ -54,24 +63,11 @@ return array(
             ),
             'description' => esc_html__( 'Select "Open" if you want toggle to be open by default.', 'js_composer' ),
         ),
-        vc_map_add_css_animation(),
-        array(
-            'type'        => 'el_id',
-            'heading'     => esc_html__( 'Element ID', 'js_composer' ),
-            'param_name'  => 'el_id',
-            'description' => sprintf( esc_html__( 'Enter element ID (Note: make sure it is unique and valid according to %sw3c specification%s).', 'js_composer' ), '<a href="https://www.w3schools.com/tags/att_global_id.asp" target="_blank">', '</a>' ),
-        ),
         array(
             'type'        => 'textfield',
             'heading'     => esc_html__( 'Extra class name', 'js_composer' ),
             'param_name'  => 'el_class',
             'description' => esc_html__( 'Style particular content element differently - add a class name and refer to it in custom CSS.', 'js_composer' ),
-        ),
-        array(
-            'type'       => 'css_editor',
-            'heading'    => esc_html__( 'CSS box', 'js_composer' ),
-            'param_name' => 'css',
-            'group'      => esc_html__( 'Design Options', 'js_composer' ),
         ),
     ),
 );

@@ -13,6 +13,7 @@ function easl_vc_get_shortcodes() {
 	    'easl_icon_widget_grid',
 		'easl_table_of_content',
 		'easl_toggle',
+		'easl_accordion',
 	);
 
 	return $shortcodes;
