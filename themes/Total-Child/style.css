@@ -11452,7 +11452,19 @@ body .mentors-application-title {
     animation: easl-ytp-right-spin 1333ms cubic-bezier(0.4, 0.0, 0.2, 1) infinite both;
 }
 
-/* VC Shortcode: easl_table_of_content */
+/* VC Shortcode: easl_toggle*/
+.easl-vc-toggle.vc_toggle .vc_toggle_title{
+    padding: 0;
+}
+.easl-vc-toggle.vc_toggle .vc_toggle_title > h4 {
+    display: block;
+    margin: 0;
+}
+.easl-vc-toggle .vc_toggle_title > h4 a {
+    display: block;
+    padding: 16px 20px 14px 16px;
+}
+    /* VC Shortcode: easl_table_of_content */
 .easl-table-of-content .vc_custom_heading {
     font-size: 21px;
     margin-bottom: 20px;
