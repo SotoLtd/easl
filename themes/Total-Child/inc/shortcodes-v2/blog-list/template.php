@@ -28,6 +28,10 @@ $excerpt_length     = '';
 $atts = vc_map_get_attributes( $this->getShortcode(), $atts );
 extract( $atts );
 
+if(!is_active_sidebar('blog-sidebar')) {
+    $display_sidebar = 'false';
+}
+
 $include_categories = $this->string_to_array( $include_categories );
 $exclude_categories = $this->string_to_array( $exclude_categories );
 $excerpt_length     = intval( $excerpt_length );
@@ -154,15 +158,19 @@ $news_query = new WP_Query( $query_args );
                             while ( $news_query->have_posts() ):
                                 $news_query->the_post();
                                 $news_link = get_permalink();
+                                $thumbnail = get_field('blog_listing_image', get_the_ID());
+                                if(!$thumbnail) {
+                                    $thumbnail = get_the_post_thumbnail_url(get_the_ID(), 'news_list');
+                                }
                                 
                                 ?>
-                                <article class="easl-news-list-entry <?php if ( has_post_thumbnail() ) {
+                                <article class="easl-news-list-entry easl-blog-list-entry <?php if ( has_post_thumbnail() ) {
                                     echo 'easl-news-list-entry-has-thumb';
                                 } ?>">
                                     <?php if ( has_post_thumbnail() ): ?>
                                         <div class="easl-news-list-thumb">
                                             <a href="<?php echo $news_link; ?>">
-                                                <?php the_post_thumbnail( 'news_list' ); ?>
+                                                <img src="<?php echo esc_url($thumbnail); ?>" alt="">
                                             </a>
                                         </div>
                                     <?php endif; ?>
@@ -211,7 +219,7 @@ $news_query = new WP_Query( $query_args );
             <?php if ( 'true' == $display_sidebar ): ?>
                 <div class="easl-col easl-col-4 easl-news-list-newsletters">
                     <div class="easl-col-inner">
-                        <?php dynamic_sidebar( 'blog-sidebar ' ); ?>
+                        <?php dynamic_sidebar( 'blog-sidebar' ); ?>
                     </div>
                 </div>
             <?php endif; ?>

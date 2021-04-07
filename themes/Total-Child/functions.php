@@ -1,6 +1,6 @@
 <?php
 
-define('EASL_THEME_VERSION', '2021.03.27.01');
+define('EASL_THEME_VERSION', '2021.04.07.03');
 //define( 'EASL_THEME_VERSION', time() );
 
 if ( ! defined( 'EASL_INC_DIR' ) ) {
@@ -73,6 +73,7 @@ function easl_custom_scripts() {
 	$fornt_end_data = array(
 		'ajaxUrl'     => admin_url( 'admin-ajax.php', $ssl_scheme ),
 		'loaderImage' => '<img class="easl-loading-icon" src="' . get_stylesheet_directory_uri() . '/images/easl-loader.gif"/>',
+        'article_id' => wpex_get_the_id()
 	);
 	wp_localize_script( 'easl-custom', 'EASLSETTINGS', $fornt_end_data );
 }
@@ -437,6 +438,9 @@ function easl_body_classes( $classes ) {
 		$classes[] = 'publication-color-' . easl_get_publication_topic_color( $post_id );
 	}
 	$page_title_color = get_post_meta( $post_id, 'easl_page_title_color', true );
+    if ( (!$page_title_color && is_singular('blog')) || (is_tax('blog_category') || is_tax('blog_tag')) ) {
+        $page_title_color = get_post_meta( wpex_get_mod( 'easl_blog_page', 22015 ), 'easl_page_title_color', true );
+    }
 	if ( $page_title_color ) {
 		$classes[] = 'easl-page-title-color-' . $page_title_color;
 	}
@@ -494,4 +498,43 @@ function exclude_pages_from_search( $query ) {
 
 if ( isset( $_GET['s'] ) ) {
 	add_action( 'pre_get_posts', 'exclude_pages_from_search' );
+}
+
+add_action('wp_ajax_easl_love_the_article', 'easl_love_the_article');
+add_action('wp_ajax_nopriv_easl_love_the_article', 'easl_love_the_article');
+
+function easl_love_the_article() {
+    if(empty($_POST['article_id'])) {
+        wp_send_json(array(
+                'Status' => 'FAILED'
+        ));
+    }
+    $post_id = $_POST['article_id'];
+    $love_count = get_post_meta($post_id, 'easl_love_count', true);
+    $love_count = absint($love_count);
+    $love_count++;
+    update_post_meta($post_id, 'easl_love_count', $love_count);
+    wp_send_json(array(
+        'Status' => 'SUCCESS',
+        'Count' => $love_count
+    ));
+}
+add_action('wp_ajax_easl_article_hit_count', 'easl_article_hit_count');
+add_action('wp_ajax_nopriv_easl_article_hit_count', 'easl_article_hit_count');
+
+function easl_article_hit_count() {
+    if(empty($_POST['article_id'])) {
+        wp_send_json(array(
+                'Status' => 'FAILED'
+        ));
+    }
+    $post_id = $_POST['article_id'];
+    $hit_count = get_post_meta($post_id, 'easl_hit_count', true);
+    $hit_count = absint($hit_count);
+    $hit_count++;
+    update_post_meta($post_id, 'easl_hit_count', $hit_count);
+    wp_send_json(array(
+        'Status' => 'SUCCESS',
+        'Count' => $hit_count
+    ));
 }

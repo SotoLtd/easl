@@ -16,4 +16,5 @@ if ( ! defined( 'ABSPATH' ) ) {
         ?>
         - <span class="easl-news-list-source"><?php echo $categories; ?></span>
     <?php endif; ?>
+     - <span class="easl-article-reading-time-wrap">Reading time: <span class="easl-article-reading-time"></span></span>
 </p>

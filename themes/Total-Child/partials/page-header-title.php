@@ -49,6 +49,7 @@ extract( wp_parse_args( $args, array(
 if ( empty( $string ) ) {
 	return;
 }
+
 if ( is_page( 'apply' ) ) {
     //@todo maybe make this more robust, so it doesn't depend on the page having the slug "apply"
     return;
@@ -60,10 +61,10 @@ if(is_tax(Publication_Config::get_tag_slug())) {
 	$string = 'Publications on <span>'. $string .'</span>';
 }
 
-if(is_singular('blog')) {
-    $string = 'Blog';
+if(is_singular('blog') && !get_post_meta( get_the_ID(), 'wpex_post_title', true )) {
+    $string = wpex_title(wpex_get_mod( 'easl_blog_page', 22015 ));
 }
-if(is_singular('blog_category')) {
+if(is_tax('blog_category') || is_tax('blog_tag')) {
     $string = 'Blog on <span>'. $string .'</span>';
 }
 
@@ -78,7 +79,13 @@ if(is_page()){
 		$allow_html_shortcode = true;
 	}
 }
-echo '<div class="easl-page-header-title-wrap">';
+$pre_title = '';
+$post_title = '';
+if(is_singular('blog')) {
+    $pre_title = trim(get_post_meta(get_the_ID(), 'easl_page_pre_title', true));
+    $post_title = trim(get_post_meta(get_the_ID(), 'easl_page_post_title', true));
+}
+echo '<div class="easl-page-header-title-wrap page-header-table">';
 if(('background-image' == wpex_page_header_style()) && wpex_page_header_background_image()) {
 	echo easl_page_header_background_image();
 }else{
@@ -94,7 +101,7 @@ echo '<' . $html_tag . ' class="page-header-title wpex-clr"' . $schema_markup . 
 	}elseif(is_singular(Publication_Config::get_publication_slug())){
 		$back_url = wpex_get_mod( 'publications_header_back_button', '');
 	}elseif(is_singular('blog') || is_tax('blog_category')){
-		$back_url = get_permalink(17781);
+		$back_url = get_permalink(22015);
 	}elseif(is_single() || is_tag()){
 		$back_url = get_the_permalink(wpex_get_mod( 'blog_page', 5626));
 	}elseif (is_tax(Publication_Config::get_tag_slug())){
@@ -103,11 +110,17 @@ echo '<' . $html_tag . ' class="page-header-title wpex-clr"' . $schema_markup . 
 	if($back_url){
 		echo '<a class="easl-title-back-link" href="'. esc_url($back_url) .'"><span class="ticon ticon-angle-left" aria-hidden="true"></span> ' . __('Back', 'total-child') . '</a>';
 	}
+	if($pre_title) {
+	    echo '<span class="easl-page-pre-title">'.  wp_kses_post($pre_title) .'</span>';
+    }
 	if($allow_html_shortcode){
 		echo do_shortcode($string);
 	}else{
-		echo '<span>' . wp_kses_post( $string ) . '</span>';
+		echo '<span>' .  ( $string ) . '</span>';
 	}
+    if ( $post_title ) {
+        echo '<span class="easl-page-post-title">' . wp_kses_post( $post_title ) . '</span>';
+    }
 
 echo '</' . $html_tag . '>';
 echo '</div>';

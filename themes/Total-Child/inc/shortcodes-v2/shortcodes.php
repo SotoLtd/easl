@@ -14,6 +14,8 @@ function easl_vc_get_shortcodes() {
 		'easl_table_of_content',
 		'easl_toggle',
 		'easl_accordion',
+		'easl_collapsible_content',
+		'easl_popular_blogs',
 	);
 
 	return $shortcodes;

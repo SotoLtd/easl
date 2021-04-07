@@ -752,6 +752,67 @@
             return false;
         });
     }
+    function easlCalculateReadingTime() {
+        if($body.hasClass('single-blog')) {
+            var wpm = 300;
+            var wordCount = $('.single-content').text().split(/\s+/).length;
+            var imageCount = $('.single-content img' ).length;
+            var readingTime = 0;
+            var imageTime = imageCount >= 10 ? 72 + (imageCount - 9) * 3 : imageCount * (25 - imageCount) / 2;
+            wordCount += parseInt(imageTime * wpm / 60, 10);
+            readingTime = wordCount / wpm;
+            if(readingTime <= 1) {
+                readingTime = '< 1 minute';
+            }else{
+                readingTime = Math.ceil(readingTime) + ' minutes';
+            }
+            $('.easl-article-reading-time').html(readingTime );
+        }
+    }
+    
+    function easlLoveTheArticle() {
+        if($body.hasClass('single')) {
+            $(".easl-love-the-article-button").on("click", function (e){
+                e.preventDefault();
+                var $button = $(this);
+                var articleID = $button.data('postid');
+                if(articleID && !$button.hasClass('easl-loved')){
+                    $(this).addClass('easl-loved', true);
+                    $.ajax({
+                        url: EASLSETTINGS.ajaxUrl,
+                        type: "POST",
+                        dataType: 'json',
+                        data: {
+                            action: 'easl_love_the_article',
+                            article_id: articleID,
+                        },
+                        success: function (response) {
+                            if(response.Status === 'SUCCESS') {
+                                $(this).addClass('easl-loved', true);
+                            }
+                        }
+                    });
+                }
+            });
+        }
+    }
+    
+    function easlArticleHitCount() {
+        if($body.hasClass('single')) {
+            $.ajax({
+                url: EASLSETTINGS.ajaxUrl,
+                type: "POST",
+                dataType: 'json',
+                data: {
+                    action: 'easl_article_hit_count',
+                    article_id: EASLSETTINGS.article_id,
+                },
+                success: function (response) {
+                
+                }
+            });
+        }
+    }
 
     $(document).ready(function () {
         $body = $('body');
@@ -760,6 +821,9 @@
         easlCustomCheckbox();
         easlCustomRadio();
         easlCustomSelect();
+        easlCalculateReadingTime();
+        easlLoveTheArticle();
+        easlArticleHitCount();
 
         $body.on("mz_reload_custom_fields", function (event, $context) {
             easlCustomCheckbox();

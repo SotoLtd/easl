@@ -116,7 +116,9 @@ body a {
     -moz-transition: all 0.25s linear;
     transition: all 0.25s linear;
 }
+blockquote {
 
+}
 /*EASL GRID*/
 .easl-row {
     margin: 0 -15px;
@@ -1697,10 +1699,13 @@ ul.sidr-class-sub-menu > .sidr-class-easl-hide-mobile-submenu {
     height: 100%;
 }
 
-.easl-page-header-title-wrap {
-    height: 220px;
+.page-header .easl-page-header-title-wrap {
     display: flex;
     align-items: center;
+    padding: 0;
+}
+.easl-page-header-title-wrap {
+    height: 220px;
 }
 
 .page-header.background-image-page-header .easl-page-header .page-header-title {
@@ -1708,7 +1713,6 @@ ul.sidr-class-sub-menu > .sidr-class-easl-hide-mobile-submenu {
 }
 
 .page-header-table {
-    height: auto;
     padding: 20px 0 75px;
 }
 
@@ -5714,7 +5718,35 @@ body.tax-publication_tag {
 .easl-ip-topblue-row {
     color: #ffff;
 }
-
+/* Blog */
+.easl-love-the-article {
+    margin: 0 0 30px;
+}
+.easl-love-the-article .easl-love-the-article-button {
+    background: #f9f9f9;
+    color: #4da7de;
+    font-size: 14px;
+    line-height: 40px;
+    width: 40px;
+    height: 40px;
+    padding: 0;
+    text-align: center;
+}
+.easl-love-the-article .easl-love-the-article-button span {
+    transition: .2s transform;
+}
+.easl-love-the-article .easl-love-the-article-button:hover {
+    outline: none;
+}
+.easl-love-the-article .easl-love-the-article-button:hover span {
+    transform: scale(1.5);
+}
+.easl-love-the-article .easl-love-the-article-button.easl-loved {
+    pointer-events: none;
+}
+.easl-love-the-article .easl-love-the-article-button.easl-loved span {
+    transform: scale(1.75);
+}
 /* Social Share */
 .social-share-text {
     color: #004b87;
@@ -7093,8 +7125,8 @@ ul.suggestions {
     color: #004b87;
 }
 
-.single-post .page-header.background-image-page-header .page-header-title,
-.single-post .page-header.easl-page-header-no-bg .page-header-title,
+.single-post:not(.single-blog)  .page-header.background-image-page-header .page-header-title,
+.single-post:not(.single-blog) .page-header.easl-page-header-no-bg .page-header-title,
 .tag .page-header.background-image-page-header .page-header-title,
 .tag .page-header.easl-page-header-no-bg .page-header-title {
     color: #004b87 !important;
@@ -7171,6 +7203,11 @@ ul.suggestions {
 
 .event-color-light-blue .page-header-title .easl-title-back-link:hover {
     color: #165291;
+}
+.easl-page-pre-title, .easl-page-post-title {
+    display: block;
+    font-size: .93em;
+    font-family: 'KnockoutHTF31JuniorMiddlewt';
 }
 
 .easl-tags a {
@@ -8877,6 +8914,18 @@ ul.suggestions {
     border: 1px solid #d1d1d1;
 }
 
+/* VC Shortcode: Collapsible Content */
+.easl-collapsible-content {
+    margin: 0 0 25px;
+    position: relative;
+    z-index: 1;
+}
+.easl-collapsible-content-button {
+    padding-top: 5px;
+}
+.easl-collapsible-content {
+    padding-top: 20px;
+}
 
 /* VC Shortcode: EASL Image Banner */
 .easl-banner-image-wrap {
@@ -13884,6 +13933,10 @@ body #onesignal-bell-container.onesignal-reset.onesignal-bell-container-bottom-r
 
 .easl-particles-header {
     position: relative;
+}
+.easl-particles-header .easl-page-header-title-wrap {
+    height: 24.7vw;
+    opacity: 0;
 }
 #particles-js {
     position: absolute;

@@ -271,6 +271,28 @@ function easl_extended_meta( $array, $post ) {
 			'disable' => esc_html__( 'Disable', 'total-child' ),
 		),
 	);
+	
+	if('blog'==get_post_type($post)) {
+        $array['title']['settings'] = array_merge(
+            array_slice($array['title']['settings'], 0, 2, true),
+            array(
+                'easl_page_pre_title' => array(
+                    'title'       => esc_html__( 'Pre title - displayed above title', 'total-child' ),
+                    'type'        => 'text',
+                    'id'          => 'easl_page_pre_title',
+                    'description' => esc_html__( 'Enter pre title.', 'total-child' ),
+                ),
+                'easl_page_post_title' => array(
+                    'title'       => esc_html__( 'Post title - displayed bellow title', 'total-child' ),
+                    'type'        => 'text',
+                    'id'          => 'easl_page_post_title',
+                    'description' => esc_html__( 'Enter  post title.', 'total-child' ),
+                ),
+            ),
+            array_slice($array['title']['settings'], 2, null, true)
+        );
+        unset($array['title']['settings']['post_subheading']);
+    }
 
 	return $array;
 }
@@ -338,6 +360,7 @@ add_action( 'vc_after_init', 'easl_vc_add_params', 40 );
 add_filter( 'wpex_main_metaboxes_post_types', 'easl_total_post_types' );
 function easl_total_post_types( $post_types ) {
 	$post_types['event'] = 'event';
+	$post_types['blog'] = 'blog';
 
 	return $post_types;
 }
@@ -382,7 +405,7 @@ function easl_get_news_page_header_height() {
 	return $title_height;
 }
 function easl_get_blog_page_header_height() {
-	$page_id      = wpex_get_mod( 'blog_page', 17781 );
+	$page_id      = wpex_get_mod( 'easl_blog_page', 22015 );
 	$title_height = get_post_meta( $page_id, 'wpex_post_title_height', true );
 	$title_height = $title_height ? $title_height : wpex_get_mod( 'page_header_table_height' );
 
@@ -398,7 +421,7 @@ function easl_get_news_page_header_overlay_style() {
 }
 
 function easl_get_blog_page_header_overlay_style() {
-	$page_id = wpex_get_mod( 'blog_page', 17781 );
+	$page_id = wpex_get_mod( 'easl_blog_page', 22015 );
 	$style   = get_post_meta( $page_id, 'wpex_post_title_background_overlay', true );
 	$style   = $style == 'none' ? '' : $style;
 
@@ -419,7 +442,7 @@ function easl_get_news_page_header_bg( $post_id ) {
 }
 
 function easl_get_blog_page_header_bg( $post_id ) {
-	$page_id  = wpex_get_mod( 'blog_page', 17781 );
+	$page_id  = wpex_get_mod( 'easl_blog_page', 22015 );
 	$new_meta = get_post_meta( $page_id, 'wpex_post_title_background_redux', true );
 	$image    = '';
 	if ( is_array( $new_meta ) && ! empty( $new_meta['url'] ) ) {
@@ -507,7 +530,7 @@ function easl_page_header_style( $style ) {
 	if ( is_single() || is_tag() ) {
 		return easl_get_news_page_header_style();
 	}
-	if ( is_singular('blog') || is_tax('blog_category') ) {
+	if ( is_singular('blog') || is_tax('blog_category') || is_tax('blog_tag')  ) {
 		return easl_get_blog_page_header_style();
 	}
 	if(is_tax(Publication_Config::get_tag_slug())) {
@@ -538,11 +561,11 @@ function easl_page_header_style( $style ) {
 add_filter( 'wpex_page_header_style', 'easl_page_header_style', 20 );
 
 function easl_page_header_title_height( $height ) {
+    if ( is_singular('blog') || is_tax('blog_category') ) {
+        return easl_get_blog_page_header_height();
+    }
 	if ( is_single() || is_tag() ) {
 		return easl_get_news_page_header_height();
-	}
-    if ( is_singular('blog') || is_tax('blog_category') ) {
-		return easl_get_blog_page_header_height();
 	}
 	if(is_tax(Publication_Config::get_tag_slug())) {
 		return easl_get_publication_tag_header_height();
@@ -561,7 +584,7 @@ function easl_page_header_overlay_style( $style ) {
 	if ( is_single() || is_tag() ) {
 		return easl_get_news_page_header_overlay_style();
 	}
-    if ( is_singular('blog') || is_tax('blog_category') ) {
+    if ( is_singular('blog') || is_tax('blog_category') || is_tax('blog_tag')  ) {
 		return easl_get_blog_page_header_overlay_style();
 	}
 	if(is_tax(Publication_Config::get_tag_slug())) {
@@ -585,7 +608,7 @@ function easl_page_header_bg( $image, $post_id ) {
 	if ( is_single() || is_tag() ) {
 		$cusotm_bg = easl_get_news_page_header_bg( $post_id );
 	}
-    if ( is_singular('blog') || is_tax('blog_category') ) {
+    if ( is_singular('blog') || is_tax('blog_category') || is_tax('blog_tag')  ) {
 		$cusotm_bg = easl_get_blog_page_header_bg( $post_id );
 	}
 	if(is_tax(Publication_Config::get_tag_slug())) {
@@ -850,8 +873,39 @@ function easl_single_blocks($blocks, $post_type) {
     return array(
         'meta',
         'title',
-        'media',
+        //'media',
         'content',
+        'tags',
+        'love-button',
+        'suggested-articles',
+        'related-articles',
+        //'readers-articles',
         'comments'
     );
 }
+
+function easl_blog_single_thumbnail_args( $args ) {
+    $args['size'] = 'full';
+    return $args;
+}
+
+add_filter( 'wpex_blog_single_thumbnail_args', 'easl_blog_single_thumbnail_args' );
+
+function easl_blog_sidebar($sidebar, $instance) {
+
+    if('singular_blog' == $instance) {
+        $sidebar = 'blog-sidebar';
+    }
+    return $sidebar;
+}
+add_filter( 'wpex_get_sidebar', 'easl_blog_sidebar', 10, 2 );
+add_filter( 'wpex_sidebar_has_fallback', '__return_false' );
+
+function easl_blog_layout_class($layout, $instance) {
+    
+    if('singular_blog' == $instance && !is_active_sidebar('blog-sidebar')) {
+        $layout = 'full-width';
+    }
+    return $layout;
+}
+add_filter( 'wpex_post_layout_class', 'easl_blog_layout_class', 10, 2 );
