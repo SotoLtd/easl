@@ -42,7 +42,7 @@ if ( ! defined( 'ABSPATH' ) ) {
                             <?=$field;?>
                         <?php elseif ($field['type'] == 'file'):?>
                             <?php if ($field['value']):?>
-                                <a href="<?=$field['value']['link'];?>" target="_blank">View file</a>
+                                <a href="<?=$field['value']['url'];?>" target="_blank">View file</a>
                             <?php else:?>
                                 No file uploaded
                             <?php endif;?>

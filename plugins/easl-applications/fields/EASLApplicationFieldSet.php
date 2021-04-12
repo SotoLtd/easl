@@ -64,6 +64,9 @@ class EASLApplicationFieldSet
                 'required' => $this->required,
                 'type' => $field->type,
             ];
+            if($field->type == 'file') {
+                $output['_easl_app_file'] = true;
+            }
 
             if ($field->conditionalLogic) {
                 $dependsOnKey = $field->conditionalLogic[0];

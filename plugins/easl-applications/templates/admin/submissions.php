@@ -13,7 +13,7 @@
     <tbody>
         <?php foreach($programmes as $programme):?>
             <tr>
-                <td><?=$programme->post_title;?></td>
+                <td><a href="<?php echo get_edit_post_link($programme->ID); ?>" target="_blank"><?=$programme->post_title;?></a></td>
                 <td><?=$programme->start_date;?></td>
                 <td><?=$programme->end_date;?></td>
                 <td><?=$programme->submissions_count;?></td>

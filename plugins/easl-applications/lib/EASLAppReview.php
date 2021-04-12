@@ -111,7 +111,7 @@ class EASLAppReview {
                     $data = $field->settings['choices'][$data];
                 }
 
-                $out[$field->name] = $data;
+                $out[] = $data;
             }
 
         } else {
@@ -158,32 +158,38 @@ class EASLAppReview {
         }
 
         $scoringCriteria = get_field('scoring_criteria', $programmeId);
-
-        foreach($this->getSubmissions($programmeId, null) as $sub) {
-            $submissions[] = $this->getSubmissionDetails($sub['submission'], true);
+        
+        if(!is_array($scoringCriteria)) {
+            $scoringCriteria = [];
         }
-
+        $reviewers_emails = wp_list_pluck($reviewers, 'email');
+        $scoringCriteriaNames = wp_list_pluck($scoringCriteria, 'criteria_name');
         foreach($reviewers as $reviewer) {
-            $reviewerName = $reviewer['firstName'] . ' ' . $reviewer['lastName'];
+            $reviewerName   = $reviewer['firstName'] . ' ' . $reviewer['lastName'];
             $headerFields[] = $reviewerName . ' Review total score';
             $headerFields[] = $reviewerName . ' Review text';
-
-            foreach($scoringCriteria as $category) {
+            foreach ( $scoringCriteria as $category ) {
                 $headerFields[] = $reviewerName . ' ' . $category['criteria_name'] . ' score (out of ' . $category['criteria_max'] . ')';
             }
+        }
 
-            foreach($submissions as &$submission) {
-                $reviews = $this->getSubmissionReviews($submission['ID']);
-                foreach($reviews as $review) {
-                    if ($review['reviewer_email'] === $reviewer['email']) {
-                        $submission[] = $review['total_score'];
-                        $submission[] = $review['review_text'];
-                        foreach($review['scoring'] as $category) {
-                            $submission[] = $category['score'];
-                        }
-                    }
-                }
+        foreach($this->getSubmissions($programmeId, null) as $sub) {
+            $sub_data = array_values( $this->getSubmissionDetails( $sub['submission'], true ) );
+            $reviews  = $this->getSubmissionReviewsAllFields( $sub['id'], $scoringCriteriaNames );
+            if ( ! $reviews ) {
+                $reviews = array();
             }
+            foreach ( $reviewers_emails as $reviewer_email ) {
+                if ( isset( $reviews[ $reviewer_email ] ) ) {
+                    $sub_data[ $reviewer_email . ' total_score' ] = $reviews[ $reviewer_email ]['total_score'];
+                    $sub_data[ $reviewer_email . ' review_text' ] = $reviews[ $reviewer_email ]['review_text'];
+                    $sub_data                                     = array_merge( $sub_data, array_values( $reviews[ $reviewer_email ]['scoring'] ) );
+                } else {
+                    $sub_data = array_merge( $sub_data, array_fill( 0, 2 + count( $scoringCriteriaNames ), '' ) );
+                }
+        
+            }
+            $submissions[] = $sub_data;
         }
 
         $programme = get_post($programmeId);
@@ -261,6 +267,52 @@ class EASLAppReview {
 
         $programmeId = get_post_meta($submissionId, 'programme_id', true);
         wp_redirect($this->getUrl(self::PAGE_PROGRAMME, ['programmeId' => $programmeId]) . '&review_submitted=1');
+    }
+    
+    protected function getSubmissionReviewsAllFields( $submissionID, $scoringCriteriaNames ) {
+        global $wpdb;
+        $sql = "SELECT p.ID, rt.meta_value AS review_text, re.meta_value AS reviewer_email, ts.meta_value AS total_score, sc.meta_value AS scoring  FROM {$wpdb->posts} AS p";
+        $sql .= " INNER JOIN {$wpdb->postmeta} ON ( p.ID = {$wpdb->postmeta}.post_id )";
+        $sql .= " LEFT JOIN {$wpdb->postmeta} AS rt ON ( p.ID = rt.post_id ) AND ( rt.meta_key = 'review_text' )";
+        $sql .= " LEFT JOIN {$wpdb->postmeta} AS re ON ( p.ID = re.post_id ) AND ( re.meta_key = 'reviewer_email' )";
+        $sql .= " LEFT JOIN {$wpdb->postmeta} AS ts ON ( p.ID = ts.post_id ) AND ( ts.meta_key = 'total_score' )";
+        $sql .= " LEFT JOIN {$wpdb->postmeta} AS sc ON ( p.ID = sc.post_id ) AND ( sc.meta_key = 'scoring' )";
+        
+        $sql .= " WHERE (1=1)";
+        $sql .= " AND ( {$wpdb->postmeta}.meta_key = 'submission_id')";
+        $sql .= $wpdb->prepare( " AND ( {$wpdb->postmeta}.meta_value = %d)", $submissionID );
+        $sql .= " AND (p.post_type = 'submission-review')";
+        $sql .= " AND (p.post_status NOT IN('trash', 'auto-draft'))";
+        $sql .= " GROUP BY p.ID ORDER BY p.post_date DESC LIMIT 0, 99999";
+        
+        $result = $wpdb->get_results( $sql );
+        if ( ! $result ) {
+            return array();
+        }
+        
+        $data = array();
+        foreach ( $result as $row ) {
+            $scores = maybe_unserialize( $row->scoring );
+            if ( ! $scores ) {
+                $scores = array();
+            }
+            $score_data = array();
+            foreach ( $scores as $score ) {
+                $score_data[ $score['name'] ] = $score['score'];
+            }
+            $scores = array();
+            foreach ( $scoringCriteriaNames as $scoring_criteria_name ) {
+                $scores[ $scoring_criteria_name ] = isset( $score_data[ $scoring_criteria_name ] ) ? $score_data[ $scoring_criteria_name ] : '';
+            }
+            $data[ $row->reviewer_email ] = array(
+                'review_text'    => $row->review_text,
+                'reviewer_email' => $row->reviewer_email,
+                'total_score'    => $row->total_score,
+                'scoring'        => $scores,
+            );
+        }
+        
+        return $data;
     }
 
     protected function getSubmissionReviews($submissionId) {
