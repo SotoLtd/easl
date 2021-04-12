@@ -13934,10 +13934,6 @@ body #onesignal-bell-container.onesignal-reset.onesignal-bell-container-bottom-r
 .easl-particles-header {
     position: relative;
 }
-.easl-particles-header .easl-page-header-title-wrap {
-    height: 24.7vw;
-    opacity: 0;
-}
 #particles-js {
     position: absolute;
     top: 0;
