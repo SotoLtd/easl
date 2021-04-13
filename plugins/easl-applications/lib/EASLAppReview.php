@@ -111,7 +111,7 @@ class EASLAppReview {
                     $data = $field->settings['choices'][$data];
                 }
 
-                $out[] = $data;
+                $out[] = preg_replace('/[\s]+/',' ', $data);
             }
 
         } else {
@@ -182,7 +182,7 @@ class EASLAppReview {
             foreach ( $reviewers_emails as $reviewer_email ) {
                 if ( isset( $reviews[ $reviewer_email ] ) ) {
                     $sub_data[ $reviewer_email . ' total_score' ] = $reviews[ $reviewer_email ]['total_score'];
-                    $sub_data[ $reviewer_email . ' review_text' ] = $reviews[ $reviewer_email ]['review_text'];
+                    $sub_data[ $reviewer_email . ' review_text' ] = preg_replace('/[\s]+/',' ',$reviews[ $reviewer_email ]['review_text']);
                     $sub_data                                     = array_merge( $sub_data, array_values( $reviews[ $reviewer_email ]['scoring'] ) );
                 } else {
                     $sub_data = array_merge( $sub_data, array_fill( 0, 2 + count( $scoringCriteriaNames ), '' ) );
@@ -193,10 +193,13 @@ class EASLAppReview {
         }
 
         $programme = get_post($programmeId);
-        $filename = $programme->post_title . ' export.csv';
-
+        $filename = $programme->post_name . '-export-' . date('Y-m-d-G-i-s', time()) . '.csv';
+    
+        header('Content-Description: File Transfer');
         header('Content-Type: text/csv');
         header('Content-Disposition: attachment; filename="' . $filename . '"');
+        header('Expires: 0');
+        header('Cache-Control: no-cache');
 
         $fp = fopen('php://output', 'wb');
         fputcsv($fp, $headerFields);
