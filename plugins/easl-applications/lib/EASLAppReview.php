@@ -195,7 +195,6 @@ class EASLAppReview {
         $programme = get_post($programmeId);
         $filename = $programme->post_name . '-export-' . date('Y-m-d-G-i-s', time()) . '.csv';
     
-        header('Content-Description: File Transfer');
         header('Content-Type: text/csv');
         header('Content-Disposition: attachment; filename="' . $filename . '"');
         header('Expires: 0');

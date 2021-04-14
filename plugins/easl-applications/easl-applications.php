@@ -310,6 +310,7 @@ class EASLApplicationsPlugin {
         $fp = fopen( $file_full_path, 'rb' );
         header( 'Content-Type: ' . mime_content_type( $file_full_path ) );
         header( 'Content-Length: ' . filesize( $file_full_path ) );
+        header("X-Robots-Tag: noindex, nofollow", true);
         fpassthru( $fp );
         fclose( $fp );
         
@@ -371,14 +372,54 @@ class EASLApplicationsPlugin {
             }
             $docs_fields = array_values( $docs_fields );
             $docs_fields = $docs_fields[0];
+            $uploadpath         = wp_get_upload_dir();
             foreach ( $docs_fields->fields as $docs_field ) {
-                $field_value = get_field( $docs_fields->getFieldKey( $docs_field ), $sub_id, true );
-                //$field_value = absint($field_value);
+                $field_value = get_field( $docs_fields->getFieldKey( $docs_field ), $sub_id, false );
+                $field_value = absint($field_value);
                 if ( $field_value ) {
-                    if(!empty($field_value['url'])) {
-                        $file_url = str_replace('https://easl.eu', '', $field_value['url']);
-                        echo '"' . str_replace('/applications/app-' . $sub_id, '', $file_url) . '","' . $file_url . '","301","plain"' . "\n";
+                    $meta         = wp_get_attachment_metadata( $field_value );
+                    if ( isset( $meta['sizes'] ) && is_array( $meta['sizes'] ) ) {
+                        $meta['sizes'] = array();
+                        update_post_meta( $field_value, '_wp_attachment_metadata', $meta );
                     }
+                    //var_dump($meta);
+//                    $file         = get_attached_file( $field_value );
+//                    $file = str_replace('/applications/app-' . $sub_id, '', $file);
+//                    // Remove intermediate and backup images if there are any.
+//                    if ( isset( $meta['sizes'] ) && is_array( $meta['sizes'] ) ) {
+//                        $intermediate_dir = path_join( $uploadpath['basedir'], dirname( $file ) );
+//
+//                        foreach ( $meta['sizes'] as $size => $sizeinfo ) {
+//                            $intermediate_file = str_replace( wp_basename( $file ), $sizeinfo['file'], $file );
+//
+//                            if ( ! empty( $intermediate_file ) ) {
+//                                echo str_replace($uploadpath['basedir'], '/wp-content/uploads', $intermediate_file) ."\n";
+//                                $intermediate_file = path_join( $uploadpath['basedir'], $intermediate_file );
+//                                wp_delete_file_from_directory( $intermediate_file, $intermediate_dir );
+//                            }
+//                        }
+//                    }
+//                    if ( is_array( $backup_sizes ) ) {
+//                        $del_dir = path_join( $uploadpath['basedir'], dirname( $meta['file'] ) );
+//
+//                        foreach ( $backup_sizes as $size ) {
+//                            $del_file = path_join( dirname( $meta['file'] ), $size['file'] );
+//
+//                            if ( ! empty( $del_file ) ) {
+//                                $del_file = path_join( $uploadpath['basedir'], $del_file );
+//                                echo str_replace($uploadpath['basedir'], '/wp-content/uploads', $del_file) ."\n";
+//                                wp_delete_file_from_directory( $del_file, $del_dir );
+//                            }
+//                        }
+//                    }
+
+                    //die();
+                    //wp_delete_attachment_files($field_value, $backup_sizes, $file);
+                    //wp_delete_attachment_files($field_value);
+//                    if(!empty($field_value['url'])) {
+//                        $file_url = str_replace('https://easl.eu', '', $field_value['url']);
+//                        echo '"' . str_replace('/applications/app-' . $sub_id, '', $file_url) . '","' . $file_url . '","301","plain"' . "\n";
+//                    }
                     //$this->migrate_single_file($field_value, $sub_id);
                 }
             }
