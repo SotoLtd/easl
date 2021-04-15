@@ -110,6 +110,7 @@ class EASLAppReview {
                 }elseif ( in_array($field->type, ['select', 'radio', 'checkbox']) && isset($field->settings['choices'][$data])){
                     $data = $field->settings['choices'][$data];
                 }
+                $data = str_replace(';', '-', $data);
 
                 $out[] = preg_replace('/[\s]+/',' ', $data);
             }
@@ -182,7 +183,7 @@ class EASLAppReview {
             foreach ( $reviewers_emails as $reviewer_email ) {
                 if ( isset( $reviews[ $reviewer_email ] ) ) {
                     $sub_data[ $reviewer_email . ' total_score' ] = $reviews[ $reviewer_email ]['total_score'];
-                    $sub_data[ $reviewer_email . ' review_text' ] = preg_replace('/[\s]+/',' ',$reviews[ $reviewer_email ]['review_text']);
+                    $sub_data[ $reviewer_email . ' review_text' ] = preg_replace('/[\s]+/',' ',$data = str_replace(';', '-', $reviews[ $reviewer_email ]['review_text']));
                     $sub_data                                     = array_merge( $sub_data, array_values( $reviews[ $reviewer_email ]['scoring'] ) );
                 } else {
                     $sub_data = array_merge( $sub_data, array_fill( 0, 2 + count( $scoringCriteriaNames ), '' ) );
