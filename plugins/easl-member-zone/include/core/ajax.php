@@ -425,7 +425,7 @@ class EASL_MZ_Ajax_Handler {
 		}
 
 
-		$this->respond_file( '/memeber-details/memeber-details.php', array( 'member' => $member_details ), 200, $extra_data );
+		$this->respond_file( '/memeber-details/memeber-details.php', array( 'member' => $member_details, 'highlight_errored_fields' ), 200, $extra_data );
 	}
 
 	public function get_membership_banner() {
@@ -485,6 +485,21 @@ class EASL_MZ_Ajax_Handler {
 		if ( ! $member_details ) {
 			$this->respond( 'Member ' . $current_member_id . ' not found!', 404 );
 		}
+        
+        $renew    = 'no';
+        $messages = false;
+        if ( isset( $_POST['request_data']['renew'] ) ) {
+            $renew = $_POST['request_data']['renew'];
+        }
+        if ( isset( $_POST['request_data']['messages'] ) ) {
+            $messages = $_POST['request_data']['messages'];
+        }
+		
+		if( $renew && easl_mz_members_has_empty_mandatory_fields($member_details)) {
+            $this->respond_file( '/new-membership-form/profile-mandatory-fields-empty.php', array(
+                'member'   => $member_details,
+            ), 200 );
+        }
 
 		$member_details['latest_membership'] = $this->api->get_members_latest_membership( $current_member_id );
 		$extra_data                          = array();
@@ -499,15 +514,6 @@ class EASL_MZ_Ajax_Handler {
 		) );
 		if ( $membership_expiring ) {
 			$extra_data['banner'] = $membership_expiring;
-		}
-
-		$renew    = 'no';
-		$messages = false;
-		if ( isset( $_POST['request_data']['renew'] ) ) {
-			$renew = $_POST['request_data']['renew'];
-		}
-		if ( isset( $_POST['request_data']['messages'] ) ) {
-			$messages = $_POST['request_data']['messages'];
 		}
 		$this->respond_file( '/new-membership-form/new-membership-form.php', array(
 			'member'   => $member_details,

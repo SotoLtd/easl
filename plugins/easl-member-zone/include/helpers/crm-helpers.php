@@ -193,6 +193,10 @@ function easl_mz_validate_new_member_form($data = array()) {
 
 }
 
+function easl_mz_members_has_empty_mandatory_fields( $data ) {
+    return count( easl_mz_validate_new_member_form( $data ) ) > 0 ? true : false;
+}
+
 function easl_mz_validate_member_data( $data = array() ) {
 
     $errors = validate_required_fields([

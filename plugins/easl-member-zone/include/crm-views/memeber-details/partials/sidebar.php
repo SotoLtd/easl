@@ -114,9 +114,16 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 
 		if ( $membership_button_title && $membership_button_url ):
+            if(easl_mz_members_has_empty_mandatory_fields($member)) {
+                $membership_button_class = 'mzms-button mzms-button-has-empty-fields';
+                $membership_button_error_data = ' data-errors="'. esc_attr( json_encode(easl_mz_validate_new_member_form( $member ))) . '"';
+            }else{
+                $membership_button_class = 'mzms-button';
+                $membership_button_error_data = '';
+            }
 			?>
             <div class="mzms-sbitem">
-                <a class="mzms-button" href="<?php echo $membership_button_url ?>"><?php echo $membership_button_title; ?></a>
+                <a class="<?php echo $membership_button_class; ?>" href="<?php echo $membership_button_url ?>"<?php echo $membership_button_error_data; ?>><?php echo $membership_button_title; ?></a>
             </div>
 		<?php endif; ?>
         <div class="mzms-sbitem mzms-delete-account-request">

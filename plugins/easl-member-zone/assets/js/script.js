@@ -347,6 +347,19 @@
                 event.preventDefault();
                 _this.changePassword($el);
             });
+            $(".mzms-button-has-empty-fields", $el).on("click", function (event) {
+                event.preventDefault();
+                var Errors = $(this).data("errors");
+                Errors = Errors || {};
+                mzModal.init();
+                mzModal.$el.one("mz.modal.hidden.account.fields.empty", function () {
+                    // May be refresh
+                });
+                mzModal.show('<div class="mz-modal-password-changed">Please fix the errors with highlighted fields!</div>', 'account.fields.empty');
+                for (var fieldName in Errors) {
+                    _this.showFieldError(fieldName, Errors[fieldName], $el);
+                }
+            });
             $("#easl-mz-membership-form").on("submit", function (event) {
                 event.preventDefault();
                 _this.submitMemberShipForm($(this));
