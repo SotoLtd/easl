@@ -221,6 +221,7 @@ class EASLApplicationsPlugin {
                 'show_ui'            => true,
                 'show_in_menu'       => true,
                 'show_in_nav_menus'  => false,
+                'show_admin_column'  => true,
                 'rewrite'            => false,
             ]
         );
