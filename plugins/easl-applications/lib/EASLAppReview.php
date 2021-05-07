@@ -30,7 +30,7 @@ class EASLAppReview {
     }
 
     public function configureAdminPages() {
-        add_submenu_page( 'edit.php?post_type=programme','Applications', 'Applications', 'edit_pages', self::ADMIN_MENU_SLUG, [$this, 'adminPages'], 'dashicons-admin-page', 27 );
+        add_submenu_page( 'edit.php?post_type=programme','Applications', 'Applications', 'edit_pages', self::ADMIN_MENU_SLUG, [$this, 'adminPages'], 27 );
     }
 
     const PAGE_PROGRAMME = 'programme';
