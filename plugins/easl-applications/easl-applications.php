@@ -338,7 +338,14 @@ class EASLApplicationsPlugin {
             return true;
         }
     }
-    
+    protected function _get_submissions_attachment($sub_id, $excludes) {
+        global $wpdb;
+        $sql = "SELECT {$wpdb->posts}.ID FROM {$wpdb->posts}";
+        $sql .= $wpdb->prepare(" WHERE ({$wpdb->posts}.post_type = 'attachment') AND ({$wpdb->posts}.post_parent = %d)", $sub_id);
+        $sql .= " AND ({$wpdb->posts}.ID NOT IN (". implode(',', $excludes) ."))";
+        $sql .= " ORDER BY {$wpdb->posts}.post_date LIMIT 99999";
+        return $wpdb->get_col($sql);
+    }
     public function migrate_user_files() {
         if ( ! isset( $_GET['mhm_migrate_app_file'] ) ) {
             return null;
@@ -348,12 +355,16 @@ class EASLApplicationsPlugin {
             'post_status'    => 'any',
             'posts_per_page' => -1,
             'fields'         => 'ids',
+            'meta_key' => 'member_id',
+            'meta_value' => 'f1647138-4546-11eb-8adc-00505642212',
         ) );
+        var_dump($submissions);die();
         
         if ( ! $submissions ) {
             var_dump( 'not found' );
             die();
         }
+        //$submissions = [17621];
         foreach ( $submissions as $sub_number => $sub_id ) {
             $programmeId = get_post_meta( $sub_id, 'programme_id', true );
             if ( ! $programmeId ) {
@@ -373,15 +384,19 @@ class EASLApplicationsPlugin {
             $docs_fields = array_values( $docs_fields );
             $docs_fields = $docs_fields[0];
             $uploadpath         = wp_get_upload_dir();
+            
+            $existing_files = [];
+            
             foreach ( $docs_fields->fields as $docs_field ) {
                 $field_value = get_field( $docs_fields->getFieldKey( $docs_field ), $sub_id, false );
                 $field_value = absint($field_value);
                 if ( $field_value ) {
-                    $meta         = wp_get_attachment_metadata( $field_value );
-                    if ( isset( $meta['sizes'] ) && is_array( $meta['sizes'] ) ) {
-                        $meta['sizes'] = array();
-                        update_post_meta( $field_value, '_wp_attachment_metadata', $meta );
-                    }
+                    $existing_files[] = $field_value;
+//                    $meta         = wp_get_attachment_metadata( $field_value );
+//                    if ( isset( $meta['sizes'] ) && is_array( $meta['sizes'] ) ) {
+//                        $meta['sizes'] = array();
+//                        update_post_meta( $field_value, '_wp_attachment_metadata', $meta );
+//                    }
                     //var_dump($meta);
 //                    $file         = get_attached_file( $field_value );
 //                    $file = str_replace('/applications/app-' . $sub_id, '', $file);
@@ -423,6 +438,31 @@ class EASLApplicationsPlugin {
                     //$this->migrate_single_file($field_value, $sub_id);
                 }
             }
+            $all_left_behind_attachment_ids = $this->_get_submissions_attachment($sub_id, $existing_files);
+            if(!$all_left_behind_attachment_ids) {
+                continue;
+            }
+            echo "Submission #{$sub_id}\n";
+            foreach ($all_left_behind_attachment_ids as $left_behind_attachment_id) {
+                $meta         = wp_get_attachment_metadata( $left_behind_attachment_id );
+                $file         = get_attached_file( $left_behind_attachment_id );
+                echo "Attachment #{$left_behind_attachment_id}\n";
+                echo str_replace($uploadpath['basedir'], '/wp-content/uploads', $file) ."\n";
+                $file = str_replace('/applications/app-' . $sub_id, '', $file);
+                // Remove intermediate and backup images if there are any.
+                if ( isset( $meta['sizes'] ) && is_array( $meta['sizes'] ) ) {
+
+                    foreach ( $meta['sizes'] as $size => $sizeinfo ) {
+                        $intermediate_file = str_replace( wp_basename( $file ), $sizeinfo['file'], $file );
+
+                        if ( ! empty( $intermediate_file ) ) {
+                            echo str_replace($uploadpath['basedir'], '/wp-content/uploads', $intermediate_file) ."\n";
+                        }
+                    }
+                }
+                wp_delete_attachment($left_behind_attachment_id, true);
+            }
+            
         }
         die();
     }
