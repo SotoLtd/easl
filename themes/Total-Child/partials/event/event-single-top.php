@@ -14,8 +14,8 @@ $event_submit_abstract_url = trim( get_field( 'event_submit_abstract_url' ) );
 $event_register_url        = trim( get_field( 'event_register_url' ) );
 $event_application_url     = trim( get_field( 'event_application_url' ) );
 
-$event_submit_abstract_title = trim( get_field( 'event_submit_abstract_title', $event_id ) );
-$event_register_title        = trim( get_field( 'event_register_title', $event_id ) );
+$event_submit_abstract_title = trim( get_field( 'event_submit_abstract_title', get_the_ID() ) );
+$event_register_title        = trim( get_field( 'event_register_title', get_the_ID() ) );
 
 if ( ! $event_submit_abstract_title ) {
     $event_submit_abstract_title = __( 'Submit Abstract', 'total-child' );

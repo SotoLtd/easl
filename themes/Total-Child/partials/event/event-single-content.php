@@ -39,9 +39,12 @@ if($event_accreditation_image) {
 	$event_accreditation_image = wp_get_attachment_image_url($event_accreditation_image, 'full');
 }
 
-
+$content_col_class = 'wpb_column vc_column_container vc_col-sm-12';
+if(easl_regular_event_has_sidebar_content()) {
+    $content_col_class = 'wpb_column vc_column_container vc_col-sm-8';
+}
 ?>
-<div class="wpb_column vc_column_container vc_col-sm-8">
+<div class="<?php echo $content_col_class; ?>">
     <div class="vc_column-inner">
         <div class="wpb_wrapper clr">
 			<?php if ( $event_top_sections && is_array( $event_top_sections ) && count( $event_top_sections ) > 0 ): ?>

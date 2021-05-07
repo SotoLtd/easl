@@ -18,7 +18,11 @@ if ( ! defined( 'ABSPATH' ) ) {
     <div class="event-main-section">
         <div class="vc_row wpb_row vc_row-fluid">
 	        <?php get_template_part('partials/event/event-single-content'); ?>
-	        <?php get_template_part('partials/event/event-single-sidebar'); ?>
+	        <?php
+            if(easl_regular_event_has_sidebar_content()) {
+                get_template_part( 'partials/event/event-single-sidebar' );
+            }
+	        ?>
         </div>
     </div>
 </article><!-- #single-blocks -->

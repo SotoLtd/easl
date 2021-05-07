@@ -16,6 +16,8 @@ function easl_vc_get_shortcodes() {
 		'easl_accordion',
 		'easl_collapsible_content',
 		'easl_popular_blogs',
+		'easl_publitus_iframe',
+		'easl_scientific_publication',
 	);
 
 	return $shortcodes;

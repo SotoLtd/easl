@@ -1938,7 +1938,30 @@ body .wpb_single_image a.easl-vc-image-over:after {
     margin-left: 7px;
 }
 
-/*VC Shortcode: EASL Button*/
+/*VC Shortcode: easl_publitus_iframe*/
+.easl-publitus-iframe {
+    width: 100%;
+}
+.easl-publitus-iframe-lt800 .easl-publitus-iframe {
+    max-width: 799px;
+}
+.easl-publitus-iframe-inner {
+    padding-top: 52.5%;
+    height: 0;
+    overflow: hidden;
+    position: relative;
+    margin-bottom: 25px;
+    width: 100%;
+}
+.easl-publitus-iframe iframe {
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+}
+
+    /*VC Shortcode: EASL Button*/
 .easl-button-wrapper a {
     position: relative;
     padding-left: 63px;

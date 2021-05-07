@@ -740,3 +740,26 @@ function easl_is_event_template_format($format = ''){
 	}
 	return $template_format == $format;
 }
+
+function easl_regular_event_has_sidebar_content() {
+    if ( 12947 == get_the_ID() ) {
+        return true;
+    }
+    if ( have_rows( 'sidebar_top_widgets' ) ) {
+        return true;
+    }
+    if ( get_field( 'event_key_deadline_row' ) ) {
+        return true;
+    }
+    if ( get_field( 'event_poster_image' ) || get_field( 'poster_download_link' ) ) {
+        return true;
+    }
+    if ( get_field( 'event_google_map_iframe' ) ) {
+        return true;
+    }
+    if ( have_rows( 'sidebar_bottom_widgets' ) ) {
+        return true;
+    }
+    
+    return false;
+}
