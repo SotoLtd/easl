@@ -10508,11 +10508,11 @@ ul.suggestions {
     border-bottom: 1px solid #000;
 }
 
-.easl-nas-contribute-form .gform_wrapper {
+.site-content .gform_wrapper {
     margin: 0;
 }
 
-.easl-nas-contribute-form .gform_wrapper .top_label .gfield_label {
+.site-content .gform_wrapper .top_label .gfield_label {
     color: #004b87;
     display: block;
     font-family: "KnockoutHTF51Middleweight", "Helvetica Neue", Helvetica, Arial, sans-serif;
@@ -10522,7 +10522,7 @@ ul.suggestions {
     margin: 0 0 3px;
 }
 
-.easl-nas-contribute-form .easl-nas-form-section-title {
+.site-content .easl-nas-form-section-title {
     color: #004b87;
     font-family: "KnockoutHTF51Middleweight", "Helvetica Neue", Helvetica, Arial, sans-serif;
     font-size: 21px;
@@ -10531,44 +10531,47 @@ ul.suggestions {
     margin: 0 0 20px;
 }
 
-body .easl-nas-contribute-form .gform_wrapper ul li.gfield {
+body .site-content .gform_wrapper ul li.gfield {
     margin: 0 0 25px;
     padding: 0;
 }
 
-.easl-nas-contribute-form .gform_wrapper .top_label li.gfield.gf_left_half {
+.site-content .gform_wrapper .top_label li.gfield.easl-dblock {
+    display: block;
+}
+.site-content .gform_wrapper .top_label li.gfield.gf_left_half {
     padding: 0 15px 0 0;
 }
 
-.easl-nas-contribute-form .gform_wrapper .top_label li.gfield.gf_right_half {
+.site-content .gform_wrapper .top_label li.gfield.gf_right_half {
     padding: 0 0 0 15px;
 }
 
-.easl-nas-contribute-form .gform_wrapper input:not([type=radio]):not([type=checkbox]):not([type=submit]):not([type=button]):not([type=image]):not([type=file]) {
-    border-radius: 0px;
+.site-content .gform_wrapper input:not([type=radio]):not([type=checkbox]):not([type=submit]):not([type=button]):not([type=image]):not([type=file]) {
+    border-radius: 0;
     border: 1px solid #d1d0d0;
     font-size: 14px;
     color: #666;
     padding: 10px 12px;
 }
 
-.easl-nas-contribute-form .gform_wrapper .top_label li.gfield.gf_left_third {
+.site-content .gform_wrapper .top_label li.gfield.gf_left_third {
     padding: 0 20px 0 0;
 }
 
-.easl-nas-contribute-form .gform_wrapper .top_label li.gfield.gf_middle_third {
+.site-content .gform_wrapper .top_label li.gfield.gf_middle_third {
     padding: 0 10px 0;
 }
 
-.easl-nas-contribute-form .gform_wrapper .top_label li.gfield.gf_right_third {
+.site-content .gform_wrapper .top_label li.gfield.gf_right_third {
     padding: 0 0 0 20px;
 }
 
-body .easl-nas-contribute-form .gform_wrapper .top_label div.ginput_container.ginput_container_date {
+body .site-content .gform_wrapper .top_label div.ginput_container.ginput_container_date {
     position: relative;
 }
 
-body .easl-nas-contribute-form .gform_wrapper img.ui-datepicker-trigger {
+body .site-content .gform_wrapper img.ui-datepicker-trigger {
     position: absolute;
     top: 14px;
     right: 12px;
@@ -10576,14 +10579,14 @@ body .easl-nas-contribute-form .gform_wrapper img.ui-datepicker-trigger {
     height: 19px !important;
 }
 
-.easl-nas-contribute-form .gform_wrapper .top_label input.large.datepicker,
-.easl-nas-contribute-form .gform_wrapper .top_label input.medium.datepicker,
-.easl-nas-contribute-form .gform_wrapper .top_label input.small.datepicker {
+.site-content .gform_wrapper .top_label input.large.datepicker,
+.site-content .gform_wrapper .top_label input.medium.datepicker,
+.site-content .gform_wrapper .top_label input.small.datepicker {
     width: 100%;
     margin: 0 !important;
 }
 
-.easl-nas-contribute-form .gform_wrapper select.gfield_select {
+.site-content .gform_wrapper select.gfield_select {
     display: block;
     font-size: 14px;
     color: #666;
@@ -10606,36 +10609,36 @@ body .easl-nas-contribute-form .gform_wrapper img.ui-datepicker-trigger {
     background-size: 22px 8px;
 }
 
-.easl-nas-contribute-form .gform_wrapper select.gfield_select::-ms-expand {
+.site-content .gform_wrapper select.gfield_select::-ms-expand {
     display: none;
 }
 
-.easl-nas-contribute-form .gform_wrapper select.gfield_select:hover {
+.site-content .gform_wrapper select.gfield_select:hover {
     border-color: #d1d0d0;
 }
 
-.easl-nas-contribute-form .gform_wrapper select.gfield_select:focus {
+.site-content .gform_wrapper select.gfield_select:focus {
     border-color: #d1d0d0;
     box-shadow: none;
     outline: none;
 }
 
-.easl-nas-contribute-form .gform_wrapper select.gfield_select option {
+.site-content .gform_wrapper select.gfield_select option {
     font-weight: normal;
 }
 
-.easl-nas-contribute-form .gform_wrapper .gform_footer {
+.site-content .gform_wrapper .gform_footer {
     padding: 15px 0 0;
     border-top: 1px solid #000;
 }
 
-.easl-nas-contribute-form .gform_wrapper .gform_footer::after {
+.site-content .gform_wrapper .gform_footer::after {
     content: '';
     clear: both;
     display: table;
 }
 
-.easl-nas-contribute-form .gform_wrapper .gform_footer .gform_button {
+.site-content .gform_wrapper .gform_footer .gform_button {
     float: right;
     display: inline-block;
     padding: 12px 45px;
@@ -10648,11 +10651,11 @@ body .easl-nas-contribute-form .gform_wrapper img.ui-datepicker-trigger {
     border-radius: 0;
 }
 
-.easl-nas-contribute-form .gform_wrapper .gform_ajax_spinner {
+.site-content .gform_wrapper .gform_ajax_spinner {
     padding: 0;
 }
 
-.easl-nas-contribute-form .gform_wrapper .gform_fileupload_multifile .gform_drop_area {
+.site-content .gform_wrapper .gform_fileupload_multifile .gform_drop_area {
     border-radius: 0;
     border: 1px solid #d1d0d0;
     display: flex;
@@ -10661,13 +10664,13 @@ body .easl-nas-contribute-form .gform_wrapper img.ui-datepicker-trigger {
     align-items: center;
 }
 
-.easl-nas-contribute-form .gform_wrapper span.gform_drop_instructions {
+.site-content .gform_wrapper span.gform_drop_instructions {
     flex: 1 0 0;
     margin: 0 !important;;
     padding: 0 25px !important;;
 }
 
-.easl-nas-contribute-form .gform_wrapper.gf_browser_chrome input.button.gform_button_select_files {
+.site-content .gform_wrapper.gf_browser_chrome input.button.gform_button_select_files {
     margin: 0 !important;
     display: inline-block;
     padding: 12px 45px !important;;
@@ -10679,7 +10682,33 @@ body .easl-nas-contribute-form .gform_wrapper img.ui-datepicker-trigger {
     margin: 0;
     border-radius: 0;
 }
-
+.site-content .gform_wrapper .chosen-container-single .chosen-single {
+    border-radius: 0;
+    border: 1px solid #d1d0d0;
+    font-size: 14px;
+    color: #666;
+    padding: 10px 12px;
+    background: #fff;
+    line-height: 1.65;
+    display: block;
+    height: auto;
+    box-shadow: none;
+    font-weight: normal;
+}
+.site-content .gform_wrapper .chosen-container-active.chosen-with-drop .chosen-single {
+    background: #fff;
+    box-shadow: none;
+}
+.site-content .gform_wrapper .top_label li.gfield.easl-dblock {
+    display: block;
+}
+.site-content .gform_wrapper .chosen-container-single .chosen-single div b {
+    position: absolute;
+    top: 10px;
+}
+.site-content .gform_wrapper .chosen-container .chosen-results li {
+    padding: 10px 12px;
+}
 /*Shortcode EASL Background Ttext Box*/
 .easl-bgtext-box {
     background-color: #104f85;
