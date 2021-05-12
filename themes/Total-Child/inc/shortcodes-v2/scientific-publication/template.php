@@ -349,13 +349,16 @@ $not_found_text = $has_filter ? 'Nothing has been found' : 'content is coming so
                         $excerpt = $hide_excerpt === "true" ? '' : get_the_excerpt();
                         //$read_more_link =  $deny_detail_page === "true" ? get_field('link_to_journal_hepatology') : get_permalink();
                         //$target = $deny_detail_page === "true" ? 'target="_blank"' : '';
-                        //$force_details_page_link_ids = array(15095);
-                        //if ( in_array( get_the_ID(), $force_details_page_link_ids ) ) {
-                        //    $read_more_link = get_permalink();
-                        //    $target = '';
-                        //}
-                        $read_more_link          = get_permalink();
-                        $target                  = '';
+                        $link_to_journal_hepatology = trim(get_field('link_to_journal_hepatology'));
+                        $read_more_link          = $link_to_journal_hepatology ? $link_to_journal_hepatology : get_permalink();
+                        $target                  = $link_to_journal_hepatology ? 'target="_blank"' : '';
+    
+                        $force_details_page_link_ids = array(15095);
+                        if ( has_term( 'policy-statements', 'publication_category', get_the_ID() ) || in_array( get_the_ID(), $force_details_page_link_ids ) ) {
+                            $read_more_link = get_permalink();
+                            $target = '';
+                        }
+                        
                         $publication_date        = get_field( 'publication_raw_date' );
                         $publication_date_format = get_field( 'publication_date_format' );
                         $custom_date_text        = get_field( 'custom_date_text' );
