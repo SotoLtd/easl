@@ -7,7 +7,7 @@ require_once get_stylesheet_directory() . '/inc/shortcodes/class-vc-button-grid.
 require_once get_stylesheet_directory() . '/inc/shortcodes/class-vc-gbutton.php';
 require_once get_stylesheet_directory() . '/inc/shortcodes/class-vc-events.php';
 require_once get_stylesheet_directory() . '/inc/shortcodes/class-vc-events-calendar.php';
-require_once get_stylesheet_directory() . '/inc/shortcodes/class-vc-news.php';
+//require_once get_stylesheet_directory() . '/inc/shortcodes/class-vc-news.php';
 //require_once get_stylesheet_directory() . '/inc/shortcodes/class-vc-scientific-publication.php';
 require_once get_stylesheet_directory() . '/inc/shortcodes/class-vc-carousel.php';
 require_once get_stylesheet_directory() . '/inc/shortcodes/class-vc-carousel-item.php';
@@ -45,7 +45,7 @@ function easl_vc_shortcodes_lean_maps(){
 	vc_lean_map( 'easl_gbutton', null, get_theme_file_path('/inc/shortcodes/config/easl-gbutton.php') );
 	vc_lean_map( 'easl_events', null, get_theme_file_path() . '/inc/shortcodes/config/easl-events.php' );
 	vc_lean_map( 'easl_events_calendar', null, get_theme_file_path('/inc/shortcodes/config/easl-events-calendar.php') );
-	vc_lean_map( 'easl_news', null, get_theme_file_path('/inc/shortcodes/config/easl-news.php') );
+	//vc_lean_map( 'easl_news', null, get_theme_file_path('/inc/shortcodes/config/easl-news.php') );
 	vc_lean_map( 'easl_carousel', null, get_theme_file_path('/inc/shortcodes/config/easl-carousel.php') );
 	vc_lean_map( 'easl_carousel_item', null, get_theme_file_path('/inc/shortcodes/config/easl-carousel-item.php' ));
 	vc_lean_map( 'easl_yi_fellowship', null, get_theme_file_path('/inc/shortcodes/config/easl-yifellowship.php') );
