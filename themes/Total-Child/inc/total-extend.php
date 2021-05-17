@@ -866,22 +866,26 @@ function easl_sidebar_override($sidebar) {
 add_filter('wpex_get_sidebar', 'easl_sidebar_override');
 
 add_filter('wpex_single_blocks', 'easl_single_blocks', 20, 2);
-function easl_single_blocks($blocks, $post_type) {
-    if('blog' != $post_type) {
+function easl_single_blocks( $blocks, $post_type ) {
+    if ( 'blog' != $post_type ) {
         return $blocks;
     }
-    return array(
+    
+    $hide_related_articles = get_field( 'hide_related_articles', get_queried_object_id() );
+    
+    $blocks = array(
         'meta',
         'title',
-        //'media',
         'content',
         'tags',
         'love-button',
         'suggested-articles',
-        'related-articles',
-        //'readers-articles',
-        'comments'
     );
+    if ( ! $hide_related_articles ) {
+        $blocks[] = 'related-articles';
+    }
+    $blocks[] = 'comments';
+    return $blocks;
 }
 
 function easl_blog_single_thumbnail_args( $args ) {
