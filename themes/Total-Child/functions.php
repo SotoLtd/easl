@@ -211,6 +211,25 @@ function add_easl_particles_header_scripts() {
 }
 add_action( 'wp_footer', 'add_easl_particles_header_scripts' );
 
+function easl_header_inline_scripts() {
+    $post_id = wpex_get_current_post_id();
+    $scripts = trim( get_field( 'easl_header_scripts', $post_id ) );
+    if ( $scripts ) {
+        echo "\n" . $scripts . "\n";
+    }
+}
+
+add_action( 'wp_head', 'easl_header_inline_scripts', 50 );
+function easl_footer_inline_scripts() {
+    $post_id = wpex_get_current_post_id();
+    $scripts = trim( get_field( 'easl_footer_scripts', $post_id ) );
+    if ( $scripts ) {
+        echo "\n" . $scripts . "\n";
+    }
+}
+
+add_action( 'wp_footer', 'easl_footer_inline_scripts', 50 );
+
 
 
 add_filter( 'wpex_page_header_classes', 'easl_page_heder_class' );
