@@ -301,7 +301,7 @@ class EASL_MZ_Mailchimp {
         if ( ! empty( $request_data['dotb_user_category'] ) ) {
             if ( 'other' == $request_data['dotb_user_category'] ) {
                 $merge_fields['USERCAT']   = 'Other';
-                $merge_fields['USERCAT_O'] = $request_data['mzf_dotb_user_category_other'];
+                $merge_fields['USERCAT_O'] = $request_data['dotb_user_category_other'];
             } else {
                 $merge_fields['USERCAT'] = easl_mz_get_list_item_name( 'user_categories', $request_data['dotb_user_category'] );
             }

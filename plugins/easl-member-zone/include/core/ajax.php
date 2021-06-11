@@ -495,7 +495,7 @@ class EASL_MZ_Ajax_Handler {
             $messages = $_POST['request_data']['messages'];
         }
 		
-		if( $renew && easl_mz_members_has_empty_mandatory_fields($member_details)) {
+		if( 'yes' == $renew && easl_mz_members_has_empty_mandatory_fields($member_details)) {
             $this->respond_file( '/new-membership-form/profile-mandatory-fields-empty.php', array(
                 'member'   => $member_details,
             ), 200 );

@@ -349,17 +349,29 @@
             });
             $(".mzms-button-has-empty-fields", $el).on("click", function (event) {
                 event.preventDefault();
-                var Errors = $(this).data("errors");
+                var $button = $(this);
+                var Errors = $button.data("errors");
                 Errors = Errors || {};
-                mzModal.init();
-                mzModal.$el.one("mz.modal.hidden.account.fields.empty", function () {
-                    // May be refresh
-                });
-                mzModal.show('<div class="mz-modal-password-changed">Please fix the errors with highlighted fields!</div>', 'account.fields.empty');
-                for (var fieldName in Errors) {
-                    _this.showFieldError(fieldName, Errors[fieldName], $el);
+                if( $button.data("doSubmit")) {
+                    _this.submitMemberShipForm($("#easl-mz-membership-form"), function (res) {
+                        mzModal.init();
+                        mzModal.show('<div class="mz-modal-password-changed">Your profile updated successfully!<br/> You are redirecting to membership page.</div>', 'account.update.ok');
+                        window.location.href = $button.attr("href");
+                    });
+                }else {
+                    mzModal.init();
+                    mzModal.show('<div class="mz-modal-password-changed">Please fix the errors with highlighted fields!</div>', 'account.fields.empty');
+                    for (var fieldName in Errors) {
+                        _this.showFieldError(fieldName, Errors[fieldName], $el);
+                    }
+                    $button.data("doSubmit", true);
                 }
+                //submitMemberShipForm
             });
+    
+            if($el.hasClass('easl-highlight-errors')) {
+                $(".mzms-button-has-empty-fields", $el).length && $(".mzms-button-has-empty-fields", $el).trigger('click');
+            }
             $("#easl-mz-membership-form").on("submit", function (event) {
                 event.preventDefault();
                 _this.submitMemberShipForm($(this));
@@ -473,7 +485,7 @@
             });
             this.request(this.methods.deleteMyAccount, $form, {"id": $form.find('#mzf_id').val()});
         },
-        submitMemberShipForm: function ($form) {
+        submitMemberShipForm: function ($form, successCB) {
             _this = this;
             this.clearFieldErrors($form);
             $form.closest(".wpb_easl_mz_membership").addClass("easl-mz-form-processing").append('<div class="easl-mz-membership-loader">' + this.loaderHtml + '</div>');
@@ -483,9 +495,13 @@
             $form.one("mz_loaded:" + this.methods.submitMemberShipForm, function (event, response, method) {
                 $form.closest(".wpb_easl_mz_membership").removeClass("easl-mz-form-processing").find(".easl-mz-membership-loader").remove();
                 if (response.Status === 200) {
-                    mzModal.init();
-                    _this.getMembershipForm();
-                    mzModal.show('<div class="mz-modal-password-changed">Your profile updated successfully!</div>', 'account.update.ok');
+                    if(typeof successCB === 'function') {
+                        successCB.call(null, response);
+                    }else {
+                        mzModal.init();
+                        _this.getMembershipForm();
+                        mzModal.show('<div class="mz-modal-password-changed">Your profile updated successfully!</div>', 'account.update.ok');
+                    }
                 }
                 if (response.Status === 400) {
                     mzModal.init();

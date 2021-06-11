@@ -28,6 +28,11 @@ $class_to_filter .= vc_shortcode_custom_css_class( $css, ' ' ) . $this->getExtra
 $css_class       = apply_filters( VC_SHORTCODE_CUSTOM_CSS_FILTER_TAG, $class_to_filter, $this->settings['base'], $atts );
 $css_animation   = $this->getCSSAnimation( $css_animation );
 
+$inner_css_class = 'easl-mz-membership-inner easl-mz-crm-view easl-mz-loading';
+if(!empty($_GET['highlight_errors'])) {
+    $inner_css_class .= ' easl-highlight-errors';
+}
+
 $wrapper_attributes = array();
 if ( ! empty( $el_id ) ) {
 	$wrapper_attributes[] = 'id="' . esc_attr( $el_id ) . '"';
@@ -39,7 +44,7 @@ easl_mz_enqueue_datepicker_assets();
 easl_mz_enqueue_select_assets();
 ?>
 <div <?php echo implode( ' ', $wrapper_attributes ); ?>>
-    <div class="easl-mz-membership-inner easl-mz-crm-view easl-mz-loading">
+    <div class="<?php echo $inner_css_class; ?>">
 
     </div>
 </div>

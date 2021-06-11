@@ -139,7 +139,8 @@ function easl_mz_get_member_image_src( $member_id, $member_picture ) {
 	if ( $member_picture ) {
 		$member_image = add_query_arg( array(
 			'mz_action' => 'member_image',
-			'member_id' => $member_id
+			'member_id' => $member_id,
+            '_mzt' => time(),
 		), get_site_url() );
 	}
 

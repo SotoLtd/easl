@@ -79,7 +79,7 @@ function easl_mz_parse_crm_contact_data( $response ) {
 	);
 
 	if ( $data['picture'] ) {
-		$data['profile_picture'] = add_query_arg( 'mz_get_picture', $data['id'], get_site_url() );
+		$data['profile_picture'] = easl_mz_get_member_image_src( $data['id'], $data['picture'] );
 	} else {
 		$data['profile_picture'] = '';
 	}
@@ -159,6 +159,10 @@ function easl_mz_validate_new_member_form($data = array()) {
     ];
 
     $errors = validate_required_fields($required_fields, $data);
+    
+    if ( empty( $errors['email1'] ) && !is_email( $data['email1'] ) ) {
+        $errors['email1'] = 'Please enter a valid email address';
+    }
     
     if ( empty( $errors['first_name'] ) && is_numeric( $data['first_name'] ) ) {
         $errors['first_name'] = 'First name must not be numeric';
