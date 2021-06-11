@@ -78,6 +78,9 @@ class EASLAppReview {
             'Country' => easl_mz_get_country_name($memberData['primary_address_country']),
             'Application submitted' => $submittedDate->format('Y-m-d')
         ];
+        if('masterclass' == get_field( 'programme-category', $programmeId )) {
+            $out['Job function'] = 'other' != $memberData['dotb_job_function'] ? easl_mz_get_list_item_name('job_functions', $memberData[ 'dotb_job_function' ]):$memberData[ 'dotb_job_function_other' ] ;
+        }
         if ($forCSV) {
             $out = ['ID' => $submission->ID] + $out;
         }
@@ -130,7 +133,7 @@ class EASLAppReview {
     public function exportCSV($programmeId, $fieldSetContainer) {
 
         //Get an array of fields that we are going to want to export
-        $headerFields = ['ID', 'Title', 'Name', 'Email', 'Phone number', 'Date of Birth', 'Country', 'Application date'];
+        $headerFields = ['ID', 'Title', 'Name', 'Email', 'Phone number', 'Date of Birth', 'Country', 'Application date', 'Job function'];
         $fieldSets = $fieldSetContainer->getFieldSets();
         $fields = [];
 

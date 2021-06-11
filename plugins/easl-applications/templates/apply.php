@@ -16,7 +16,7 @@ if($programme && 'programme' == get_post_type($programme)):
 ?>
 
 <h1><?=$programme->post_title;?>: Your application</h1>
-<div><?=$programme->post_content;?></div>
+<div><?php echo apply_filters('the_content', $programme->post_content);?></div>
 
 <?php
 if ($valid):
@@ -36,7 +36,9 @@ if ($valid):
             'html_updated_message' => '<div class="application-submitted-message">%s</div>',
             'html_submit_button' => '<input type="submit" value="Submit application" class="mzms-submit">'
         ];
+    add_action('acf/render_field', 'easl_app_show_personal_info', 1);
     acf_form($args);
+    remove_action('acf/render_field', 'easl_app_show_personal_info', 1);
     ?>
 <?php else:?>
     <h2>An error occurred</h2>

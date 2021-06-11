@@ -24,12 +24,13 @@ class MasterclassFieldContainer extends AbstractFieldContainer {
                 new EASLApplicationField('applicant_profile_other', 'Other - please specify', 'text', [], false, ['applicant_profile', 'other']),
                 new EASLApplicationField('area_of_interest', 'Area of interest', 'select', [
                     'choices' => [
-                        'general_hepatology' => 'General Hepatology',
-                        'cholestatic_and_autoimmune' => 'Cholestatic and Autoimmune',
-                        'cirrhosis_and_complications' => 'Cirrhosis and Complications',
-                        'liver_tumors' => 'Liver Tumors',
-                        'metablic' => 'Metablic',
-                        'alcohol_and_toxitity' => 'Alcohol and Toxicity'
+                        'general_hepatology'                      => 'General Hepatology',
+                        'immune_mediated_and_cholestatic_disease' => 'Immune-mediated and cholestatic disease',
+                        'cirrhosis_and_complications'             => 'Cirrhosis and complications',
+                        'liver_tumors'                            => 'Liver tumours',
+                        'metablic_disease'                        => 'Metabolic disease',
+                        'alcohol_and_toxitity'                    => 'Alcohol and toxicity',
+                        'viral_hepatitis'                         => 'Viral hepatitis'
                     ]
                 ]),
                 new EASLApplicationField('current_position', 'Current position', 'text'),
@@ -47,27 +48,30 @@ class MasterclassFieldContainer extends AbstractFieldContainer {
                         'basic' => 'Basic communication skills'
                     ]
                 ]),
-                new EASLApplicationField('referee_name', 'Name of referee', 'text'),
-                new EASLApplicationField('referee_email', 'Email address of referee', 'text'),
+                new EASLApplicationField('referee_name', 'Name of referee 1', 'text'),
+                new EASLApplicationField('referee_email', 'Email address of referee 1', 'text'),
+                new EASLApplicationField('referee_recommendation_letter', 'Upload letter of recommendation from referee 1', 'file'),
+    
+                new EASLApplicationField('referee2_name', 'Name of referee 2', 'text'),
+                new EASLApplicationField('referee2_email', 'Email address of referee 2', 'text'),
+                new EASLApplicationField('referee2_recommendation_letter', 'Upload letter of recommendation from referee 2', 'file'),
             ]
         );
 
         $abstractsFieldSet = $this->makeFieldSet('abstracts', 'Abstracts', [
-            new EASLApplicationField('publication_titles', 'Titles of publications / abstracts', 'textarea'),
-            new EASLApplicationField('authors', 'Authors', 'textarea'),
-            new EASLApplicationField('background_methods_results', 'Briefly describe the background, methods, results and conclusions.', 'textarea')
+            new EASLApplicationField('background_methods_results', 'Abstract research presentation', 'textarea', ['instructions' => 'In the box below, briefly describe the background, methods, results, and conclusions for your study or research (2500 Characters)','maxlength' => 2500])
         ]);
 
         $grantApplications = $this->makeFieldSet('grant_applications', 'Grant Applications', [
             self::makeYesNoSelect('have_you_ever_obtained_independent_grants', 'Have you ever obtained independent and competitive grants?'),
-            new EASLApplicationField('grants_applied_for', 'If yes, please list the type of grants you applied for/obtained:', 'text', [], false, ['have_you_ever_obtained_independent_grants', 'yes'])
+            new EASLApplicationField('grants_applied_for', 'If yes please list them:', 'text', [], false, ['have_you_ever_obtained_independent_grants', 'yes'])
         ]);
 
         $applicationDocumentFieldSet = $this->makeFieldSet(
             'application_documents',
             'Application documents',
             [
-                new EASLApplicationField('cv', 'CV', 'file', ['instructions' => 'Max 4 pages']),
+                new EASLApplicationField('cv', 'CV', 'file', ['instructions' => 'Max 5 pages']),
                 new EASLApplicationField('list_of_publications', 'List of publications', 'file'),
                 new EASLApplicationField('confirmation_of_age_or_training_status', 'Confirmation of age or training status', 'file', ['instructions' => 'Please provide a copy of ID or certificate of enrollment']),
             ]

@@ -48,6 +48,9 @@ class EASLApplicationsPlugin {
     private $submissionFieldSets = [];
 
     public function __construct(){
+        $this->dir         = dirname( __FILE__ ) . '/';
+        $this->templateDir = $this->dir . 'templates/';
+        require_once $this->dir . 'lib/functions.php';
         //ACF custom fields
         $this->createFields();
 
@@ -65,9 +68,6 @@ class EASLApplicationsPlugin {
         add_action( 'wp_ajax_nopriv_sync_submission_member_data', [ $this, 'sync_submission_member_data' ] );
         
         add_filter( 'acf/upload_prefilter/type=file', [ $this, 'change_application_files_path' ], 10, 3 );
-        
-        $this->dir         = dirname( __FILE__ ) . '/';
-        $this->templateDir = $this->dir . 'templates/';
     }
     
     public function change_application_files_path( $errors, $file, $field ) {
@@ -582,6 +582,12 @@ class EASLApplicationsPlugin {
             if ( ! empty( $member_data[ $key ] ) ) {
                 $value = $member_data[ $key ];
             }
+            if('dotb_job_function' == $key) {
+                $value = easl_mz_get_list_item_name('job_functions', $member_data[ $key ]);
+            }elseif('primary_address_country' == $key){
+                $value = easl_mz_get_country_name( $member_data[ $key ]);
+            }
+            
             echo '<tr>';
             echo '<td>' . $label . '</td>';
             echo '<td>' . $value . '</td>';

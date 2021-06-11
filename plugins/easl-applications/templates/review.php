@@ -38,19 +38,21 @@ if ( ! defined( 'ABSPATH' ) ) {
                         </th>
                     <?php endif;?>
                     <td>
-                        <?php if (is_string($field)):?>
-                            <?=$field;?>
-                        <?php elseif ($field['type'] == 'file'):?>
-                            <?php if ($field['value']):?>
-                                <a href="<?=$field['value']['url'];?>" target="_blank">View file</a>
+                        <?php  if($field):?>
+                            <?php if (is_string($field)):?>
+                                <?=$field;?>
+                            <?php elseif ($field['type'] == 'file'):?>
+                                <?php if ($field['value']):?>
+                                    <a href="<?=$field['value']['url'];?>" target="_blank">View file</a>
+                                <?php else:?>
+                                    No file uploaded
+                                <?php endif;?>
+                            <?php elseif ($field['type'] == 'select'):?>
+                                <?=$field['choices'][$field['value']];?>
                             <?php else:?>
-                                No file uploaded
+                                <?=$field['value'];?>
                             <?php endif;?>
-                        <?php elseif ($field['type'] == 'select'):?>
-                            <?=$field['choices'][$field['value']];?>
-                        <?php else:?>
-                            <?=$field['value'];?>
-                        <?php endif;?>
+                        <?php endif; ?>
                     </td>
                 </tr>
             <?php endforeach;?>

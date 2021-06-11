@@ -49,7 +49,10 @@ class EASLAppSubmission
         'primary_address_city' => 'City',
         'primary_address_state' => 'State',
         'primary_address_postalcode' => 'Postcode',
-        'primary_address_country' => 'Country'
+        'primary_address_country' => 'Country',
+        
+        'dotb_job_function' => 'Job function',
+        'dotb_job_function_other' => 'Job function – other'
     ];
     //@todo Nationality field
 
@@ -150,8 +153,20 @@ class EASLAppSubmission
         if('submission' != get_post_type($postId)) {
             return null;
         }
+        if(!is_admin()) {
+    
+            $memberData = array();
+            $member_id = get_post_meta($postId, 'member_id', true);
+            $memberDataFromCRM = easl_mz_get_member_data($member_id);
+            foreach(self::MEMBER_DATA_FIELDS as $key => $label) {
+                $memberData[$key] = $memberDataFromCRM[$key];
+            }
+            update_post_meta($postId, 'member_data', $memberData);
+        }else{
+            $memberData = get_post_meta($postId, 'member_data', true);
+        }
+        
         $submittedAlready = get_post_meta($postId, self::SUBMISSION_DATE_META_KEY, true);
-        $memberData = get_post_meta($postId, 'member_data', true);
         $programmeId = get_post_meta($postId, 'programme_id', true);
         $programme = get_post($programmeId);
 
