@@ -1,6 +1,6 @@
 <?php
 
-define('EASL_THEME_VERSION', '2021.05.10.01');
+define('EASL_THEME_VERSION', '2021.06.14.02');
 //define( 'EASL_THEME_VERSION', time() );
 
 if ( ! defined( 'EASL_INC_DIR' ) ) {
@@ -25,6 +25,7 @@ require_once EASL_INC_DIR . 'settings.php';
 require_once EASL_INC_DIR . 'sticky-footer.php';
 require_once EASL_INC_DIR . 'wp-seo-extend.php';
 require_once EASL_INC_DIR . 'easl-clock.php';
+require_once EASL_INC_DIR . 'freshchat/freshchat.php';
 
 function easl_theme_setup() {
 	load_theme_textdomain( 'total-child' );

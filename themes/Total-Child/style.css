@@ -1698,7 +1698,10 @@ ul.sidr-class-sub-menu > .sidr-class-easl-hide-mobile-submenu {
     width: 100%;
     height: 100%;
 }
-
+.easl-particles-header.page-header .easl-page-header-bg-img,
+.easl-particles-header.page-header .page-header-inner {
+    z-index: 4!important;
+}
 .page-header .easl-page-header-title-wrap {
     display: flex;
     align-items: center;

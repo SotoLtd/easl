@@ -539,7 +539,7 @@ function easl_page_header_style( $style ) {
 	if ( is_search() ) {
 		return 'background-image';
 	}
-	if ( ! is_singular( 'event', Publication_Config::get_publication_slug() ) || 'background-image' == $style ) {
+	if ( ! is_singular( ['event', Publication_Config::get_publication_slug()] ) || 'background-image' == $style ) {
 		return $style;
 	}
 	$term_id = easl_meeting_type_id( get_queried_object_id() );
@@ -570,7 +570,7 @@ function easl_page_header_title_height( $height ) {
 	if(is_tax(Publication_Config::get_tag_slug())) {
 		return easl_get_publication_tag_header_height();
 	}
-	if ( is_search() || is_singular( 'event', Publication_Config::get_publication_slug() ) ) {
+	if ( is_search() || is_singular( ['event', Publication_Config::get_publication_slug()] ) ) {
 		return 220;
 	}
 
@@ -749,6 +749,17 @@ add_action( 'wpex_hook_after_body_tag', 'easl_page_prelaoder_template' );
 
 
 function easl_page_header_background_image() {
+	if($event_subpage_id = easl_get_the_event_subpage_id()) {
+		$bg_img_id  = get_field('event_subpage_header_image', $event_subpage_id);
+		if($bg_img_id) {
+			$bg_img = wp_get_attachment_image_url($bg_img_id, 'full');
+			$img_alt = trim( strip_tags( get_post_meta( $bg_img_id, '_wp_attachment_image_alt', true ) ) );
+			if($bg_img) {
+				return '<img class="easl-page-header-bg-img" alt="' . $img_alt . '" src="' . $bg_img . '"/>';
+			}
+		}
+		
+	}
 
 	// Get current post ID
 	$post_id = wpex_get_current_post_id();
@@ -913,3 +924,25 @@ function easl_blog_layout_class($layout, $instance) {
     return $layout;
 }
 add_filter( 'wpex_post_layout_class', 'easl_blog_layout_class', 10, 2 );
+
+add_filter( 'wpex_head_css', 'easl_page_header_css', 20, 1 );
+function easl_page_header_css($output) {
+	$bg_img = '';
+	$page_header_css = '';
+	if($event_subpage_id = easl_get_the_event_subpage_id()) {
+		$bg_img_id  = get_field('event_subpage_header_image', $event_subpage_id);
+		if($bg_img_id) {
+			$bg_img = wp_get_attachment_image_url( $bg_img_id, 'full' );
+		}
+	}
+	if ( $bg_img ) {
+		$page_header_css .= 'background-image:url(' . esc_url( $bg_img ) . ' )!important;';
+	}
+	
+	
+	// Apply all css to the page-header class.
+	if ( ! empty( $page_header_css ) ) {
+		$output .= '.page-header{' . $page_header_css . '}';
+	}
+	return $output;
+}
