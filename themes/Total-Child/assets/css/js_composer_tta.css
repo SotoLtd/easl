@@ -28,7 +28,8 @@
 
 .vc_tta.vc_general .vc_tta-panel-title {
     margin: 0;
-    line-height: 1
+    line-height: 1;
+    font-weight: 400;
 }
 
 .vc_tta.vc_general .vc_tta-panel-title > a {

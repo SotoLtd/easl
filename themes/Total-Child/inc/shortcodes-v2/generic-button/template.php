@@ -36,6 +36,7 @@ $color        = '';
 $size         = '';
 $align        = '';
 $show_arrow   = '';
+$icon_wrapper = '';
 $add_icon = $i_align = $i_type = $i_icon_entypo = $i_icon_fontawesome = $i_icon_linecons = $i_icon_pixelicons = $i_icon_typicons = '';
 
 $el_id = $el_class = $css_animation = $css = '';

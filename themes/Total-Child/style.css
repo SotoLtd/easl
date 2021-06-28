@@ -4614,6 +4614,7 @@ a.wpb_easl_post_type_grid_head_all_link:after {
 
 .site-footer-inner {
     position: relative;
+    padding-top: 45px;
 }
 
 .footer-hepatocyte-logo {
@@ -4673,7 +4674,7 @@ a.wpb_easl_post_type_grid_head_all_link:after {
     line-height: 1.65em;
 }
 
-.site-footer a, .site-footer strong {
+.site-footer a:not(.theme-button), .site-footer strong {
     color: #fff;
 }
 
@@ -4731,7 +4732,7 @@ a.wpb_easl_post_type_grid_head_all_link:after {
     color: #d3d3d3;
 }
 
-.easl-copy-inner a {
+.easl-copy-inner a:not(.theme-button) {
     color: #d3d3d3;
 }
 
