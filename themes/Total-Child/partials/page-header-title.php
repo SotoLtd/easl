@@ -68,6 +68,10 @@ if(is_tax('blog_category') || is_tax('blog_tag')) {
     $string = 'Blog on <span>'. $string .'</span>';
 }
 
+if(is_singular(EASL_Event_Config::get_event_slug())){
+	$string = wpex_title(get_the_ID());
+}
+
 // Sanitize
 $html_tag = wp_strip_all_tags( $html_tag );
 
