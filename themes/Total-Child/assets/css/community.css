@@ -18,10 +18,10 @@
     display: none;
 }
 .entry h1, .entry h2, .entry h3, .entry h4, .entry h5, .entry h6 {
-    font-family: "KnockoutHTF51Middleweight", "Helvetica Neue", Helvetica, Arial, sans-serif;
+    font-family:"Helvetica Neue", Helvetica, Arial, sans-serif;
     color: #004b87;
     line-height: 1.5em;
-    font-weight: 400;
+    font-weight: 700;
     margin: 0 0 10px;
     padding: 0;
 }
@@ -87,7 +87,8 @@ ul.vcex-filter-links li.active a{
     margin-top: 10px;
     margin-left: 10px;
     font-size: 21px;
-    font-family: 'KnockoutHTF51Middleweight';
+    font-family: 'Helvetica Neue';
+    font-weight: 700;
 }
 .easl-staff-list.term-name p{
     margin-left: 10px;
@@ -96,7 +97,8 @@ ul.vcex-filter-links li.active a{
     position: relative;
     padding-right: 10px;
     font-size: 21px;
-    font-family: 'KnockoutHTF51Middleweight';
+    font-family: 'Helvetica Neue';
+    font-weight: 700;
 }
 .staff-entry-title.entry-title a:before{
     content: "\f105";

@@ -9,7 +9,7 @@ if(empty($event_id)) {
 $key_dates = array();
 $now       = time();
 while ( have_rows( 'event_key_deadline_row', $event_id ) ) {
-	the_row( 'event_key_deadline_row', $event_id );
+	the_row( 'event_key_deadline_row' );
 	$title      = get_sub_field( 'key_date_name' );
 	$start_date = trim( get_sub_field( 'event_key_start_date' ) );
 	$end_date   = trim( get_sub_field( 'event_key_end_date' ) );

@@ -159,8 +159,8 @@ body .mzms-button {
     background-color: #62cff5;
     border-radius: 0;
     color: #fff;
-    font-family: "KnockoutHTF51Middleweight", "Helvetica Neue", Helvetica, Arial, sans-serif;
-    font-size: 14px;
+    font-weight: 700;
+    font-size: 12px;
     line-height: 1.2em;
     padding: 10px 24px 10px 12px;
     position: relative;
@@ -385,9 +385,9 @@ body .mzms-button::after {
     background: #62cff5;
     color: #005499;
     padding: 5px;
-    font-family: "KnockoutHTF51Middleweight", "Helvetica Neue", Helvetica, Arial, sans-serif;
-    font-size: 16px;
-    line-height: 20px;
+    font-weight: 700;
+    font-size: 15px;
+    line-height: 18px;
     margin: 0 0 15px;
 }
 
@@ -417,17 +417,16 @@ body .mzms-button::after {
     color:#004b87;
     border-radius:3px;
     box-shadow:0 0 4px 0 rgba(0, 0, 0, .2);
-    font-size:30px;
+    font-size:28px;
     padding:20px 30px;
     margin-bottom:16px;
     overflow:hidden;
-    font-weight:bold;
     display:flex;
     flex-direction:row;
     justify-content:space-between;
     align-items:center;
     background-image: url("../images/dashboard-member-banner.jpg");
-    font-family: "KnockoutHTF51Middleweight", "Helvetica Neue", Helvetica, Arial, sans-serif;
+    font-weight: 700;
 }
 
 .easl-application-submitted-notice {
@@ -471,9 +470,9 @@ body .mzms-button::after {
 .mz-member-welcome-block {
     flex: 1 1 0;
     text-align: left;
-    font-family: "KnockoutHTF51Middleweight", "Helvetica Neue", Helvetica, Arial, sans-serif;
-    font-size: 16px;
-    line-height: 16px;
+    font-weight: 700;
+    font-size: 15px;
+    line-height: 15px;
     color: #666;
 }
 
@@ -496,8 +495,8 @@ body .mzms-button::after {
 
 .mz-member-welcome-block .mz-member-welcome-button a,
 .mz-member-welcome-block .mz-member-welcome-button a:visited {
-    font-size: 16px;
-    line-height: 16px;
+    font-size: 14px;
+    line-height: 14px;
     color: #fff;
     background-color: #004b87;
     display: block;
@@ -598,9 +597,9 @@ body .mzms-button::after {
 }
 
 .easl-mz-container-inner .mz-page-heading {
-    font-size: 30px;
+    font-size: 26px;
     line-height: 1.2em;
-    font-weight: 400;
+    font-weight: 700;
     margin: 0 0 15px;
     padding: 0;
 }
@@ -614,7 +613,7 @@ body .mzms-button::after {
 
 .easl-mz-page-menu .easl-mz-page-menu-title {
     color: #fff;
-    font-size: 25px;
+    font-size: 22px;
     line-height: 1em;
     margin: 0 0 12px;
     padding: 0;
@@ -624,9 +623,8 @@ body .mzms-button::after {
     list-style: none;
     padding: 0 0 20px;
     margin: 0;
-    font-family: KnockoutHTF31JuniorMiddlewt;
-    font-size: 16px;
-    font-weight: normal;
+    font-weight: 700;
+    font-size: 14px;
 
 }
 
@@ -640,9 +638,9 @@ body .mzms-button::after {
     display: block;
     position: relative;
     line-height: 20px;
-    padding: 8px 30px 8px 0;
+    padding: 8px 25px 8px 0;
     color: #fff;
-    font-weight: normal;
+    font-weight: 700;
     transition: all 0.25s ease;
     border-bottom: 1px solid #336f9f;
     text-decoration: none;
@@ -704,9 +702,9 @@ body .mzms-button::after {
 }
 
 .mz-featured-member-title h3 {
-    font-family: "KnockoutHTF51Middleweight", "Helvetica Neue", Helvetica, Arial, sans-serif;
+    font-weight: 700;
     color: #004b87;
-    font-size: 21px;
+    font-size: 19px;
     line-height: 1em;
     margin: 0;
     padding: 0;
@@ -775,8 +773,8 @@ body .mzms-button::after {
 
 .mz-featured-member-details p {
     color: #666;
-    font-family: KnockoutHTF31JuniorMiddlewt;
-    font-size: 15px;
+    font-weight: 700;
+    font-size: 14px;
     line-height: 19px;
     margin: 0 0 15px;
 }
@@ -786,7 +784,7 @@ body .mzms-button::after {
     display: inline-block;
     position: relative;
     padding-right: 12px;
-    font-family: KnockoutHTF51Middleweight;
+    font-weight: 700;
     font-size: 14px;
     line-height: 14px;
     color: #004b87;
@@ -909,10 +907,9 @@ body .mzms-button::after {
 
 .easl-mz-publicaiton-item-title {
     color: #004b87;
-    font-family: "KnockoutHTF51Middleweight", "Helvetica Neue", Helvetica, Arial, sans-serif;
-    font-size: 21px;
+    font-size: 19px;
     line-height: 1.2em;
-    font-weight: 400;
+    font-weight: 700;
     margin: 0 0 16px;
     padding: 0;
 }
@@ -941,9 +938,8 @@ body .mzms-button::after {
 .easl-mz-publicaiton-item-link a {
     color: #004b87;
     display: inline-block;
-    font-family: "KnockoutHTF51Middleweight", "Helvetica Neue", Helvetica, Arial, sans-serif;
     font-size: 14px;
-    font-weight: 400;
+    font-weight: 700;
     line-height: 14px;
     text-decoration: none;
     position: relative;
@@ -992,16 +988,16 @@ body .mzms-button::after {
 
 .easl-mz-filter-or {
     color: #004b87;
-    font-family: "KnockoutHTF51Middleweight", "Helvetica Neue", Helvetica, Arial, sans-serif;
-    font-size: 15px;
-    line-height: 15px;
+    font-weight: 700;
+    font-size: 14px;
+    line-height: 14px;
     margin: 0 0 10px;
 }
 
 .easl-mz-letter-filter {
-    font-family: "KnockoutHTF51Middleweight", "Helvetica Neue", Helvetica, Arial, sans-serif;
-    font-size: 16px;
-    line-height: 16px;
+    font-weight: 700;
+    font-size: 15px;
+    line-height: 15px;
     margin: 20px 0 35px;
     display: flex;
     justify-content: space-between;
@@ -1025,7 +1021,7 @@ body .mzms-button::after {
 }
 
 .easl-mz-filter-clear-wrap .easl-mz-clear-filters {
-    font-family: "KnockoutHTF51Middleweight", "Helvetica Neue", Helvetica, Arial, sans-serif;
+    font-weight: 700;
     font-size: 14px;
     line-height: 14px;
     position: absolute;
@@ -1107,9 +1103,9 @@ body .mzms-button::after {
     background: #e4e4e4;
     color: #004b87;
     display: inline-block;
-    font-family: "KnockoutHTF51Middleweight", "Helvetica Neue", Helvetica, Arial, sans-serif;
-    font-size: 16px;
-    line-height: 26px;
+    font-weight: 700;
+    font-size: 15px;
+    line-height: 24px;
     padding: 0 10px;
     text-decoration: none;
     height: 25px;
@@ -1120,9 +1116,9 @@ body .mzms-button::after {
     background: #e4e4e4;
     color: #004b87;
     display: inline-block;
-    font-family: "KnockoutHTF51Middleweight", "Helvetica Neue", Helvetica, Arial, sans-serif;
-    font-size: 16px;
-    line-height: 26px;
+    font-weight: 700;
+    font-size: 15px;
+    line-height: 23px;
     padding: 0 10px;
     text-decoration: none;
     height: 25px;
@@ -1179,10 +1175,9 @@ body .mzms-button::after {
 
 .md-item-details .md-item-name {
     color: #004b87;
-    font-family: "KnockoutHTF51Middleweight", "Helvetica Neue", Helvetica, Arial, sans-serif;
     line-height: 1.5em;
-    font-size: 21px;
-    font-weight: 400;
+    font-size: 19px;
+    font-weight: 700;
     margin: 0;
     padding: 0;
 }
@@ -1206,8 +1201,8 @@ body .mzms-button::after {
 
 .md-item-details .md-item-text {
     color: #9c9c9c;
-    font-family: "KnockoutHTF31JuniorMiddlewt", "Helvetica Neue", Helvetica, Arial, sans-serif;
-    font-size: 16px;
+    font-weight: 700;
+    font-size: 15px;
     line-height: 1.3em;
     margin: 0;
     padding: 0;
@@ -1216,7 +1211,7 @@ body .mzms-button::after {
 .md-item-country {
     color: #71c5e8;
     display: inline-block;
-    font-family: "KnockoutHTF31JuniorMiddlewt", "Helvetica Neue", Helvetica, Arial, sans-serif;
+    font-weight: 700;
     font-size: 14px;
     line-height: 14px;
 }
@@ -1279,11 +1274,10 @@ body .mzms-button::after {
 }
 
 .easl-mz-back-link-wrap .easl-mz-back-link {
-    font-family: "KnockoutHTF51Middleweight", "Helvetica Neue", Helvetica, Arial, sans-serif;
     color: #004b87;
     line-height: 1.5em;
-    font-weight: 400;
-    font-size: 16px;
+    font-weight: 700;
+    font-size: 15px;
     text-decoration: none;
 }
 
@@ -1558,12 +1552,11 @@ body .mzms-button::after {
 .mzms-fields-con .mzms-field-label,
 .mzms-fields-con .easl-custom-checkbox span, .acf-fields .acf-field .acf-label label {
     color: #004b87;
-    font-family: "KnockoutHTF51Middleweight", "Helvetica Neue", Helvetica, Arial, sans-serif;
     font-size: 14px;
+    font-weight: 700;
     line-height: 14px;
     display: block;
     margin: 0 0 8px;
-    font-weight:normal;
 }
 
 .mzms-fields-con .easl-custom-checkbox {
@@ -1756,8 +1749,8 @@ body .mzms-button::after {
     background-color: #004b87;
     border-radius: 0;
     color: #fff;
-    font-family: "KnockoutHTF51Middleweight", "Helvetica Neue", Helvetica, Arial, sans-serif;
     font-size: 14px;
+    font-weight: 700;
     line-height: 1.2em;
     padding: 10px 40px 10px;
     position: relative;
@@ -1803,8 +1796,8 @@ body .mzms-button::after {
 
 .mzms-sbitem-delete a {
     color: #004b87;
-    font-family: "KnockoutHTF51Middleweight", "Helvetica Neue", Helvetica, Arial, sans-serif;
     font-size: 14px;
+    font-weight: 700;
     line-height: 14px;
     text-decoration: none;
 }
@@ -1879,8 +1872,8 @@ body .mzms-button::after {
 .easl-icon-cta-title {
     color: #004b87;
     display: block;
-    font-family: "KnockoutHTF51Middleweight", "Helvetica Neue", Helvetica, Arial, sans-serif;
-    font-size: 21px;
+    font-size: 19px;
+    font-weight: 700;
     line-height: 1.2em;
     position: relative;
 }
@@ -1899,8 +1892,8 @@ body .mzms-button::after {
 .easl-icon-cta-subtitle {
     color: #666;
     display: block;
-    font-family: "KnockoutHTF31JuniorMiddlewt", "Helvetica Neue", Helvetica, Arial, sans-serif;
-    font-size: 15px;
+    font-size: 14px;
+    font-weight: 700;
     line-height: 1.2em;
 }
 
@@ -1930,17 +1923,15 @@ body .mzms-button::after {
 }
 
 .mzms-birthday-box strong {
-    font-family: "KnockoutHTF51Middleweight", "Helvetica Neue", Helvetica, Arial, sans-serif;
-    font-size: 15px;
-    font-weight: 400;
+    font-size: 14px;
+    font-weight: 700;
     line-height: 20px;
     display: block;
 }
 
 .mzms-birthday-box span {
-    font-family: "KnockoutHTF31JuniorMiddlewt", "Helvetica Neue", Helvetica, Arial, sans-serif;
-    font-size: 16px;
-    font-weight: 400;
+    font-size: 15px;
+    font-weight: 700;
     line-height: 20px;
     display: block;
 }
@@ -2119,7 +2110,7 @@ span.mzms-field-file-button {
     background-color: #f00;
     color: #fff;
     display: flex;
-    font-family: "KnockoutHTF51Middleweight", "Helvetica Neue", Helvetica, Arial, sans-serif;
+    font-weight: 700;
     margin: 0 0 30px;
     padding: 15px 20px;
     align-items: center;
@@ -2179,8 +2170,8 @@ span.mzms-field-file-button {
 .mzmd-docs-table {
     display: table;
     width: 100%;
-    font-family: "KnockoutHTF51Middleweight", "Helvetica Neue", Helvetica, Arial, sans-serif;
-    font-size: 16px;
+    font-size: 15px;
+    font-weight: 700;
     line-height: 1.2em;
     color: #666;
 }
@@ -2328,9 +2319,9 @@ span.mzms-field-file-button {
 .mz-country-stats {
     color: #004b87;
     flex: 1 1 0;
-    font-size: 40px;
-    font-family: "KnockoutHTF51Middleweight", "Helvetica Neue", Helvetica, Arial, sans-serif;
-    line-height: 40px;
+    font-size: 36px;
+    font-weight: 700;
+    line-height: 36px;
 }
 
 .mz-wordlwide-stats {
@@ -2381,7 +2372,7 @@ span.mzms-field-file-button {
     justify-content: center;
     align-items: center;
     text-align: center;
-    font-family: "KnockoutHTF51Middleweight", "Helvetica Neue", Helvetica, Arial, sans-serif;
+    font-weight: 700;
 }
 
 .mz-wordlwide-stats-categories .mz-stat-block-inner {
@@ -2448,11 +2439,10 @@ span.mzms-field-file-button {
 }
 
 .mz-country-name {
-    font-family: "KnockoutHTF51Middleweight", "Helvetica Neue", Helvetica, Arial, sans-serif;
     color: #004b87;
-    font-size: 18px;
+    font-size: 16px;
     line-height: 1.2em;
-    font-weight: 400;
+    font-weight: 700;
     text-transform: uppercase;
 }
 
@@ -2693,8 +2683,8 @@ span.mzms-field-file-button {
     display: flex;
     align-items: center;
     color: #fff;
-    font-family: "KnockoutHTF51Middleweight", "Helvetica Neue", Helvetica, Arial, sans-serif;
-    font-size: 38px;
+    font-size: 34px;
+    font-weight: 700;
     line-height: 1em;
     width: 140px;
 }
@@ -2784,8 +2774,8 @@ span.mzms-field-file-button {
 
 .mz-panel-button .mz-panel-button-title {
     color: #004b87;
-    font-family: "KnockoutHTF51Middleweight", "Helvetica Neue", Helvetica, Arial, sans-serif;
-    font-size: 16px;
+    font-size: 14px;
+    font-weight: 700;
     line-height: 1em;
     display: block;
 }
@@ -2919,20 +2909,21 @@ span.mzms-field-file-button {
 }
 
 .applications-widget-programme .programme-title {
-    width: calc(100% - 300px);
+    width: calc(100% - 320px);
     font-weight:bold;
 }
 
 .applications-widget-programme-buttons {
     display: flex;
-    width: 290px;
+    width: 310px;
+}
+.applications-widget-programme-buttons .easl-generic-button {
+    width: 150px;
+    margin-right: 10px;
+    font-size: 12px;
 }
 .applications-widget-programme-buttons .easl-generic-button:last-child {
     margin-right: 0;
-}
-.applications-widget-programme-buttons .easl-generic-button {
-    width: 140px;
-    margin-right: 10px;
 }
 .applications-widget-closed {
     color: #333333;

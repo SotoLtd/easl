@@ -3,7 +3,7 @@ h4.app-tlt {
     background-color: #454545;
     color: #ffffff;
     margin-bottom: 0;
-    font-family:'KnockoutHTF51Middleweight';
+    font-family:'Helvetica Neue';
     padding-left: 15px;
 }
 h2.app-tlt{
@@ -43,7 +43,7 @@ h4.app-tlt{
 .app-process ul li.active h4,
 .app-process ul li.active p{
     color:#cbcbcb;
-    font-family: 'KnockoutHTF51Middleweight';
+    font-family: 'Helvetica Neue';
 }
 .app-process ul li h4{
     margin-bottom: 0;
@@ -91,7 +91,7 @@ body .vc_tta.vc_general .vc_tta-panels-container .vc_tta-panels .vc_tta-panel .v
 }
 .archive-wrapper a{
     color: #004b87;
-    font-family:'KnockoutHTF51Middleweight';
+    font-family:'Helvetica Neue';
     font-size: 18px;
 }
 .wpex-social-share{
@@ -103,7 +103,7 @@ body .vc_tta.vc_general .vc_tta-panels-container .vc_tta-panels .vc_tta-panel .v
 .show-more{
     background-color: #104f85;
     font-size: 16px;
-    font-family: 'KnockoutHTF51Middleweight';
+    font-family: 'Helvetica Neue';
     border-radius: 0;
     padding: 8px 24px;
 }

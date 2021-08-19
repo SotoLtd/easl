@@ -69,7 +69,8 @@ body{
     font-size: 14px;
     padding: 0;
     color: #004b87;
-    font-family: "KnockoutHTF51Middleweight", "Helvetica Neue", Helvetica, Arial, sans-serif;
+    font-family: "Helvetica Neue", "Helvetica Neue", Helvetica, Arial, sans-serif;
+    font-weight: 700;
 }
 .publication-filter-button:hover{
     background-color: #ffffff;

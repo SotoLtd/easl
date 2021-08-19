@@ -22,7 +22,8 @@ a.button {
 }
 .printed-copies .books-text{
     color: #004b87;
-    font-family: "KnockoutHTF51Middleweight";
+    font-family: "Helvetica Neue";
+    font-weight: 700;
 }
 .membership .ticon-angle-right::before{
     color: #004b87;

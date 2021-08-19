@@ -1,13 +1,3 @@
-@media only screen and (max-width: 1250px) {
-
-	#site-navigation .dropdown-menu > li > a{
-		padding:0 9px !important;
-	}
-
-	#site-navigation .dropdown-menu .link-inner{
-		font-size:14px !important;
-	}
-}
 
 @media only screen and (max-width: 1199px) {
 	.easl-mz-page-menu{

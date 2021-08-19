@@ -29,7 +29,7 @@
 .vc_tta.vc_general .vc_tta-panel-title {
     margin: 0;
     line-height: 1;
-    font-weight: 400;
+    font-weight: 700;
 }
 
 .vc_tta.vc_general .vc_tta-panel-title > a {
@@ -757,7 +757,8 @@
     margin-right: 4px;
     margin-bottom: 4px;
     display: block;
-    font-family: "KnockoutHTF51Middleweight";
+    font-family: "Helvetica Neue";
+    font-weight: 700;
     font-size: 17px;
     line-height: 23px;
     padding: 15px 12px 13px;
@@ -1015,7 +1016,8 @@
     background: transparent;
     color: #004b87;
     display: block;
-    font-family: "KnockoutHTF51Middleweight";
+    font-family: "Helvetica Neue";
+    font-weight: 700;
     font-size: 17px;
     line-height: 23px;
     padding: 15px 12px 13px;

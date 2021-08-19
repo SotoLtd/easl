@@ -11,7 +11,8 @@
     background-color: #ffffff !important;
     color: #004b87 !important;
     font-size: 17px !important;
-    font-family: 'KnockoutHTF51Middleweight';
+    font-family: 'Helvetica Neue';
+    font-weight: 700;
 }
 .awardees-tabs .vc_tta-tab.vc_active > a[data-vc-tabs]{
     background-color: #e1e1e1 !important;
@@ -27,11 +28,13 @@ body .vc_tta.vc_general .vc_tta-tabs-container .vc_tta-tabs-list {
 .awardees-tabs .awardees-tabs-additional-sub-nav .vc_column_container .wpb_wrapper a{
     color: #ffffff;
     font-size: 16px;
-    font-family: 'KnockoutHTF51Middleweight';
+    font-family: 'Helvetica Neue';
+    font-weight: 700;
 }
 .awardees-tabs .awardees-tabs-additional-sub-nav .vc_column_container .vc_column-inner {
     margin-bottom: 0 !important;
 }
 .easl-recognition-award-year{
-    font-family: 'KnockoutHTF51Middleweight';
+    font-family: 'Helvetica Neue';
+    font-weight: 700;
 }
