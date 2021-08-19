@@ -28,7 +28,7 @@ $needs_modal = ! easl_mz_is_member_logged_in() && has_term( 'clinical-practice-g
                     class="vcex-button theme-button inline animate-on-hover wpex-dhover-0 <?php if ( $needs_modal ): ?> sp-modal-trigger<?php endif; ?>"
                     style="background:#ffffff;
                                            color:#004b87;
-                                           font-family: KnockoutHTF51Middleweight;
+                                           font-family: Helvetica Neue;
                                            font-size: 17px;
                                            background-image: url('/wp-content/themes/Total-Child/images/ppoint.png');
                                            background-repeat: no-repeat;
@@ -52,7 +52,7 @@ $needs_modal = ! easl_mz_is_member_logged_in() && has_term( 'clinical-practice-g
                     class="vcex-button theme-button inline animate-on-hover wpex-dhover-0 text-decoration-none <?php if ( $needs_modal ): ?> sp-modal-trigger<?php endif; ?>"
                     style="background:#ffffff;
                                            color:#004b87;
-                                           font-family: KnockoutHTF51Middleweight;
+                                           font-family: Helvetica Neue;
                                            font-size: 17px;
                                            background-image: url('/wp-content/themes/Total-Child/images/ppoint.png');
                                            background-repeat: no-repeat;

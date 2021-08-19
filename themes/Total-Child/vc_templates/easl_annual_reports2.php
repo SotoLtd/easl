@@ -79,7 +79,7 @@ if ( $annual_reports->have_posts() ) {
 			             '<div class="theme-button-block-wrap theme-button-wrap clr">' .
 			             '<a href="' . $download_link . '" target="_blank"' .
 			             'class="vcex-button theme-button block animate-on-hover" ' .
-			             'style="color:#ffffff;width:100%;font-family:KnockoutHTF51Middleweight;"' .
+			             'style="color:#ffffff;width:100%;font-family:Helvetica Neue;"' .
 			             '>' .
 			             '<span class="theme-button-inner">' .
 			             '<span class="vcex-icon-wrap theme-button-icon-left">' .

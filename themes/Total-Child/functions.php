@@ -1,7 +1,7 @@
 <?php
 
-define('EASL_THEME_VERSION', '2021.06.18.03');
-//define( 'EASL_THEME_VERSION', time() );
+//define('EASL_THEME_VERSION', '2021.08.18.03');
+define( 'EASL_THEME_VERSION', time() );
 
 if ( ! defined( 'EASL_INC_DIR' ) ) {
 	define( 'EASL_INC_DIR', trailingslashit( get_stylesheet_directory() ) . 'inc/' );
@@ -238,9 +238,7 @@ add_filter( 'wpex_page_header_classes', 'easl_page_heder_class' );
 // Add custom font to font settings
 function wpex_add_custom_fonts() {
 	return array(
-		'KnockoutHTF31JuniorMiddlewt',
-		'KnockoutHTF51Middleweight',
-		'KnockoutHTF91UltmtMiddlewt',
+		'Helvetica Neue',
 	);
 }
 

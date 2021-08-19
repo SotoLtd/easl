@@ -450,7 +450,7 @@ echo '<div class="vc_row wpb_row vc_row-fluid">
         <div class="wpb_column vc_column_container vc_col-sm-12">
             <div class="vc_column-inner " style="margin-bottom: 0">
                 <div class="wpb_wrapper">
-                    <div style="float: left;margin-right: 10px;font-family: \'KnockoutHTF51Middleweight\';
+                    <div style="float: left;margin-right: 10px;font-family: \'Helvetica Neue\';
 font-size: 16px;
 font-weight: normal;color:#104f85;">Share this page</div>
                     <div class="wpex-social-share position-horizontal style-custom display-block" style="margin-bottom: 0"

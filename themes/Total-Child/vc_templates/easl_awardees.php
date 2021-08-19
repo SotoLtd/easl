@@ -133,7 +133,7 @@ if ( $awardees->have_posts() ):
                             </figure>
                         </div>
 
-                        <div style="color:#104e85;font-family:KnockoutHTF51Middleweight;font-size:19px;"
+                        <div style="color:#104e85;font-family:Helvetica Neue;font-size:19px;"
                              class="wpb_text_column has-custom-color wpb_content_element  recognition-link">
                             <div class="wpb_wrapper">
                                 <p><?php echo the_title();?></p>

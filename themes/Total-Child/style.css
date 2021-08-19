@@ -5,33 +5,28 @@ Text Domain: total-child
 */
 
 @font-face {
-    font-family: 'KnockoutHTF91UltmtMiddlewt';
-    src: url('fonts/KnockoutHTF91UltmtMiddlewt.eot');
-    src: url('fonts/KnockoutHTF91UltmtMiddlewt.eot') format('embedded-opentype'),
-    url('fonts/KnockoutHTF91UltmtMiddlewt.woff2') format('woff2'),
-    url('fonts/KnockoutHTF91UltmtMiddlewt.woff') format('woff'),
-    url('fonts/KnockoutHTF91UltmtMiddlewt.ttf') format('truetype'),
-    url('fonts/KnockoutHTF91UltmtMiddlewt.svg#KnockoutHTF91UltmtMiddlewt') format('svg');
+    font-family: 'Helvetica Neue';
+    src: url(assets/fonts/HelveticaNeueLTPro/HelveticaNeueLTPro-It.woff2) format("woff2"),url(assets/fonts/HelveticaNeueLTPro/HelveticaNeueLTPro-It.woff) format("woff");
+    font-weight: 400;
+    font-style: italic
 }
-
 @font-face {
-    font-family: 'KnockoutHTF51Middleweight';
-    src: url('fonts/KnockoutHTF51Middleweight.eot');
-    src: url('fonts/KnockoutHTF51Middleweight.eot') format('embedded-opentype'),
-    url('fonts/KnockoutHTF51Middleweight.woff2') format('woff2'),
-    url('fonts/KnockoutHTF51Middleweight.woff') format('woff'),
-    url('fonts/KnockoutHTF51Middleweight.ttf') format('truetype'),
-    url('fonts/KnockoutHTF51Middleweight.svg#KnockoutHTF51Middleweight') format('svg');
+    font-family: 'Helvetica Neue';
+    src: url(assets/fonts/HelveticaNeueLTPro/HelveticaNeueLTPro-Roman.woff2) format("woff2"),url(assets/fonts/HelveticaNeueLTPro/HelveticaNeueLTPro-Roman.woff) format("woff");
+    font-weight: 400;
+    font-style: normal
 }
-
 @font-face {
-    font-family: 'KnockoutHTF31JuniorMiddlewt';
-    src: url('fonts/KnockoutHTF31JuniorMiddlewt.eot');
-    src: url('fonts/KnockoutHTF31JuniorMiddlewt.eot') format('embedded-opentype'),
-    url('fonts/KnockoutHTF31JuniorMiddlewt.woff2') format('woff2'),
-    url('fonts/KnockoutHTF31JuniorMiddlewt.woff') format('woff'),
-    url('fonts/KnockoutHTF31JuniorMiddlewt.ttf') format('truetype'),
-    url('fonts/KnockoutHTF31JuniorMiddlewt.svg#KnockoutHTF31JuniorMiddlewt') format('svg');
+    font-family: 'Helvetica Neue';
+    src: url(assets/fonts/HelveticaNeueLTPro/HelveticaNeueLTPro-Bd.woff2) format("woff2"),url(assets/fonts/HelveticaNeueLTPro/HelveticaNeueLTPro-Bd.woff) format("woff");
+    font-weight: 700;
+    font-style: normal
+}
+@font-face {
+    font-family: 'Helvetica Neue';
+    src: url(assets/fonts/HelveticaNeueLTPro/HelveticaNeueLTPro-BdIt.woff2) format("woff2"),url(assets/fonts/HelveticaNeueLTPro/HelveticaNeueLTPro-BdIt.woff) format("woff");
+    font-weight: 700;
+    font-style: italic
 }
 
 [class^="icon-"]:before, [class*=" icon-"]:before {
@@ -107,8 +102,9 @@ Text Domain: total-child
 
 
 body {
-    font-family: Arial, sans-serif;
+    font-family: "Helvetica Neue",Helvetica,Arial,sans-serif;
     font-size: 14px;
+    font-weight: 400;
 }
 
 body a {
@@ -337,11 +333,13 @@ hr.in-the-bottom {
 }
 
 .easl-fswmw-bold {
-    font-family: "KnockoutHTF91UltmtMiddlewt" !important;
+    font-family: "Helvetica Neue" !important;
+    font-weight: 700!important;
 }
 
 .easl-fswmw-lighter {
-    font-family: "KnockoutHTF31JuniorMiddlewt" !important;
+    font-family: "Helvetica Neue" !important;
+    font-weight: 400!important;
 }
 
 .easl-toc-menu {
@@ -448,9 +446,9 @@ hr.in-the-bottom {
 .easl-generic-button {
     background: #104f85;
     color: #fff;
-    font-family: "KnockoutHTF51Middleweight", "Helvetica Neue", Helvetica, Arial, sans-serif;
+    font-family:  "Helvetica Neue", Helvetica, Arial, sans-serif;
     font-size: 14px;
-    font-weight: 400;
+    font-weight: 700;
     padding: 7px 15px;
     display: inline-block;
     margin: 0;
@@ -463,6 +461,12 @@ hr.in-the-bottom {
     text-decoration: none !important;
     max-width: 100%;
     transition: 0.15s all ease;
+}
+.theme-button, .color-button, input[type="submit"], button, .button, .added_to_cart {
+    font-family:  "Helvetica Neue", Helvetica, Arial, sans-serif;
+    font-size: 14px;
+    font-weight: 700;
+    line-height: 1.65;
 }
 
 .easl-generic-button-right-icon {
@@ -594,9 +598,8 @@ hr.in-the-bottom {
     background: #71c5e8;
     color: #fff;
     display: inline-block;
-    font-family: "KnockoutHTF51Middleweight", "Helvetica Neue", Helvetica, Arial, sans-serif;
-    font-size: 16px;
-    font-weight: 400;
+    font-size: 14px;
+    font-weight: 700;
     line-height: 16px;
     padding: 10px 15px;
     margin: 0;
@@ -774,10 +777,9 @@ hr.in-the-bottom {
 }
 
 .easl-custom-checkbox span {
-    font-family: "KnockoutHTF51Middleweight", "Helvetica Neue", Helvetica, Arial, sans-serif;
-    font-size: 16px;
-    font-weight: 400;
-    line-height: 16px;
+    font-size: 14px;
+    font-weight: 700;
+    line-height: 14px;
     color: #666;
 }
 
@@ -836,10 +838,9 @@ hr.in-the-bottom {
 }
 
 .easl-custom-radio span {
-    font-family: "KnockoutHTF51Middleweight", "Helvetica Neue", Helvetica, Arial, sans-serif;
-    font-size: 16px;
-    font-weight: 400;
-    line-height: 16px;
+    font-size: 14px;
+    font-weight: 700;
+    line-height: 14px;
     color: #666;
 }
 
@@ -906,7 +907,6 @@ hr.in-the-bottom {
 .easl-dropdown {
     position: relative;
     font-size: 14px;
-    font-family: "KnockoutHTF51Middleweight", "Helvetica Neue", Helvetica, Arial, sans-serif;
 }
 
 .easl-dropdown-label {
@@ -1034,16 +1034,16 @@ hr.in-the-bottom {
 .entry h4,
 .entry h5,
 .entry h6 {
-    font-family: "KnockoutHTF51Middleweight", "Helvetica Neue", Helvetica, Arial, sans-serif;
+    font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
     color: #004b87;
     line-height: 1.5em;
-    font-weight: 400;
+    font-weight: 700;
     margin: 0 0 20px;
     padding: 0;
 }
 
 .entry h3 {
-    font-size: 21px;
+    font-size: 19px;
 }
 
 .easl-text-gray {
@@ -1064,7 +1064,7 @@ hr.in-the-bottom {
 .easl-section-title,
 body .vcex-heading.easl-section-title {
     color: #00468a;
-    font-family: "KnockoutHTF51Middleweight", "Helvetica Neue", Helvetica, Arial, sans-serif;
+    font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
     font-size: 28px;
     line-height: 38px;
     margin: 0 0 25px 0;
@@ -1080,13 +1080,13 @@ body .vcex-heading.easl-section-title {
     font-size: 21px;
     line-height: 25px;
     color: #fff;
-    font-family: "KnockoutHTF31JuniorMiddlewt", "Helvetica Neue", Helvetica, Arial, sans-serif;
+    font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
     font-weight: 400;
 }
 
 #wrap .easl-infopane a {
     color: #004b87;
-    font-family: "KnockoutHTF51Middleweight", "Helvetica Neue", Helvetica, Arial, sans-serif;
+    font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
 }
 
 #wrap .easl-infopane a:hover,
@@ -1124,62 +1124,62 @@ sub {
 
 .knockout31-14 {
     font-size: 14px !important;
-    font-family: "KnockoutHTF31JuniorMiddlewt" !important;
+    font-family: "Helvetica Neue" !important;
     font-weight: 400 !important;
 }
 
 .knockout31-15 {
     font-size: 15px !important;
-    font-family: "KnockoutHTF31JuniorMiddlewt" !important;
+    font-family: "Helvetica Neue" !important;
     font-weight: 400 !important;
 }
 
 .knockout31-16 {
     font-size: 16px !important;
-    font-family: "KnockoutHTF31JuniorMiddlewt" !important;
+    font-family: "Helvetica Neue" !important;
     font-weight: 400 !important;
     line-height: 24px !important;
 }
 
 .knockout31-21 {
     font-size: 21px !important;
-    font-family: "KnockoutHTF31JuniorMiddlewt" !important;
+    font-family: "Helvetica Neue" !important;
     font-weight: 400 !important;
     line-height: 29px !important;
 }
 
 .knockout31-26 {
     font-size: 26px !important;
-    font-family: "KnockoutHTF31JuniorMiddlewt" !important;
+    font-family: "Helvetica Neue" !important;
     font-weight: 400 !important;
     line-height: 32px !important;
 }
 
 .knockout51-16 {
     font-size: 16px !important;
-    font-family: "KnockoutHTF51Middleweight" !important;
-    font-weight: 400 !important;
+    font-family: "Helvetica Neue" !important;
+    font-weight: 700 !important;
     line-height: 24px !important;
 }
 
 .knockout51-24 {
     font-size: 21px !important;
-    font-family: "KnockoutHTF51Middleweight" !important;
-    font-weight: 400 !important;
+    font-family: "Helvetica Neue" !important;
+    font-weight: 700 !important;
     line-height: 32px !important;
 }
 
 .knockout51-28 {
     font-size: 28px !important;
-    font-family: "KnockoutHTF51Middleweight" !important;
-    font-weight: 400 !important;
+    font-family: "Helvetica Neue" !important;
+    font-weight: 700 !important;
     line-height: 34px !important;
 }
 
 .knockout51-30 {
     font-size: 30px !important;
-    font-family: "KnockoutHTF51Middleweight" !important;
-    font-weight: 400 !important;
+    font-family: "Helvetica Neue" !important;
+    font-weight: 700 !important;
     line-height: 36px !important;
 }
 
@@ -1357,7 +1357,7 @@ body #site-navigation-wrap {
     padding: 22px 30px 0 0;
     color: #005499;
     font-size: 16px;
-    font-family: "KnockoutHTF51Middleweight";
+    font-family: "Helvetica Neue";
 }
 
 .header-aside-content a,
@@ -1451,20 +1451,19 @@ body #site-navigation-wrap {
     margin-bottom: 0;
 }
 
-body #site-navigation .dropdown-menu a {
-    font-family: "KnockoutHTF51Middleweight";
-}
-
 #site-navigation .dropdown-menu > li > a {
-    padding: 0 8px;
+    padding: 0 7px;
     height: 40px;
     line-height: 40px;
+    font-weight: 700;
 }
 
 body #site-navigation .dropdown-menu ul a.sf-with-ul {
     padding-right: 25px !important;
 }
-
+#site-navigation .dropdown-menu ul.sub-menu li.menu-item a {
+    font-weight: 700;
+}
 #site-navigation .dropdown-menu > li > a.site-search-toggle {
     position: relative;
 }
@@ -1525,7 +1524,7 @@ body #site-navigation .dropdown-menu ul a.sf-with-ul {
     padding-left: 44px;
     background: transparent;
     padding-bottom: 0;
-    font-family: "KnockoutHTF51Middleweight";
+    font-family: "Helvetica Neue";
     font-size: 16px;
 }
 
@@ -1710,6 +1709,10 @@ ul.sidr-class-sub-menu > .sidr-class-easl-hide-mobile-submenu {
 .easl-page-header-title-wrap {
     height: 220px;
 }
+.page-header.background-image-page-header {
+    height: auto;
+    min-height: 220px;
+}
 
 .page-header.background-image-page-header .easl-page-header .page-header-title {
     margin: 0;
@@ -1756,14 +1759,14 @@ ul.sidr-class-sub-menu > .sidr-class-easl-hide-mobile-submenu {
     color: #004b87;
 }
 
-.page-header.background-image-page-header .page-header-title,
-.page-header.easl-page-header-no-bg .page-header-title {
+.page-header.background-image-page-header:not(.wpex-supports-mods) .page-header-title,
+.page-header.easl-page-header-no-bg:not(.wpex-supports-mods) .page-header-title {
     color: #fff;
-    font-family: "KnockoutHTF51Middleweight", "Helvetica Neue", Helvetica, Arial, sans-serif;
-    font-weight: 400;
-    font-size: 40px;
-    line-height: 48px;
-    text-align: left;
+    font-family: "Helvetica Neue", Helvetica, Arial, sans-serif !important;
+    font-weight: 700 !important;
+    font-size: 38px !important;
+    line-height: 46px !important;
+    text-align: left !important;
 }
 
 .easl-page-title-color-blue .page-header.background-image-page-header .page-header-title,
@@ -1873,7 +1876,7 @@ body .tp-loader.spinner0 {
 }
 
 .rev_slider .tp-caption {
-    font-family: "KnockoutHTF31JuniorMiddlewt", "Helvetica Neue", Helvetica, Arial, sans-serif !important;
+    font-family: "Helvetica Neue", Helvetica, Arial, sans-serif !important;
 }
 
 body .custom.tparrows {
@@ -1920,8 +1923,9 @@ body .wpb_single_image .easl-vc-image-over {
     opacity: 1;
     position: absolute;
     bottom: 15px;
-    font-family: "KnockoutHTF51Middleweight", "Helvetica Neue", Helvetica, Arial, sans-serif;
-    font-size: 19px;
+    font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+    font-size: 18px;
+    font-weight: 700;
     line-height: 26px;
     width: 100%;
     z-index: 2;
@@ -1972,8 +1976,8 @@ body .wpb_single_image a.easl-vc-image-over:after {
     min-height: 48px;
     text-decoration: none;
     color: #004b87;
-    font-family: "KnockoutHTF51Middleweight", "Helvetica Neue", Helvetica, Arial, sans-serif;
-    font-weight: 400;
+    font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+    font-weight: 700;
 }
 
 .easl-button-wrapper a:hover {
@@ -2013,10 +2017,10 @@ body .wpb_single_image a.easl-vc-image-over:after {
     color: #004b87;
     margin: -7px 0 25px;
     padding: 0 0 10px;
-    font-family: "KnockoutHTF51Middleweight", "Helvetica Neue", Helvetica, Arial, sans-serif;
-    font-size: 30px;
-    line-height: 37px;
-    font-weight: 400;
+    font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+    font-size: 27px;
+    line-height: 34px;
+    font-weight: 700;
     position: relative;
 }
 
@@ -2026,8 +2030,9 @@ body .wpb_single_image a.easl-vc-image-over:after {
     color: #fff;
     display: inline-block;
     padding: 5px 8px;
-    font-size: 16px;
-    line-height: 16px;
+    font-size: 14px;
+    font-weight: 700;
+    line-height: 1em;
     position: absolute;
     right: 0;
     top: 50%;
@@ -2062,7 +2067,7 @@ body .wpb_single_image a.easl-vc-image-over:after {
     margin: 0 0 30px;
     position: relative;
     padding: 0 0 0 95px;
-    font-family: "KnockoutHTF51Middleweight", "Helvetica Neue", Helvetica, Arial, sans-serif;
+    font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
     min-height: 75px;
 }
 
@@ -2155,22 +2160,25 @@ body .wpb_single_image a.easl-vc-image-over:after {
 
 .eld-day {
     display: block;
-    font-size: 15px;
-    line-height: 15px;
-    padding-top: 5px;
+    font-size: 14px;
+    line-height: 14px;
+    padding-top: 8px;
+    font-weight: 700;
 }
 
 .eld-mon {
     display: block;
-    font-size: 20px;
+    font-size: 16px;
     line-height: 22px;
     padding: 5px 0;
+    font-weight: 700;
 }
 
 .eld-year {
     display: block;
-    font-size: 15px;
-    line-height: 15px;
+    font-size: 14px;
+    line-height: 14px;
+    font-weight: 700;
 }
 
 .events-li-date .ticon {
@@ -2184,8 +2192,8 @@ body .wpb_single_image a.easl-vc-image-over:after {
 
 .easl-events-li h3 {
     color: inherit;
-    font-size: 18px;
-    line-height: 22px;
+    font-size: 15px;
+    line-height: 1.25;
     margin: 0 0 10px;
     padding: 0;
     font-family: inherit;
@@ -2213,9 +2221,10 @@ body .wpb_single_image a.easl-vc-image-over:after {
 
 .el-topic-organiser,
 .el-location {
-    font-size: 14px;
-    line-height: 14px;
+    font-size: 12px;
+    line-height: 12px;
     margin: 0;
+    font-weight: 700;
 }
 
 .el-topic-organiser {
@@ -2246,10 +2255,8 @@ body .wpb_single_image a.easl-vc-image-over:after {
 
 .easl-ec-filter h4 {
     color: #004b87;
-    font-family: "KnockoutHTF51Middleweight", "Helvetica Neue", Helvetica, Arial, sans-serif;
-    font-size: 21px;
-    font-weight: 400;
-    line-height: 21px;
+    font-size: 19px;
+    line-height: 19px;
     margin: 0 0 12px;
     padding: 0;
 }
@@ -2436,10 +2443,10 @@ body .wpb_single_image a.easl-vc-image-over:after {
     background: #fff !important;
     padding: 0;
     font-size: 14px;
-    font-weight: 400;
+    font-weight: 700;
     line-height: 16px;
     display: inline-block;
-    font-family: "KnockoutHTF51Middleweight", "Helvetica Neue", Helvetica, Arial, sans-serif;
+    font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
     outline: none !important;
 }
 
@@ -2469,10 +2476,9 @@ body .wpb_single_image a.easl-vc-image-over:after {
 
 .easl-ec-related-links li a {
     color: #004b87;
-    font-family: "KnockoutHTF51Middleweight", "Helvetica Neue", Helvetica, Arial, sans-serif;
-    font-size: 16px;
-    font-weight: 400;
-    line-height: 16px;
+    font-size: 14px;
+    font-weight: 700;
+    line-height: 14px;
 }
 
 .easl-ec-related-links li a:hover,
@@ -2517,9 +2523,9 @@ body .wpb_single_image a.easl-vc-image-over:after {
     display: inline-block;
     background: #afafaf;
     color: #fff;
-    font-family: "KnockoutHTF51Middleweight", "Helvetica Neue", Helvetica, Arial, sans-serif;
-    font-size: 16px;
-    line-height: 16px;
+    font-size: 14px;
+    font-weight: 700;
+    line-height: 14px;
     padding: 6px 30px;
 }
 
@@ -2560,9 +2566,8 @@ body .wpb_single_image a.easl-vc-image-over:after {
 .ec-head h3 {
     padding: 0;
     margin: 0;
-    font-family: "KnockoutHTF51Middleweight", "Helvetica Neue", Helvetica, Arial, sans-serif;
-    font-size: 24px;
-    line-height: 28px;
+    font-size: 20px;
+    line-height: 25px;
 }
 
 .ec-head h3 a {
@@ -2581,7 +2586,7 @@ body .wpb_single_image a.easl-vc-image-over:after {
     border-width: 3px;
     border-style: solid;
     bottom: -1px;
-    font-family: "KnockoutHTF51Middleweight", "Helvetica Neue", Helvetica, Arial, sans-serif;
+    font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
     position: absolute;
     height: 80px;
     width: 80px;
@@ -2600,26 +2605,26 @@ body .wpb_single_image a.easl-vc-image-over:after {
 
 .ecd-day {
     display: block;
-    font-size: 15px;
-    line-height: 15px;
-    font-weight: 400;
+    font-size: 14px;
+    line-height: 14px;
+    font-weight: 700;
     margin: 0 0 4px;
-    padding: 7px 0 0;
+    padding: 10px 0 0;
 }
 
 .ecd-mon {
     display: block;
-    font-size: 20px;
-    line-height: 22px;
-    font-weight: 400;
+    font-size: 17px;
+    line-height: 20px;
+    font-weight: 700;
     margin: 0 0 4px;
 }
 
 .ecd-year {
     display: block;
-    font-size: 15px;
-    line-height: 15px;
-    font-weight: 400;
+    font-size: 14px;
+    line-height: 14px;
+    font-weight: 700;
 }
 
 .ec-dates .ticon {
@@ -2687,9 +2692,9 @@ body .wpb_single_image a.easl-vc-image-over:after {
 }
 
 .ec-location {
-    font-family: "KnockoutHTF51Middleweight", "Helvetica Neue", Helvetica, Arial, sans-serif;
-    font-size: 16px;
-    line-height: 16px;
+    font-size: 14px;
+    font-weight: 700;
+    line-height: 14px;
     padding: 0;
     margin: 0 0 25px;
 }
@@ -2768,8 +2773,8 @@ body .wpb_single_image a.easl-vc-image-over:after {
 
 .ec-link-text {
     display: block;
-    font-size: 13px;
-    line-height: 17px;
+    font-size: 12px;
+    line-height: 16px;
     font-weight: 700;
 }
 
@@ -2939,10 +2944,10 @@ body .wpb_single_image a.easl-vc-image-over:after {
 
 .ec-links-details ul li {
     margin: 0 0 8px;
-    font-family: "KnockoutHTF51Middleweight", "Helvetica Neue", Helvetica, Arial, sans-serif;
-    font-weight: 400;
-    font-size: 14px;
-    line-height: 20px;
+    font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+    font-weight: 700;
+    font-size: 13px;
+    line-height: 19px;
 }
 
 .easl-ec-row-blue .ec-links-details ul li {
@@ -3173,7 +3178,7 @@ body .wpb_single_image a.easl-vc-image-over:after {
 
 .easl-news-date {
     color: #666;
-    font-family: "KnockoutHTF31JuniorMiddlewt", "Helvetica Neue", Helvetica, Arial, sans-serif;
+    font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
     font-size: 12px;
     line-height: 12px;
     margin: 0 0 10px;
@@ -3181,9 +3186,10 @@ body .wpb_single_image a.easl-vc-image-over:after {
 
 .easl-news-item h3 {
     color: #004b87;
-    font-family: "KnockoutHTF31JuniorMiddlewt", "Helvetica Neue", Helvetica, Arial, sans-serif;
-    font-size: 18px;
-    line-height: 24px;
+    font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+    font-size: 17px;
+    font-weight: 400;
+    line-height: 1.3em;
     margin: 0 0 15px;
     padding: 0;
 }
@@ -3254,9 +3260,8 @@ body .wpb_single_image a.easl-vc-image-over:after {
 
 .sp-content h3 {
     color: #004b87;
-    font-family: "KnockoutHTF31JuniorMiddlewt", "Helvetica Neue", Helvetica, Arial, sans-serif;
-    font-size: 21px;
-    font-weight: 400;
+    font-size: 18px;
+    font-weight: 700;
     line-height: 26px;
     margin: 0 0 10px;
     padding: 0;
@@ -3385,9 +3390,9 @@ body .wpb_single_image a.easl-vc-image-over:after {
 .easl-gbtn {
     color: #004b87;
     display: block;
-    font-family: "KnockoutHTF51Middleweight", "Helvetica Neue", Helvetica, Arial, sans-serif;
+    font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
     font-size: 15px;
-    font-weight: 400;
+    font-weight: 700;
     line-height: 16px;
     text-decoration: none;
     padding: 23px 5px;
@@ -3824,8 +3829,8 @@ body .wpb_single_image a.easl-vc-image-over:after {
     font-size: 10px;
     line-height: 10px;
     height: 37px;
-    font-family: "KnockoutHTF51Middleweight", "Helvetica Neue", Helvetica, Arial, sans-serif;
-    font-weight: 400;
+    font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+    font-weight: 700;
     position: absolute;
     top: 93px;
     left: -53px;
@@ -3868,9 +3873,9 @@ body .wpb_single_image a.easl-vc-image-over:after {
     border: 0 none;
     color: #104f85;
     display: inline-block;
-    font-family: "KnockoutHTF51Middleweight", "Helvetica Neue", Helvetica, Arial, sans-serif;
+    font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
     font-size: 14px;
-    font-weight: 400;
+    font-weight: 700;
     line-height: 14px;
     padding: 10px 30px;
     margin: 0;
@@ -3902,8 +3907,8 @@ body .wpb_single_image a.easl-vc-image-over:after {
 .yif-application-closed-block .yif-awarded {
     background: #f5f5f5;
     color: #666;
-    font-family: "KnockoutHTF51Middleweight", "Helvetica Neue", Helvetica, Arial, sans-serif;
-    font-weight: 400;
+    font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+    font-weight: 700;
     font-size: 14px;
     line-height: 18px;
     margin: 0;
@@ -3973,7 +3978,7 @@ body .wpb_single_image a.easl-vc-image-over:after {
     background: #e9e9e9;
     padding: 12px 10px;
     color: #004b87;
-    font-family: "KnockoutHTF51Middleweight";
+    font-family: "Helvetica Neue";
     font-size: 21px;
     line-height: 21px;
 }
@@ -3987,7 +3992,7 @@ body .wpb_single_image a.easl-vc-image-over:after {
     display: block;
     background: #004b87;
     border-radius: 50%;
-    font-family: "KnockoutHTF51Middleweight";
+    font-family: "Helvetica Neue";
     font-size: 16px;
     line-height: 57px;
     text-align: center;
@@ -4064,14 +4069,14 @@ body .wpb_single_image a.easl-vc-image-over:after {
     margin: 0 0 5px;
     font-size: 17px;
     line-height: 17px;
-    font-family: "KnockoutHTF31JuniorMiddlewt";
+    font-family: "Helvetica Neue";
 }
 
 .cag-members-row .cagm-text h6 {
     margin: 0;
     font-size: 17px;
     line-height: 17px;
-    font-family: "KnockoutHTF51Middleweight";
+    font-family: "Helvetica Neue";
 }
 
 /* VC Shortcode: Menu Stacked Content */
@@ -4080,7 +4085,7 @@ body .wpb_single_image a.easl-vc-image-over:after {
 }
 
 .easl-menu-stacked-content .wpb_easl_widget_heading {
-    font-family: "KnockoutHTF51Middleweight";
+    font-family: "Helvetica Neue";
     font-size: 30px;
     line-height: 34px;
     margin: 0 0 20px;
@@ -4116,9 +4121,9 @@ body .wpb_single_image a.easl-vc-image-over:after {
 .msc-menu li a {
     color: #004b87;
     display: block;
-    font-family: "KnockoutHTF51Middleweight";
-    font-size: 17px;
-    line-height: 23px;
+    font-size: 15px;
+    font-weight: 700;
+    line-height: 21px;
     padding: 15px 12px 13px;
 }
 
@@ -4162,7 +4167,7 @@ body .wpb_single_image a.easl-vc-image-over:after {
     display: block;
     background-color: #fff;
     color: #004b87;
-    font-family: 'KnockoutHTF51Middleweight';
+    font-family: "Helvetica Neue";
     font-size: 17px;
 }
 
@@ -4194,7 +4199,7 @@ body .wpb_single_image a.easl-vc-image-over:after {
 .easl-msc-content-wrap-vertical .vc_tta.vc_general .vc_tta-tabs-list .vc_tta-tab > a {
     color: #fff;
     font-size: 16px;
-    font-family: 'KnockoutHTF51Middleweight';
+    font-family: "Helvetica Neue";
     line-height: 1.4em;
     background: transparent !important;
     padding: 10px 20px;
@@ -4277,7 +4282,7 @@ body.wpb-js-composer .easl-msc-content-wrap .vc_tta.vc_tta-style-classic .vc_tta
     padding: 0.5em 1em;
     font-family: inherit;
     font-size: .923em;
-    font-weight: 400;
+    font-weight: 700;
     margin: 0;
     cursor: pointer;
     line-height: 1.65;
@@ -4333,7 +4338,7 @@ a.wpb_easl_post_type_grid_head_all_link {
     float: right;
     color: #004b87;
     text-decoration: none;
-    font-family: "KnockoutHTF51Middleweight", "Helvetica Neue", Helvetica, Arial, sans-serif;
+    font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
     font-size: 14px;
     /*line-height: 16px;*/
 }
@@ -4531,9 +4536,8 @@ a.wpb_easl_post_type_grid_head_all_link:after {
 .easl-icon-widget-link {
     color: #004b87;
     display: block;
-    font-family: "KnockoutHTF51Middleweight", "Helvetica Neue", Helvetica, Arial, sans-serif;
-    font-size: 15px;
-    font-weight: 400;
+    font-size: 14px;
+    font-weight: 700;
     line-height: 16px;
     text-decoration: none;
     padding: 23px 5px;
@@ -4608,7 +4612,7 @@ a.wpb_easl_post_type_grid_head_all_link:after {
 
 /*Footer*/
 #footer {
-    font-family: KnockoutHTF51Middleweight;
+    font-family: "Helvetica Neue";
     font-size: 15px;
 }
 
@@ -4642,16 +4646,16 @@ a.wpb_easl_post_type_grid_head_all_link:after {
 }
 
 .footer-widget .widget-title {
-    font-family: "KnockoutHTF51Middleweight", "Helvetica Neue", Helvetica, Arial, sans-serif;
+    font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
     font-size: 21px;
     line-height: 21px;
     color: #fff;
-    font-weight: 400;
+    font-weight: 700;
     margin: 0 0 15px;
 }
 
 .footer-contacts a {
-    font-size: 17px;
+    font-size: 16px;
     color: #fff;
 }
 
@@ -4690,10 +4694,10 @@ a.wpb_easl_post_type_grid_head_all_link:after {
 
 .site-footer .widget_nav_menu li a {
     color: #fff;
-    font-family: "KnockoutHTF51Middleweight", "Helvetica Neue", Helvetica, Arial, sans-serif;
+    font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
     font-size: 15px;
     line-height: 1.25em;
-    font-weight: 400;
+    font-weight: 700;
 }
 
 .site-footer .widget_nav_menu li a:hover,
@@ -4774,9 +4778,9 @@ a.wpb_easl_post_type_grid_head_all_link:after {
 .entry .cpg-title {
     border-bottom: 1px solid #004b87;
     color: #004b87;
-    font-family: "KnockoutHTF51Middleweight", "Helvetica Neue", Helvetica, Arial, sans-serif;
+    font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
     font-size: 21px;
-    font-weight: 400;
+    font-weight: 700;
     line-height: 21px;
     padding: 0 0 8px;
     margin: 0;
@@ -4835,7 +4839,7 @@ a.wpb_easl_post_type_grid_head_all_link:after {
 
 .wpex-pagination ul li .page-numbers {
     border: 0 none;
-    font-family: "KnockoutHTF51Middleweight", "Helvetica Neue", Helvetica, Arial, sans-serif;
+    font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
 }
 
 .wpex-pagination ul li .page-numbers.prev,
@@ -4855,9 +4859,7 @@ body .sidebar-box .widget-title {
     color: #004b87;
     text-align: left;
     line-height: 1.5em;
-    font-family: "KnockoutHTF51Middleweight", "Helvetica Neue", Helvetica, Arial, sans-serif;
-    font-size: 21px;
-    font-weight: 400;
+    font-size: 19px;
     margin: 0 0 20px;
     padding: 0;
 }
@@ -4898,8 +4900,8 @@ body.single-event {
     border: 3px solid #dc214e;
     border-radius: 50%;
     color: #dc214e;
-    font-family: "KnockoutHTF51Middleweight", "Helvetica Neue", Helvetica, Arial, sans-serif;
-    font-weight: 400;
+    font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+    font-weight: 700;
     position: relative;
     width: 80px;
     height: 80px;
@@ -4908,22 +4910,25 @@ body.single-event {
 
 .event-day {
     display: block;
-    font-size: 15px;
-    line-height: 15px;
-    padding-top: 5px;
+    font-size: 14px;
+    font-weight: 700;
+    line-height: 14px;
+    padding-top: 8px;
 }
 
 .event-mon {
     display: block;
-    font-size: 20px;
-    line-height: 22px;
+    font-size: 17px;
+    font-weight: 700;
+    line-height: 20px;
     padding: 5px 0;
 }
 
 .event-year {
     display: block;
-    font-size: 15px;
-    line-height: 15px;
+    font-size: 14px;
+    font-weight: 700;
+    line-height: 14px;
 }
 
 .event-meta-wrap {
@@ -4931,10 +4936,9 @@ body.single-event {
 }
 
 .event-meta-wrap .event-meta {
-    font-family: "KnockoutHTF51Middleweight", "Helvetica Neue", Helvetica, Arial, sans-serif;
-    font-size: 18px;
-    font-weight: 400;
-    line-height: 24px;
+    font-size: 16px;
+    font-weight: 700;
+    line-height: 22px;
     margin: 0;
     padding: 0;
     color: #666;
@@ -4956,10 +4960,9 @@ body.single-event {
     background-color: #004b87;
     color: #fff;
     display: inline-block;
-    font-family: "KnockoutHTF51Middleweight", "Helvetica Neue", Helvetica, Arial, sans-serif;
-    font-size: 18px;
-    font-weight: 400;
-    line-height: 24px;
+    font-size: 16px;
+    font-weight: 700;
+    line-height: 22px;
     padding: 15px 30px 15px 15px;
     position: relative;
     text-decoration: none;
@@ -5132,9 +5135,9 @@ body.single-event {
     background-color: #004b87;
     color: #fff;
     display: block;
-    font-family: "KnockoutHTF51Middleweight", "Helvetica Neue", Helvetica, Arial, sans-serif;
+    font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
     font-size: 18px;
-    font-weight: 400;
+    font-weight: 700;
     line-height: 24px;
     padding: 15px;
     position: relative;
@@ -5192,10 +5195,9 @@ body.single-event {
 .event-key-deadlines .event-kd-date {
     margin: 0 0 4px;
     color: #004b87;
-    font-family: "KnockoutHTF51Middleweight", "Helvetica Neue", Helvetica, Arial, sans-serif;
-    font-size: 16px;
-    line-height: 16px;
-    font-weight: 400;
+    font-size: 14px;
+    line-height: 14px;
+    font-weight: 700;
 }
 
 .event-key-deadlines .event-kd-title {
@@ -5417,7 +5419,7 @@ ul.event-links-list li:before {
 .addeventatc_dropdown em {
     color: #999 !important;
     font-size: 12px !important;
-    font-weight: 400;
+    font-weight: 700;
 }
 
 .addeventatc_dropdown .frs a {
@@ -5426,7 +5428,7 @@ ul.event-links-list li:before {
     cursor: pointer;
     font-size: 9px !important;
     font-style: normal !important;
-    font-weight: 400 !important;
+    font-weight: 700 !important;
     line-height: 110% !important;
     padding-left: 10px;
     position: absolute;
@@ -5582,14 +5584,14 @@ ul.event-links-list li:before {
 }
 
 .pub-content .single-publication-title {
-    font-size: 26px;
-    line-height: 30px;
+    font-size: 24px;
+    line-height: 28px;
     margin: 0 0 15px;
 }
 
 .pub-content .pub-section-title {
-    font-size: 26px;
-    line-height: 34px;
+    font-size: 24px;
+    line-height: 32px;
     margin: 0 0 5px;
 }
 
@@ -5602,7 +5604,8 @@ ul.event-links-list li:before {
     background-image: url('images/icons/pdf.png');
     background-repeat: no-repeat;
     background-position: left top;
-    line-height: 21px;
+    line-height: 18px;
+    font-size: 18px;
     min-height: 34px;
     padding: 13px 0 5px 38px;
     border-bottom: 1px solid #004b87;
@@ -5732,11 +5735,10 @@ body.tax-publication_tag {
 }
 
 .sp-modal-content h3 {
-    font-family: "KnockoutHTF51Middleweight", "Helvetica Neue", Helvetica, Arial, sans-serif;
+    font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
     color: #004b87;
     font-size: 21px;
     line-height: 1.5em;
-    font-weight: 400;
     margin: 0 0 20px;
     padding: 0;
 }
@@ -5778,7 +5780,7 @@ body.tax-publication_tag {
 .social-share-text {
     color: #004b87;
     line-height: 30px;
-    font-family: "KnockoutHTF51Middleweight", "Helvetica Neue", Helvetica, Arial, sans-serif;
+    font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
     font-size: 16px;
     display: inline-block;
     margin-right: 10px;
@@ -5899,9 +5901,8 @@ body.tax-publication_tag {
     border-bottom: 1px solid #dedede;
     color: #004b87;
     line-height: 1.5em;
-    font-family: 'KnockoutHTF51Middleweight';
-    font-size: 21px;
-    font-weight: 400;
+    font-size: 19px;
+    font-weight: 700;
     margin: 0;
     padding: 0;
 }
@@ -5940,8 +5941,8 @@ body.tax-publication_tag {
 .easl-staff-item-detail .easl-staff-item-name {
     color: #004b87;
     line-height: 1.5em;
-    font-size: 21px;
-    font-weight: 400;
+    font-size: 19px;
+    font-weight: 700;
     margin: 0 0 10px;
     padding: 0;
 }
@@ -6046,10 +6047,10 @@ body.tax-publication_tag {
 }
 
 .easl-member-profile-back-link a {
-    font-family: "KnockoutHTF51Middleweight", "Helvetica Neue", Helvetica, Arial, sans-serif;
+    font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
     color: #004b87;
     line-height: 1.5em;
-    font-weight: 400;
+    font-weight: 700;
     font-size: 16px;
     text-decoration: none;
 }
@@ -6111,14 +6112,14 @@ body.tax-publication_tag {
 
 .easl-staff-details-title-contact h2 {
     margin-bottom: 5px;
-    font-size: 2.2em;
+    font-size: 2em;
     border-bottom: 1px solid #004b87;
 }
 
 .easl-staff-details-title-contact h4 {
-    margin-top: 0px;
+    margin-top: 0;
     margin-bottom: 5px;
-    font-size: 16px;
+    font-size: 15px;
 }
 
 .easl-staff-details-excerpt p {
@@ -6190,9 +6191,9 @@ body.wpex-responsive .footer-newsletter .footer-newsletter-inner {
     border-radius: 0;
     color: #fff;
     display: inline-block;
-    font-family: "KnockoutHTF51Middleweight", "Helvetica Neue", Helvetica, Arial, sans-serif;
+    font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
     font-size: 18px;
-    font-weight: 400;
+    font-weight: 700;
     line-height: 18px;
     margin: 0;
     text-align: center;
@@ -6232,9 +6233,9 @@ body.wpex-responsive .footer-newsletter .footer-newsletter-inner {
 
 .footer-newsletter .gform_wrapper h3.gform_title {
     color: #fff;
-    font-family: "KnockoutHTF51Middleweight", "Helvetica Neue", Helvetica, Arial, sans-serif;
+    font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
     font-size: 24px;
-    font-weight: 400;
+    font-weight: 700;
     line-height: 24px;
     margin: 0;
     padding: 0;
@@ -6341,9 +6342,9 @@ body.wpex-responsive .footer-newsletter .footer-newsletter-inner {
     border-radius: 0;
     color: #fff;
     display: inline-block;
-    font-family: "KnockoutHTF51Middleweight", "Helvetica Neue", Helvetica, Arial, sans-serif;
+    font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
     font-size: 18px;
-    font-weight: 400;
+    font-weight: 700;
     line-height: 18px;
     margin: 0;
     text-align: center;
@@ -6421,9 +6422,9 @@ a.button {
     border-radius: 0;
     color: #fff;
     display: inline-block;
-    font-family: "KnockoutHTF51Middleweight", "Helvetica Neue", Helvetica, Arial, sans-serif;
+    font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
     font-size: 18px;
-    font-weight: 400;
+    font-weight: 700;
     line-height: 18px;
     margin: 0;
     text-align: center;
@@ -6539,9 +6540,9 @@ a.button:hover {
     line-height: 40px;
     color: #004b87;
     width: 60px;
-    font-family: 'KnockoutHTF51Middleweight';
-    font-size: 16px;
-    font-weight: 400;
+    font-family: "Helvetica Neue";
+    font-size: 14px;
+    font-weight: 600;
 }
 
 .heateor_sss_sharing_container .heateor_sss_sharing_ul {
@@ -6679,9 +6680,9 @@ a.easl-card-btn:hover {
 
 .easl-card-text {
     color: #004b87;
-    font-family: "KnockoutHTF51Middleweight", "Helvetica Neue", Helvetica, Arial, sans-serif;
+    font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
     font-size: 16px;
-    font-weight: 400;
+    font-weight: 700;
     line-height: 16px;
     text-decoration: none;
     margin-top: 15px;
@@ -7175,9 +7176,8 @@ ul.suggestions {
     color: #004b87;
     text-align: left;
     line-height: 1.25em;
-    font-family: "KnockoutHTF51Middleweight", "Helvetica Neue", Helvetica, Arial, sans-serif;
+    font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
     font-size: 32px;
-    font-weight: 400;
     margin: 0 0 20px;
     padding: 0;
 }
@@ -7191,8 +7191,8 @@ ul.suggestions {
 }
 
 .page-header-title .easl-title-back-link {
-    font-size: 16px;
-    line-height: 16px;
+    font-size: 14px;
+    line-height: 14px;
     position: absolute;
     top: -21px;
     left: 0;
@@ -7234,16 +7234,14 @@ ul.suggestions {
 .easl-page-pre-title, .easl-page-post-title {
     display: block;
     font-size: .93em;
-    font-family: 'KnockoutHTF31JuniorMiddlewt';
 }
 
 .easl-tags a {
     background: #80c4e5;
     color: #fff;
     display: inline-block;
-    font-family: "KnockoutHTF51Middleweight", "Helvetica Neue", Helvetica, Arial, sans-serif;
+    font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
     font-size: 14px;
-    font-weight: 400;
     padding: 7px 15px;
     margin: 0 10px 10px 0;
     border: 0;
@@ -7347,7 +7345,7 @@ ul.suggestions {
     left: 0;
     width: 100%;
     font-size: 18px;
-    font-family: "KnockoutHTF31JuniorMiddlewt";
+    font-family: "Helvetica Neue";
     font-weight: normal;
     line-height: 24px;
 }
@@ -7359,7 +7357,7 @@ ul.suggestions {
 
 .easl-heading-wrap .easl-heading {
     font-size: 30px;
-    font-family: "KnockoutHTF51Middleweight", "Helvetica Neue", Helvetica, Arial, sans-serif;
+    font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
     font-weight: normal;
     line-height: 38px;
     color: #005796;
@@ -7559,7 +7557,7 @@ ul.suggestions {
 
 .small-event-date-location {
     color: #8ccbee;
-    font-family: "KnockoutHTF31JuniorMiddlewt";
+    font-family: "Helvetica Neue";
     font-size: 16px;
     line-height: 1.3em;
     margin: 0 0 22px;
@@ -7572,7 +7570,7 @@ ul.suggestions {
 
 .small-event-header-button-title {
     color: #004b87;
-    font-family: "KnockoutHTF31JuniorMiddlewt";
+    font-family: "Helvetica Neue";
     font-size: 16px;
     line-height: 1.3em;
     margin: 0 0 13px;
@@ -7630,9 +7628,9 @@ ul.suggestions {
 
 .easl-key-dates .easl-key-dates-list li {
     color: #71c5e8;
-    font-family: 'KnockoutHTF51Middleweight';
+    font-family: "Helvetica Neue";
     font-size: 16px;
-    font-weight: 400;
+    font-weight: 700;
     line-height: 16px;
     margin: 0;
     padding: 0 0 30px;
@@ -7682,9 +7680,9 @@ ul.suggestions {
     background: #104f85;
     color: #fff;
     display: inline-block;
-    font-family: "KnockoutHTF51Middleweight", "Helvetica Neue", Helvetica, Arial, sans-serif;
+    font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
     font-size: 14px;
-    font-weight: 400;
+    font-weight: 700;
     padding: 10px 15px;
     margin: 0;
     border: 0;
@@ -7731,7 +7729,7 @@ ul.suggestions {
 }
 
 .easl-small-event-countdown {
-    font-family: "KnockoutHTF31JuniorMiddlewt";
+    font-family: "Helvetica Neue";
     color: #fff;
     background: #004b87;
     text-align: center;
@@ -7788,7 +7786,7 @@ ul.suggestions {
     background-position: right center;
     background-size: 70px 95%;
     background-color: #004b87;
-    font-family: "KnockoutHTF31JuniorMiddlewt";
+    font-family: "Helvetica Neue";
     color: #fff;
     text-align: left;
     padding: 30px 80px 30px 15px;
@@ -7802,7 +7800,7 @@ ul.suggestions {
     padding: 20px 15px;
     text-align: center;
     color: #fff;
-    font-family: "KnockoutHTF31JuniorMiddlewt";
+    font-family: "Helvetica Neue";
 }
 
 .easl-event-contact-icon {
@@ -8176,7 +8174,6 @@ ul.suggestions {
 .app-process ul li.active h4,
 .app-process ul li.active p {
     color: #dc234e;
-    font-family: 'KnockoutHTF51Middleweight';
 }
 
 .event-color-blue .app-process ul li.active,
@@ -8360,7 +8357,7 @@ ul.suggestions {
 .ste-menu-wrap .ste-menu {
     background: #004b87;
     list-style: none;
-    font-family: KnockoutHTF31JuniorMiddlewt;
+    font-family: "Helvetica Neue";
     margin: 0 0 25px;
     padding: 0 0 20px;
     font-size: 16px;
@@ -8637,7 +8634,7 @@ ul.suggestions {
 .easl-social-share-icons h5 {
     display: inline-block;
     margin-right: 20px;
-    font-family: 'KnockoutHTF51Middleweight';
+    font-family: "Helvetica Neue";
     font-size: 16px;
     font-weight: normal;
     color: #104f85;
@@ -8817,8 +8814,8 @@ ul.suggestions {
     color: #fff;
     margin: 0;
     font-size: 21px;
-    font-family: 'KnockoutHTF51Middleweight';
-    font-weight: 400;
+    font-family: "Helvetica Neue";
+    font-weight: 700;
 }
 
 .app-period-title span {
@@ -8840,7 +8837,7 @@ ul.suggestions {
     background-position: left center;
     color: #fff;
     display: inline-block;
-    font-family: 'KnockoutHTF51Middleweight';
+    font-family: "Helvetica Neue";
     min-height: 33px;
     padding-top: 6px;
     padding-left: 40px;
@@ -8887,7 +8884,7 @@ ul.suggestions {
 
 .fellowship-detials-title {
     flex: 1;
-    font-family: 'KnockoutHTF51Middleweight';
+    font-family: "Helvetica Neue";
     font-weight: 600;
     font-style: normal;
     font-size: 38px;
@@ -8900,7 +8897,7 @@ ul.suggestions {
 }
 
 .fellowship-detials-terms span {
-    font-family: 'KnockoutHTF51Middleweight';
+    font-family: "Helvetica Neue";
     font-size: 16px;
     color: #004b87;
     background: #f5f5f5;
@@ -9059,7 +9056,7 @@ ul.suggestions {
 }
 
 .easl-news-list-meta {
-    font-family: "KnockoutHTF31JuniorMiddlewt", "Helvetica Neue", Helvetica, Arial, sans-serif;
+    font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
     font-size: 12px;
     line-height: 1em;
     color: #666;
@@ -9073,7 +9070,7 @@ ul.suggestions {
 
 .easl-news-list-entry .easl-news-list-title {
     color: #004b87;
-    font-size: 21px;
+    font-size: 18px;
     line-height: 1.2em;
     margin-bottom: 8px;
 }
@@ -9081,7 +9078,7 @@ ul.suggestions {
 .easl-news-list-excerpt {
     margin-bottom: 0;
     color: #666;
-    font-size: 13px;
+    font-size: 14px;
     line-height: 1.4em;
 }
 
@@ -9159,7 +9156,7 @@ ul.suggestions {
 }
 
 .easl-3dcarousel-slide-title {
-    font-family: "KnockoutHTF51Middleweight", "Helvetica Neue", Helvetica, Arial, sans-serif;
+    font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
     position: absolute;
     top: -20px;
     font-size: 14px;
@@ -9312,7 +9309,7 @@ ul.suggestions {
 
 /* Utility: Pagination List */
 .easl-list-pagination .page-numbers .page-numbers {
-    font-family: "KnockoutHTF51Middleweight", "Helvetica Neue", Helvetica, Arial, sans-serif;
+    font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
     font-size: 15px;
     line-height: 27px;
     min-width: 27px;
@@ -9469,9 +9466,9 @@ ul.suggestions {
 }
 
 .easl-highlights-filter h5 {
-    font-size: 18px;
+    font-size: 16px;
     color: #004b87;
-    line-height: 18px;
+    line-height: 16px;
     margin: 0 15px 0 0;
 }
 
@@ -9543,9 +9540,9 @@ ul.suggestions {
     display: block;
     width: 100%;
     padding: 8px 22px;
-    line-height: 22px;
-    font-size: 16px;
-    font-family: "KnockoutHTF51Middleweight", "Helvetica Neue", Helvetica, Arial, sans-serif;
+    line-height: 20px;
+    font-size: 14px;
+    font-weight: 700;
     position: relative;
 }
 
@@ -9628,8 +9625,7 @@ ul.suggestions {
     color: #004b87;
     display: inline-block;
     padding: 5px 40px;
-    font-size: 16px;
-    font-family: "KnockoutHTF51Middleweight", "Helvetica Neue", Helvetica, Arial, sans-serif;
+    font-size: 15px;
     text-decoration: none;
     border-radius: 3px;
 }
@@ -9711,8 +9707,8 @@ ul.suggestions {
 
 .easl-highlights-publications-item-inner h2 {
     olor: #004b87;
-    font-size: 16px;
-    line-height: 20px;
+    font-size: 15px;
+    line-height: 19px;
     text-align: left;
     margin-bottom: 13px;
 }
@@ -9816,10 +9812,10 @@ ul.suggestions {
     color: #004b87;
     border-left: 4px solid #004b87;
     display: block;
-    font-size: 18px;
+    font-size: 16px;
+    font-weight: 700;
     line-height: 1.4em;
     padding: 0 0 0 8px;
-    font-family: "KnockoutHTF51Middleweight", "Helvetica Neue", Helvetica, Arial, sans-serif;
     text-decoration: none;
 }
 
@@ -9945,8 +9941,8 @@ ul.suggestions {
     color: #fff;
     font-size: 14px;
     text-transform: uppercase;
-    font-family: "KnockoutHTF31JuniorMiddlewt", "Helvetica Neue", Helvetica, Arial, sans-serif;
-    font-weight: 400;
+    font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+    font-weight: 700;
 }
 
 .easl-ilc-details-buttons .easl-ilc-details-button:hover {
@@ -9961,8 +9957,8 @@ ul.suggestions {
     margin-bottom: 2px;
     position: relative;
     z-index: 2;
-    font-family: "KnockoutHTF51Middleweight", "Helvetica Neue", Helvetica, Arial, sans-serif;
-    font-weight: 400;
+    font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+    font-weight: 700;
 }
 
 .easl-ilc-details-buttons .easl-ilc-details-button::after {
@@ -10100,9 +10096,9 @@ ul.suggestions {
 
 .easl-nas-filter-label {
     color: #004b87;
-    font-family: "KnockoutHTF51Middleweight", "Helvetica Neue", Helvetica, Arial, sans-serif;
+    font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
     font-size: 30px;
-    font-weight: 400;
+    font-weight: 700;
     line-height: 30px;
     margin: 0 20px 0 0;
     padding: 0;
@@ -10356,7 +10352,7 @@ ul.suggestions {
 
 .easl-misc-list-item .easl-misc-list-item-url {
     color: #004b87;
-    font-family: "KnockoutHTF51Middleweight", "Helvetica Neue", Helvetica, Arial, sans-serif;
+    font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
     font-size: 15px;
     line-height: 1.4em;
     text-decoration: none;
@@ -10387,7 +10383,7 @@ ul.suggestions {
 
 .easl-misc-list-item-excerpt {
     color: #666;
-    font-family: "KnockoutHTF31JuniorMiddlewt", Helvetica, Arial, sans-serif;
+    font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
     font-size: 15px;
     line-height: 1.5em;
     margin-bottom: 15px;
@@ -10411,7 +10407,7 @@ ul.suggestions {
 }
 
 .easl-misc-list-item-title-excerpt h5 {
-    font-family: "KnockoutHTF51Middleweight", "Helvetica Neue", Helvetica, Arial, sans-serif;
+    font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
     font-size: 15px;
     line-height: 1.4em;
     margin: 0 0 5px;
@@ -10427,11 +10423,11 @@ ul.suggestions {
     color: #fff;
     font-size: 18px;
     line-height: 1.4em;
-    font-family: "KnockoutHTF31JuniorMiddlewt", Helvetica, Arial, sans-serif;
+    font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
 }
 
 .easl-nas-contact-text .easl-nas-contact-point {
-    font-family: "KnockoutHTF51Middleweight", "Helvetica Neue", Helvetica, Arial, sans-serif;
+    font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
     color: #fff;
     position: relative;
     padding-right: 10px;
@@ -10504,7 +10500,7 @@ ul.suggestions {
 
 .easl-nas-contribute-form-header {
     color: #004b87;
-    font-family: "KnockoutHTF51Middleweight", "Helvetica Neue", Helvetica, Arial, sans-serif;
+    font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
     font-size: 30px;
     line-height: 1.4em;
     padding: 0 0 15px;
@@ -10519,7 +10515,7 @@ ul.suggestions {
 .site-content .gform_wrapper .top_label .gfield_label {
     color: #004b87;
     display: block;
-    font-family: "KnockoutHTF51Middleweight", "Helvetica Neue", Helvetica, Arial, sans-serif;
+    font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
     font-size: 14px;
     line-height: 1.4em;
     font-weight: normal;
@@ -10528,7 +10524,7 @@ ul.suggestions {
 
 .site-content .easl-nas-form-section-title {
     color: #004b87;
-    font-family: "KnockoutHTF51Middleweight", "Helvetica Neue", Helvetica, Arial, sans-serif;
+    font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
     font-size: 21px;
     line-height: 1.4em;
     padding: 0;
@@ -10648,7 +10644,7 @@ body .site-content .gform_wrapper img.ui-datepicker-trigger {
     padding: 12px 45px;
     text-align: center;
     width: 140px;
-    font-family: "KnockoutHTF51Middleweight", "Helvetica Neue", Helvetica, Arial, sans-serif;
+    font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
     font-size: 15px;
     line-height: 15px;
     margin: 0;
@@ -10680,7 +10676,7 @@ body .site-content .gform_wrapper img.ui-datepicker-trigger {
     padding: 12px 45px !important;;
     text-align: center;
     width: 140px;
-    font-family: "KnockoutHTF51Middleweight", "Helvetica Neue", Helvetica, Arial, sans-serif;
+    font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
     font-size: 15px;
     line-height: 15px;
     margin: 0;
@@ -10757,10 +10753,10 @@ body .site-content .gform_wrapper img.ui-datepicker-trigger {
 
 .easl-bgtext-box .easl-bgtext-box-text {
     color: inherit;
-    font-family: "KnockoutHTF31JuniorMiddlewt", Helvetica, Arial, sans-serif;
-    font-size: 21px;
-    font-weight: 400;
-    line-height: 29px;
+    font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+    font-size: 19px;
+    font-weight: 700;
+    line-height: 1.35em;
     margin: 0;
     padding: 0;
 }
@@ -10797,7 +10793,7 @@ body .site-content .gform_wrapper img.ui-datepicker-trigger {
 
 .easl-yearly-awardees-peoples .easl-yearly-awardee-title {
     color: #104e85;
-    font-family: KnockoutHTF51Middleweight;
+    font-family: "Helvetica Neue";
     font-size: 19px;
     line-height: 1.4em;
     margin: 0;
@@ -10806,15 +10802,15 @@ body .site-content .gform_wrapper img.ui-datepicker-trigger {
 
 /*Shortcode:: EASL Secretary Generals Carousel*/
 .sec-genral-details .sec-gen-year {
-    font-size: 18px;
-    line-height: 1em;
+    font-size: 17px;
+    line-height: 1.1em;
     margin: 0 0 10px;
     text-align: center;
 }
 
 .sec-genral-details .sec-gen-name {
-    font-size: 18px;
-    line-height: 1em;
+    font-size: 17px;
+    line-height: 1.1em;
     margin: 0 0 15px;
     text-align: center;
 }
@@ -10905,9 +10901,8 @@ body .site-content .gform_wrapper img.ui-datepicker-trigger {
 
 .easl-history-carousel-item-year {
     color: #004b87;
-    font-size: 30px;
-    font-family: "KnockoutHTF51Middleweight", "Helvetica Neue", Helvetica, Arial, sans-serif;
-    font-weight: 400;
+    font-size: 27px;
+    font-weight: 700;
     line-height: 1em;
     margin: 0 0 5px;
     padding: 0;
@@ -10915,9 +10910,9 @@ body .site-content .gform_wrapper img.ui-datepicker-trigger {
 
 .easl-history-carousel-item-content h3 {
     color: #004b87;
-    font-size: 18px;
+    font-size: 16px;
     line-height: 1.4em;
-    font-weight: 400;
+    font-weight: 700;
     margin: 0 0 15px;
     padding: 0;
 }
@@ -10955,9 +10950,9 @@ body .site-content .gform_wrapper img.ui-datepicker-trigger {
     background-color: #135289;
     color: #fff;
     line-height: 50px;
-    font-size: 24px;
+    font-size: 22px;
+    font-weight: 700;
     text-align: center;
-    font-family: "KnockoutHTF51Middleweight";
 }
 
 .easl-hisgtory-slider-barinner {
@@ -11013,7 +11008,7 @@ body .site-content .gform_wrapper img.ui-datepicker-trigger {
     top: -83px !important;
     color: #80c4e5;
     font-size: 50px;
-    font-family: "KnockoutHTF51Middleweight";
+    font-family: "Helvetica Neue";
 }
 
 .easl-history-slide-wrap .easl-history-slider .easl-hisgtory-slider-bar-wrapper .easl-hisgtory-slider-bar-chandle:before {
@@ -11035,7 +11030,7 @@ body .site-content .gform_wrapper img.ui-datepicker-trigger {
 
 /* Shortcode:: EASL Membership Categories */
 .easl-membership-category-wrap .wpb_easl_widget_heading {
-    font-family: "KnockoutHTF51Middleweight";
+    font-family: "Helvetica Neue";
     font-size: 30px;
     line-height: 34px;
     margin: 0 0 20px;
@@ -11200,9 +11195,9 @@ body .mentors-application-title {
     top: 0;
     margin: 0 !important;
     padding: 13px 25px;
-    font-family: "KnockoutHTF51Middleweight", "Helvetica Neue", Helvetica, Arial, sans-serif;
+    font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
     font-size: 28px;
-    font-weight: 400;
+    font-weight: 700;
     line-height: 28px;
 }
 
@@ -11247,8 +11242,8 @@ body .mentors-application-title {
     min-width: 120px;
     text-align: center;
     padding: 0 35px;
-    font-family: "KnockoutHTF51Middleweight", "Helvetica Neue", Helvetica, Arial, sans-serif;
-    font-weight: 400;
+    font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+    font-weight: 700;
     margin: 0 15px;
     -webkit-transition: background-color .3s;
     -moz-transition: background-color .3s;
@@ -11611,9 +11606,9 @@ body .mentors-application-title {
 .easl-table-of-content.easl-toc-inline li a {
     background: #80c4e5;
     color: #fff;
-    font-family: "KnockoutHTF51Middleweight", "Helvetica Neue", Helvetica, Arial, sans-serif;
+    font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
     font-size: 14px;
-    font-weight: 400;
+    font-weight: 700;
     padding: 7px 15px;
     display: inline-block;
     margin: 0;
@@ -11835,7 +11830,7 @@ body .mentors-application-title {
 }
 
 .easl-hps-caption-content {
-    font-family: "KnockoutHTF31JuniorMiddlewt";
+    font-family: "Helvetica Neue";
     background: #f0f0f0;
     margin-left: 16px;
     padding: 15px 20px 15px 20px;
@@ -11849,7 +11844,8 @@ body .mentors-application-title {
 .easl-hps-caption-content .easl-hsc-easl-hsc-title {
     color: #004b87;
     font-family: inherit;
-    font-size: 34px;
+    font-weight: inherit;
+    font-size: 27px;
     line-height: 1.2em;
     margin: 0 0 13px;
 }
@@ -11857,7 +11853,8 @@ body .mentors-application-title {
 .easl-hps-caption-content .easl-hsc-easl-hsc-subtitle {
     color: #8ccbee;
     font-family: inherit;
-    font-size: 16px;
+    font-weight: inherit;
+    font-size: 14px;
     line-height: 1.3em;
     margin: 0 0 20px;
 }
@@ -11865,21 +11862,23 @@ body .mentors-application-title {
 .easl-hps-caption-content .easl-hsc-easl-hsc-text {
     color: #004b87;
     font-family: inherit;
-    font-size: 16px;
+    font-weight: inherit;
+    font-size: 14px;
     line-height: 1.3em;
     margin: 0 0 13px;
 }
 
 .easl-hps-caption-cta-wrap {
     display: flex;
-    align-items: flex-start;
+    align-items: flex-end;
     justify-content: space-between;
 }
 
 .easl-hps-caption-cta-wrap .easl-generic-button {
-    width: calc(50% - 13px);
+    width: calc((100% - 14px)/2);
     position: relative;
     padding-right: 20px;
+    font-size: 12px;
 }
 
 .easl-hps-caption-cta-wrap .easl-generic-button .easl-generic-button-icon {
@@ -12125,21 +12124,21 @@ body #onesignal-bell-container.onesignal-reset.onesignal-bell-container-bottom-r
     }
 
     .easl-hps-caption-content .easl-hsc-easl-hsc-title {
-        font-size: 28px !important;
+        font-size: 24px !important;
         margin-bottom: 8px;
         line-height: 1.18em;
         min-height: 66px;
     }
 
     .easl-hps-caption-content .easl-hsc-easl-hsc-subtitle {
-        font-size: 15px;
+        font-size: 14px;
         margin-bottom: 10px;
         line-height: 1.2em;
         min-height: 36px;
     }
 
     .easl-hps-caption-content .easl-hsc-easl-hsc-text {
-        font-size: 15px;
+        font-size: 14px;
         margin: 0 0 10px;
         line-height: 1.25em;
         min-height: 36px;
@@ -12147,7 +12146,7 @@ body #onesignal-bell-container.onesignal-reset.onesignal-bell-container-bottom-r
 
     .easl-hps-caption-cta-wrap .easl-generic-button {
         width: calc(50% - 5px);
-        font-size: 14px;
+        font-size: 12px;
         padding: 2px 5px 2px 7px;
     }
 
@@ -12167,10 +12166,17 @@ body #onesignal-bell-container.onesignal-reset.onesignal-bell-container-bottom-r
     }
 }
 
-@media only screen and (max-width: 1199px) and (min-width: 990px) {
+@media only screen and (max-width: 1248px) and (min-width: 1080px) {
     #site-navigation .dropdown-menu > li > a {
-        padding: 0 12px;
-        font-size: 14px;
+        font-size: 12px;
+        padding: 0 6px;
+    }
+}
+@media only screen and (max-width: 1079px) and (min-width: 960px) {
+    #site-navigation .dropdown-menu > li > a {
+        font-size: 11px;
+        padding: 0 5px;
+        font-weight: 700;
     }
 }
 
@@ -12215,6 +12221,11 @@ body #onesignal-bell-container.onesignal-reset.onesignal-bell-container-bottom-r
 
     .footer-contacts a {
         font-size: 15px;
+    }
+
+    .page-header-title {
+        font-size: 38px!important;
+        line-height: 1.35em!important;
     }
 }
 
@@ -12271,26 +12282,26 @@ body #onesignal-bell-container.onesignal-reset.onesignal-bell-container-bottom-r
     }
 
     .easl-hps-caption-content .easl-hsc-easl-hsc-title {
-        font-size: 28px !important;
+        font-size: 24px !important;
         margin-bottom: 8px;
         line-height: 1.18em;
     }
 
     .easl-hps-caption-content .easl-hsc-easl-hsc-subtitle {
-        font-size: 15px;
+        font-size: 14px;
         margin-bottom: 10px;
         line-height: 1.2em;
     }
 
     .easl-hps-caption-content .easl-hsc-easl-hsc-text {
-        font-size: 15px;
+        font-size: 14px;
         margin: 0 0 10px;
         line-height: 1.25em;
     }
 
     .easl-hps-caption-cta-wrap .easl-generic-button {
         width: calc(50% - 5px);
-        font-size: 14px;
+        font-size: 12px;
         padding: 2px 5px 2px 7px;
     }
 
@@ -12332,8 +12343,7 @@ body #onesignal-bell-container.onesignal-reset.onesignal-bell-container-bottom-r
 
 @media only screen and (max-width: 989px) and (min-width: 960px) {
     #site-navigation .dropdown-menu > li > a {
-        padding: 0 10px;
-        font-size: 14px;
+
     }
 }
 
@@ -12573,7 +12583,7 @@ body #onesignal-bell-container.onesignal-reset.onesignal-bell-container-bottom-r
         text-align: center;
         color: #004b87;
         display: inline-block;
-        font-family: "KnockoutHTF51Middleweight";
+        font-family: "Helvetica Neue";
         font-size: 14px;
         line-height: 1em;
         margin: 0;
@@ -12721,21 +12731,21 @@ body #onesignal-bell-container.onesignal-reset.onesignal-bell-container-bottom-r
     }
 
     .easl-hps-caption-content .easl-hsc-easl-hsc-title {
-        font-size: 22px !important;
+        font-size: 20px !important;
         margin-bottom: 8px;
         line-height: 1.2em;
         min-height: 52px;
     }
 
     .easl-hps-caption-content .easl-hsc-easl-hsc-subtitle {
-        font-size: 14px;
+        font-size: 13px;
         margin-bottom: 10px;
         line-height: 1.2em;
         min-height: 32px;
     }
 
     .easl-hps-caption-content .easl-hsc-easl-hsc-text {
-        font-size: 14px;
+        font-size: 13px;
         margin: 0 0 8px;
         line-height: 1.25em;
         min-height: 34px;
@@ -12747,7 +12757,7 @@ body #onesignal-bell-container.onesignal-reset.onesignal-bell-container-bottom-r
 
     .easl-hps-caption-cta-wrap .easl-generic-button {
         width: calc(50% - 5px);
-        font-size: 14px;
+        font-size: 12px;
         padding: 2px 5px 2px 7px;
     }
 
@@ -12828,8 +12838,8 @@ body #onesignal-bell-container.onesignal-reset.onesignal-bell-container-bottom-r
         border-radius: 0;
         position: relative;
         color: #004b87 !important;
-        font-family: "KnockoutHTF51Middleweight", "Helvetica Neue", Helvetica, Arial, sans-serif;
-        font-weight: 400;
+        font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+        font-weight: 700;
         font-size: 18px;
         position: relative;
         width: 113px;
@@ -12935,9 +12945,9 @@ body #onesignal-bell-container.onesignal-reset.onesignal-bell-container-bottom-r
 
     .easl-ec-related-links-mob .easl-ec-related-links-title {
         color: #004b87;
-        font-family: "KnockoutHTF51Middleweight", "Helvetica Neue", Helvetica, Arial, sans-serif;
+        font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
         font-size: 21px;
-        font-weight: 400;
+        font-weight: 700;
         line-height: 21px;
         margin: 0 0 12px;
         padding: 0 0 12px;
@@ -13146,7 +13156,7 @@ body #onesignal-bell-container.onesignal-reset.onesignal-bell-container-bottom-r
         background-color: #e1e1e1;
         color: #004b87;
         display: block;
-        font-family: "KnockoutHTF51Middleweight";
+        font-family: "Helvetica Neue";
         font-size: 16px;
         line-height: 23px;
         padding: 12px 12px 11px;
@@ -13668,6 +13678,10 @@ body #onesignal-bell-container.onesignal-reset.onesignal-bell-container-bottom-r
     /*Logo grid*/
     .easl-logo-grid-item {
         width: 33.333%;
+    }
+    .page-header-title {
+        font-size: 24px!important;
+        line-height: 1.35em!important;
     }
 }
 

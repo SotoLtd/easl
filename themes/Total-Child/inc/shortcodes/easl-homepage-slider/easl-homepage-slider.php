@@ -78,17 +78,14 @@ class EASL_VC_Homepage_Slider extends WPBakeryShortCode {
 			case 'arial':
 				$font_stack = 'Arial, Helvetica, sans-serif';
 				break;
-			case 'arial':
-				$font_stack = 'Arial, Helvetica, sans-serif';
-				break;
 			case 'knockout91':
-				$font_stack = 'KnockoutHTF91UltmtMiddlewt';
+				$font_stack = 'Helvetica Neue';
 				break;
 			case 'knockout51':
-				$font_stack = 'KnockoutHTF51Middleweight';
+				$font_stack = 'Helvetica Neue';
 				break;
 			case 'knockout31':
-				$font_stack = 'KnockoutHTF31JuniorMiddlewt';
+				$font_stack = 'Helvetica Neue';
 				break;
 		}
 
