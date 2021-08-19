@@ -7,6 +7,11 @@ add_action('wpex_hook_main_top', 'easl_primary_before_open', 100);
 add_action('wpex_hook_main_bottom', 'easl_primary_before_close', 100);
 //add_action('wpex_hook_primary_before', 'easl_primary_before_open');
 //add_action('wpex_hook_primary_after', 'easl_primary_before_close');
+//add_filter( 'wpex_header_menu_mobile_breakpoint', 'easl_header_mobile_breakpoint', 20 );
+
+function easl_header_mobile_breakpoint( $breakpoint ) {
+	return 1080;
+}
 function easl_primary_before_open() {
     $post_id = wpex_get_current_post_id();
     $content_bg = get_field('content_background_image', $post_id);
@@ -921,9 +926,12 @@ function easl_blog_layout_class($layout, $instance) {
     if('singular_blog' == $instance && !is_active_sidebar('blog-sidebar')) {
         $layout = 'full-width';
     }
+    if('singular_post' == $instance && !is_active_sidebar(wpex_get_sidebar())) {
+        $layout = 'full-width';
+    }
     return $layout;
 }
-add_filter( 'wpex_post_layout_class', 'easl_blog_layout_class', 10, 2 );
+add_filter( 'wpex_post_layout_class', 'easl_blog_layout_class', 20, 2 );
 
 add_filter( 'wpex_head_css', 'easl_page_header_css', 20, 1 );
 function easl_page_header_css($output) {
