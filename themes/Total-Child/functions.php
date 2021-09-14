@@ -445,6 +445,10 @@ function easl_body_classes( $classes ) {
 	$post_id = get_queried_object_id();
 	if ( is_singular( 'event' ) ) {
 		$classes[] = 'event-color-' . easl_get_events_topic_color( $post_id );
+		$event_subpage_id = easl_get_the_event_subpage_id();
+		if($event_subpage_id) {
+			$classes[] = 'event-subpage-' . $event_subpage_id;
+        }
 	}
 	if ( is_singular( 'blog' ) ) {
 		$classes[] = 'single-post';

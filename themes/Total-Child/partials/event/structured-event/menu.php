@@ -4,6 +4,7 @@ if ( ! defined( 'ABSPATH' ) ) {
     die( '-1' );
 }
 $current_sub_page = get_query_var( 'easl_event_subpage' );
+$current_sub_page2 = get_query_var( 'easl_event_subpage2' );
 
 $draft_or_pending = get_post_status( get_the_ID() ) && in_array( get_post_status( get_the_ID() ), array( 'draft', 'pending', 'auto-draft', 'future' ) );
 
@@ -43,12 +44,30 @@ if($menu_bg_custom_color) {
                 }
 
                 $item_class = 'easl-ste-menu-item';
-                if ( $current_sub_page == $slug ) {
-                    $item_class .= ' easl-active';
+	            if ( $current_sub_page == $slug ) {
+		            $item_class .= ' easl-active';
+	            }
+                $current_slug_for_2nd_level = $current_sub_page2;
+                if('subpage' != get_sub_field('content_source')) {
+	                $current_slug_for_2nd_level = $current_sub_page;
+                }
+                $sub_menus = easl_get_event_subpages_sub_pages_html(get_sub_field('subpages'), $url, $draft_or_pending, $current_slug_for_2nd_level);
+                $sub_menus_html = '';
+                if(!empty($sub_menus['html'])) {
+	                $sub_menus_html = $sub_menus['html'];
+	                $item_class .= ' ste-has-submenu';
+                }
+                if(!empty($sub_menus['has_current'])) {
+	                $item_class .= ' ste-show-submenu-active';
+	                if ( $current_sub_page != $slug ) {
+		                $item_class .= ' easl-active';
+	                }
                 }
                 ?>
                 <li class="<?php echo $item_class; ?>">
-                    <a href="<?php echo esc_url( $url ); ?>"><?php echo $title; ?></a></li>
+                    <a href="<?php echo esc_url( $url ); ?>"><?php echo $title; ?></a>
+                    <?php echo $sub_menus_html; ?>
+                </li>
             <?php endwhile; ?>
         </ul>
     <?php endif; ?>

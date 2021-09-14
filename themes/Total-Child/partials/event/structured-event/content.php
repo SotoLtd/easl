@@ -4,14 +4,28 @@ if ( ! defined( 'ABSPATH' ) ) {
     die( '-1' );
 }
 $current_sub_page_slug = get_query_var( 'easl_event_subpage' );
+$current_sub_page2_slug = get_query_var( 'easl_event_subpage2' );
 $events_subpages       = get_field( 'event_subpages', $posts[0]->ID );
 if ( ! $events_subpages ) {
     $events_subpages = array();
 }
 $current_sub_page = false;
 foreach ( $events_subpages as $subpage ) {
+	if($current_sub_page_slug && !$current_sub_page2_slug && !$subpage['slug']) {
+		$current_sub_page = easl_event_subpage_maybe_found_in_subpage($subpage, $current_sub_page_slug);
+	}
+	if($current_sub_page) {
+		$current_sub_page['content_source'] = 'subpage';
+	    break;
+    }
     if ( isset( $subpage['slug'] ) && trim( $subpage['slug'] ) == $current_sub_page_slug ) {
-        $current_sub_page = $subpage;
+        if($current_sub_page2_slug){
+	        $current_sub_page = easl_event_subpage_maybe_found_in_subpage($subpage, $current_sub_page2_slug);
+	        $current_sub_page['content_source'] = 'subpage';
+        }else{
+	        $current_sub_page = $subpage;
+        }
+        
         break;
     }
 }

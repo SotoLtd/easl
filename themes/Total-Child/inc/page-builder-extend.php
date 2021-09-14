@@ -11,6 +11,8 @@ add_filter( 'vc-tta-get-params-tabs-list', 'easl_vc_tta_tabs_list', 20, 4 );
 add_filter( 'tiny_mce_before_init', 'easl_tiny_mce_settings', 20, 2 );
 add_filter( 'vc_map_get_attributes', 'easl_vc_map_get_attributes', 20, 2 );
 
+add_filter('vc_post_custom_css', 'easl_vc_post_custom_css', 20, 2 );
+
 add_action('vc_backend_editor_enqueue_js_css', 'easl_vc_backend_scripts');
 
 function easl_tta_sc_css_classes( $classes, $atts ) {
@@ -257,4 +259,12 @@ function easl_vc_map_get_attributes($atts, $tag ) {
 }
 function easl_vc_backend_scripts() {
     wp_enqueue_script('easl_vc_scripts', get_stylesheet_directory_uri() . '/assets/js/admin/vc-custom-views.js', array(), EASL_THEME_VERSION, true);
+}
+
+function easl_vc_post_custom_css($post_custom_css, $id ) {
+	$event_subpage_id = easl_get_the_event_subpage_id();
+	if(!$event_subpage_id) {
+		return $post_custom_css;
+	}
+	$post_custom_css .= get_metadata( 'post', $event_subpage_id, '_wpb_post_custom_css', true );
 }

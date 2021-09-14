@@ -813,6 +813,13 @@
             });
         }
     }
+    
+    function easlSetSteSubmenuSize() {
+        $('.ste-submenu-wrap').each(function(){
+            var mh = $('.ste-submenu', $(this)).height();
+            $(this).css({'max-height': mh});
+        });
+    }
 
     $(document).ready(function () {
         $body = $('body');
@@ -824,6 +831,7 @@
         easlCalculateReadingTime();
         easlLoveTheArticle();
         easlArticleHitCount();
+        easlSetSteSubmenuSize();
 
         $body.on("mz_reload_custom_fields", function (event, $context) {
             easlCustomCheckbox();
@@ -1047,9 +1055,19 @@
                 $this.toggleClass('easl-active');
             });
         });
-
+        $('.ste-has-submenu').on('mouseenter', function(e){
+            if(!$(this).hasClass('ste-show-submenu-active')) {
+                $(this).addClass('ste-show-submenu');
+            }
+        }).on('mouseleave', function(e){
+            if(!$(this).hasClass('ste-show-submenu-active')) {
+                $(this).removeClass('ste-show-submenu');
+            }
+        });
+    
         function easlResizeEvent() {
             setCardBlockHeight();
+            easlSetSteSubmenuSize();
             $(window).trigger('easl_resize_sampled');
         }
 

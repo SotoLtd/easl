@@ -8360,8 +8360,8 @@ ul.suggestions {
     font-family: "Helvetica Neue";
     margin: 0 0 25px;
     padding: 0 0 20px;
-    font-size: 16px;
-    font-weight: normal;
+    font-size: 14px;
+    font-weight: 700;
     width: 100%;
     z-index: 1;
 }
@@ -8381,15 +8381,47 @@ ul.suggestions {
     line-height: 20px;
     padding: 10px 40px 10px 15px;
     color: #fff;
-    font-weight: normal;
+    font-weight: 700;
     transition: all 0.25s ease;
     border-bottom: 1px solid #336f9f;
     text-decoration: none;
 }
 
-.ste-menu li.easl-active a,
-.ste-menu li a:hover {
+.ste-menu li.easl-active > a,
+.ste-menu li > a:hover {
     color: #004b87;
+}
+
+
+/*STE Menu*/
+
+.ste-menu li {
+    position: relative;
+}
+.ste-menu li .ste-submenu-wrap {
+    overflow: hidden;
+    margin: 0 0 0 15px;
+    padding: 0;
+    transition: max-height .25s;
+}
+.ste-menu .ste-has-submenu:not(.ste-show-submenu):not(.ste-show-submenu-active) .ste-submenu-wrap {
+    max-height: 0!important;
+}
+.ste-menu li .ste-submenu {
+    margin: 0 0 0 15px;
+    padding: 0;
+    background: #62cff5;
+}
+
+.ste-submenu li {
+    list-style: none;
+}
+.ste-submenu li > a {
+    border-bottom-color: #eaeaea;
+}
+.ste-menu-blue .ste-submenu li.easl-active > a,
+.ste-menu-blue .ste-submenu li > a:hover {
+    color: #004b87!important;
 }
 
 .ste-menu-wrap .ste-menu-blue {
@@ -8434,30 +8466,29 @@ ul.suggestions {
 .ste-menu-yellow li a {
     border-bottom-color: #c7963a;
 }
-.ste-menu-blue li.easl-active a,
-.ste-menu-blue li a:hover {
+.ste-menu-blue li.easl-active > a,
+.ste-menu-blue li > a:hover {
     color: #62cff5;
 }
 
-.ste-menu li a::after {
-    content: "\f105";
+.ste-menu li.ste-has-submenu > a::after {
+    content: "\f067";
     color: #fff;
     display: inline-block;
     font-family: ticons;
-    font-size: 20px;
+    font-size: 12px;
     position: absolute;
     right: 15px;
     top: 50%;
     transform: translateY(-50%);
-    visibility: hidden;
-    opacity: 0;
-    transition: opacity .25s;
 }
 
-.ste-menu li.easl-active a::after,
-.ste-menu li a:hover::after {
-    visibility: visible;
-    opacity: 1;
+.ste-menu li .ste-submenu {
+    padding: 0;
+    margin: 0
+}
+.ste-submenu li {
+    list-style: none;
 }
 
 .ste-buttons-wrap {
@@ -12587,7 +12618,7 @@ body #onesignal-bell-container.onesignal-reset.onesignal-bell-container-bottom-r
         font-size: 14px;
         line-height: 1em;
         margin: 0;
-        padding: 0 20px;
+        padding: 0 10px;
         width: auto;
     }
 
@@ -12595,8 +12626,7 @@ body #onesignal-bell-container.onesignal-reset.onesignal-bell-container-bottom-r
         padding-left: 0;
     }
 
-    .easl-mobile-top-buttons .header-aside-buttons .easl-header-mz-buttons:last-child,
-    .easl-mobile-top-buttons .header-aside-buttons .easl-mz-header-login-button {
+    .easl-mobile-top-buttons .header-aside-buttons .easl-header-mz-buttons:last-of-type {
         border-right: 0;
         padding-right: 0;
     }
@@ -13683,6 +13713,9 @@ body #onesignal-bell-container.onesignal-reset.onesignal-bell-container-bottom-r
         font-size: 24px!important;
         line-height: 1.35em!important;
     }
+    /*STE Menu*/
+    .ste-menu li .ste-submenu {
+    }
 }
 
 @media only screen and (max-width: 640px) {
@@ -13881,6 +13914,11 @@ body #onesignal-bell-container.onesignal-reset.onesignal-bell-container-bottom-r
         margin: 0;
         max-width: 100%;
     }
+
+    .easl-mobile-top-buttons .header-aside-buttons .easl-header-mz-buttons {
+        font-size: 10px;
+        padding: 0 5px;
+    }
 }
 
 @media only screen and (max-width: 480px) {
@@ -13938,6 +13976,10 @@ body #onesignal-bell-container.onesignal-reset.onesignal-bell-container-bottom-r
 
     .small-events-page-header {
         height: 52.08vw;
+    }
+    .easl-mobile-top-buttons .header-aside-buttons .easl-header-mz-buttons {
+        font-size: 10px;
+        padding: 0 5px;
     }
 }
 

@@ -165,3 +165,59 @@ function easl_get_event_subpage_by_slug($event_id, $current_sub_page_slug) {
     return $subpage_post;
 }
 
+function easl_get_event_subpages_sub_pages_html($subpages, $parent_url, $draft_or_pending, $current_slug) {
+	$menu_html = '';
+	$has_current_item = false;
+	if(!$subpages) {
+		return '';
+	}
+	foreach ( $subpages as $subpage ) {
+		if(!current_user_can('edit_posts' ) && !empty($subpage['status']) && 'draft' == $subpage['status']) {
+			continue;
+		}
+		if(!$subpage['title']) {
+			continue;
+		}
+		$slug = trim($subpage['slug']);
+		if ( $slug ) {
+			if($draft_or_pending) {
+				$url = add_query_arg(array('easl_event_subpage2' => $slug), $parent_url);
+			}else{
+				$url = trailingslashit(untrailingslashit( $parent_url ) . '/' . $slug);
+			}
+		}else{
+			$url = $parent_url;
+		}
+		$item_class = 'ste-submenu-item';
+		if ( $current_slug == $slug ) {
+			$item_class .= ' easl-active';
+			$has_current_item = true;
+		}
+		$menu_html .= '<li class="'. $item_class .'"><a href="'. esc_url($url) .'">' . $subpage['title'] . '</a></li>';
+	}
+	if($menu_html) {
+		$menu_html = '<div class="ste-submenu-wrap"><ul class="ste-submenu">' . $menu_html . '</ul></div';
+	}
+	
+	return array(
+		'html' => $menu_html,
+		'has_current' => $has_current_item,
+	);
+}
+
+function easl_event_subpage_maybe_found_in_subpage($subpage, $subpage_request) {
+	if(empty($subpage['subpages'])) {
+		return false;
+	}
+	$found = false;
+	foreach ( $subpage['subpages'] as $subpage ) {
+		if(!current_user_can('edit_posts' ) && !empty($subpage['status']) && 'draft' == $subpage['status']) {
+			continue;
+		}
+		if ( ! empty( $subpage['slug'] ) && trim( $subpage['slug'] ) == $subpage_request ) {
+			$found = $subpage;
+			break;
+		}
+	}
+	return $found;
+}
