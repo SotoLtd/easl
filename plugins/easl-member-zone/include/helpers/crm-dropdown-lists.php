@@ -315,9 +315,9 @@ function easl_mz_get_list_interactions_patient( $current = '' ) {
 
 function easl_mz_get_list_genders() {
 	$genders = array(
-		'female'      => 'Female',
 		'male'        => 'Male',
-		'other'       => 'Other',
+		'female'      => 'Female',
+		'other'       => 'Non-binary',
 		'undisclosed' => 'Undisclosed',
 	);
 

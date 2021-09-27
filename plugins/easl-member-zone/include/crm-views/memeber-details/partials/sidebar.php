@@ -127,8 +127,7 @@ if ( ! defined( 'ABSPATH' ) ) {
             </div>
 		<?php endif; ?>
         <div class="mzms-sbitem mzms-delete-account-request">
-            <p>If you would like to delete your account, please contact
-                <a href="mailto:membership@easloffice.eu">membership@easloffice.eu</a></p>
+            <p>If you need assistance with membership renewal or would like to delete your account, please contact <a href="mailto:membership@easloffice.eu">membership@easloffice.eu</a></p>
         </div>
     </div>
 </div>

@@ -14,7 +14,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 
 
-define( 'EASL_MZ_VERSION', '1.3.2' );
+define( 'EASL_MZ_VERSION', '1.3.3' );
 
 //define( 'EASL_MZ_VERSION', time() );
 
@@ -311,6 +311,9 @@ class EASL_MZ_Manager {
 			$this->set_message( 'login_error', 'Invalid username or password.' );
 
 			return false;
+		}
+		if(!empty($_POST['mz_is_renew'])) {
+			$redirect = easl_member_new_membership_form_url( true );;
 		}
 		// Member authenticated
 		do_action( 'easl_mz_member_authenticated', $member_login, $this->api->get_credential_data( true ), $redirect );

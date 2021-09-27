@@ -23,6 +23,7 @@ $member_dashboard_url     = get_field( 'member_dashboard_url', 'option' );
 $members_profile_page     = get_field( 'member_dashboard_url', 'option' );
 $member_zone_button_title = get_field( 'member_zone_button_title', 'option' );
 $member_login_link_title  = get_field( 'member_login_link_title', 'option' );
+$membership_renew_link_title  = get_field( 'membership_renew_link_title', 'option' );
 
 $buttons_to_display = array();
 $button_nt          = '';
@@ -48,6 +49,9 @@ if ( ! easl_mz_is_member_logged_in() ):
 	if ( $member_login_link_title ) {
 		$buttons_to_display[] = '<a href="#" class="easl-header-mz-buttons easl-mz-header-login-button">' . $member_login_link_title . '</a>';
 	}
+	if ( $membership_renew_link_title ) {
+		$buttons_to_display[] = '<a href="#" class="easl-header-mz-buttons easl-mz-header-login-button mz-enable-renew">' . $membership_renew_link_title . '</a>';
+	}
 	?>
     <div class="header-aside-buttons mz-loggedout-buttons">
 		<?php echo implode( '<span class="mz-buttonsep">|</span>', $buttons_to_display ); ?>
@@ -66,6 +70,7 @@ if ( ! easl_mz_is_member_logged_in() ):
                 </div>
                 <div class="mz-login-row">
                     <input type="hidden" name="mz_redirect_url" value="<?php echo esc_url( $member_dashboard_url ); ?>">
+                    <input type="hidden" name="mz_is_renew" value="0">
                     <button class="easl-generic-button easl-color-lightblue">Login</button>
                 </div>
             </form>

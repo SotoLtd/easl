@@ -95,8 +95,8 @@ if ( ! $member_has_waiting_payemnt ):
                         <label class="mzms-field-label" for="mzf_membership_payment_type">Payment Type</label>
                         <div class="mzms-field-wrap">
                             <select class="easl-mz-select2" name="membership_payment_type" id="mzf_membership_payment_type" style="width: 100%;">
-                                <option value="ingenico_epayments" selected="selected">Online</option>
-                                <option value="offline_payment">Offline</option>
+                                <option value="ingenico_epayments" selected="selected">Credit Card/Paypal</option>
+                                <option value="offline_payment">Bank Transfer</option>
                             </select>
                         </div>
                     </div>
