@@ -6669,7 +6669,7 @@ a.button:hover {
     height: 100%;
 }
 
-text-center {
+.text-center {
     text-align: center;
 }
 
@@ -11977,6 +11977,21 @@ body #onesignal-bell-container.onesignal-reset.onesignal-bell-container-bottom-r
     right: -14px;
 }
 
+/* Survey Monkey */
+.easl-sm-names {
+    margin-bottom: 25px;
+}
+.easl-sm-names ul {
+    column-count: 6;
+    list-style: none;
+    font-size: 13px;
+    margin: 0;
+    padding: 0;
+}
+.easl-sm-names ul li {
+    margin: 0 0 5px;
+}
+
 @-webkit-keyframes easl-ytp-spinner-linspin {
     to {
         -webkit-transform: rotate(360deg);
@@ -13716,6 +13731,9 @@ body #onesignal-bell-container.onesignal-reset.onesignal-bell-container-bottom-r
     /*STE Menu*/
     .ste-menu li .ste-submenu {
     }
+    .easl-sm-names ul {
+        column-count: 4;
+    }
 }
 
 @media only screen and (max-width: 640px) {
@@ -13844,6 +13862,9 @@ body #onesignal-bell-container.onesignal-reset.onesignal-bell-container-bottom-r
         margin: 0;
         max-width: 210px;
     }
+    .easl-sm-names ul {
+        column-count: 3;
+    }
 }
 
 @media only screen and  (min-width: 601px) and (max-width: 767px) {
@@ -13919,6 +13940,9 @@ body #onesignal-bell-container.onesignal-reset.onesignal-bell-container-bottom-r
         font-size: 10px;
         padding: 0 5px;
     }
+    .easl-sm-names ul {
+        column-count: 4;
+    }
 }
 
 @media only screen and (max-width: 480px) {
@@ -13981,6 +14005,10 @@ body #onesignal-bell-container.onesignal-reset.onesignal-bell-container-bottom-r
         font-size: 10px;
         padding: 0 5px;
     }
+
+    .easl-sm-names ul {
+        column-count: 3;
+    }
 }
 
 @media only screen and (max-width: 360px) {
@@ -14040,6 +14068,9 @@ body #onesignal-bell-container.onesignal-reset.onesignal-bell-container-bottom-r
     /*Logo grid*/
     .easl-logo-grid-item {
         width: 100%;
+    }
+    .easl-sm-names ul {
+        column-count: 2;
     }
 }
 

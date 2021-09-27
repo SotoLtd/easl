@@ -267,4 +267,5 @@ function easl_vc_post_custom_css($post_custom_css, $id ) {
 		return $post_custom_css;
 	}
 	$post_custom_css .= get_metadata( 'post', $event_subpage_id, '_wpb_post_custom_css', true );
+	return $post_custom_css;
 }

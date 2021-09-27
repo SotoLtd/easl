@@ -18,4 +18,12 @@ if ( function_exists( 'acf_add_options_page' ) ) {
         'parent_slug' => 'easl-settings',
         'redirect'   => false,
     ) );
+    $easl_survey_monkey_settings = acf_add_options_page( array(
+        'page_title' => 'Survey Monkey',
+        'menu_title' => 'Survey Monkey',
+        'menu_slug'  => 'survey-monkey-settings',
+        'capability' => 'manage_options',
+        'parent_slug' => 'easl-settings',
+        'redirect'   => false,
+    ) );
 }

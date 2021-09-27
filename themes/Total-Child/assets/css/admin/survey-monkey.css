@@ -1,0 +1,59 @@
+.easl-sm-sync {
+
+}
+
+.easl-sm-sync button {
+    padding: 8px 25px;
+    background-color: #D6EAF8;
+    color: #333;
+    border: 1px solid #5DADE2;
+    border-radius: 4px;
+    font-size: 16px;
+    position: relative;
+    cursor: pointer;
+}
+.easl-sm-sync button.easl-sm-processing {
+    pointer-events: none;
+}
+
+.easl-sm-sync button em {
+    color: #566573;
+}
+.easl-sm-sync button span {
+    position: absolute;
+    right: 5px;
+    top: 50%;
+    width: 16px;
+    height: 16px;
+    transform: translateY(-50%);
+}
+.easl-sm-sync button .fa {
+    position: absolute;
+    left: 0;
+    right: 0;
+    opacity: 0;
+    transition: opacity .2s;
+    visibility: hidden;
+}
+.easl-sm-sync button .fa-spinner {
+    color: #F39C12;
+}
+.easl-sm-sync button .fa-check {
+    color: #27AE60;
+}
+.easl-sm-sync button .fa-times {
+    color: #E74C3C;
+}
+.easl-sm-sync button.easl-sm-processing .fa-spinner {
+    visibility: visible;
+    opacity: 1;
+}
+.easl-sm-sync button.easl-sm-processed-ok .fa-check {
+    visibility: visible;
+    opacity: 1;
+    color: #27AE60;
+}
+.easl-sm-sync button.easl-sm-processed-not_ok .fa-times {
+    visibility: visible;
+    opacity: 1;
+}

@@ -26,6 +26,7 @@ require_once EASL_INC_DIR . 'sticky-footer.php';
 require_once EASL_INC_DIR . 'wp-seo-extend.php';
 require_once EASL_INC_DIR . 'easl-clock.php';
 require_once EASL_INC_DIR . 'freshchat/freshchat.php';
+require_once EASL_INC_DIR . 'survey-monkey.php';
 
 function easl_theme_setup() {
 	load_theme_textdomain( 'total-child' );
