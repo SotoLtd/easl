@@ -298,6 +298,9 @@ function easl_extended_meta( $array, $post ) {
         );
         unset($array['title']['settings']['post_subheading']);
     }
+	if(isset($array['slider'])) {
+		unset($array['slider']);
+	}
 
 	return $array;
 }
@@ -934,6 +937,7 @@ function easl_blog_layout_class($layout, $instance) {
 add_filter( 'wpex_post_layout_class', 'easl_blog_layout_class', 20, 2 );
 
 add_filter( 'wpex_head_css', 'easl_page_header_css', 20, 1 );
+add_filter( 'wpex_head_css', 'easl_page_header_mobile_css', 20, 2 );
 function easl_page_header_css($output) {
 	$bg_img = '';
 	$page_header_css = '';
@@ -951,6 +955,45 @@ function easl_page_header_css($output) {
 	// Apply all css to the page-header class.
 	if ( ! empty( $page_header_css ) ) {
 		$output .= '.page-header{' . $page_header_css . '}';
+	}
+	return $output;
+}
+function easl_page_header_mobile_css($output) {
+	
+	$banner_mobile_alternative = '';
+	$page_header_css = '';
+	if(is_singular( 'event' ) && ($event_subpage_id = easl_get_the_event_subpage_id())) {
+		$banner_mobile_alternative = get_field('banner_mobile_alternative',$event_subpage_id);
+	}
+	if(!$banner_mobile_alternative) {
+		$banner_mobile_alternative = get_field('banner_mobile_alternative', wpex_get_the_id());
+	}
+//	if(!$banner_mobile_alternative) {
+//		if ( is_single() || is_tag() ) {
+//			$banner_mobile_alternative = get_field( 'banner_mobile_alternative', wpex_get_mod( 'blog_page', 5626 ) );
+//		}
+//		if ( is_singular( 'blog' ) || is_tax( 'blog_category' ) || is_tax( 'blog_tag' ) ) {
+//			$banner_mobile_alternative = get_field( 'banner_mobile_alternative', wpex_get_mod( 'easl_blog_page', 22015 ) );
+//		}
+//
+//		if ( is_singular( 'event' ) ) {
+//			if ( $event_subpage_id = easl_get_the_event_subpage_id() ) {
+//				$banner_mobile_alternative = get_field( 'banner_mobile_alternative', $event_subpage_id );
+//			}
+//		}
+//		if ( is_singular( Publication_Config::get_publication_slug() ) ) {
+//			$banner_mobile_alternative = get_field( 'banner_mobile_alternative', 2015 );
+//		}
+//	}
+	
+	if ( $banner_mobile_alternative ) {
+		$page_header_css .= 'background-image:url(' . esc_url( $banner_mobile_alternative ) . ' )!important;';
+	}
+	
+	
+	// Apply all css to the page-header class.
+	if ( ! empty( $page_header_css ) ) {
+		$output .= '@media only screen and (max-width: 767px) {.page-header{' . $page_header_css . '}}';
 	}
 	return $output;
 }
