@@ -79,7 +79,7 @@ function easl_get_template_part( $name, $args = array() ) {
     include $located;
 }
 
-function easl_get_the_event_subpage_id() {
+function easl_get_the_event_subpage_id($include_parent_subpage = false) {
     if(!is_singular('event')) {
         return null;
     }
@@ -92,29 +92,58 @@ function easl_get_the_event_subpage_id() {
     if('structured-event' != $template_format) {
         return null;
     }
-    $current_sub_page_slug = get_query_var( 'easl_event_subpage' );
-    $events_subpages       = get_field( 'event_subpages' );
-    if ( ! $events_subpages ) {
-        $events_subpages = array();
-    }
-    $current_sub_page = false;
-    foreach ( $events_subpages as $subpage ) {
-        if ( isset( $subpage['slug'] ) && trim( $subpage['slug'] ) == $current_sub_page_slug ) {
-            $current_sub_page = $subpage;
-            break;
-        }
-    }
-    if(!$current_sub_page) {
-        return null;
-    }
-    if ( 'subpage' != $current_sub_page['content_source'] ) {
-        return null;
-    }
-    $subpage_post = get_post( $current_sub_page['subpage'] );
-    if ( !$subpage_post ) {
-        return null;
-    }
-    return $subpage_post->ID;
+	$current_sub_page_slug  = get_query_var( 'easl_event_subpage' );
+	$current_sub_page2_slug = get_query_var( 'easl_event_subpage2' );
+	$events_subpages        = get_field( 'event_subpages', $event_id );
+	
+	if ( ! $events_subpages ) {
+		$events_subpages = array();
+	}
+	$current_sub_page  = false;
+	$current_sub_page2 = false;
+	foreach ( $events_subpages as $subpage ) {
+		if ( ! $current_sub_page2_slug && ! $subpage['slug'] ) {
+			$current_sub_page2 = easl_event_subpage_maybe_found_in_subpage( $subpage, $current_sub_page_slug );
+		}
+		if ( $current_sub_page2 ) {
+			break;
+		}
+		if ( isset( $subpage['slug'] ) && trim( $subpage['slug'] ) == $current_sub_page_slug ) {
+			$current_sub_page = $subpage;
+			if ( $current_sub_page2_slug && ! empty( $subpage['subpages'] ) ) {
+				$current_sub_page2 = easl_event_subpage_maybe_found_in_subpage( $subpage, $current_sub_page2_slug );
+			}
+			break;
+		}
+	}
+	$subpage_post = false;
+	$subpage2_post = false;
+	if($current_sub_page &&  ( 'subpage' == $current_sub_page['content_source'] )) {
+		$subpage_post  = get_post( $current_sub_page['subpage'] );
+	}
+	if($current_sub_page2) {
+		$subpage2_post = get_post( $current_sub_page2['subpage'] );
+	}
+	
+	if(!$subpage_post && $subpage2_post) {
+		return null;
+	}
+	if(!$include_parent_subpage) {
+		if($subpage2_post) {
+			return $subpage2_post->ID;
+		}elseif($subpage_post) {
+			return $subpage_post->ID;
+		}
+		return null;
+	}
+	$ids = [];
+	if($subpage_post) {
+		$ids[] = $subpage_post->ID;
+	}
+	if($subpage2_post) {
+		$ids[] = $subpage2_post->ID;
+	}
+	return count($ids) > 0 ? $ids : null;
 }
 
 /**
@@ -134,8 +163,38 @@ function easl_get_the_event_subpage() {
     if('structured-event' != $template_format) {
         return null;
     }
-    $current_sub_page_slug = get_query_var( 'easl_event_subpage' );
-    return easl_get_event_subpage_by_slug($event_id, $current_sub_page_slug);
+    //$current_sub_page_slug = get_query_var( 'easl_event_subpage' );
+    //return easl_get_event_subpage_by_slug($event_id, $current_sub_page_slug);
+	$events_subpage_slugs = get_field( 'event_subpages', $event_id );
+	if ( ! $events_subpage_slugs ) {
+		$events_subpage_slugs = array();
+	}
+	$found_subpage   = false;
+	$found_subpage2 = false;
+	$subpage_request = get_query_var( 'easl_event_subpage' );
+	$subpage2_request = get_query_var( 'easl_event_subpage2' );
+	foreach ( $events_subpage_slugs as $subpage ) {
+		if(!$subpage2_request && !$subpage['slug']) {
+			$found_subpage = easl_event_subpage_maybe_found_in_subpage($subpage, $subpage_request);
+		}
+		if(!current_user_can('edit_posts' ) && !empty($subpage['status']) && 'draft' == $subpage['status']) {
+			continue;
+		}
+		if ( ! empty( $subpage['slug'] ) && trim( $subpage['slug'] ) == $subpage_request ) {
+			$found_subpage = true;
+			if($subpage2_request) {
+				$found_subpage2 = easl_event_subpage_maybe_found_in_subpage($subpage, $subpage2_request);
+			}
+			break;
+		}
+	}
+	if ( ! $found_subpage ) {
+		return null;
+	}
+	if ( $subpage2_request && $found_subpage2 ) {
+		return $found_subpage2;
+	}
+	return $found_subpage;
 }
 
 

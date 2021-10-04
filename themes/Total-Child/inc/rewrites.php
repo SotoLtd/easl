@@ -103,7 +103,6 @@ function easl_admin_bar_menu_change($wp_admin_bar) {
     }
     $current_sub_page = false;
 	$current_sub_page2 = false;
-	$events_subpages2 = array();
     foreach ( $events_subpages as $subpage ) {
 	    if(!$current_sub_page2_slug && !$subpage['slug']) {
 		    $current_sub_page2 = easl_event_subpage_maybe_found_in_subpage($subpage, $current_sub_page_slug);
