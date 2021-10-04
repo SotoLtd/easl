@@ -1107,8 +1107,12 @@
 .vc_toggle_color_yellow .vc_toggle_title {
     background-color: #f9bc49;
 }
+.vc_toggle_color_transparent .vc_toggle_title {
+    background-color: transparent;
+    padding: 0;
+}
 
-.vc_toggle_title h4 {
+.vc_toggle:not(.vc_toggle_color_transparent)  .vc_toggle_title h4 {
     color: #fff;
     font-size: 16px;
     line-height: 16px;
@@ -1157,6 +1161,10 @@
     -webkit-transform: rotate(225deg) translate(-25%, -25%);
     -ms-transform: rotate(225deg) translate(-25%, -25%);
     transform: rotate(225deg) translate(-25%, -25%);
+}
+
+.vc_toggle_color_transparent .vc_toggle_icon {
+    display: none!important;
 }
 .vc_toggle_has_padding .vc_toggle_content {
     padding-left: 20px;
