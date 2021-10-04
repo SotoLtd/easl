@@ -962,8 +962,13 @@ function easl_page_header_mobile_css($output) {
 	
 	$banner_mobile_alternative = '';
 	$page_header_css = '';
-	if(is_singular( 'event' ) && ($event_subpage_id = easl_get_the_event_subpage_id())) {
-		$banner_mobile_alternative = get_field('banner_mobile_alternative',$event_subpage_id);
+	if ( is_singular( 'event' ) && ( $event_subpage_id = easl_get_the_event_subpage_id( true ) ) ) {
+		if ( $event_subpage_id && ! empty( $event_subpage_id[1] ) ) {
+			$banner_mobile_alternative = get_field( 'banner_mobile_alternative', $event_subpage_id[1] );
+		}
+		if ( $event_subpage_id && ! $banner_mobile_alternative ) {
+			$banner_mobile_alternative = get_field( 'banner_mobile_alternative', $event_subpage_id[0] );
+		}
 	}
 	if(!$banner_mobile_alternative) {
 		$banner_mobile_alternative = get_field('banner_mobile_alternative', wpex_get_the_id());
@@ -996,4 +1001,10 @@ function easl_page_header_mobile_css($output) {
 		$output .= '@media only screen and (max-width: 767px) {.page-header{' . $page_header_css . '}}';
 	}
 	return $output;
+}
+
+add_filter('wpex_metabox_alpha_color_picker', '__return_false');
+add_filter('acf/input/admin_enqueue_scripts', 'easl_disable_acf_color_picker_alpha_scripts', 20);
+function easl_disable_acf_color_picker_alpha_scripts() {
+	wp_dequeue_script('acf-color-picker-alpha');
 }

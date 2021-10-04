@@ -12,6 +12,7 @@ add_filter( 'tiny_mce_before_init', 'easl_tiny_mce_settings', 20, 2 );
 add_filter( 'vc_map_get_attributes', 'easl_vc_map_get_attributes', 20, 2 );
 
 add_filter('vc_post_custom_css', 'easl_vc_post_custom_css', 20, 2 );
+add_filter('vc_shortcodes_custom_css', 'easl_vc_shortcodest_custom_css', 20, 2 );
 
 add_action('vc_backend_editor_enqueue_js_css', 'easl_vc_backend_scripts');
 
@@ -141,6 +142,7 @@ function easl_vc_modify_existing_shortcode_params() {
                 __( 'Orange', 'total-child' )                => 'orange',
                 __( 'Grey', 'total-child' )                  => 'grey',
                 __( 'Yellow', 'total-child' )                => 'yellow',
+                __( 'No Color', 'total-child' )              => 'transparent',
             ),
             'description' => esc_html__( 'Select title bg color.', 'js_composer' ),
         ) );
@@ -268,4 +270,16 @@ function easl_vc_post_custom_css($post_custom_css, $id ) {
 	}
 	$post_custom_css .= get_metadata( 'post', $event_subpage_id, '_wpb_post_custom_css', true );
 	return $post_custom_css;
+}
+
+function easl_vc_shortcodest_custom_css($shortcodes_custom_css, $id ) {
+	if(!is_singular('event')){
+		return $shortcodes_custom_css;
+	}
+	$event_subpage_id = easl_get_the_event_subpage_id();
+	if(!$event_subpage_id) {
+		return $shortcodes_custom_css;
+	}
+	$shortcodes_custom_css = get_metadata( 'post', $event_subpage_id, '_wpb_shortcodes_custom_css', true );
+	return $shortcodes_custom_css;
 }
