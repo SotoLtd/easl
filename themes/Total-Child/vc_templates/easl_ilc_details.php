@@ -60,7 +60,7 @@ if($ilc_object):
 	}
 	$debriefs = $this->get_debrief_data($debriefs);
 	if($debriefs){
-		wp_enqueue_script('easl-yt-playlist', get_theme_file_uri('assets/js/yt-playlist.js'), array('jquery'), null, true);
+		wp_enqueue_script('easl-yt-playlist', get_theme_file_uri('assets/js/yt-playlist.js'), array('jquery'), EASL_THEME_VERSION, true);
 	}
 	if($downloadable_congress_report) {
 		$downloadable_congress_report = ' download="' . basename( parse_url( $congress_report_pdf, PHP_URL_PATH ) ) . '"';
