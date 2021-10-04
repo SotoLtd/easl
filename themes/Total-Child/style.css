@@ -11971,6 +11971,9 @@ body .mentors-application-title {
     background: #fc6719;
     color: #fff;
 }
+#easl-sticky-footer-message-inner p:last-child {
+    margin-bottom: 0;
+}
 
 body #onesignal-bell-container.onesignal-reset.onesignal-bell-container-bottom-right {
     bottom: 37px;

@@ -12,7 +12,14 @@ add_action( 'wp_ajax_nopriv_easl_save_closed_footer_message', 'easl_save_closed_
 function easl_sticky_footer() {
 	$enabled        = get_field( 'footer_sticky_msg_enable', 'option' );
 	$sticky_message = get_field( 'footer_stikcy_msg', 'option' );
-	$closed_for_IP  = easl_footer_message_is_closed();
+	$enabled_for = 'global';
+	if(is_singular() && get_field( 'footer_sticky_msg_enable', wpex_get_the_id() )){
+		$enabled = true;
+		$sticky_message = get_field( 'footer_stikcy_msg', wpex_get_the_id() );
+		$enabled_for = wpex_get_the_id();
+	}
+	
+	$closed_for_IP  = easl_footer_message_is_closed($enabled_for);
 	if ( ! $enabled || ! $sticky_message || $closed_for_IP ) {
 		return '';
 	}
@@ -24,8 +31,13 @@ function easl_sticky_footer() {
 	include $template;
 }
 
-function easl_footer_message_is_closed() {
-	$ips = get_option( 'easl_footer_message_closed_ip' );
+function easl_footer_message_is_closed($for = 'global') {
+	if('global' == $for) {
+		$ips = get_option( 'easl_footer_message_closed_ip' );
+	}else{
+		$ips = get_post_meta($for, 'easl_footer_message_closed_ip', true);
+	}
+	
 	if ( ! is_array( $ips ) ) {
 		return false;
 	}
@@ -40,8 +52,12 @@ function easl_footer_message_is_closed() {
 	return false;
 }
 
-function easl_footer_message_save_closed() {
-	$ips = get_option( 'easl_footer_message_closed_ip' );
+function easl_footer_message_save_closed($for = 'global') {
+	if('global' == $for) {
+		$ips = get_option( 'easl_footer_message_closed_ip' );
+	}else{
+		$ips = get_post_meta($for, 'easl_footer_message_closed_ip', true);
+	}
 	if ( ! is_array( $ips ) ) {
 		$ips = array();
 	}
@@ -54,6 +70,11 @@ function easl_footer_message_save_closed() {
 	}
 	$ips[] = $current_ip;
 	update_option( 'easl_footer_message_closed_ip', $ips );
+	if('global' == $for) {
+		update_option( 'easl_footer_message_closed_ip', $ips );
+	}else{
+		update_post_meta($for, 'easl_footer_message_closed_ip', $ips);
+	}
 
 	return true;
 }
@@ -78,7 +99,8 @@ function easl_get_visitorIP() {
 }
 
 function easl_save_closed_footer_message() {
-	$result = easl_footer_message_save_closed();
+	$page = !empty($_POST['page']) ? $_POST['page'] : 'global';
+	$result = easl_footer_message_save_closed($page);
 	if ( $result ) {
 		wp_send_json( array( 'status' => 'OK' ) );
 	}

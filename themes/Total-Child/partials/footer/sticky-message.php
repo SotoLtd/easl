@@ -1,9 +1,10 @@
 <?php
 /**
  * @var $sticky_message
+ * @var $enabled_for
  */
 ?> 
-<div id="easl-sticky-footer-message-wrap">
+<div id="easl-sticky-footer-message-wrap" data-page="<?php echo $enabled_for; ?>">
 	<a id="easl-close-sticky-message" href="#">
 		<span class="ticon ticon-times" aria-hidden="true"></span>
 	</a>

@@ -722,7 +722,8 @@
     };
 
     function easlStickyFooterMsg() {
-        var $sf = $('#easl-sticky-footer-message-wrap');
+        var $sf = $('#easl-sticky-footer-message-wrap'),
+            page = $sf.data('page');
         if ($sf.length < 1) {
             return false;
         }
@@ -735,7 +736,8 @@
                 type: "POST",
                 url: EASLSETTINGS.ajaxUrl,
                 data: {
-                    action: 'easl_save_closed_footer_message'
+                    action: 'easl_save_closed_footer_message',
+                    page: page
                 },
                 dataType: 'json',
                 success: function (data) {
