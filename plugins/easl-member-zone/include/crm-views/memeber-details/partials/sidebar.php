@@ -6,6 +6,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 /**
  * @var $member array
  */
+$is_member = $member['dotb_mb_id'] && $member['dotb_mb_current_status'] === 'active';
 ?>
 <div class="easl-mz-membership-sidebar">
     <div class="easl-mz-membership-sidebar-inner">
@@ -114,9 +115,9 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 
 		if ( $membership_button_title && $membership_button_url ):
-            if(easl_mz_members_has_empty_mandatory_fields($member)) {
+            if(easl_mz_members_has_empty_mandatory_fields($member, $is_member)) {
                 $membership_button_class = 'mzms-button mzms-button-has-empty-fields';
-                $membership_button_error_data = ' data-errors="'. esc_attr( json_encode(easl_mz_validate_new_member_form( $member ))) . '"';
+                $membership_button_error_data = ' data-errors="'. esc_attr( json_encode(easl_mz_validate_new_member_form( $member, $is_member ))) . '"';
             }else{
                 $membership_button_class = 'mzms-button';
                 $membership_button_error_data = '';

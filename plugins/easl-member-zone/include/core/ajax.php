@@ -550,7 +550,7 @@ class EASL_MZ_Ajax_Handler {
 			$this->respond( 'Member not found!', 404 );
 		}
 
-        $errors = easl_mz_validate_new_member_form( $request_data );
+        $errors = easl_mz_validate_new_member_form( $request_data, isset($request_data['title']) );
 
 		if ( count( $errors ) > 0 ) {
 			$this->respond_field_errors( $errors );
@@ -677,7 +677,7 @@ class EASL_MZ_Ajax_Handler {
 		if ( empty( $request_data ) ) {
 			$this->respond( 'No fields specified!', 405 );
 		}
-		$errors = easl_mz_validate_new_member_form( $request_data );
+		$errors = easl_mz_validate_new_member_form( $request_data, $request_data['title'] );
 
 		if ( ! $errors ) {
 			$errors = array();

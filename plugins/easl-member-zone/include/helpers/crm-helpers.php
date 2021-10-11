@@ -143,7 +143,7 @@ function validate_required_fields( $required_field_names, $data, $message = 'Man
     return $errors;
 }
 
-function easl_mz_validate_new_member_form($data = array()) {
+function easl_mz_validate_new_member_form($data = array(), $is_member = false) {
     $required_fields = [
         'salutation',
         'first_name',
@@ -176,10 +176,12 @@ function easl_mz_validate_new_member_form($data = array()) {
     if ( empty( $errors['last_name'] ) && strlen( preg_replace( '/[^a-zA-Z]/', '', $data['last_name'] ) ) < 2 ) {
         $errors['last_name'] = 'Last name must contain at least 2 letters';
     }
-
-    if ( isset( $data['title'] ) && empty( $data['title'] ) ) {
-        $errors['title'] = 'Mandatory field';
+    if($is_member){
+        if ( isset( $data['title'] ) && empty( $data['title'] ) ) {
+            $errors['title'] = 'Mandatory field';
+        }
     }
+    
     if ( ! empty( $data['dotb_job_function'] ) && ( $data['dotb_job_function'] == 'other' ) && empty( $data['dotb_job_function_other'] ) ) {
         $errors['dotb_job_function_other'] = 'Mandatory field';
     }
@@ -197,8 +199,8 @@ function easl_mz_validate_new_member_form($data = array()) {
 
 }
 
-function easl_mz_members_has_empty_mandatory_fields( $data ) {
-    return count( easl_mz_validate_new_member_form( $data ) ) > 0 ? true : false;
+function easl_mz_members_has_empty_mandatory_fields( $data, $is_member = false ) {
+    return count( easl_mz_validate_new_member_form( $data, $is_member ) ) > 0 ? true : false;
 }
 
 function easl_mz_validate_member_data( $data = array() ) {
