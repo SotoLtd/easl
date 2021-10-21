@@ -228,8 +228,13 @@ class EASLAppReview {
         $this->renderTemplate('admin/submissions.php', ['programmes' => $programmes]);
     }
 
-    protected function saveReviewDetails($loggedInUserData, $submission, $formData) {
-        $submissionId = $submission->ID;
+    protected function saveReviewDetails($loggedInUserData, $submission, $formData, $redirect = true) {
+	    if ( $submission instanceof WP_Post ) {
+		    $submissionId = $submission->ID;
+	    }else{
+		
+		    $submissionId = $submission;
+	    }
 
         $errors = [];
         foreach($formData['category'] as $i => $cat) {
@@ -245,7 +250,7 @@ class EASLAppReview {
             return $errors;
         }
 
-        if (isset($formData['review_id'])) {
+        if (!empty($formData['review_id'])) {
             $reviewId = $formData['review_id'];
             $reviewerEmail = get_post_meta($reviewId, 'reviewer_email', true);
             if ($reviewerEmail !== $loggedInUserData['email1']) {
@@ -270,9 +275,11 @@ class EASLAppReview {
         update_post_meta($reviewId, 'total_score', $totalScore);
 
         update_post_meta($reviewId, 'scoring', $formData['category']);
-
-        $programmeId = get_post_meta($submissionId, 'programme_id', true);
-        wp_redirect($this->getUrl(self::PAGE_PROGRAMME, ['programmeId' => $programmeId]) . '&review_submitted=1');
+        if($redirect){
+	        $programmeId = get_post_meta($submissionId, 'programme_id', true);
+	        wp_redirect($this->getUrl(self::PAGE_PROGRAMME, ['programmeId' => $programmeId]) . '&review_submitted=1');
+        }
+        return true;
     }
     
     protected function getSubmissionReviewsAllFields( $submissionID, $scoringCriteriaNames ) {
@@ -367,7 +374,14 @@ class EASLAppReview {
 
         if (!$this->isAdmin) {
             if (isset($_POST['review_submitted'])) {
-                $saveReviewErrors = $this->saveReviewDetails($loggedInUserData, $submission, $_POST);
+                if(!empty($_POST['easl_app_other_schools_sub'])) {
+                	foreach ($_POST['easl_app_other_schools_sub'] as $other_schools_sub_id) {
+                		$reviewData = $_POST;
+		                $reviewData['review_id'] = easl_app_get_my_review_id($other_schools_sub_id, $loggedInUserData['email1']);
+		                $sss = $this->saveReviewDetails($loggedInUserData, $other_schools_sub_id, $reviewData, false);
+	                }
+                }
+	            $saveReviewErrors = $this->saveReviewDetails($loggedInUserData, $submission, $_POST);
             }
         }
 
@@ -379,6 +393,7 @@ class EASLAppReview {
 
         $programmeId = get_post_meta($submissionId, 'programme_id', true);
         $programme = get_post($programmeId);
+	    $otherSchoolsApps = easl_app_users_other_schools_app_for_this_reviewer($submissionId, $loggedInUserData['email1']);
 
         $this->renderTemplate('review.php', [
             'submission' => $submission,
@@ -389,7 +404,8 @@ class EASLAppReview {
             'reviews' => $reviews,
             'myReview' => $myReview,
             'saveReviewErrors' => $saveReviewErrors,
-            'isAdmin' => $this->isAdmin
+            'isAdmin' => $this->isAdmin,
+	        'otherSchoolsApps' => $otherSchoolsApps,
         ]);
     }
 

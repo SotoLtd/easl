@@ -9,6 +9,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * @var string $programmeName
  * @var string $contactEmail
  * @var string $programmeId
+ * @var string $reviewDeadline
  */
 $programmeCategory = '';
 if(!empty($programmeId)){
@@ -16,9 +17,9 @@ if(!empty($programmeId)){
 }
 
 if('easl-schools' == $programmeCategory){
-    $message = 'You will be notified as to whether you have been successful by the end of April 2021.';
+    $message = 'You will be notified as to whether you have been successful by the end of April 2022.';
 }else{
-    $message = 'Your application will be reviewed by external reviewers and the EASL Governing Board. You will be notified as to whether you have been successful within three months of the application deadline.';
+    $message = 'Your application will be reviewed by external reviewers and the EASL Governing Board. You will be notified as to whether you have been successful within three months of the application deadline.';
 }
 ?>
 <p>Dear <?=$firstName;?> <?=$lastName;?>,</p>

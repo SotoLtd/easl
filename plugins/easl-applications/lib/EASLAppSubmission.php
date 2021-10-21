@@ -174,13 +174,15 @@ class EASLAppSubmission
             $apps = EASLApplicationsPlugin::getInstance();
     
             $contactEmail = EASLApplicationsPlugin::getContactEmail($programmeId);
+	        $reviewDeadline = get_field('review_deadline', $programmeId);
 
             $message = EASLApplicationsPlugin::renderEmail($apps->templateDir . 'email/application_confirmation.php', [
                 'firstName' => $memberData['first_name'],
                 'lastName' => $memberData['last_name'],
                 'programmeName' => $programme->post_title,
                 'contactEmail' => $contactEmail,
-                'programmeId' => $programmeId
+                'programmeId' => $programmeId,
+                'reviewDeadline' => $reviewDeadline,
             ]);
             update_post_meta($postId, self::SUBMISSION_DATE_META_KEY, time());
             $email = $memberData['email1'];

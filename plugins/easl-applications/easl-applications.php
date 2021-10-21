@@ -559,11 +559,17 @@ class EASLApplicationsPlugin {
     
     public static function sendEmail( $to, $subject, $message, $bcc = 'fellowships@easloffice.eu' ) {
         $headers = [
-            'Content-Type: text/html; charset=UTF-8',
             'Bcc: ' . $bcc,
-            'From: EASL Applications <no-reply@easl.eu>'
         ];
+        add_filter('wp_mail_from', 'easl_app_email_form_email', 100);
+        add_filter('wp_mail_from_name', 'easl_app_email_form_name', 100);
+        add_filter('wp_mail_content_type', 'easl_app_email_content_type_html', 100);
+        
         wp_mail( $to, $subject, $message, $headers );
+        
+	    remove_filter('wp_mail_content_type', 'easl_app_email_content_type_html', 100);
+	    remove_filter('wp_mail_from', 'easl_app_email_form_email', 100);
+	    remove_filter('wp_mail_from_name', 'easl_app_email_form_name', 100);
     }
     
     public function registerSubmissionMetaBox() {
