@@ -1,0 +1,227 @@
+
+.agenda-table {
+    width: 100%;
+    border-collapse: collapse;
+    border-spacing: 0;
+    padding: 0;
+    margin: 0 0 20px 0;
+    font-size: 1em;
+}
+
+.agenda-table th, .agenda-table td {
+    text-align: inherit;
+    padding: .769em 1em;
+    border: 1px solid #eee;
+}
+
+.agenda-table .easl-text-center {
+    text-align: center;
+}
+
+.easl-tb-hide {
+    display: none;
+}
+
+#easl-table-builder {
+    position: relative;
+    min-height: 385px;
+}
+
+table.agenda-table p,
+table.agenda-table h3 {
+    color: inherit;
+    margin: 0 0 10px;
+}
+
+table.agenda-table td p:last-child,
+table.agenda-table td h3:last-child {
+    margin-bottom: 0;
+}
+
+table.agenda-table td {
+    border: 1px solid #000;
+}
+
+table.agenda-table td:last-child {
+    width: 100%;
+    color: #333;
+}
+
+tr.agenda-table-row-white {
+    background-color: #fff;
+}
+tr.agenda-table-row-blue {
+    background-color: #1b3157;
+    color: #fff;
+}
+
+tr.agenda-table-row-blue td > * {
+    color: #fff;
+}
+
+tr.agenda-table-row-lightblue {
+    background-color: #a9bfe1;
+    color: #333;
+}
+
+tr.agenda-table-row-yellow {
+    background-color: #fde0d0;
+    color: #333;
+}
+
+td.nowrap {
+    white-space: nowrap;
+}
+
+table.agenda-table .easl-tb-row-action {
+    padding: 0;
+    vertical-align: top;
+}
+
+table.agenda-table .easl-tb-row-action .easl-tb-row-action-wrap {
+    display: flex;
+    flex-wrap: nowrap;
+    align-items: stretch;
+    width: 100px;
+}
+
+table.agenda-table .easl-tb-row-action a {
+    display: block;
+    cursor: pointer;
+    padding: 8px 4px 2px 4px;
+    appearance: none;
+    margin: 0;
+    width: 33.33%;
+    border: none;
+    border-radius: 0;
+    border-bottom: 1px solid #ccc;
+    text-decoration: none;
+    color: inherit;
+    background: rgb(239, 239, 239);
+}
+
+table.agenda-table .easl-tb-row-action a:nth-child(2) {
+    border-right: 1px solid #ccc;
+    border-left: 1px solid #ccc;
+}
+
+table.agenda-table .easl-tb-row-action a .dashicons {
+    font-size: 14px;
+    color: #000;
+}
+
+table.agenda-table .easl-tb-row-action a .dashicons-edit {
+    color: #37E022;
+}
+
+table.agenda-table .easl-tb-row-action a .dashicons-trash {
+    color: #DE4223;
+}
+
+.easl-tb-actions {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.easl-tb-actions button {
+    width: 120px;
+    display: block;
+    padding: 10px 25px;
+    cursor: pointer;
+    border: none;
+    border-radius: 0;
+}
+
+.easl-tb-actions .easl-tb-add-row {
+    display: inline-block;
+    padding: 5px 25px;
+    cursor: pointer;
+    margin-right: 40px;
+}
+
+.easl-tb-actions .easl-tb-save {
+    display: inline-block;
+    padding: 5px 25px;
+    cursor: pointer;
+}
+
+#easl-tb-editor {
+    background: #fff;
+    position: absolute;
+    left: 0;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    visibility: hidden;
+    opacity: 0;
+    z-index: 5;
+}
+
+#easl-tb-editor.easl-tb-active {
+    visibility: visible;
+    opacity: 1;
+}
+
+.easl-tb-editor-inner {
+    background: #efefef;
+    padding: 20px;
+}
+
+.easl-tb-editor-inner table {
+    margin-bottom: 20px;
+    border-collapse: collapse;
+    width: 100%;
+}
+
+.easl-tb-editor-inner table th {
+    width: 160px;
+}
+
+.easl-tb-editor-inner table th,
+.easl-tb-editor-inner table td {
+    vertical-align: top;
+    padding: 10px;
+    border: 1px solid #ddd;
+    color: #333;
+}
+
+.easl-tb-editor-inner table textarea {
+    display: block;
+    width: 100%;
+    height: 80px;
+    border: 1px solid #ccc;
+    padding: 10px;
+    color: #333;
+    resize: vertical;
+}
+
+.easl-tbe-actions {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.easl-tbe-actions button {
+    width: 120px;
+    display: block;
+    padding: 10px 25px;
+    cursor: pointer;
+    border: none;
+    border-radius: 5px;
+}
+
+.easl-tbe-actions .easl-tb-save {
+    background: #37E022;
+    color: #fff;
+}
+
+.easl-tbe-actions .easl-tb-remove {
+    background: #DE4223;
+    color: #fff;
+}
+
+.sortable-placeholder {
+    background: #ddd;
+    background-image: repeating-linear-gradient(45deg, #eee, #eee 2px, transparent 0, transparent 8px);
+}
