@@ -149,6 +149,17 @@ function easl_get_the_event_subpage_id($include_parent_subpage = false) {
 /**
  * @return WP_Post|null
  */
+function easl_get_the_event_subpage_post() {
+    $current_sub_page = easl_get_the_event_subpage();
+    if ( empty( $current_sub_page['subpage'] ) ) {
+        return null;
+    }
+    
+    return get_post( $current_sub_page['subpage'] );
+}
+/**
+ * @return WP_Post|null
+ */
 function easl_get_the_event_subpage() {
     if(!is_singular('event')) {
         return null;
@@ -181,10 +192,12 @@ function easl_get_the_event_subpage() {
 			continue;
 		}
 		if ( ! empty( $subpage['slug'] ) && trim( $subpage['slug'] ) == $subpage_request ) {
-			$found_subpage = true;
 			if($subpage2_request) {
+                $found_subpage = true;
 				$found_subpage2 = easl_event_subpage_maybe_found_in_subpage($subpage, $subpage2_request);
-			}
+			}else{
+                $found_subpage = $subpage;
+            }
 			break;
 		}
 	}

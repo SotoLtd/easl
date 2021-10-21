@@ -408,6 +408,9 @@ hr.in-the-bottom {
 }
 
 /*Table*/
+.site-content table th, .site-content table td{
+    vertical-align: top;
+}
 .table-first-col-nowrap > tr > td:first-child,
 .table-first-col-nowrap > tr > th:first-child,
 .table-first-col-nowrap > thead > tr > th:first-child,
@@ -4967,6 +4970,20 @@ body.single-event {
     position: relative;
     text-decoration: none;
 }
+.event-button.addeventatc {
+    background-color: #004b87;
+    color: #fff!important;
+    display: inline-block;
+    font-size: 16px;
+    font-weight: 700;
+    font-family: inherit!important;
+    line-height: 22px;
+    padding: 15px 30px 15px 15px;
+    position: relative;
+    text-decoration: none;
+    border-radius: 0;
+    text-shadow: none;
+}
 
 .event-button-light-blue {
     background-color: #80c4e5;
@@ -5322,11 +5339,15 @@ ul.event-links-list li:before {
 
 /* Add to Calendar */
 
-.addeventatc {
+body .addeventatc {
     display: inline-block;
     position: relative;
     z-index: 99998;
     cursor: pointer;
+    border: none;
+    box-shadow: none!important;
+    background-image: none!important;
+    padding: 0;
 }
 
 .addeventatc:hover {
@@ -5338,9 +5359,7 @@ ul.event-links-list li:before {
 .addeventatc-selected {
 }
 
-.addeventatc .addeventatc_icon {
-}
-
+.addeventatc .addeventatc_ico,
 .addeventatc .start,
 .addeventatc .end,
 .addeventatc .timezone,
@@ -8507,7 +8526,7 @@ ul.suggestions {
     font-size: 20px;
 }
 .ste-buttons-wrap .event-button.addeventatc {
-    padding-left: 46px;
+    padding: 15px 30px 15px 46px;
 }
 
 .ste-buttons-wrap .event-button:first-child {
@@ -11978,6 +11997,32 @@ body .mentors-application-title {
 body #onesignal-bell-container.onesignal-reset.onesignal-bell-container-bottom-right {
     bottom: 37px;
     right: -14px;
+}
+/*Shortcode table*/
+table.agenda-table p,
+table.agenda-table h3 {
+    color: inherit;
+}
+table.agenda-table td {
+    border: 1px solid #000;
+}
+tr.agenda-table-row-blue {
+    background-color: #1b3157;
+    color: #fff;
+}
+tr.agenda-table-row-blue td > * {
+    color: #fff;
+}
+tr.agenda-table-row-lightblue {
+    background-color: #a9bfe1;
+    color: #333;
+}
+tr.agenda-table-row-yellow {
+    background-color: #fde0d0;
+    color: #333;
+}
+td.nowrap {
+    white-space: nowrap;
 }
 
 /* Survey Monkey */

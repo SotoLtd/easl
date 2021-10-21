@@ -184,7 +184,7 @@ function easl_vc_shortcodes_custom_css($custom_css, $post_id) {
     if(get_post_type($post_id) != 'event') {
         return $custom_css;
     }
-    $event_subpage = easl_get_the_event_subpage();
+    $event_subpage = easl_get_the_event_subpage_post();
     if ( ! $event_subpage ) {
         return $custom_css;
     }
