@@ -1970,8 +1970,28 @@ body .wpb_single_image a.easl-vc-image-over:after {
     width: 100%;
     height: 100%;
 }
+/*VC Shortcode: easl_tv_iframe*/
+.easl-tv-iframe {
+    width: 100%;
+}
 
-    /*VC Shortcode: EASL Button*/
+.easl-tv-iframe-inner {
+    padding-top: 56.25%;
+    height: 0;
+    overflow: hidden;
+    position: relative;
+    margin-bottom: 25px;
+    width: 100%;
+}
+.easl-tv-iframe iframe {
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+}
+
+/*VC Shortcode: EASL Button*/
 .easl-button-wrapper a {
     position: relative;
     padding-left: 63px;

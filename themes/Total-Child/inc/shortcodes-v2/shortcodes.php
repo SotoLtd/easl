@@ -18,6 +18,7 @@ function easl_vc_get_shortcodes() {
 		'easl_news',
 		'easl_popular_blogs',
 		'easl_publitus_iframe',
+		'easl_tv_iframe',
 		'easl_scientific_publication',
 		'easl_table',
 	);
