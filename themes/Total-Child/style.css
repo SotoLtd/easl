@@ -1971,6 +1971,10 @@ body .wpb_single_image a.easl-vc-image-over:after {
     height: 100%;
 }
 /*VC Shortcode: easl_tv_iframe*/
+.easl-tv-iframe-wrap {
+    margin-left: -15px;
+    margin-right: -15px;
+}
 .easl-tv-iframe {
     width: 100%;
 }
