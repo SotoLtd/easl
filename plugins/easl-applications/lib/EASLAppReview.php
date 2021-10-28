@@ -105,13 +105,27 @@ class EASLAppReview {
         }
         
         if ($forCSV) {
+            $application_other_set = false;
             foreach($fields as $key => $field) {
                 $data = get_field($key, $submission->ID);
-
+                if($field->key == 'applicant_profile' && 'other' == $data ) {
+                    $application_other_set = true;
+                    continue;
+                }
+                if(!$application_other_set && $field->key == 'applicant_profile_other') {
+                    continue;
+                }
+                
                 if ($field->type === 'file') {
                     $data = $data['url'];
-                }elseif ( in_array($field->type, ['select', 'radio', 'checkbox']) && isset($field->settings['choices'][$data])){
+                }elseif ( in_array($field->type, ['select', 'radio']) && isset($field->settings['choices'][$data])){
                     $data = $field->settings['choices'][$data];
+                }elseif ('checkbox' == $field->type) {
+                    $fields_value = [];
+                    foreach ($data as $data_key){
+                        $fields_value[] = $field->settings['choices'][$data_key];
+                    }
+                    $data = implode(' | ', $fields_value);
                 }
                 $data = str_replace(';', '-', $data);
 
@@ -133,7 +147,11 @@ class EASLAppReview {
     public function exportCSV($programmeId, $fieldSetContainer) {
 
         //Get an array of fields that we are going to want to export
-        $headerFields = ['ID', 'Title', 'Name', 'Email', 'Phone number', 'Date of Birth', 'Country', 'Application date', 'Job function'];
+        $headerFields = ['ID', 'Title', 'Name', 'Email', 'Phone number', 'Date of Birth', 'Country', 'Application date',];
+    
+        if('masterclass' == get_field( 'programme-category', $programmeId )) {
+            $headerFields[] = 'Job function';
+        }
         $fieldSets = $fieldSetContainer->getFieldSets();
         $fields = [];
 
@@ -142,7 +160,7 @@ class EASLAppReview {
                 if ($field->hideFromOutput) {
                     continue;
                 }
-                if('date_of_birth' != $field->key) {
+                if('date_of_birth' != $field->key && 'applicant_profile_other' != $field->key) {
                     $headerFields[] = $field->name;
                     $fieldKey = $fieldSet->getFieldKey($field);
                     $fields[$fieldKey] = $field;
@@ -161,7 +179,7 @@ class EASLAppReview {
             $reviewers = [];
         }
 
-        $scoringCriteria = get_field('scoring_criteria', $programmeId);
+        $scoringCriteria = easl_app_get_scoring_criteria($programmeId);
         
         if(!is_array($scoringCriteria)) {
             $scoringCriteria = [];
@@ -393,19 +411,17 @@ class EASLAppReview {
 
         $programmeId = get_post_meta($submissionId, 'programme_id', true);
         $programme = get_post($programmeId);
-	    $otherSchoolsApps = easl_app_users_other_schools_app_for_this_reviewer($submissionId, $loggedInUserData['email1']);
 
         $this->renderTemplate('review.php', [
             'submission' => $submission,
             'programme' => $programme,
             'fields' => $fields,
             'reviewManager' => $this,
-            'scoringCriteria' => get_field('scoring_criteria', $programmeId),
+            'scoringCriteria' => easl_app_get_scoring_criteria($programmeId, $submissionId),
             'reviews' => $reviews,
             'myReview' => $myReview,
             'saveReviewErrors' => $saveReviewErrors,
             'isAdmin' => $this->isAdmin,
-	        'otherSchoolsApps' => $otherSchoolsApps,
         ]);
     }
 

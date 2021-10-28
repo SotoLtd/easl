@@ -16,7 +16,7 @@ if(!empty($programmeId)){
     $programmeCategory = get_field('programme-category', $programmeId);
 }
 
-if('easl-schools' == $programmeCategory){
+if(in_array($programmeCategory, ['easl-schools', 'easl-schools-all'])){
     $message = 'You will be notified as to whether you have been successful by the end of April 2022.';
 }else{
     $message = 'Your application will be reviewed by external reviewers and the EASL Governing Board. You will be notified as to whether you have been successful within three months of the application deadline.';

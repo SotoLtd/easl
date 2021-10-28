@@ -5,7 +5,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 
 
-class EASLSchoolsFieldContainer extends AbstractFieldContainer {
+class EASLSchoolsCombinedFieldContainer extends AbstractFieldContainer {
 
     protected function registerFieldSets() {
 
@@ -55,9 +55,28 @@ class EASLSchoolsFieldContainer extends AbstractFieldContainer {
             'application_documents',
             'Application documents',
             [
+                new EASLApplicationField('schools', 'Schools:', 'checkbox', [
+                    'choices' => [
+                        'amsterdam' => 'School Amsterdam',
+                        'barcelona' => 'School Barcelona',
+                        'frankfurt' => 'School Frankfurt',
+                        'hamburg' => 'School Hamburg',
+                    ]
+                ]),
                 new EASLApplicationField('cv', 'CV', 'file', ['instructions' => 'Max 4 pages']),
                 new EASLApplicationField('confirmation_age_training_status', 'Confirmation of age or training status', 'file', ['instructions' => 'Please provide a copy of ID or certificate of enrollment']),
-                new EASLApplicationField('reference_letter', 'Reference Letter', 'file'),
+                new EASLApplicationField('reference_letter_amsterdam', 'Reference Letter for School Amsterdam', 'file', [], false, [
+                    'schools', 'amsterdam'
+                ]),
+                new EASLApplicationField('reference_letter_barcelona', 'Reference Letter for School Barcelona', 'file', [], false, [
+                    'schools', 'barcelona'
+                ]),
+                new EASLApplicationField('reference_letter_frankfurt', 'Reference Letter for School Frankfurt', 'file', [], false, [
+                    'schools', 'frankfurt'
+                ]),
+                new EASLApplicationField('reference_letter_hamburg', 'Reference Letter for School Hamburg', 'file', [], false, [
+                    'schools', 'hamburg'
+                ]),
             ]
         );
 

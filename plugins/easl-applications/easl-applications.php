@@ -20,6 +20,7 @@ class EASLApplicationsPlugin {
         'fellowship' => 'Fellowship',
         'masterclass' => 'EASL Masterclass',
         'easl-schools' => 'EASL Schools',
+        'easl-schools-all' => 'EASL Schools Combined',
         'sponsorship' => 'Sponsorship',
         'mentorship' => 'Mentorship',
         'registry-grant' => 'Registry Grant',
@@ -251,6 +252,7 @@ class EASLApplicationsPlugin {
             'registry-grant'        => 'RegistryGrantFieldContainer',
             'sponsorship'           => 'EndorsementFieldContainer',
             'easl-schools'          => 'EASLSchoolsFieldContainer',
+            'easl-schools-all'      => 'EASLSchoolsCombinedFieldContainer',
             'masterclass'           => 'MasterclassFieldContainer',
             'daniel-alagille-award' => 'DanielAlagilleAwardFieldContainer',
             'emerging-leader-award' => 'EmergingLeaderAwardFieldContainer',
@@ -359,8 +361,6 @@ class EASLApplicationsPlugin {
             'meta_key' => 'member_id',
             'meta_value' => 'f1647138-4546-11eb-8adc-00505642212',
         ) );
-        var_dump($submissions);die();
-        
         if ( ! $submissions ) {
             var_dump( 'not found' );
             die();
@@ -398,7 +398,6 @@ class EASLApplicationsPlugin {
 //                        $meta['sizes'] = array();
 //                        update_post_meta( $field_value, '_wp_attachment_metadata', $meta );
 //                    }
-                    //var_dump($meta);
 //                    $file         = get_attached_file( $field_value );
 //                    $file = str_replace('/applications/app-' . $sub_id, '', $file);
 //                    // Remove intermediate and backup images if there are any.

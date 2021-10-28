@@ -10,7 +10,6 @@ if ( ! defined( 'ABSPATH' ) ) {
  * @var array $reviews
  * @var array $fields
  * @var array $scoringCriteria
- * @var array $otherSchoolsApps
  */
 ?>
 <h1>Review submission: <?=$submission->post_title;?></h1>
@@ -50,6 +49,14 @@ if ( ! defined( 'ABSPATH' ) ) {
                                 <?php endif;?>
                             <?php elseif ($field['type'] == 'select'):?>
                                 <?=$field['choices'][$field['value']];?>
+                            <?php elseif ($field['type'] == 'checkbox'):?>
+                                <?php
+                                    $fields_value = [];
+                                    foreach ($field['value'] as $value_key){
+                                        $fields_value[] = $field['choices'][$value_key];
+                                    }
+                                    echo implode(', ', $fields_value);
+                                ?>
                             <?php else:?>
                                 <?=$field['value'];?>
                             <?php endif;?>
@@ -95,23 +102,6 @@ if ( ! defined( 'ABSPATH' ) ) {
             <h2>Review submission</h2>
 
             <form method="post">
-	            <?php
-	            if($otherSchoolsApps):?>
-                    <div class="has-other-programme">
-                        <p>This applicant also applied on other schools. This review will be saved to other applications as well.</p>
-                        <ul>
-				            <?php
-				            foreach ($otherSchoolsApps as $other_schools_app):
-					            $otherProgrammeId = get_post_meta($other_schools_app, 'programme_id', true);
-					            ?>
-                                <li>
-                                    <a href="/review-applications?subpage=<?php echo EASLAppReview::PAGE_SUBMISSION; ?>&submissionId=<?php echo $other_schools_app; ?>"><?php echo get_the_title($otherProgrammeId); ?></a>
-                                    <input type="hidden" name="easl_app_other_schools_sub[]" value="<?php echo $other_schools_app; ?>">
-                                </li>
-				            <?php  endforeach; ?>
-                        </ul>
-                    </div>
-	            <?php endif; ?>
             <?php foreach($scoringCriteria as $i => $category):
                 if ($myReview) {
                     $myScore = array_filter($myReview['scoring'], function($c) use ($category) {

@@ -35,70 +35,6 @@ function easl_app_show_personal_info( $field ) {
     echo '<p>If you want to update your personal details, please go <a href="'. $member_profile_url .'" target="_blank">My Profile</a> page.</p>';
 }
 
-function easl_app_users_other_schools_app_for_this_reviewer($submissionId, $reviewerEmail) {
-	$programmeId = get_post_meta($submissionId, 'programme_id', true);
-	if('easl-schools' != get_field( 'programme-category', $programmeId )) {
-		return false;
-	}
-	$thisYear = date('Y');
-	$otherProgrammes = get_posts( [
-		'post_type' => 'programme',
-		'numberposts' => - 1,
-		'fields' => 'ids',
-		'meta_query' => [
-			[
-				'key' => 'programme-category',
-				'value' => 'easl-schools',
-				'compare' => '='
-			],
-			[
-				'key'     => 'end_date',
-				'compare' => '>',
-				'value'   => $thisYear . '0000',
-			],
-			[
-				'key'     => 'end_date',
-				'compare' => '<=',
-				'value'   => $thisYear . '1231',
-			],
-			[
-				'key'     => 'reviewers',
-				'compare' => 'LIKE',
-				'value'   => $reviewerEmail,
-			],
-		]
-	] );
-	if(!$otherProgrammes) {
-		return false;
-	}
-	$appMemberId = get_post_meta($submissionId, 'member_id', true);
-	
-	$submissions = get_posts([
-		'post_type' => 'submission',
-		'post_status' => 'any',
-		'posts_per_page' => -1,
-		'post__not_in' => [$submissionId],
-		'fields' => 'ids',
-		'meta_query' => [
-			[
-				'key' => 'member_id',
-				'value' => $appMemberId,
-				'compare' => '='
-			],
-			[
-				'key' => 'programme_id',
-				'value' => $otherProgrammes,
-				'compare' => 'IN'
-			],
-			[
-				'key' => 'submitted_timestamp',
-				'compare' => 'EXISTS'
-			]
-		]
-	]);
-	return $submissions;
-}
-
 function easl_app_get_my_review_id($submissionId, $reviewer_email) {
 	$reviews = get_posts([
 		'post_type' => 'submission-review',
@@ -131,4 +67,38 @@ function easl_app_email_form_email($form_email){
 }
 function easl_app_email_form_name($form_name){
 	return 'EASL Applications';
+}
+
+function easl_app_get_scoring_criteria($programme_id, $submission_id = false) {
+    $category = get_field( 'programme-category', $programme_id );
+    if('easl-schools-all' == $category) {
+        $school_criteria = get_field('scoring_criteria_schools', $programme_id);
+        $scoring_criteria = array();
+        $scoring_criteria[] = array(
+            'criteria_name' => 'Detailed CV',
+            'criteria_max' => $school_criteria['detailed_cv_max_score'],
+            'criteria_instructions' => '',
+        );
+        $scoring_criteria[] = array(
+            'criteria_name' => 'Publications',
+            'criteria_max' => $school_criteria['publications_max_score'],
+            'criteria_instructions' => '',
+        );
+        $schools = ['amsterdam', 'barcelona', 'frankfurt', 'hamburg'];
+        if($submission_id){
+            $schools = get_field('easl-schools-all_application_documents_schools', $submission_id);
+        }
+        foreach ( $schools as $school ) {
+            $scoring_criteria[] = array(
+                'criteria_name'         => 'Reference Letter - School ' . ucfirst($school),
+                'criteria_max'          => $school_criteria['reference_letter_max_score'],
+                'criteria_instructions' => '',
+            );
+        }
+    }else{
+        $scoring_criteria = get_field('scoring_criteria', $programme_id);
+    }
+    
+    return $scoring_criteria;
+    
 }
