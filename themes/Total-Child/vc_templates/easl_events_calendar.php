@@ -168,12 +168,18 @@ $top_filter = '
 							    	</button>
 							    </div>
 								<div class="ec-filter-fields">
-								    <div class="ec-filter-field-wrap">
-										<div class="ecf-events-types" style="margin-bottom: 15px">
-											<label class="easl-custom-radio"><input type="radio" name="organizer" data-events="'. esc_attr( json_encode($organizer_events_map[1])) .'" value="1" checked="checked"/> <span>EASL organised</span></label>
-											<label class="easl-custom-radio"><input type="radio" name="organizer" data-events="'. esc_attr( json_encode($organizer_events_map[2])) .'" value="2"/> <span>Other events</span></label>
+								    <div class="ec-filter-field-wrap ecf-col-full">
+                                        <div class="ecf-events-types" style="margin-bottom: 15px">
+                                                <label class="easl-custom-radio"><input type="radio" name="organizer" data-events="'. esc_attr( json_encode($organizer_events_map[1])) .'" value="1" checked="checked"/> <span>EASL organised</span></label>
+                                                <label class="easl-custom-radio"><input type="radio" name="organizer" data-events="'. esc_attr( json_encode($organizer_events_map[3])) .'" value="3"/> <span>EASL endorsed</span></label>
+                                                <label class="easl-custom-radio"><input type="radio" name="organizer" data-events="'. esc_attr( json_encode($organizer_events_map[2])) .'" value="2"/> <span>Other events</span></label>
 										</div>
-									
+										<div class="ecf-events-types">
+											<label class="easl-custom-radio"><input type="radio" name="ec_filter_type" data-events="'. esc_attr( json_encode($past_future_events_map['future'])) .'"  value="future" checked="checked"/> <span>Future events</span></label>
+											<label class="easl-custom-radio"><input type="radio" name="ec_filter_type" data-events="'. esc_attr( json_encode($past_future_events_map['past'])) .'" value="past"/> <span>Past events</span></label>
+										</div>
+								    </div>
+								    <div class="ec-filter-field-wrap ecf-col-half ecf-left">
 										<div class="easl-custom-select easl-custom-select-filter-type">
 											<span class="ec-cs-label">Meeting type</span>
 											<select name="ec_meeting_type">
@@ -181,12 +187,7 @@ $top_filter = '
 											</select>
 										</div>
 									</div>
-									<div class="ec-filter-field-wrap ec-filter-field-location">
-										<div class="ecf-events-types" style="margin-bottom: 15px">
-											<label class="easl-custom-radio"><input type="radio" name="ec_filter_type" data-events="'. esc_attr( json_encode($past_future_events_map['future'])) .'"  value="future" checked="checked"/> <span>Future events</span></label>
-											<label class="easl-custom-radio"><input type="radio" name="ec_filter_type" data-events="'. esc_attr( json_encode($past_future_events_map['past'])) .'" value="past"/> <span>Past events</span></label>
-										</div>
-									
+									<div class="ec-filter-field-wrap ecf-col-half ecf-right ec-filter-field-location">
 										<div class="easl-custom-select easl-custom-select-filter-location">
 											<span class="ec-cs-label">Location</span>
 											<select name="ec_location">
@@ -194,10 +195,10 @@ $top_filter = '
 											</select>
 										</div>
 									</div>
-									<div class="ec-filter-field-wrap ec-hide-mob">
+									<div class="ec-filter-field-wrap ecf-col-half ec-hide-mob ecf-left">
 										
 									</div>
-									<div class="ec-filter-field-wrap ec-hide-mob" style="margin-bottom:0;margin-top: 34px;">
+									<div class="ec-filter-field-wrap ecf-col-half ec-hide-mob ecf-right" style="margin-bottom:0;margin-top: 34px;">
 										<div class="easl-filter-reset-wrap">
 											<button class="easl-ecf-reset"><i class="ticon ticon-times-circle"></i> Clear filters</button>
 										</div>

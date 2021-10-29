@@ -85,6 +85,15 @@ if( class_exists('WPBakeryShortCode') ){
 					$return[$item->organiser_type] = array();
 				}
 			}
+            if ( ! isset( $return[1] ) ) {
+                $return[1] = array();
+            }
+            if ( ! isset( $return[2] ) ) {
+                $return[2] = array();
+            }
+            if ( ! isset( $return[3] ) ) {
+                $return[3] = array();
+            }
 			return $return;
 		}
 
