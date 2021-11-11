@@ -51,7 +51,15 @@ if($menu_bg_custom_color) {
                 if('subpage' != get_sub_field('content_source')) {
 	                $current_slug_for_2nd_level = $current_sub_page;
                 }
-                $sub_menus = easl_get_event_subpages_sub_pages_html(get_sub_field('subpages'), $url, $draft_or_pending, $current_slug_for_2nd_level);
+                $include_in_subpage = get_sub_field('include_in_subpage');
+                $title_in_subpage = '';
+                if($include_in_subpage) {
+                    $title_in_subpage = get_sub_field('title_in_subpage');
+                    if(!$title_in_subpage) {
+                        $title_in_subpage = $title;
+                    }
+                }
+                $sub_menus = easl_get_event_subpages_sub_pages_html(get_sub_field('subpages'), $url, $draft_or_pending, $current_slug_for_2nd_level, $title_in_subpage, ($current_sub_page == $slug));
                 $sub_menus_html = '';
                 if(!empty($sub_menus['html'])) {
 	                $sub_menus_html = $sub_menus['html'];

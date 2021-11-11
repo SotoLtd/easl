@@ -237,7 +237,7 @@ function easl_get_event_subpage_by_slug($event_id, $current_sub_page_slug) {
     return $subpage_post;
 }
 
-function easl_get_event_subpages_sub_pages_html($subpages, $parent_url, $draft_or_pending, $current_slug) {
+function easl_get_event_subpages_sub_pages_html($subpages, $parent_url, $draft_or_pending, $current_slug, $title_in_subpage = '', $is_parent_current = false) {
 	$menu_html = '';
 	$has_current_item = false;
 	if(!$subpages) {
@@ -268,6 +268,14 @@ function easl_get_event_subpages_sub_pages_html($subpages, $parent_url, $draft_o
 		$menu_html .= '<li class="'. $item_class .'"><a href="'. esc_url($url) .'">' . $subpage['title'] . '</a></li>';
 	}
 	if($menu_html) {
+	    if($title_in_subpage) {
+            $mirror_item_class = 'ste-submenu-item';
+	        if(!$has_current_item && $is_parent_current) {
+	            $mirror_item_class .= ' easl-active';
+                $has_current_item = true;
+            }
+            $menu_html = '<li class="'. $mirror_item_class .'"><a href="'. esc_url($parent_url) .'">' . $title_in_subpage . '</a></li>' . $menu_html;;
+        }
 		$menu_html = '<div class="ste-submenu-wrap"><ul class="ste-submenu">' . $menu_html . '</ul></div';
 	}
 	
