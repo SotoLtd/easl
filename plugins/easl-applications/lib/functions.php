@@ -86,7 +86,7 @@ function easl_app_get_scoring_criteria($programme_id, $submission_id = false) {
         );
         $schools = ['amsterdam', 'barcelona', 'frankfurt', 'hamburg'];
         if($submission_id){
-            $schools = get_field('easl-schools-all_application_documents_schools', $submission_id);
+            $schools = get_field('easl-schools-all_programme_information_schools', $submission_id);
         }
         foreach ( $schools as $school ) {
             $scoring_criteria[] = array(

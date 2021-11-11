@@ -10,9 +10,17 @@ class EASLSchoolsCombinedFieldContainer extends AbstractFieldContainer {
     protected function registerFieldSets() {
 
         $applicantInformationFieldSet = $this->makeFieldSet(
-            'project_information',
-            'Project information',
+            'programme_information',
+            'Programme information',
             [
+                new EASLApplicationField('schools', 'Schools:', 'checkbox', [
+                    'choices' => [
+                        'amsterdam' => 'School Amsterdam',
+                        'barcelona' => 'School Barcelona',
+                        'frankfurt' => 'School Frankfurt',
+                        'hamburg' => 'School Hamburg',
+                    ]
+                ]),
                 new EASLApplicationField('date_of_birth', 'Date of birth', 'date_picker', [
                     'display_format' => 'd/m/Y',
                     'return_format' => 'd/m/Y'
@@ -48,21 +56,7 @@ class EASLSchoolsCombinedFieldContainer extends AbstractFieldContainer {
                 new EASLApplicationField('abstracts_at_easl_events_title', 'Abstracts presented at EASL events: Titles of publications / abstracts', 'text'),
                 new EASLApplicationField('abstracts_at_non_easl_events_year', 'Abstracts presented at non-EASL events: Presentation years', 'text'),
                 new EASLApplicationField('abstracts_at_non_easl_events_title', 'Abstracts presented at non-EASL events: Titles of publications / abstracts', 'text'),
-            ]
-        );
 
-        $applicationDocumentFieldSet = $this->makeFieldSet(
-            'application_documents',
-            'Application documents',
-            [
-                new EASLApplicationField('schools', 'Schools:', 'checkbox', [
-                    'choices' => [
-                        'amsterdam' => 'School Amsterdam',
-                        'barcelona' => 'School Barcelona',
-                        'frankfurt' => 'School Frankfurt',
-                        'hamburg' => 'School Hamburg',
-                    ]
-                ]),
                 new EASLApplicationField('cv', 'CV', 'file', ['instructions' => 'Max 4 pages']),
                 new EASLApplicationField('confirmation_age_training_status', 'Confirmation of age or training status', 'file', ['instructions' => 'Please provide a copy of ID or certificate of enrollment']),
                 new EASLApplicationField('reference_letter_amsterdam', 'Reference Letter for School Amsterdam', 'file', [], false, [
@@ -77,13 +71,6 @@ class EASLSchoolsCombinedFieldContainer extends AbstractFieldContainer {
                 new EASLApplicationField('reference_letter_hamburg', 'Reference Letter for School Hamburg', 'file', [], false, [
                     'schools', 'hamburg'
                 ]),
-            ]
-        );
-
-        $additionalInformationFieldSet = $this->makeFieldSet(
-            'additional_information',
-            'Additional Information',
-            [
                 new EASLApplicationField('previously_applied', 'Have you participated in previous EASL schools?', 'radio', [
                     'choices' => [
                         'yes' => 'Yes',
@@ -105,8 +92,6 @@ class EASLSchoolsCombinedFieldContainer extends AbstractFieldContainer {
 
         $this->fieldSets = [
             $applicantInformationFieldSet,
-            $applicationDocumentFieldSet,
-            $additionalInformationFieldSet,
             $confirmationFieldSet
         ];
     }
