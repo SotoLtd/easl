@@ -15,10 +15,10 @@ class EASLSchoolsCombinedFieldContainer extends AbstractFieldContainer {
             [
                 new EASLApplicationField('schools', 'Schools:', 'checkbox', [
                     'choices' => [
-                        'amsterdam' => 'School Amsterdam',
-                        'barcelona' => 'School Barcelona',
-                        'frankfurt' => 'School Frankfurt',
-                        'hamburg' => 'School Hamburg',
+                        'amsterdam' => 'Clinical School Padua',
+                        'barcelona' => 'Clinical School London',
+                        'frankfurt' => 'Basic science school London',
+                        'hamburg'   => 'Clinical School Freiburg',
                     ]
                 ]),
                 new EASLApplicationField('date_of_birth', 'Date of birth', 'date_picker', [
