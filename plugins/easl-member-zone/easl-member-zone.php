@@ -14,7 +14,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 
 
-define( 'EASL_MZ_VERSION', '1.3.3' );
+define( 'EASL_MZ_VERSION', '1.3.7' );
 
 //define( 'EASL_MZ_VERSION', time() );
 
@@ -224,6 +224,7 @@ class EASL_MZ_Manager {
 	public function init() {
 		$this->add_options_page();
 		$this->handle_member_login();
+		//$this->handle_other_member_login();
 		$this->handle_member_logout();
 		$this->handle_mz_actions();
 
@@ -313,7 +314,7 @@ class EASL_MZ_Manager {
 			return false;
 		}
 		if(!empty($_POST['mz_is_renew'])) {
-			$redirect = easl_member_new_membership_form_url( true );;
+			$redirect = easl_member_new_membership_form_url( true );
 		}
 		// Member authenticated
 		do_action( 'easl_mz_member_authenticated', $member_login, $this->api->get_credential_data( true ), $redirect );
@@ -334,6 +335,42 @@ class EASL_MZ_Manager {
 		}
 
 	}
+	
+	public function handle_other_member_login() {
+        if ( empty( $_GET['mz_other_member_login'] ) ) {
+            return false;
+        }
+        $member_login    = $_GET['mz_other_member_login'];
+        $redirect        = get_field( 'member_dashboard_url', 'option' );
+        $member_id = $this->api->get_member_by_email( $member_login );
+        
+        if ( ! $member_id ) {
+            $this->set_message( 'login_error', 'Invalid username.' );
+            
+            return false;
+        }
+        // Member authenticated
+        $dummy_session_data = array(
+            'access_token'       => wp_generate_password( 43, false, false ),
+            'refresh_token'      => wp_generate_password( 43, false, false ),
+            'expires_in'         => 3600,
+            'refresh_expires_in' => 3600,
+            'scope'              => '',
+            'download_token'     => '',
+        );
+        do_action( 'easl_mz_member_authenticated', $member_login, $dummy_session_data, $redirect );
+        $this->session->add_data( 'member_id', $member_id );
+        $this->session->save_session_data();
+
+        do_action( 'easl_mz_member_logged_id' );
+
+        if ( ! $redirect ) {
+            $redirect = site_url();
+        }
+        if ( wp_redirect( $redirect ) ) {
+            exit;
+        }
+    }
 
 	public function handle_member_logout() {
 		if ( empty( $_REQUEST['mz_logout'] ) ) {

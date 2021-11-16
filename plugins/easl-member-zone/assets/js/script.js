@@ -274,6 +274,13 @@
             } else {
                 $specialityOther.addClass("easl-mz-hide");
             }
+    
+            if ($speciality.val() && (-1 !== $speciality.val().indexOf("other"))) {
+                $specialityOther.removeClass("easl-mz-hide");
+            } else {
+                $specialityOther.addClass("easl-mz-hide");
+            }
+            
             $speciality.on("change", function () {
                 if ($(this).val() && (-1 !== $(this).val().indexOf("other"))) {
                     $specialityOther.removeClass("easl-mz-hide");
@@ -370,7 +377,23 @@
             });
     
             if($el.hasClass('easl-highlight-errors')) {
-                $(".mzms-button-has-empty-fields", $el).length && $(".mzms-button-has-empty-fields", $el).trigger('click');
+                var $button = $(".mzms-button-has-empty-fields", $el);
+                var Errors = {};
+                if($button.length < 1) {
+                    return
+                }
+                Errors = $button.data("errors");
+                Errors = Errors || {};
+                for (var fieldName in Errors) {
+                    _this.showFieldError(fieldName, Errors[fieldName], $el);
+                }
+                setTimeout(function (){
+                    mzModal.init();
+                    mzModal.show('<div class="mz-modal-password-changed">Please fix the errors with highlighted fields!</div>', 'account.fields.empty');
+                }, 1000);
+                
+                
+                $button.data("doSubmit", true);
             }
             $("#easl-mz-membership-form").on("submit", function (event) {
                 event.preventDefault();

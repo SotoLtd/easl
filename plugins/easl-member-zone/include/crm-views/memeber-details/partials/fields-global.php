@@ -122,6 +122,7 @@ if ( ! defined( 'ABSPATH' ) ) {
             <label class="mzms-field-label" for="mzf_dotb_place_of_work">Place of work <span class="mzms-asteric">*</span></label>
             <div class="mzms-field-wrap">
                 <select class="easl-mz-select2" name="dotb_place_of_work" id="mzf_dotb_place_of_work" data-placeholder="Select one option"  style="width: 100%;">
+                    <option value=""></option>
                     <?php echo easl_mz_get_crm_dropdown_items( 'places_of_work', $member['dotb_place_of_work'] ); ?>
                 </select>
             </div>
