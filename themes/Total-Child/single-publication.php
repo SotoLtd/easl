@@ -33,7 +33,7 @@ get_header(); ?>
 				    if(is_null($members_only)) {
 				        $members_only = true;
                     }
-                    if ( has_term('policy-statements', 'publication_category', get_the_ID()) || easl_mz_user_can_access_memberzone_page( get_the_ID() ) ) {
+                    if ( has_term(['policy-statements', 'eu-publications'], 'publication_category', get_the_ID()) || easl_mz_user_can_access_memberzone_page( get_the_ID() ) ) {
                         // Single publication
                         get_template_part( 'partials/publication/publication-single-layout' );
                     } elseif ( easl_mz_is_member_logged_in() ) {
