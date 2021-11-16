@@ -59,16 +59,16 @@ class EASLSchoolsCombinedFieldContainer extends AbstractFieldContainer {
 
                 new EASLApplicationField('cv', 'CV', 'file', ['instructions' => 'Max 4 pages']),
                 new EASLApplicationField('confirmation_age_training_status', 'Confirmation of age or training status', 'file', ['instructions' => 'Please provide a copy of ID or certificate of enrollment']),
-                new EASLApplicationField('reference_letter_amsterdam', 'Reference Letter for School Amsterdam', 'file', [], false, [
+                new EASLApplicationField('reference_letter_amsterdam', 'Motivation Letter for Clinical School Padua', 'file', [], false, [
                     'schools', 'amsterdam'
                 ]),
-                new EASLApplicationField('reference_letter_barcelona', 'Reference Letter for School Barcelona', 'file', [], false, [
+                new EASLApplicationField('reference_letter_barcelona', 'Motivation Letter for Clinical School London', 'file', [], false, [
                     'schools', 'barcelona'
                 ]),
-                new EASLApplicationField('reference_letter_frankfurt', 'Reference Letter for School Frankfurt', 'file', [], false, [
+                new EASLApplicationField('reference_letter_frankfurt', 'Motivation Letter for Basic science school London', 'file', [], false, [
                     'schools', 'frankfurt'
                 ]),
-                new EASLApplicationField('reference_letter_hamburg', 'Reference Letter for School Hamburg', 'file', [], false, [
+                new EASLApplicationField('reference_letter_hamburg', 'Motivation Letter for Clinical School Freiburg', 'file', [], false, [
                     'schools', 'hamburg'
                 ]),
                 new EASLApplicationField('previously_applied', 'Have you participated in previous EASL schools?', 'radio', [

@@ -184,11 +184,11 @@ acf_add_local_field_group( array(
                     'step'              => 1,
                 ),
                 array(
-                    'key'               => 'field_appreciation_by_reviewer_max_score',
-                    'label'             => 'Appreciation by reviewer Max Score',
-                    'name'              => 'appreciation_by_reviewer_max_score',
+                    'key'               => 'field_reference_letter_max_score',
+                    'label'             => 'Motivation Letter Max Score',
+                    'name'              => 'reference_letter_max_score',
                     'type'              => 'number',
-                    'instructions'      => 'Enter the maximum score that can be achieved for Appreciation by reviewer',
+                    'instructions'      => 'Enter the maximum score that can be achieved for Motivation Letter. This will duplicated for the selected schools.',
                     'required'          => 1,
                     'conditional_logic' => 0,
                     'wrapper'           => array(
@@ -205,11 +205,11 @@ acf_add_local_field_group( array(
                     'step'              => 1,
                 ),
                 array(
-                    'key'               => 'field_reference_letter_max_score',
-                    'label'             => 'Reference Letter Max Score',
-                    'name'              => 'reference_letter_max_score',
+                    'key'               => 'field_appreciation_by_reviewer_max_score',
+                    'label'             => 'Appreciation by reviewer Max Score',
+                    'name'              => 'appreciation_by_reviewer_max_score',
                     'type'              => 'number',
-                    'instructions'      => 'Enter the maximum score that can be achieved for Reference Letter. This will duplicated for the selected schools.',
+                    'instructions'      => 'Enter the maximum score that can be achieved for Appreciation by reviewer',
                     'required'          => 1,
                     'conditional_logic' => 0,
                     'wrapper'           => array(

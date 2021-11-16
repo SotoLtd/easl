@@ -84,22 +84,22 @@ function easl_app_get_scoring_criteria($programme_id, $submission_id = false) {
             'criteria_max' => $school_criteria['publications_max_score'],
             'criteria_instructions' => '',
         );
-        $scoring_criteria[] = array(
-            'criteria_name' => 'Appreciation by reviewer',
-            'criteria_max' => $school_criteria['appreciation_by_reviewer_max_score'],
-            'criteria_instructions' => '',
-        );
         $schools = ['amsterdam', 'barcelona', 'frankfurt', 'hamburg'];
         if($submission_id){
             $schools = get_field('easl-schools-all_programme_information_schools', $submission_id);
         }
         foreach ( $schools as $school ) {
             $scoring_criteria[] = array(
-                'criteria_name'         => 'Reference Letter - School ' . ucfirst($school),
+                'criteria_name'         => 'Motivation Letter - School ' . ucfirst($school),
                 'criteria_max'          => $school_criteria['reference_letter_max_score'],
                 'criteria_instructions' => '',
             );
         }
+        $scoring_criteria[] = array(
+            'criteria_name' => 'Appreciation by reviewer',
+            'criteria_max' => $school_criteria['appreciation_by_reviewer_max_score'],
+            'criteria_instructions' => '',
+        );
     }else{
         $scoring_criteria = get_field('scoring_criteria', $programme_id);
     }
