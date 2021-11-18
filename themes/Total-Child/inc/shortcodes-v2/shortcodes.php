@@ -20,6 +20,7 @@ function easl_vc_get_shortcodes() {
 		'easl_publitus_iframe',
 		'easl_tv_iframe',
 		'easl_scientific_publication',
+		'easl_staffs',
 		'easl_table',
 	);
 
