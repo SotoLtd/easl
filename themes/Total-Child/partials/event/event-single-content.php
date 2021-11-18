@@ -99,23 +99,54 @@ if(easl_regular_event_has_sidebar_content()) {
                             </a>
                         </li>
 					<?php endif; ?>
-					<?php if ( 'past' != $event_time_type ): ?>
+                    <?php if ( 'past' != $event_time_type && get_field('atc_enable')): ?>
+                        <?php
+                        $atc_alt_title = get_field('atc_alt_title');
+                        $atc_start_time = get_field('atc_start_time');
+                        $atc_end_time = get_field('atc_end_time');
+                        $atc_description = get_field('atc_description');
+    
+                        if(!$atc_alt_title) {
+                            $atc_alt_title = get_the_title();
+                        }
+                        $atc_start_date = '';
+                        if ( $event_start_date ){
+                            $atc_start_date = date( 'm/d/Y', $event_start_date );
+                            if($atc_start_time) {
+                                $atc_start_date .= ' ' . $atc_start_time;
+                            }
+                        }
+                        $atc_end_date = '';
+                        if ( $event_end_date ){
+                            $atc_end_date = date( 'm/d/Y', $event_end_date );
+                            if($atc_end_time) {
+                                $atc_end_date .= ' ' . $atc_end_time;
+                            }
+                        }
+    
+                        ?>
                         <li class="event-link-calendar" style="float: left;border: none;margin-right: 40px">
                             <div title="Add to Calendar" class="addeventatc">
-										<span class="event-link-item" href="" style="display: inline-block">
-											<span class="event-link-icon"><i class="ticon ticon-calendar-plus-o"
-                                                        aria-hidden="true"></i></span>
-											<span class="event-link-text">Add to Calendar</span>
-										</span>
-								<?php if ( $event_start_date ): ?>
-                                    <span class="start"><?php echo date( 'Y-m-d', $event_start_date ); ?></span>
-								<?php endif; ?>
-								<?php if ( $event_end_date ): ?>
-                                    <span class="end"><?php echo date( 'Y-m-d', $event_end_date ); ?></span>
-								<?php endif; ?>
-                                <span class="timezone">America/Los_Angeles</span>
-                                <span class="title"><?php the_title(); ?></span>
-                                <span class="location"><?php echo $event_location_display; ?></span>
+                                <span class="event-link-item" href="" style="display: inline-block">
+                                    <span class="event-link-icon"><i class="ticon ticon-calendar-plus-o"
+                                                aria-hidden="true"></i></span>
+                                    <span class="event-link-text">Add to Calendar</span>
+                                </span>
+                                <?php if ( $atc_start_date ): ?>
+                                    <span class="start"><?php echo $atc_start_date; ?></span>
+                                <?php endif; ?>
+                                <?php if ( $atc_end_date ): ?>
+                                    <span class="end"><?php echo $atc_end_date; ?></span>
+                                <?php endif; ?>
+                                <span class="date_format">MM/DD/YYYY</span>
+                                <?php if ( $atc_description ): ?>
+                                    <span class="description">Description of event</span>
+                                <?php endif; ?>
+                                <span class="timezone">Europe/Zurich</span>
+                                <span class="title"><?php echo $atc_alt_title; ?></span>
+                                <?php if($event_location_display): ?>
+                                    <span class="location"><?php echo $event_location_display; ?></span>
+                                <?php endif; ?>
                             </div>
                         </li>
 					<?php endif; ?>

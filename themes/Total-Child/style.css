@@ -5002,7 +5002,7 @@ body.single-event {
     background-color: #004b87;
     color: #fff!important;
     display: inline-block;
-    font-size: 16px;
+    font-size: 16px!important;
     font-weight: 700;
     font-family: inherit!important;
     line-height: 22px;
@@ -5388,6 +5388,7 @@ body .addeventatc {
 }
 
 .addeventatc .addeventatc_ico,
+.addeventatc .addeventatc_icon,
 .addeventatc .start,
 .addeventatc .end,
 .addeventatc .timezone,
@@ -8551,7 +8552,7 @@ ul.suggestions {
     min-width: 220px;
     margin-left: 15px;
     text-align: left;
-    font-size: 20px;
+    font-size: 20px!important;
 }
 .ste-buttons-wrap .event-button.addeventatc {
     padding: 15px 30px 15px 46px;

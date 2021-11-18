@@ -2,6 +2,11 @@
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
+/**
+ * @var int $row_count
+ * @var string $previous_events_month
+ * @var string $css_animation
+ */
 $event_id = get_the_ID();
 $event_data = get_post_meta($event_id);
 
@@ -64,54 +69,7 @@ if($event_start_month){
 if($event_end_month && ($event_start_month != $event_end_month)){
 	$event_date_month .= '/' . $event_end_month;
 }
-
-if(!in_array( $event_location_display_format, array('venue|city,contury', 'venue,Country', 'venue', 'city,contury' ))) {
-	$event_location_display_format = 'venue|city,contury';
-}
-
-$event_location_display_format = 'city,contury';
-
-$event_location_display = array();
-$event_location = array();
-
-
-if('venue|city,contury' == $event_location_display_format){
-	if($event_location_venue){
-		$event_location_display[] = $event_location_venue;
-	}
-	if($event_location_city){
-		$event_location[] = $event_location_city;
-	}
-	if($event_location_country){
-		$event_location[] = easl_event_map_country_key($event_location_country );
-	}
-	if(count($event_location > 0)){
-		$event_location_display[] = implode(', ', $event_location);
-	}
-	$event_location_display = implode( ' | ', $event_location_display );
-}elseif('venue,Country' == $event_location_display_format){
-	if($event_location_venue){
-		$event_location_display[] = $event_location_venue;
-	}
-	if($event_location_country){
-		$event_location_display[] = easl_event_map_country_key($event_location_country );
-	}
-	$event_location_display = implode( ', ', $event_location_display );
-}elseif('venue' == $event_location_display_format){
-	$event_location_display = $event_location_venue;
-}elseif('city,contury' == $event_location_display_format){
-	if($event_location_city){
-		$event_location_display[] = $event_location_city;
-	}
-	if($event_location_country){
-		$event_location_display[] = easl_event_map_country_key($event_location_country );
-	}
-	$event_location_display = implode( ', ', $event_location_display );
-}else{
-	$event_location_display = '';
-}
-
-
+$event_location_display     = easl_get_formatted_event_location( $event_id );
 
 $event_color = easl_get_events_topic_color($event_id);
 
@@ -250,20 +208,55 @@ $event_highlights = wp_parse_args($event_highlights, array(
 						</a>
 					</li>
 					<?php endif; ?>
-					<?php if('past' != $event_time_type): ?>
+					<?php if('past' != $event_time_type && get_field('atc_enable', $event_id)): ?>
+                        <?php
+                        $atc_alt_title = get_field('atc_alt_title', $event_id);
+                        $atc_start_time = get_field('atc_start_time', $event_id);
+                        $atc_end_time = get_field('atc_end_time', $event_id);
+                        $atc_description = get_field('atc_description', $event_id);
+                        
+                        if(!$atc_alt_title) {
+                            $atc_alt_title = get_the_title($event_id);
+                        }
+                        $atc_start_date = '';
+                        if ( $event_start_date ){
+                            $atc_start_date = date( 'm/d/Y', $event_start_date );
+                            if($atc_start_time) {
+                                $atc_start_date .= ' ' . $atc_start_time;
+                            }
+                        }
+                        $atc_end_date = '';
+                        if ( $event_end_date ){
+                            $atc_end_date = date( 'm/d/Y', $event_end_date );
+                            if($atc_end_time) {
+                                $atc_end_date .= ' ' . $atc_end_time;
+                            }
+                        }
+                        
+                        ?>
 					<li class="ec-links-calendar">
 						<div title="Add to Calendar" class="addeventatc">
-							<span class="event-link-item" href="">
+							<span class="event-link-item">
 								<span class="icon-wrapper">
 									<span class="ec-links-icon calendar"></span>
 								</span>
 								<span class="ec-link-text"> Add to <br/>Calendar</span>
 							</span>
-							<span class="start"><?php echo date('Y-m-d', $event_start_date); ?></span>
-							<span class="end"><?php echo date('Y-m-d', $event_end_date); ?></span>
-							<span class="timezone">America/Los_Angeles</span>
-							<span class="title"><?php the_title(); ?></span>
-							<span class="location"><?php echo $event_location_display; ?></span>
+                            <?php if ( $atc_start_date ): ?>
+                                <span class="start"><?php echo $atc_start_date; ?></span>
+                            <?php endif; ?>
+                            <?php if ( $atc_end_date ): ?>
+                                <span class="end"><?php echo $atc_end_date; ?></span>
+                            <?php endif; ?>
+                            <span class="date_format">MM/DD/YYYY</span>
+                            <?php if ( $atc_description ): ?>
+                                <span class="description">Description of event</span>
+                            <?php endif; ?>
+                            <span class="timezone">Europe/Zurich</span>
+                            <span class="title"><?php echo $atc_alt_title; ?></span>
+                            <?php if($event_location_display): ?>
+                                <span class="location"><?php echo $event_location_display; ?></span>
+                            <?php endif; ?>
 						</div>
 					</li>
 					<?php endif; ?>

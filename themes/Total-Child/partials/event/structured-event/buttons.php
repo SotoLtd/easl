@@ -44,22 +44,53 @@ $event_location_display     = easl_get_formatted_event_location( get_the_ID() );
 		<?php if ( $event_register_url && $register_button_show ): ?>
 			<a class="event-button event-button-icon event-button-icon-person" href="<?php echo esc_url( $event_register_url ); ?>" target="_blank"><?php echo $event_register_title; ?></a>
 		<?php endif; ?>
-        <?php if ( 'past' != $event_time_type ): ?>
+        <?php if ( 'past' != $event_time_type && get_field('atc_enable', $event_id) ): ?>
+        <?php
+                $atc_alt_title = get_field('atc_alt_title', $event_id);
+                $atc_start_time = get_field('atc_start_time', $event_id);
+                $atc_end_time = get_field('atc_end_time', $event_id);
+                $atc_description = get_field('atc_description', $event_id);
+                
+                if(!$atc_alt_title) {
+                    $atc_alt_title = get_the_title($event_id);
+                }
+                $atc_start_date = '';
+                if ( $event_start_date ){
+                    $atc_start_date = date( 'm/d/Y', $event_start_date );
+                    if($atc_start_time) {
+                        $atc_start_date .= ' ' . $atc_start_time;
+                    }
+                }
+                $atc_end_date = '';
+                if ( $event_end_date ){
+                    $atc_end_date = date( 'm/d/Y', $event_end_date );
+                    if($atc_end_time) {
+                        $atc_end_date .= ' ' . $atc_end_time;
+                    }
+                }
+                
+        ?>
             <div title="Add to Calendar" class="addeventatc event-button">
                 <span class="event-link-item">
                     <span class="event-link-icon"><i class="ticon ticon-calendar-plus-o"
                                 aria-hidden="true"></i></span>
                     <span class="event-link-text">Add to Calendar</span>
                 </span>
-                <?php if ( $event_start_date ): ?>
-                    <span class="start"><?php echo date( 'Y-m-d', $event_start_date ); ?></span>
+                <?php if ( $atc_start_date ): ?>
+                    <span class="start"><?php echo $atc_start_date; ?></span>
                 <?php endif; ?>
-                <?php if ( $event_end_date ): ?>
-                    <span class="end"><?php echo date( 'Y-m-d', $event_end_date ); ?></span>
+                <?php if ( $atc_end_date ): ?>
+                    <span class="end"><?php echo $atc_end_date; ?></span>
                 <?php endif; ?>
-                <span class="timezone">America/Los_Angeles</span>
-                <span class="title"><?php the_title(); ?></span>
+                <span class="date_format">MM/DD/YYYY</span>
+                <?php if ( $atc_description ): ?>
+                    <span class="description">Description of event</span>
+                <?php endif; ?>
+                <span class="timezone">Europe/Zurich</span>
+                <span class="title"><?php echo $atc_alt_title; ?></span>
+                <?php if($event_location_display): ?>
                 <span class="location"><?php echo $event_location_display; ?></span>
+                <?php endif; ?>
             </div>
         <?php endif; ?>
 	</div>
