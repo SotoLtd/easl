@@ -113,6 +113,9 @@ switch ($organizer){
     case 'other':
 	    $organizer = 2;
 	    break;
+    case 'easl_endorsed':
+	    $organizer = 3;
+	    break;
 }
 if($organizer){
     $meta_query[] = array(
