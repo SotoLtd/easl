@@ -11,7 +11,7 @@
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
-
+remove_action( 'wpex_hook_main_bottom', 'wpex_next_prev', 10 );
 get_header(); ?>
 
 	<div id="content-wrap" class="container clr">
@@ -48,6 +48,7 @@ get_header(); ?>
 			<?php wpex_hook_content_after(); ?>
 
 		</div><!-- #primary -->
+        <?php get_template_part('partials/event/recommended') ?>
 
 		<?php //wpex_hook_primary_after(); ?>
 

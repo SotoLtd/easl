@@ -7181,6 +7181,9 @@ ul.suggestions {
     font-weight: 700;
     font-size: 13px;
 }
+.easl-recommended-events {
+    padding-top: 20px;
+}
 
 /* News tag */
 .tag #content-wrap {
@@ -12583,6 +12586,21 @@ td.nowrap {
         display: none !important;
     }
 
+    /*Shortcode: Events */
+
+    .easl-events-list-wrap ul.easl-events-grid-3 {
+        display: flex;
+        align-items: flex-start;
+        justify-content: flex-start;
+    }
+    .easl-events-list-wrap ul.easl-events-grid-3 > .easl-events-li {
+        width: calc((100% - 40px) / 3);
+        margin-right: 20px;
+    }
+    .easl-events-list-wrap ul.easl-events-grid-3 > .easl-events-li:last-child {
+        margin-right: 0;
+    }
+
     /*Slide decks*/
     .easl-slide-deck-item-has-thumb {
         isplay: -webkit-box;
@@ -12938,7 +12956,10 @@ td.nowrap {
     }
 
     /* VC Shortcode: EASL Events */
-    /*Shortcode: Events Calendar*/
+    .easl-events-list-wrap ul.easl-events-grid-3 > .easl-events-li {
+        margin-bottom: 30px;
+    }
+        /*Shortcode: Events Calendar*/
     .ec-hide-mob {
         display: none !important;
     }

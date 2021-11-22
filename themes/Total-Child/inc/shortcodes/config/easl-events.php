@@ -107,6 +107,7 @@ return array(
 			'value'		 => array(
 				__( 'All', 'total-child' ) => '',
 				__( 'EASL', 'total-child' )	 => 'easl',
+				__( 'EASL endorsed', 'total-child' )	 => 'easl_endorsed',
 				__( 'Other', 'total-child' )	 => 'other',
 			),
 			'group'		 => __( 'Query', 'total-child' ),

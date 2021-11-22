@@ -84,7 +84,7 @@ $event_location_display     = easl_get_formatted_event_location( get_the_ID() );
                 <?php endif; ?>
                 <span class="date_format">MM/DD/YYYY</span>
                 <?php if ( $atc_description ): ?>
-                    <span class="description">Description of event</span>
+                    <span class="description"><?php echo $atc_description; ?></span>
                 <?php endif; ?>
                 <span class="timezone">Europe/Zurich</span>
                 <span class="title"><?php echo $atc_alt_title; ?></span>
