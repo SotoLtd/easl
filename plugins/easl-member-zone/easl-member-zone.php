@@ -625,24 +625,25 @@ class EASL_MZ_Manager {
 
         $this->api->get_user_auth_token();
 
-        $updated = $this->api->update_member_personal_info( $member_id, $contact_data );
+        $updated = $this->api->update_member_personal_info( $member_id, $contact_data, false );
 
         if ( ! $updated ) {
-            $this->respond( 'Error!', 500 );
+            $this->set_message( 'membership_error', 'Membership could not be updated.' );
+            return null;
         }
-
+        
 		$membership_id = $this->api->create_membership( $membership_api_data );
 
 		if ( ! $membership_id ) {
 			$this->set_message( 'membership_error', 'Membership could not be created.' );
 
-			return;
+			return null;
 		}
 		$membership_number = $this->api->add_membeship_to_member( $member_id, $membership_id );
 		if ( ! $membership_number ) {
 			$this->set_message( 'membership_error', 'Membership created but it could not be linked to contact.' );
 
-			return;
+			return null;
 		}
 		$membership_cart_data = array(
 			'membership_created_id' => $membership_id,
@@ -694,7 +695,7 @@ class EASL_MZ_Manager {
 			wp_redirect( $redirect_url );
 			exit();
 		}
-
+        return null;
 	}
 
 	public function handle_payment_feedback() {
