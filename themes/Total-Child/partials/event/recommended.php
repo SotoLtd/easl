@@ -12,31 +12,32 @@ $event_args      = array(
     'order'          => 'ASC',
     'orderby'        => 'meta_value_num',
     'meta_key'       => 'event_start_date',
+    'meta_query'     =>  array(
+        'relation' => 'AND',
+        array(
+            'key'     => 'event_organisation',
+            'value'   => array( 1, 3 ),
+            'compare' => 'IN',
+            'type'    => 'NUMERIC',
+        ),
+        array(
+            'relation' => 'OR',
+            array(
+                'key'     => 'event_start_date',
+                'value'   => $now_time - 86399,
+                'compare' => '>=',
+                'type'    => 'NUMERIC',
+            ),
+            array(
+                'key'     => 'event_end_date',
+                'value'   => $now_time - 86399,
+                'compare' => '>=',
+                'type'    => 'NUMERIC',
+            ),
+        )
+    ),
 );
-$meta_query      = array();
-$meta_query_date = array();
 
-$meta_query_date[] = array(
-    'relation' => 'OR',
-    array(
-        'key'     => 'event_start_date',
-        'value'   => $now_time - 86399,
-        'compare' => '>=',
-        'type'    => 'NUMERIC',
-    ),
-    array(
-        'key'     => 'event_end_date',
-        'value'   => $now_time - 86399,
-        'compare' => '>=',
-        'type'    => 'NUMERIC',
-    ),
-);
-$meta_query[]      = array(
-    'key'     => 'event_organisation',
-    'value'   => array( 1, 3 ),
-    'compare' => 'IN',
-    'type'    => 'NUMERIC',
-);
 $event_query       = new WP_Query( $event_args );
 if ( $event_query->have_posts() ):
     ?>

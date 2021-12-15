@@ -22,6 +22,7 @@ function easl_vc_get_shortcodes() {
 		'easl_scientific_publication',
 		'easl_staffs',
 		'easl_table',
+		'easl_yt_player',
 	);
 
 	return $shortcodes;

@@ -125,7 +125,7 @@ return array(
 			'type'		 => 'css_editor',
 			'heading'	 => __( 'CSS box', 'total-child' ),
 			'param_name' => 'css',
-			'group'		 => __( 'total-child', 'total-child' ),
+			'group'		 => __( 'Design', 'total-child' ),
 		),
 		array(
 			'type'       => 'vcex_ofswitch',
