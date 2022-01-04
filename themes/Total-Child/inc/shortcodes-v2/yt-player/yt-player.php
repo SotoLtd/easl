@@ -9,6 +9,16 @@ class EASL_VC_Youtube_Player extends EASL_ShortCode {
 		}
 		return $attachment_url;
 	}
+    
+    public function get_video_id_from_input( $input ) {
+        $input = trim( $input );
+        if ( strpos( $input, 'http') === false ) {
+            return $input;
+        }
+        preg_match( '%(?:youtube(?:-nocookie)?\.com/(?:[^/]+/.+/|(?:v|e(?:mbed)?)/|.*[?&]v=)|youtu\.be/)([^"&?/ ]{11})%i', $input, $match );
+        
+        return $match[1];
+    }
 	public function load_scripts(){
 		if(!self::$script_loaded){
 			self::$script_loaded = true;

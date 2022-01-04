@@ -54,7 +54,7 @@ if(!$play_icon_pos) {
     $play_icon_pos = 'center-middle';
 }
 $css_class .= ' play-icon-pos-' . $play_icon_pos;
-
+$video_id = $this->get_video_id_from_input($video_id);
 if ( $video_id ):
     if ( $lightbox ) {
         wp_enqueue_script( 'fancybox', get_stylesheet_directory_uri() . '/assets/js/jquery.fancybox.min.js', array( 'jquery' ), '3.5.7', true );

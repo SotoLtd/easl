@@ -29,11 +29,11 @@ return array(
         ),
         array(
             'type'        => 'textfield',
-            'heading'     => __( 'Video ID', 'total-child' ),
+            'heading'     => __( 'Video ID/URL', 'total-child' ),
             'admin_label' => true,
             'param_name'  => 'video_id',
             'value'       => '',
-            'description' => __( 'Enter the youtube video ID.', 'total-child' ),
+            'description' => __( 'Enter the youtube video ID/url.', 'total-child' ),
             'group'       => __( 'Video Info', 'total' ),
         ),
         array(
