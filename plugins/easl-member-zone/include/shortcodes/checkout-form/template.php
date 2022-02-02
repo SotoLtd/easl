@@ -256,7 +256,16 @@ if ( easl_mz_is_member_logged_in() ):
                         <?php endif; ?>
                     </div>
                     <div class="mz-checkout-submit-row">
-                        <span class="mz-input-submit-wrap mzms-button"><input type="submit" value="Submit" id="submit2" name="submit2"></span>
+                        <?php
+                        if ( in_array( $member['dotb_mb_current_status'], array( 'expired', 'active' ) ) ) {
+                            $membership_button_url   = easl_member_new_membership_form_url( true );
+                        } else {
+                            $membership_button_title = 'Add Membership';
+                            $membership_button_url   = easl_member_new_membership_form_url( false );
+                        }
+                        ?>
+                        <a class="mzms-button mz-checkout-back" href="<?php echo $membership_button_url; ?>">Back</a>
+                        <span class="mz-input-submit-wrap mzms-button mz-checkout-submit"><input type="submit" value="Submit" id="submit2" name="submit2"></span>
                     </div>
 
                 </form>

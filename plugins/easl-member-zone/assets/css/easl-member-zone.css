@@ -2523,7 +2523,21 @@ span.mzms-field-file-button {
 }
 
 .mz-checkout-submit-row {
-    text-align: right;
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+}
+.mz-checkout-submit-row .mz-checkout-back {
+    padding-left: 25px;
+    padding-right: 12px;
+}
+.mz-checkout-submit-row .mz-checkout-back::after {
+    content: "\f104";
+    left: 10px;
+    right: auto;
+}
+.mz-checkout-submit-row .mz-checkout-submit {
+
 }
 
 
