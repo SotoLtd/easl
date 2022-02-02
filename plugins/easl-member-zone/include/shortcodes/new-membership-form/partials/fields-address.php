@@ -3,6 +3,9 @@
 if ( ! defined( 'ABSPATH' ) ) {
 	die( '-1' );
 }
+/**
+ * @var array $member
+ */
 ?>
 
 <div class="mzms-fields-row">
@@ -21,7 +24,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 				<div class="mzms-fields-con">
 					<label class="mzms-field-label" for="mzf_primary_address_street">Street <span class="mzms-asteric">*</span></label>
 					<div class="mzms-field-wrap">
-						<textarea name="primary_address_street" id="mzf_primary_address_street" placeholder="" autocomplete="off"></textarea>
+						<textarea name="primary_address_street" id="mzf_primary_address_street" placeholder="" autocomplete="off"><?php echo esc_textarea( $member['primary_address_street'] ); ?><</textarea>
 					</div>
 				</div>
 			</div>
@@ -29,7 +32,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 				<div class="mzms-fields-con">
 					<label class="mzms-field-label" for="mzf_primary_address_city">City <span class="mzms-asteric">*</span></label>
 					<div class="mzms-field-wrap">
-						<input type="text" placeholder="" name="primary_address_city" id="mzf_primary_address_city" value="" autocomplete="off">
+						<input type="text" placeholder="" name="primary_address_city" id="mzf_primary_address_city" value="<?php echo esc_attr( $member['primary_address_city'] ); ?>" autocomplete="off">
 					</div>
 				</div>
 			</div>
@@ -37,7 +40,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 				<div class="mzms-fields-con">
 					<label class="mzms-field-label" for="mzf_primary_address_state">State <span class="mzms-asteric">*</span></label>
 					<div class="mzms-field-wrap">
-						<input type="text" placeholder="" name="primary_address_state" id="mzf_primary_address_state" value="" autocomplete="off">
+						<input type="text" placeholder="" name="primary_address_state" id="mzf_primary_address_state" value="<?php echo esc_attr( $member['primary_address_state'] ); ?>" autocomplete="off">
 					</div>
 				</div>
 			</div>
@@ -45,7 +48,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 				<div class="mzms-fields-con">
 					<label class="mzms-field-label" for="mzf_primary_address_postalcode">Postal code <span class="mzms-asteric">*</span></label>
 					<div class="mzms-field-wrap">
-						<input type="text" placeholder="" name="primary_address_postalcode" id="mzf_primary_address_postalcode" value="" autocomplete="off">
+						<input type="text" placeholder="" name="primary_address_postalcode" id="mzf_primary_address_postalcode" value="<?php echo esc_attr( $member['primary_address_postalcode'] ); ?>" autocomplete="off">
 					</div>
 				</div>
 			</div>
@@ -55,7 +58,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 					<div class="mzms-field-wrap">
 						<select class="easl-mz-select2" name="primary_address_country" id="mzf_primary_address_country" data-placeholder="Select an option" style="width: 100%;">
                             <option value=""></option>
-							<?php echo easl_mz_get_crm_dropdown_items( 'countries', '' ); ?>
+							<?php echo easl_mz_get_crm_dropdown_items( 'countries', $member['primary_address_country'] ); ?>
 						</select>
 					</div>
 				</div>
@@ -69,7 +72,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 				<div class="mzms-fields-con">
 					<label class="mzms-field-label" for="mzf_alt_address_street">Street</label>
 					<div class="mzms-field-wrap">
-						<textarea name="alt_address_street" id="mzf_alt_address_street" placeholder="" autocomplete="off"></textarea>
+						<textarea name="alt_address_street" id="mzf_alt_address_street" placeholder="" autocomplete="off"><?php echo esc_textarea( $member['alt_address_street'] ); ?></textarea>
 					</div>
 				</div>
 			</div>
@@ -77,7 +80,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 				<div class="mzms-fields-con">
 					<label class="mzms-field-label" for="mzf_alt_address_city">City</label>
 					<div class="mzms-field-wrap">
-						<input type="text" placeholder="" name="alt_address_city" id="mzf_alt_address_city" value="" autocomplete="off">
+						<input type="text" placeholder="" name="alt_address_city" id="mzf_alt_address_city" value="<?php echo esc_attr( $member['alt_address_city'] ); ?>" autocomplete="off">
 					</div>
 				</div>
 			</div>
@@ -85,7 +88,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 				<div class="mzms-fields-con">
 					<label class="mzms-field-label" for="mzf_alt_address_state">State</label>
 					<div class="mzms-field-wrap">
-						<input type="text" placeholder="" name="alt_address_state" id="mzf_alt_address_state" value="" autocomplete="off">
+						<input type="text" placeholder="" name="alt_address_state" id="mzf_alt_address_state" value="<?php echo esc_attr( $member['alt_address_state'] ); ?>" autocomplete="off">
 					</div>
 				</div>
 			</div>
@@ -93,7 +96,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 				<div class="mzms-fields-con">
 					<label class="mzms-field-label" for="mzf_alt_address_postalcode">Postal code</label>
 					<div class="mzms-field-wrap">
-						<input type="text" placeholder="" name="alt_address_postalcode" id="mzf_alt_address_postalcode" value="" autocomplete="off">
+						<input type="text" placeholder="" name="alt_address_postalcode" id="mzf_alt_address_postalcode" value="<?php echo esc_attr( $member['alt_address_postalcode'] ); ?>" autocomplete="off">
 					</div>
 				</div>
 			</div>
@@ -103,7 +106,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 					<div class="mzms-field-wrap">
 						<select class="easl-mz-select2" name="alt_address_country" id="mzf_alt_address_country" data-placeholder="Select an option" style="width: 100%;">
                             <option value=""></option>
-							<?php echo easl_mz_get_crm_dropdown_items( 'countries' ); ?>
+							<?php echo easl_mz_get_crm_dropdown_items( 'countries', $member['alt_address_country'] ); ?>
 						</select>
 					</div>
 				</div>

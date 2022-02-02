@@ -526,6 +526,12 @@ class EASL_MZ_Manager {
 		if ( $renew && ( $current_end_date != 'now' ) ) {
 			$status = 'active';
 		}
+        if ( in_array( $member_cat, array(
+            'trainee_jhep',
+            'trainee',
+        ) ) ) {
+            $status = 'active';
+        }
 
 		switch ( $_POST['membership_payment_type'] ) {
 			case 'ingenico_epayments':
@@ -556,6 +562,7 @@ class EASL_MZ_Manager {
 			'billing_type'   => $billing_type,
 			'billing_mode'   => $billing_mode,
 			//'billing_amount' => $membership_cat_fee,
+            'fellow_mentor' => true,
 		);
         $eilf_donation_amount = '';
         if ( ! empty( $_POST['eilf_donation'] ) ) {

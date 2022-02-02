@@ -214,7 +214,7 @@ if ( ! $member_has_waiting_payemnt ):
                 <div class="mzms-fields-con">
                     <label class="mzms-field-label" for="mzms_personal_profile">Personal Profile</label>
                     <div class="mzms-field-wrap">
-                        <textarea name="description" id="mzms_personal_profile" placeholder=""></textarea>
+                        <textarea name="description" id="mzms_personal_profile" placeholder=""><?php echo esc_textarea( wp_unslash($member['description'] )); ?></textarea>
                     </div>
                 </div>
             </div>
