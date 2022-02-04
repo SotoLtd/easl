@@ -95,6 +95,13 @@ function easl_app_get_scoring_criteria($programme_id, $submission_id = false) {
                 'criteria_instructions' => '',
             );
         }
+        foreach ( $schools as $school ) {
+            $scoring_criteria[] = array(
+                'criteria_name'         => 'Recommendation Letter - School ' . ucfirst($school),
+                'criteria_max'          => $school_criteria['recommendation_letter_max_score'],
+                'criteria_instructions' => '',
+            );
+        }
         $scoring_criteria[] = array(
             'criteria_name' => 'Appreciation by reviewer',
             'criteria_max' => $school_criteria['appreciation_by_reviewer_max_score'],

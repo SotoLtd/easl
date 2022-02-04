@@ -61,7 +61,9 @@ class EASLApplicationsPlugin {
         add_action('admin_menu', [$this, 'adminMenu']);
         add_action('acf/save_post', [EASLAppSubmission::class, 'onSavePost'], 10, 1);
         add_action('acf/init', [$this, 'addOptionsFields']);
-
+        
+        add_filter('acf/validate_value/name=easl-schools-all_programme_information_schools', [$this, 'restrict_combine_schools_selection'], 20, 4);
+        
         add_filter('wp_nav_menu_items', [$this, 'addReviewMenuItem'], 10, 2);
         add_action( 'admin_enqueue_scripts', [$this, 'admin_scripts'] );
         
@@ -150,6 +152,12 @@ class EASLApplicationsPlugin {
         }
     }
     
+    public function restrict_combine_schools_selection($valid, $value, $field, $input) {
+        if (count($value) > 2) {
+            $valid = 'Max 2 schools are allowed.';
+        }
+        return $valid;
+    }
     public function addOptionsFields() {
         acf_add_local_field_group( [
             'key'      => 'key_pages',

@@ -71,6 +71,18 @@ class EASLSchoolsCombinedFieldContainer extends AbstractFieldContainer {
                 new EASLApplicationField('reference_letter_hamburg', 'Motivation Letter for Clinical School Freiburg', 'file', [], false, [
                     'schools', 'hamburg'
                 ]),
+                new EASLApplicationField('recommendation_letter_amsterdam', 'Recommendation Letter for Clinical School Padua', 'file', [], false, [
+                    'schools', 'amsterdam'
+                ]),
+                new EASLApplicationField('recommendation_letter_barcelona', 'Recommendation Letter for Clinical School London', 'file', [], false, [
+                    'schools', 'barcelona'
+                ]),
+                new EASLApplicationField('recommendation_letter_frankfurt', 'Recommendation Letter for Basic science school London', 'file', [], false, [
+                    'schools', 'frankfurt'
+                ]),
+                new EASLApplicationField('recommendation_letter_hamburg', 'Recommendation Letter for Clinical School Freiburg', 'file', [], false, [
+                    'schools', 'hamburg'
+                ]),
                 new EASLApplicationField('previously_applied', 'Have you participated in previous EASL schools?', 'radio', [
                     'choices' => [
                         'yes' => 'Yes',
