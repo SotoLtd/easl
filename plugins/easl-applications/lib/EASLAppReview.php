@@ -429,12 +429,13 @@ class EASLAppReview {
      * @param $programmeId
      * @return int[]|WP_Post[]
      */
-    protected function getSubmissionPosts($programmeId) {
-        return get_posts([
+    protected function getSubmissionPosts($programmeId, $status = 'any' , $schools = false, $ids_only = false) {
+        $args = [
             'post_type' => 'submission',
-            'post_status' => 'any',
+            'post_status' => $status,
             'posts_per_page' => -1,
             'meta_query' => [
+                'relation' => 'AND',
                 [
                     'key' => 'programme_id',
                     'value' => $programmeId,
@@ -445,7 +446,24 @@ class EASLAppReview {
                     'compare' => 'EXISTS'
                 ]
             ]
-        ]);
+        ];
+        if($schools) {
+            $school_meta = [
+                'relation' => 'OR',
+            ];
+            foreach ($schools as $school) {
+                $school_meta[] = [
+                    'key' => 'easl-schools-all_programme_information_schools',
+                    'compare' => 'RLIKE',
+                    'value' => '^[^"]+"' . $school .'"',
+                ];
+            }
+            $args['meta_query'][] = $school_meta;
+        }
+        if($ids_only) {
+            $args['fields'] = 'ids';
+        }
+        return get_posts($args);
     }
 
     /**
@@ -453,8 +471,8 @@ class EASLAppReview {
      * @param null $reviewerEmail
      * @return array
      */
-    protected function getSubmissions($programmeId, $reviewerEmail = null) {
-        $submission_posts = $this->getSubmissionPosts($programmeId);
+    protected function getSubmissions($programmeId, $reviewerEmail = null, $status = 'any', $schools=false) {
+        $submission_posts = $this->getSubmissionPosts($programmeId, $status, $schools);
 
         return array_map(function($submission) use ($reviewerEmail, $programmeId) {
 
@@ -514,7 +532,7 @@ class EASLAppReview {
             'submissions' => $submissions,
             'programme' => $programme,
             'tab' => $tab,
-            'reviewManager' => $this
+            'reviewManager' => $this,
         ]);
     }
 
@@ -539,30 +557,113 @@ class EASLAppReview {
         $loggedInUserData = easl_mz_get_logged_in_member_data();
 
         $validProgrammes = $this->getProgrammesUserCanReview($loggedInUserData['email1']);
-
-        if (count($validProgrammes) === 1) {
+    
+        if(!$programmeId && count($validProgrammes) !== 1) {
+            EASLApplicationsPlugin::load_template('review/programme-list.php', [
+                'reviewManager' => $this,
+                'validProgrammes' => $validProgrammes
+            ]);
+            return;
+        }
+        
+        if(!$programmeId && (count($validProgrammes) === 1) ) {
             $programmeId = $validProgrammes[0]->ID;
         }
-
-        if ($programmeId) {
-            $programme = get_post($programmeId);
-            $programmeIsValid = array_filter($validProgrammes, function($p) use ($programmeId) {
-                return $p->ID == $programmeId;
-            });
-            if (!$programmeIsValid) {
-                $error = 'You have not been invited as a reviewer for this programme.';
-            }
-        } else {
-            $programme = null;
+        if(!$programmeId) {
+            return;
         }
-
-        $submissions = $this->getSubmissions($programmeId, $loggedInUserData['email1']);
-        $this->renderTemplate('submissions.php', [
+        $programme = get_post($programmeId);
+        $programmeIsValid = array_filter($validProgrammes, function($p) use ($programmeId) {
+            return $p->ID == $programmeId;
+        });
+        if (!$programmeIsValid) {
+            echo '<h2>You have not been invited as a reviewer for this programme.</h2>';
+            return;
+        }
+    
+        $category = get_field( 'programme-category', $programmeId );
+        $current_school = !empty($_GET['school']) ? $_GET['school'] : '';
+        $schools = false;
+        $programme_schools_applied = [];
+        if('easl-schools-all' == $category) {
+            $programme_schools_applied = $this->get_programmes_school_applied($programmeId, $loggedInUserData['email1']);
+            if(!$programme_schools_applied) {
+                echo '<h2>No application in any of the schools.</h2>';
+                return;
+            }
+            $schools = array_keys($programme_schools_applied);
+        }
+        if($current_school) {
+            $schools = [$current_school];
+        }
+        $submissions = $this->getSubmissions($programmeId, $loggedInUserData['email1'], 'publish', $schools);
+        EASLApplicationsPlugin::load_template('review/submissions.php', [
             'submissions' => $submissions,
             'programme' => $programme,
+            'schools' => $programme_schools_applied,
+            'current_school' => $current_school,
+            'total_applications' => $this->getNumberSubmissions($programmeId, array_keys($programme_schools_applied)),
             'reviewManager' => $this,
             'validProgrammes' => $validProgrammes
         ]);
+        return;
+    }
+    
+    public function get_reviewer_schools( $programme_id, $reviewer_email ) {
+        $schools                  = [
+            'amsterdam' => 'Clinical School Padua',
+            'barcelona' => 'Clinical School London',
+            'frankfurt' => 'Basic science school London',
+            'hamburg'   => 'Clinical School Freiburg',
+        ];
+        $current_reviewer_schools = false;
+        if ( $reviewer_email ) {
+            $programme_reviewers = $this->getProgrammeReviewers( $programme_id );
+            foreach ( $programme_reviewers as $pr ) {
+                if ( empty( $pr['email'] || empty( $pr['schools'] ) ) ) {
+                    continue;
+                }
+                if ( $pr['email'] == $reviewer_email ) {
+                    $current_reviewer_schools = $pr['schools'];
+                    break;
+                }
+            }
+        }
+        if ( ! $current_reviewer_schools ) {
+            return $schools;
+        }
+        $schools_to_return = [];
+        foreach ( $schools as $school_key => $school_name ) {
+            if ( in_array( $school_key, $current_reviewer_schools ) ) {
+                $schools_to_return[ $school_key ] = $school_name;
+            }
+        }
+        
+        return $schools_to_return;
+    }
+    public function get_programmes_school_applied($programme_id, $reviewer_email = '') {
+        if($reviewer_email) {
+            $schools = $this->get_reviewer_schools($programme_id, $reviewer_email);
+        }else{
+            $schools = [
+                'amsterdam' => 'Clinical School Padua',
+                'barcelona' => 'Clinical School London',
+                'frankfurt' => 'Basic science school London',
+                'hamburg'   => 'Clinical School Freiburg',
+            ];
+        }
+        $available_schools = [];
+        foreach ($schools as $school_key => $school_name) {
+            $program_school_submissions = $this->getSubmissionPosts($programme_id, 'publish', [$school_key], true);
+            if($program_school_submissions) {
+                $available_schools[$school_key] = [
+                    'school_name' => $school_name,
+                    'count' => count($program_school_submissions)
+                ];
+            }
+        }
+        
+        return $available_schools;
     }
 
     protected function getProgrammeReviewers($programmeId) {
@@ -579,15 +680,8 @@ class EASLAppReview {
         require_once(EASLApplicationsPlugin::rootDir() . 'templates/' . $file);
     }
 
-    protected function getNumberSubmissions($programmeId) {
-        return count($this->getSubmissionPosts($programmeId));
-//        global $wpdb;
-//        return $wpdb->get_var("
-//          SELECT COUNT(DISTINCT(post_id))
-//          FROM $wpdb->postmeta
-//          WHERE meta_key = 'programme_id'
-//          AND meta_value = $programmeId
-//        ");
+    protected function getNumberSubmissions($programmeId, $schools=false) {
+        return count($this->getSubmissionPosts($programmeId, 'publish', $schools, true));
     }
 
     public function handleInviteReviewerFormSubmit() {
@@ -631,18 +725,22 @@ class EASLAppReview {
                 $this->error = 'That email address has already been invited as a reviewer for this programme';
                 return;
             }
-
-            $reviewers[] = [
+            $reviewers_data = [
                 'email' => $email,
                 'firstName' => $member['first_name'],
                 'lastName' => $member['last_name'],
                 'name' => $member['first_name'] . ' ' . $member['last_name']
             ];
-
+            
+            if(!empty($_POST['reviewer_schools'])) {
+                $reviewers_data['schools'] = $_POST['reviewer_schools'];
+            }
+    
+            $reviewers[] = $reviewers_data;
             update_post_meta($programmeId, 'reviewers', $reviewers);
 
             //Invite the reviewer
-            $this->sendReviewerInviteEmail($email, $member, $programmeId);
+            $this->sendReviewerInviteEmail($email, $member, $programmeId, $reviewers_data);
         } else {
             $this->error = 'No MyEASL account was found for ' . $email;
         }
@@ -661,7 +759,7 @@ class EASLAppReview {
         wp_redirect($this->getUrl(self::PAGE_PROGRAMME, ['programmeId' => $programmeId, 'tab' => 'reviewers']));
     }
 
-    protected function sendReviewerInviteEmail($email, $memberData, $programmeId) {
+    protected function sendReviewerInviteEmail($email, $memberData, $programmeId, $reviewers_data = []) {
 
         $programme = get_post($programmeId);
         $apps = EASLApplicationsPlugin::getInstance();
@@ -676,7 +774,8 @@ class EASLAppReview {
             'programmeName' => $programme->post_title,
             'guidelinesLink' => $guidelinesLink,
             'reviewDeadline' => $reviewDeadline,
-            'contactEmail' => $contactEmail
+            'contactEmail' => $contactEmail,
+            'reviewers_data' => $reviewers_data,
         ]);
 
         $subject = 'Invitation to Review EASL Applications';

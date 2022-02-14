@@ -57,12 +57,14 @@ class EASLApplicationsPlugin {
 
         add_action('init', [$this, 'init']);
         add_action('add_meta_boxes', [$this, 'registerSubmissionMetaBox']);
+        add_action('easl_application_page_start', [$this, 'application_assets']);
         add_action('easl_applications_page_content', [$this, 'pageContent']);
         add_action('admin_menu', [$this, 'adminMenu']);
         add_action('acf/save_post', [EASLAppSubmission::class, 'onSavePost'], 10, 1);
         add_action('acf/init', [$this, 'addOptionsFields']);
         
         add_filter('acf/validate_value/name=easl-schools-all_programme_information_schools', [$this, 'restrict_combine_schools_selection'], 20, 4);
+        add_filter('acf/prepare_field/name=easl-schools-all_programme_information_schools', [$this, 'display_sorted_combine_schools_selection']);
         
         add_filter('wp_nav_menu_items', [$this, 'addReviewMenuItem'], 10, 2);
         add_action( 'admin_enqueue_scripts', [$this, 'admin_scripts'] );
@@ -157,6 +159,22 @@ class EASLApplicationsPlugin {
             $valid = 'Max 2 schools are allowed.';
         }
         return $valid;
+    }
+    
+    public function display_sorted_combine_schools_selection($field) {
+        if(!$field['value']) {
+            return $field;
+        }
+        $choices = [];
+        $org_choices = $field['choices'];
+        foreach ($field['value'] as $value) {
+            if(array_key_exists($value, $org_choices)) {
+                $choices[$value] = $org_choices[$value];
+                unset($org_choices[$value]);
+            }
+        }
+        $field['choices'] =  array_merge($choices, $org_choices);
+        return $field;
     }
     public function addOptionsFields() {
         acf_add_local_field_group( [
@@ -295,6 +313,58 @@ class EASLApplicationsPlugin {
             $this->handle_file_access();
             die();
         }
+        if(isset($_GET['mhm_fix_school_choices'])) {
+            $this->fix_school_choices();
+        }
+    }
+    
+    protected function fix_school_choices() {
+        $file_handle = fopen( self::rootDir() . 'school-choices.csv', "r" );
+        if ( ! $file_handle ) {
+            die( 'File not found' );
+        }
+        $csv_data   = [];
+        $school_map = [
+            'Padua'        => 'amsterdam',
+            'London'       => 'barcelona',
+            'Basic London' => 'frankfurt',
+            'Freiburg'     => 'hamburg',
+        ];
+        while ( ( $data = fgetcsv( $file_handle, 1000, "," ) ) !== false ) {
+            $csv_data[ $data[0] ] = [ $school_map[ $data[1] ], $school_map[ $data[2] ] ];
+        }
+        fclose( $file_handle );
+        $applications = [];
+        foreach($csv_data as $email => $application) {
+            $submission = get_posts([
+                'post_type' => 'submission',
+                'post_status' => 'publish',
+                'posts_per_page' => -1,
+                'fields' => 'ids',
+                'meta_query' => [
+                    'relation' => 'AND',
+                    [
+                        'key' => 'programme_id',
+                        'value' => 27839,
+                        'compare' => '='
+                    ],
+                    [
+                        'key' => 'member_data',
+                        'value' => $email,
+                        'compare' => 'LIKE'
+                    ],
+                    [
+                        'key' => 'submitted_timestamp',
+                        'compare' => 'EXISTS'
+                    ]
+                ]
+            ]);
+            if(!$submission){
+                continue;
+            }
+            update_post_meta($submission[0], 'easl-schools-all_programme_information_schools', $application);
+        }
+        die();
     }
     
     protected function handle_file_access() {
@@ -367,7 +437,14 @@ class EASLApplicationsPlugin {
         $review = new EASLAppReview( true );
         $review->configureAdminPages();
     }
-    
+    public function application_assets() {
+        wp_enqueue_style('easl-application-style', plugin_dir_url( __FILE__ ) . 'assets/css/application.css', [], time());
+        if ( !is_page( 'review-applications' ) ) {
+            wp_enqueue_style('dragula', plugin_dir_url( __FILE__ ) . 'assets/lib/dragula/dragula.min.css');
+            wp_enqueue_script('dragula', plugin_dir_url( __FILE__ ) . 'assets/lib/dragula/dragula.min.js');
+            wp_enqueue_script('application-js', plugin_dir_url( __FILE__ ) . 'assets/js/application.js', ['dragula', 'jquery'], time(), true);
+        }
+    }
     public function pageContent() {
         if ( is_page( 'review-applications' ) ) {
             $review = new EASLAppReview( false );
@@ -517,6 +594,22 @@ class EASLApplicationsPlugin {
         }
         
         return null;
+    }
+    
+    /**
+     * @param string $template template php file wiht .php extension
+     * @param array $data
+     *
+     * @return bool
+     */
+    public static function load_template( $template, $data = [] ) {
+        $template_path = EASLApplicationsPlugin::getInstance()->templateDir . $template;
+        if ( ! file_exists( $template_path ) ) {
+            return false;
+        }
+        extract( $data );
+        include( $template_path );
+        return true;
     }
 }
 

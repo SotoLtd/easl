@@ -19,7 +19,8 @@ class EASLSchoolsCombinedFieldContainer extends AbstractFieldContainer {
                         'barcelona' => 'Clinical School London',
                         'frankfurt' => 'Basic science school London',
                         'hamburg'   => 'Clinical School Freiburg',
-                    ]
+                    ],
+                    'instructions' => 'You can set order of choices by dragging the schools.',
                 ]),
                 new EASLApplicationField('date_of_birth', 'Date of birth', 'date_picker', [
                     'display_format' => 'd/m/Y',

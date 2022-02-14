@@ -10,6 +10,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * @var string $contactEmail
  * @var array $guidelinesLink
  * @var string $reviewDeadline
+ * @var array $reviewers_data
  */
 ?>
 <p>Dear <?= $firstName; ?> <?= $lastName; ?>,</p>
