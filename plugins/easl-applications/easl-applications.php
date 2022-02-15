@@ -73,6 +73,8 @@ class EASLApplicationsPlugin {
         add_action( 'wp_ajax_nopriv_sync_submission_member_data', [ $this, 'sync_submission_member_data' ] );
         
         add_filter( 'acf/upload_prefilter/type=file', [ $this, 'change_application_files_path' ], 10, 3 );
+        
+        add_action('deleted_post', [$this, 'clean_submissions_after_post_delete'], 10, 2);
     }
     
     public function change_application_files_path( $errors, $file, $field ) {
@@ -318,6 +320,40 @@ class EASLApplicationsPlugin {
         }
     }
     
+    /**
+     * @param int $postid
+     * @param WP_Post $post
+     */
+    public function clean_submissions_after_post_delete($postid, $post) {
+        WP_Filesystem();
+        /**
+         * @var WP_Filesystem_Direct $wp_filesystem
+         */
+        global $wp_filesystem;
+        if ( 'submission' == $post->post_type ) {
+            $dir = WP_CONTENT_DIR . '/uploads/applications/app-' . $postid;
+            $wp_filesystem->rmdir( $dir, true );
+        } elseif ( 'programme' == $post->post_type ) {
+            $submissions = get_posts( [
+                'post_type'      => 'submission',
+                'post_status'    => 'publish',
+                'posts_per_page' => - 1,
+                'fields'         => 'ids',
+                'meta_query'     => [
+                    [
+                        'key'     => 'programme_id',
+                        'value'   => $postid,
+                        'compare' => '='
+                    ],
+                ]
+            ] );
+            if ( $submissions ) {
+                foreach ( $submissions as $submission_id ) {
+                    wp_delete_post($submission_id, true);
+                }
+            }
+        }
+    }
     protected function fix_school_choices() {
         $file_handle = fopen( self::rootDir() . 'school-choices.csv', "r" );
         if ( ! $file_handle ) {
