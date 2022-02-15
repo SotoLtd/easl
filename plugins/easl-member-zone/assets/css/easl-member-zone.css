@@ -2523,9 +2523,7 @@ span.mzms-field-file-button {
 }
 
 .mz-checkout-submit-row {
-    display: flex;
-    align-items: flex-start;
-    justify-content: space-between;
+    text-align: right;
 }
 .mz-checkout-submit-row .mz-checkout-back {
     padding-left: 25px;

@@ -216,6 +216,17 @@ function easl_mz_user_can_access_url($url) {
     if (!easl_mz_is_member_logged_in()) {
         return false;
     }
+    
+    $member = easl_mz_get_logged_in_member_data();
+    if ( 'https://easl.eu/my-documents/' == trailingslashit( $url ) ) {
+        return $member && ! empty( $member['dotb_mb_id'] ) && ! empty( $member['dotb_mb_current_status'] ) && in_array( $member['dotb_mb_current_status'], [
+                'active',
+                'cancelled'
+            ] );
+    }
+    if ( 'https://easl.eu/my-membership/' == trailingslashit( $url ) ) {
+        return $member && ! empty( $member['dotb_mb_id'] ) && ! empty( $member['dotb_mb_current_status'] );
+    }
     if (easl_mz_user_is_member()) {
         return true;
     }
@@ -242,7 +253,7 @@ function easl_mz_user_can_access_url($url) {
 
 function easl_mz_user_can_access_profile_page(){
     $member = easl_mz_get_logged_in_member_data();
-    return $member && !empty( $member['dotb_mb_id'] ) && in_array( $member['dotb_mb_current_status'], array( 'expired', 'active' ) );
+    return $member && !empty( $member['dotb_mb_id'] ) && !empty($member['dotb_mb_current_status']);
 }
 
 function easl_mz_redirect($url) {

@@ -56,10 +56,19 @@ $add_membership_url = get_field('membership_plan_url', 'option');
         <div class="wpb_column vc_column_container vc_col-sm-12 vc_col-lg-9 vc_col-md-10">
             <div class="vc_column-inner">
                 <div class="wpb_wrapper easl-mz-container-inner">
-                    <?php if (!easl_mz_user_is_member() && !is_page('add-a-membership') && !is_page('membership-confirm')):?>
+                    <?php
+                    if (!easl_mz_user_is_member() && !is_page('add-a-membership') && !is_page('membership-confirm')):
+                        $banner_link_text = 'Become an EASL member';
+                        $banner_link_title = 'Join today';
+                        $member = easl_mz_get_logged_in_member_data();
+                        $membership_status = !empty($member['dotb_mb_current_status']) ? $member['dotb_mb_current_status'] : '';
+                        if( in_array($membership_status, ['expired', 'cancelled']) ) {
+                            $banner_link_title = 'Renew Now';
+                        }
+                        ?>
                         <div class="easl-member-banner">
-                            Become an EASL member
-                            <a href="<?php echo $add_membership_url;?>" class="easl-generic-button easl-color-lightblue">Join today</a>
+                            <span><?php echo $banner_link_text; ?></span>
+                            <a href="<?php echo $add_membership_url;?>" class="easl-generic-button easl-color-lightblue"><?php echo $banner_link_title; ?></a>
                         </div>
                     <?php endif;?>
 
