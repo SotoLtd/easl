@@ -89,7 +89,7 @@ class EASLAppReview {
 
         $fieldSets = $fieldSetContainer->getFieldSets();
         $fields = [];
-        
+        $acf_fields = get_field_objects($submission->ID);
         foreach ($fieldSets as $fieldSet) {
             foreach ($fieldSet->fields as $field) {
                 if ($field->hideFromOutput) {
@@ -98,8 +98,11 @@ class EASLAppReview {
                 $fieldKey = $fieldSet->getFieldKey($field);
                 if('date_of_birth' == $field->key) {
                     $out['Date of birth'] = get_field($fieldKey, $submission->ID);
-                }else{
-                    $fields[$fieldKey] = $field;
+                    continue;
+                }
+                $fields[$fieldKey] = $field;
+                if(!$forCSV && array_key_exists($fieldKey, $acf_fields)) {
+                    $out[$fieldKey] = $acf_fields[$fieldKey];
                 }
             }
         }
