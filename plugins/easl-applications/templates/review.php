@@ -102,7 +102,8 @@ if ( ! defined( 'ABSPATH' ) ) {
             <h2>Review submission</h2>
 
             <form method="post">
-            <?php foreach($scoringCriteria as $i => $category):
+            <?php
+            foreach($scoringCriteria as $i => $category):
                 if ($myReview) {
                     $myScore = array_filter($myReview['scoring'], function($c) use ($category) {
                         return $c['name'] === $category['criteria_name'];
@@ -111,10 +112,21 @@ if ( ! defined( 'ABSPATH' ) ) {
                 }
                 ?>
 
-                <?php if (!$category['criteria_name']): continue; endif;?>
+                <?php
+    
+                if ( empty ($category['criteria_name']) ) {
+                    continue;
+                }
+                
+                if(!empty($category['criteria_label'])) {
+                    $school_name = $category['criteria_label'];
+                }else{
+                    $school_name = $category['criteria_name'];
+                }
+                ?>
                 <div class="mzms-fields-row" style="padding-bottom:10px;">
                     <div class="mzms-fields-con">
-                        <label class="mzms-field-label"><?=$category['criteria_name'];?> <span class="mzms-asteric">*</span></label>
+                        <label class="mzms-field-label"><?php echo $school_name;?> <span class="mzms-asteric">*</span></label>
                         <div><?=$category['criteria_instructions'];?></div>
                         <div class="mzms-field-wrap<?php if (isset($saveReviewErrors['categories']) && in_array($i, $saveReviewErrors['categories'])):?> easl-mz-field-has-error<?php endif;?>">
                             <input type="number"

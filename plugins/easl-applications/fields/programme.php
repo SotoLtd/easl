@@ -296,7 +296,7 @@ acf_add_local_field_group([
             'name' => 'review_deadline',
             'type' => 'date_picker',
             'display_format' => 'd/m/Y',
-            'return_format' => 'd/m/Y',
+            'return_format' => 'l d F',
             'required' => true,
             'instructions' => 'When should reviewers complete their reviews of applications for this programme?'
         ],

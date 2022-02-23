@@ -69,6 +69,19 @@ function easl_app_email_form_name($form_name){
 	return 'EASL Applications';
 }
 
+function easl_app_get_school_label($school_key) {
+    $schools_labels = [
+        'amsterdam' => 'Clinical School Padua',
+        'barcelona' => 'Clinical School London',
+        'frankfurt' => 'Basic science school London',
+        'hamburg'   => 'Clinical School Freiburg',
+    ];
+    if(array_key_exists($school_key, $schools_labels)) {
+        return $schools_labels[$school_key];
+    }
+    return '';
+}
+
 function easl_app_get_scoring_criteria($programme_id, $submission_id = false) {
     $category = get_field( 'programme-category', $programme_id );
     if('easl-schools-all' == $category) {
@@ -85,19 +98,30 @@ function easl_app_get_scoring_criteria($programme_id, $submission_id = false) {
             'criteria_instructions' => '',
         );
         $schools = ['amsterdam', 'barcelona', 'frankfurt', 'hamburg'];
+        
         if($submission_id){
             $schools = get_field('easl-schools-all_programme_information_schools', $submission_id);
         }
         foreach ( $schools as $school ) {
+            $school_label = easl_app_get_school_label($school);
+            if(!$school_label) {
+                $school_label = ucfirst($school);
+            }
             $scoring_criteria[] = array(
                 'criteria_name'         => 'Motivation Letter - School ' . ucfirst($school),
+                'criteria_label'         => 'Motivation Letter - ' . $school_label,
                 'criteria_max'          => $school_criteria['reference_letter_max_score'],
                 'criteria_instructions' => '',
             );
         }
         foreach ( $schools as $school ) {
+            $school_label = easl_app_get_school_label($school);
+            if(!$school_label) {
+                $school_label = ucfirst($school);
+            }
             $scoring_criteria[] = array(
                 'criteria_name'         => 'Recommendation Letter - School ' . ucfirst($school),
+                'criteria_label'         => 'Recommendation Letter - ' . $school_label,
                 'criteria_max'          => $school_criteria['recommendation_letter_max_score'],
                 'criteria_instructions' => '',
             );

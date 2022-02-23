@@ -108,6 +108,9 @@ class EASLAppReview {
             $application_other_set = false;
             foreach($fields as $key => $field) {
                 $data = get_field($key, $submission->ID);
+                if(!$data){
+                    continue;
+                }
                 if($field->key == 'applicant_profile' && 'other' == $data ) {
                     $application_other_set = true;
                     continue;
@@ -620,7 +623,7 @@ class EASLAppReview {
         if ( $reviewer_email ) {
             $programme_reviewers = $this->getProgrammeReviewers( $programme_id );
             foreach ( $programme_reviewers as $pr ) {
-                if ( empty( $pr['email'] || empty( $pr['schools'] ) ) ) {
+                if ( empty( $pr['email'] ) || empty( $pr['schools'] ) ) {
                     continue;
                 }
                 if ( $pr['email'] == $reviewer_email ) {

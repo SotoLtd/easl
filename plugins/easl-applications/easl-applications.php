@@ -3,6 +3,7 @@
 if ( ! defined( 'ABSPATH' ) ) {
     die( '-1' );
 }
+define('EASL_APPLICATION_VERSION', '2.0.0');
 require_once(EASLApplicationsPlugin::rootDir() . 'lib/EASLAppSubmission.php');
 require_once(EASLApplicationsPlugin::rootDir() . 'lib/EASLAppReview.php');
 /*
@@ -316,7 +317,7 @@ class EASLApplicationsPlugin {
             die();
         }
         if(isset($_GET['mhm_fix_school_choices'])) {
-            $this->fix_school_choices();
+            //$this->fix_school_choices();
         }
     }
     
@@ -370,7 +371,6 @@ class EASLApplicationsPlugin {
             $csv_data[ $data[0] ] = [ $school_map[ $data[1] ], $school_map[ $data[2] ] ];
         }
         fclose( $file_handle );
-        $applications = [];
         foreach($csv_data as $email => $application) {
             $submission = get_posts([
                 'post_type' => 'submission',
@@ -474,11 +474,11 @@ class EASLApplicationsPlugin {
         $review->configureAdminPages();
     }
     public function application_assets() {
-        wp_enqueue_style('easl-application-style', plugin_dir_url( __FILE__ ) . 'assets/css/application.css', [], time());
+        wp_enqueue_style('easl-application-style', plugin_dir_url( __FILE__ ) . 'assets/css/application.css', [], EASL_APPLICATION_VERSION);
         if ( !is_page( 'review-applications' ) ) {
             wp_enqueue_style('dragula', plugin_dir_url( __FILE__ ) . 'assets/lib/dragula/dragula.min.css');
             wp_enqueue_script('dragula', plugin_dir_url( __FILE__ ) . 'assets/lib/dragula/dragula.min.js');
-            wp_enqueue_script('application-js', plugin_dir_url( __FILE__ ) . 'assets/js/application.js', ['dragula', 'jquery'], time(), true);
+            wp_enqueue_script('application-js', plugin_dir_url( __FILE__ ) . 'assets/js/application.js', ['dragula', 'jquery'], EASL_APPLICATION_VERSION, true);
         }
     }
     public function pageContent() {
