@@ -7,10 +7,14 @@ if ( ! defined( 'ABSPATH' ) ) {
  * @var EASLAppReview $reviewManager
  * @var boolean $isAdmin
  * @var WP_Post $submission
+ * @var WP_Post $programme
  * @var array $reviews
  * @var array $fields
  * @var array $scoringCriteria
  */
+
+
+$category = get_field( 'programme-category', $programme->ID );
 ?>
 <h1>Review submission: <?=$submission->post_title;?></h1>
 
@@ -22,7 +26,40 @@ if ( ! defined( 'ABSPATH' ) ) {
         <table class="review-submission-table<?php if ($isAdmin):?> widefat striped<?php endif;?>">
             <tbody>
 
-            <?php foreach($fields as $key => $field):?>
+            <?php
+            foreach($fields as $key => $field):
+                if('easl-schools-all' == $category) {
+    
+                    $schools = get_field('easl-schools-all_programme_information_schools', $submission->ID);
+                    
+                    if ( $key == 'easl-schools-all_programme_information_reference_letter_amsterdam' && ! in_array( 'amsterdam', $schools ) ) {
+                        continue;
+                    }
+                    if ( $key == 'easl-schools-all_programme_information_reference_letter_barcelona' && ! in_array( 'barcelona', $schools ) ) {
+                        continue;
+                    }
+                    if ( $key == 'easl-schools-all_programme_information_reference_letter_frankfurt' && ! in_array( 'frankfurt', $schools ) ) {
+                        continue;
+                    }
+                    if ( $key == 'easl-schools-all_programme_information_reference_letter_hamburg' && ! in_array( 'hamburg', $schools ) ) {
+                        continue;
+                    }
+    
+    
+                    if ( $key == 'easl-schools-all_programme_information_recommendation_letter_amsterdam' && ! in_array( 'amsterdam', $schools ) ) {
+                        continue;
+                    }
+                    if ( $key == 'easl-schools-all_programme_information_recommendation_letter_barcelona' && ! in_array( 'barcelona', $schools ) ) {
+                        continue;
+                    }
+                    if ( $key == 'easl-schools-all_programme_information_recommendation_letter_frankfurt' && ! in_array( 'frankfurt', $schools ) ) {
+                        continue;
+                    }
+                    if ( $key == 'easl-schools-all_programme_information_recommendation_letter_hamburg' && ! in_array( 'hamburg', $schools ) ) {
+                        continue;
+                    }
+                }
+                ?>
                 <tr>
                     <?php if (is_array($field)):?>
                         <th><?=$field['label'];?></th>
