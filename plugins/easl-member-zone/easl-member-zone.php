@@ -526,12 +526,6 @@ class EASL_MZ_Manager {
 		if ( $renew && ( $current_end_date != 'now' ) ) {
 			$status = 'active';
 		}
-        if ( in_array( $member_cat, array(
-            'trainee_jhep',
-            'trainee',
-        ) ) ) {
-            $status = 'active';
-        }
 
 		switch ( $_POST['membership_payment_type'] ) {
 			case 'ingenico_epayments':
