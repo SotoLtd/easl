@@ -210,7 +210,7 @@ if ( easl_mz_is_member_logged_in() ):
                     <input type="hidden" name="OWNERADDRESS" id="billing_street" value="<?php echo $billing_address['street']; ?>">
                     <input type="hidden" name="OWNERTOWN" id="billing_state" value="<?php echo $billing_address['state']; ?>">
                     <input type="hidden" name="OWNERZIP" id="billing_zip" value="<?php echo $billing_address['postalcode']; ?>">
-                    <input type="hidden" name="OWNERCTY" id="billing_zip" value="<?php echo $billing_country; ?>">
+                    <input type="hidden" name="OWNERCTY" id="billing_city" value="<?php echo $billing_country; ?>">
                     <input type="hidden" name="OWNERTELNO" id="billing_telephone" value="<?php echo $member['phone_work']; ?>">
                     <!-- check before the payment: see Security: Check before the payment -->
 
@@ -256,6 +256,10 @@ if ( easl_mz_is_member_logged_in() ):
                         <?php endif; ?>
                     </div>
                     <div class="mz-checkout-submit-row">
+                        <?php
+                        $back_button_url   = easl_membership_page_url();
+                        ?>
+                        <a class="mzms-button mz-checkout-back" href="<?php echo $back_button_url; ?>">Back</a>
                         <span class="mz-input-submit-wrap mzms-button mz-checkout-submit"><input type="submit" value="Submit" id="submit2" name="submit2"></span>
                     </div>
 

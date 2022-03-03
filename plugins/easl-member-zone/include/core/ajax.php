@@ -352,6 +352,31 @@ class EASL_MZ_Ajax_Handler {
 		$this->respond_file( '/members-documents/members-documents-row.php', $template_data, 200 );
 	}
 
+	public function get_members_notes() {
+        if ( ! easl_mz_is_member_logged_in() ) {
+            $this->respond( 'Member not logged in!', 401 );
+        }
+        $current_member_id = $this->session->get_current_member_id();
+        if ( ! $current_member_id ) {
+            $current_member_id = $this->api->get_member_id();
+            
+            if ( $current_member_id ) {
+                $this->session->add_data( 'member_id', $current_member_id );
+                $this->session->save_session_data();
+            } else {
+                $this->session->unset_auth_cookie( true );
+                $this->respond( 'Member not found!', 404 );
+            }
+        }
+        $this->api->get_user_auth_token();
+        $member_notes = $this->api->get_member_notes( $current_member_id );
+        if ( empty( $member_notes ) ) {
+            $this->respond( 'No documents found.', 404 );
+        }
+		$template_data = array( 'member_notes' => $member_notes );
+		$this->respond_file( '/members-documents/contact-documents-row.php', $template_data, 200 );
+	}
+
 	public function get_member_statistics() {
         if ( ! easl_mz_is_member_logged_in() ) {
             $this->respond( 'Member not logged in!', 401 );
@@ -444,6 +469,7 @@ class EASL_MZ_Ajax_Handler {
         if ( ! $current_member_id ) {
             $this->respond( 'Member not found!', 404 );
         }
+        $this->api->get_user_auth_token();
         $member_details = $this->api->get_member_details( $current_member_id, false );
         if ( ! $member_details ) {
             $this->respond( 'Member ' . $current_member_id . ' not found!', 404 );

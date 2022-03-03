@@ -877,6 +877,42 @@ class EASL_MZ_API {
         
         return $notes;
     }
+    public function get_member_notes( $member_id ) {
+        $headers = array(
+            'Content-Type' => 'application/json',
+            'OAuth-Token'  => $this->get_access_token( false ),
+        );
+        $data    = array(
+            'filter'   => array(
+                array( 'portal_flag' => '1' )
+            ),
+            'fields'   => 'id,name,file_mime_type,filename,file_ext,dotb_type,parent_type',
+            'order_by' => 'date_entered:DESC'
+        );
+        $result  = $this->get( "/Contacts/{$member_id}/link/notes/", false, $headers, $data );
+        if ( ! $result ) {
+            return false;
+        }
+        $response = $this->request->get_response_body();
+        
+        if ( empty( $response->records ) || ( count( $response->records ) < 1 ) ) {
+            return false;
+        }
+        $notes = array();
+        foreach ( $response->records as $record ) {
+            $notes[] = array(
+                'id'             => $record->id,
+                'name'           => $record->name,
+                'file_mime_type' => $record->file_mime_type,
+                'filename'       => $record->filename,
+                'file_ext'       => $record->file_ext,
+                'dotb_type'      => $record->dotb_type,
+                'parent_type'      => $record->parent_type,
+            );
+        }
+        
+        return $notes;
+    }
     
     public function delete_member_account( $member_id ) {
         $headers = array(

@@ -14,7 +14,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 
 
-define( 'EASL_MZ_VERSION', '1.4.1' );
+define( 'EASL_MZ_VERSION', '1.4.2' );
 
 //define( 'EASL_MZ_VERSION', time() );
 
@@ -224,7 +224,7 @@ class EASL_MZ_Manager {
 	public function init() {
 		$this->add_options_page();
 		$this->handle_member_login();
-		//$this->handle_other_member_login();
+		$this->handle_other_member_login();
 		$this->handle_member_logout();
 		$this->handle_mz_actions();
 

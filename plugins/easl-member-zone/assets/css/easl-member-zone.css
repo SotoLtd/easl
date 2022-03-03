@@ -2200,12 +2200,18 @@ span.mzms-field-file-button {
     border-top: 0 none;
 }
 
+.mzmd-docs-table-col-name {
+    width: calc(100% - 400px);
+}
 .mzmd-docs-table-col-duration {
-    width: 205px;
+    width: 210px;
+}
+.mzmd-docs-table-col-type {
+    width: 210px;
 }
 
 .mzmd-docs-table-col-download {
-    width: 175px;
+    width: 190px;
     text-align: left;
 }
 
@@ -2523,7 +2529,9 @@ span.mzms-field-file-button {
 }
 
 .mz-checkout-submit-row {
-    text-align: right;
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
 }
 .mz-checkout-submit-row .mz-checkout-back {
     padding-left: 25px;

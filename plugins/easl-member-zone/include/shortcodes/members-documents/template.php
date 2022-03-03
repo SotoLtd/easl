@@ -47,8 +47,8 @@ $back_link = easl_membership_page_url();
             <h2 class="mz-page-heading">My documents</h2>
             <div class="mzmd-docs-table">
                 <div class="mzmd-docs-table-row mzmd-docs-table-head">
-                    <div class="mzmd-docs-table-col mzmd-docs-table-col-duration">Membership duration</div>
-                    <div class="mzmd-docs-table-col mzmd-docs-table-col-type">Membership category</div>
+                    <div class="mzmd-docs-table-col mzmd-docs-table-col-name">Subject</div>
+                    <div class="mzmd-docs-table-col mzmd-docs-table-col-type">Type</div>
                     <div class="mzmd-docs-table-col mzmd-docs-table-col-download">&nbsp;</div>
                 </div>
             </div>

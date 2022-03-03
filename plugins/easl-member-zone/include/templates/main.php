@@ -57,7 +57,7 @@ $add_membership_url = get_field('membership_plan_url', 'option');
             <div class="vc_column-inner">
                 <div class="wpb_wrapper easl-mz-container-inner">
                     <?php
-                    if (!easl_mz_user_is_member() && !is_page('add-a-membership') && !is_page('membership-confirm')):
+                    if (!easl_mz_user_is_member() && !is_page(['add-a-membership', 'membership-confirm', 'membership-checkout'] )):
                         $banner_link_text = 'Become an EASL member';
                         $banner_link_title = 'Join today';
                         $member = easl_mz_get_logged_in_member_data();
