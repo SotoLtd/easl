@@ -138,3 +138,18 @@ function easl_app_get_scoring_criteria($programme_id, $submission_id = false) {
     return $scoring_criteria;
     
 }
+
+function easl_app_school_exclude_list_for_review( $submission_id, $order = 0 ) {
+    $schools          = [ 'amsterdam', 'barcelona', 'frankfurt', 'hamburg' ];
+    $schools_selected = get_field( 'easl-schools-all_programme_information_schools', $submission_id );
+    $select_school_key = !empty($schools_selected[ $order ]) ? $schools_selected[ $order ] : '';
+    $review_names = [];
+    foreach ( $schools as $school ) {
+        if($select_school_key == $school) {
+            continue;
+        }
+        $review_names[] = 'Motivation Letter - School ' . ucfirst($school);
+        $review_names[] = 'Recommendation Letter - School ' . ucfirst( $school );
+    }
+    return $review_names;
+}

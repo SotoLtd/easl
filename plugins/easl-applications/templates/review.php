@@ -11,6 +11,8 @@ if ( ! defined( 'ABSPATH' ) ) {
  * @var array $reviews
  * @var array $fields
  * @var array $scoringCriteria
+ * @var array|bool $saveReviewErrors
+ * @var array|bool $myReview
  */
 
 
@@ -138,10 +140,15 @@ $category = get_field( 'programme-category', $programme->ID );
         <?php if (!$isAdmin):?>
             <h2>Review submission</h2>
 
-            <form method="post">
+            <form class="app-review-score-form" method="post">
             <?php
             foreach($scoringCriteria as $i => $category):
-                if ($myReview) {
+                if($saveReviewErrors) {
+                    $myScore = array_filter($_POST['category'], function($c) use ($category) {
+                        return $c['name'] === $category['criteria_name'];
+                    });
+                    $myScore = current($myScore);
+                }elseif ($myReview) {
                     $myScore = array_filter($myReview['scoring'], function($c) use ($category) {
                         return $c['name'] === $category['criteria_name'];
                     });
@@ -166,13 +173,16 @@ $category = get_field( 'programme-category', $programme->ID );
                         <label class="mzms-field-label"><?php echo $school_name;?> <span class="mzms-asteric">*</span></label>
                         <div><?=$category['criteria_instructions'];?></div>
                         <div class="mzms-field-wrap<?php if (isset($saveReviewErrors['categories']) && in_array($i, $saveReviewErrors['categories'])):?> easl-mz-field-has-error<?php endif;?>">
-                            <input type="number"
+                            <input type="text"
+                                    class="app-review-score-field"
                                    max="<?=$category['criteria_max'];?>"
                                    name="category[<?=$i;?>][score]"
                                    value="<?=isset($myScore) ? $myScore['score'] : '';?>"
-                                   min="0" />
+                                   min="0"
+                                    style="display: inline-block;width: 45px;"
+                            />
                             out of <?=$category['criteria_max'];?>
-                            <p class="mzms-field-error-msg">Please enter the score for this category</p>
+                            <p class="mzms-field-error-msg">Please enter the score between 1 - <?php echo $category['criteria_max']; ?> for this category</p>
                         </div>
                         <input type="hidden"
                                name="category[<?=$i;?>][name]"
@@ -185,7 +195,15 @@ $category = get_field( 'programme-category', $programme->ID );
                 <div class="mzms-fields-con">
                     <label class="mzms-field-label">Review <span class="mzms-asteric">*</span></label>
                     <div class="mzms-field-wrap<?php if (in_array('review_text', $saveReviewErrors)):?> easl-mz-field-has-error<?php endif;?>">
-                        <textarea name="review_text"><?=isset($myReview) ? $myReview['review_text'] : '';?></textarea>
+                        <?php
+                        $my_review_text = '';
+                        if($saveReviewErrors) {
+                            $my_review_text = $_POST['review_text'];
+                        }elseif($myReview){
+                            $my_review_text = $myReview['review_text'];
+                        }
+                        ?>
+                        <textarea name="review_text"><?php echo $my_review_text;?></textarea>
                         <p class="mzms-field-error-msg">Please enter your review</p>
                     </div>
                 </div>

@@ -3,7 +3,7 @@
 if ( ! defined( 'ABSPATH' ) ) {
     die( '-1' );
 }
-define('EASL_APPLICATION_VERSION', '2.0.0');
+define('EASL_APPLICATION_VERSION', '2.0.3');
 require_once(EASLApplicationsPlugin::rootDir() . 'lib/EASLAppSubmission.php');
 require_once(EASLApplicationsPlugin::rootDir() . 'lib/EASLAppReview.php');
 /*
@@ -479,6 +479,8 @@ class EASLApplicationsPlugin {
             wp_enqueue_style('dragula', plugin_dir_url( __FILE__ ) . 'assets/lib/dragula/dragula.min.css');
             wp_enqueue_script('dragula', plugin_dir_url( __FILE__ ) . 'assets/lib/dragula/dragula.min.js');
             wp_enqueue_script('application-js', plugin_dir_url( __FILE__ ) . 'assets/js/application.js', ['dragula', 'jquery'], EASL_APPLICATION_VERSION, true);
+        }else{
+            wp_enqueue_script('review-js', plugin_dir_url( __FILE__ ) . 'assets/js/review.js', [ 'jquery'], EASL_APPLICATION_VERSION, true);
         }
     }
     public function pageContent() {

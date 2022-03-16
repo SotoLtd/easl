@@ -301,7 +301,16 @@ class EASLAppReview {
         update_post_meta($reviewId, 'scoring', $formData['category']);
         if($redirect){
 	        $programmeId = get_post_meta($submissionId, 'programme_id', true);
-	        wp_redirect($this->getUrl(self::PAGE_PROGRAMME, ['programmeId' => $programmeId]) . '&review_submitted=1');
+            $redirect_params = [
+                'programmeId' => $programmeId
+            ];
+    
+            $category = get_field( 'programme-category', $programmeId );
+            $schools = get_post_meta($submissionId, 'easl-schools-all_programme_information_schools', true);
+            if(('easl-schools-all' == $category) && $schools) {
+                $redirect_params['school'] = $schools[0];
+            }
+	        wp_redirect($this->getUrl(self::PAGE_PROGRAMME, $redirect_params) . '&review_submitted=1');
         }
         return true;
     }
@@ -522,6 +531,8 @@ class EASLAppReview {
         }
         if ($reviewerEmail) {
             $out['reviewedByMe'] = $reviewedByMe;
+            $out['myReview'] = $reviewedByMe ? $myReview : false;
+            $out['totalScoreByMe'] = $reviewedByMe? $myReview['total_score'] : '';
         }
 
         return $out;
@@ -550,7 +561,7 @@ class EASLAppReview {
             if (!$reviewers) return false;
 
             $userIsReviewer = array_filter($reviewers, function($reviewer) use($email) {
-                return $reviewer['email'] == $email;
+                return strtolower($reviewer['email']) == strtolower($email);
             });
             if (count($userIsReviewer) === 0) {
                 return false;
