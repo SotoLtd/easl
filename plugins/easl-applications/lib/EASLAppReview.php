@@ -69,6 +69,8 @@ class EASLAppReview {
         $programmeId = get_post_meta($submission->ID, 'programme_id', true);
         $submittedDate = new DateTime('@' . get_post_meta($submission->ID, 'submitted_timestamp', true));
         $memberData = get_post_meta($submission->ID, 'member_data', true);
+    
+        $is_combined_school = 'easl-schools-all' == get_field( 'programme-category', $programmeId );
         $out = [
             'Title' => $memberData['salutation'],
             'Name' => $submission->post_title,
@@ -108,17 +110,22 @@ class EASLAppReview {
         }
         
         if ($forCSV) {
+            
             $application_other_set = false;
+            
             foreach($fields as $key => $field) {
                 $data = get_field($key, $submission->ID);
-                if(!$data){
-                    continue;
-                }
+
                 if($field->key == 'applicant_profile' && 'other' == $data ) {
                     $application_other_set = true;
                     continue;
                 }
                 if(!$application_other_set && $field->key == 'applicant_profile_other') {
+                    continue;
+                }
+                
+                if ($is_combined_school && !$data) {
+                    $out[] = '';
                     continue;
                 }
                 
@@ -137,6 +144,10 @@ class EASLAppReview {
 
                 $out[] = preg_replace('/[\s]+/',' ', $data);
             }
+            
+            if($is_combined_school) {
+                $out = $out + easl_app_get_schools_selected($submission);
+            }
 
         } else {
             $acfFields = array_filter(get_field_objects($submission->ID), function($field) use ($fields) {
@@ -146,7 +157,7 @@ class EASLAppReview {
             $out = $out + $acfFields;
         }
 
-        $out = $out + $this->getSubmissionReviewOverview($submission);
+        $out = $out + $this->getSubmissionReviewOverview($submission, null);
         return $out;
     }
 
@@ -173,9 +184,19 @@ class EASLAppReview {
                 }
             }
         }
-
-        $headerFields[] = 'Average score';
-        $headerFields[] = 'Number of reviews';
+        $category = get_field( 'programme-category', $programmeId );
+        $is_combined_school = false;
+        if('easl-schools-all' == $category) {
+            $is_combined_school = true;
+            $headerFields[] = 'First choice';
+            $headerFields[] = 'Second choice';
+            $headerFields[] = 'Average score - first choice';
+            $headerFields[] = 'Average score - second choice';
+            $headerFields[] = 'Number of reviews';
+        }else{
+            $headerFields[] = 'Average score';
+            $headerFields[] = 'Number of reviews';
+        }
 
         $submissions = [];
 
@@ -197,7 +218,8 @@ class EASLAppReview {
             $headerFields[] = $reviewerName . ' Review total score';
             $headerFields[] = $reviewerName . ' Review text';
             foreach ( $scoringCriteria as $category ) {
-                $headerFields[] = $reviewerName . ' ' . $category['criteria_name'] . ' score (out of ' . $category['criteria_max'] . ')';
+                $criteria_label = isset($category['criteria_label']) ? $category['criteria_label'] : $category['criteria_name'];
+                $headerFields[] = $reviewerName . ' ' . $criteria_label . ' score (out of ' . $category['criteria_max'] . ')';
             }
         }
 
@@ -208,14 +230,23 @@ class EASLAppReview {
                 $reviews = array();
             }
             foreach ( $reviewers_emails as $reviewer_email ) {
-                if ( isset( $reviews[ $reviewer_email ] ) ) {
-                    $sub_data[ $reviewer_email . ' total_score' ] = $reviews[ $reviewer_email ]['total_score'];
-                    $sub_data[ $reviewer_email . ' review_text' ] = preg_replace('/[\s]+/',' ',$data = str_replace(';', '-', $reviews[ $reviewer_email ]['review_text']));
-                    $sub_data                                     = array_merge( $sub_data, array_values( $reviews[ $reviewer_email ]['scoring'] ) );
-                } else {
-                    $sub_data = array_merge( $sub_data, array_fill( 0, 2 + count( $scoringCriteriaNames ), '' ) );
+                if($is_combined_school){
+                    if ( isset( $reviews[ $reviewer_email ] ) ) {
+                        $sub_data[ $reviewer_email . ' total_score' ] = $reviews[ $reviewer_email ]['total_score'];
+                        $sub_data[ $reviewer_email . ' review_text' ] = preg_replace( '/[\s]+/', ' ', $data = str_replace( ';', '-', $reviews[ $reviewer_email ]['review_text'] ) );
+                        $sub_data                                     = array_merge( $sub_data, array_values( $reviews[ $reviewer_email ]['scoring'] ) );
+                    } else {
+                        $sub_data = array_merge( $sub_data, array_fill( 0, 2 + count( $scoringCriteriaNames ), '' ) );
+                    }
+                }else {
+                    if ( isset( $reviews[ $reviewer_email ] ) ) {
+                        $sub_data[ $reviewer_email . ' total_score' ] = $reviews[ $reviewer_email ]['total_score'];
+                        $sub_data[ $reviewer_email . ' review_text' ] = preg_replace( '/[\s]+/', ' ', $data = str_replace( ';', '-', $reviews[ $reviewer_email ]['review_text'] ) );
+                        $sub_data                                     = array_merge( $sub_data, array_values( $reviews[ $reviewer_email ]['scoring'] ) );
+                    } else {
+                        $sub_data = array_merge( $sub_data, array_fill( 0, 2 + count( $scoringCriteriaNames ), '' ) );
+                    }
                 }
-        
             }
             $submissions[] = $sub_data;
         }
@@ -498,34 +529,77 @@ class EASLAppReview {
                     'name' => $submission->post_title,
                     'date' => new DateTime('@' . $meta['submitted_timestamp'][0]),
                     'submission' => $submission
-                ] + $this->getSubmissionReviewOverview($submission, $reviewerEmail);
+                ] + $this->getSubmissionReviewOverview($submission, $reviewerEmail, );
 
             return $sub;
         }, $submission_posts);
     }
 
     private function getSubmissionReviewOverview($submission, $reviewerEmail = null) {
-
         $reviewedByMe = false;
-
         $reviews = $this->getSubmissionReviews($submission->ID);
-        if (count($reviews)) {
-            $totalScores = array_map(function($review) {
-                return $review['total_score'];
-            }, $reviews);
-            $sumTotalScore = array_sum($totalScores);
-            $averageScore = $sumTotalScore / count($reviews);
-
+        $programmeId = get_post_meta($submission->ID, 'programme_id', true);
+        $is_combined_school = 'easl-schools-all' == get_field( 'programme-category', $programmeId );
+        if(!$reviews) {
+            $reviews = [];
+        }
+        $total_score_1 = 0;
+        $total_score_2 = 0;
+        $exclude_school_scores_1 = [];
+        $exclude_school_scores_2 = [];
+        $school_choices = [];
+        if($is_combined_school) {
+            $school_choices = easl_app_get_schools_selected($submission->ID);
+            $exclude_school_scores_1 = easl_app_school_exclude_list_for_review($submission->ID, 0);
+            if($school_choices['second_choice']){
+                $exclude_school_scores_2 = easl_app_school_exclude_list_for_review($submission->ID, 1);
+            }
+        }
+        foreach ($reviews as $review) {
+            if(!$is_combined_school) {
+                $total_score_1 += $review['total_score'];
+                continue;
+            }
+            $rts1 = $review['total_score'];
+            if(!empty($school_choices['second_choice'])) {
+                $rts2 = $review['total_score'];
+                foreach ( $review['scoring'] as $review_score ) {
+                    if(in_array($review_score['name'], $exclude_school_scores_1)) {
+                        $rts1 -= $review_score['score'];
+                    }
+                    if(in_array($review_score['name'], $exclude_school_scores_2)) {
+                        $rts2 -= $review_score['score'];
+                    }
+                }
+                $total_score_2 += $rts2;
+            }
+            $total_score_1 += $rts1;
+        }
+        $total_reviews_count = count($reviews);
+        if($total_reviews_count) {
+            $average_score_1 = (float) $total_score_1/$total_reviews_count;
+            $average_score_2 = (float) $total_score_2/$total_reviews_count;
+            $average_score_1 = number_format($average_score_1, 2, '.', '');
+            $average_score_2 = number_format($average_score_2, 2, '.', '');
+            
             if ($reviewerEmail) {
                 $myReview = $this->findReviewByUser($reviews, $reviewerEmail);
                 $reviewedByMe = !!$myReview;
             }
         }
         if ($this->isAdmin) {
-            $out = [
-                'averageScore' => isset($averageScore) ? $averageScore : null,
-                'numberReviews' => count($reviews)
-            ];
+            if($is_combined_school){
+                $out = [
+                    'averageScore1'  => isset( $average_score_1 ) ? $average_score_1 : null,
+                    'averageScore2'  => isset( $average_score_2 ) ? $average_score_2 : null,
+                    'numberReviews' => count( $reviews )
+                ];
+            }else {
+                $out = [
+                    'averageScore'  => isset( $average_score_1 ) ? $average_score_1 : null,
+                    'numberReviews' => count( $reviews )
+                ];
+            }
         } else {
             $out = [];
         }

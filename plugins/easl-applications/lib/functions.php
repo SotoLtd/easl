@@ -153,3 +153,33 @@ function easl_app_school_exclude_list_for_review( $submission_id, $order = 0 ) {
     }
     return $review_names;
 }
+
+function easl_app_get_schools_selected($submission_id) {
+    $choices = [
+        'first_choice' => '',
+        'second_choice' => '',
+    ];
+    $schools_selected = get_field( 'easl-schools-all_programme_information_schools', $submission_id );
+    if(isset($schools_selected[0])) {
+        $choices['first_choice'] = easl_app_get_school_label($schools_selected[0]);
+    }
+    if(isset($schools_selected[1])) {
+        $choices['second_choice'] = easl_app_get_school_label($schools_selected[1]);
+    }
+    return $choices;
+}
+
+function easl_app_get_schools_selected_for_scoring( $submission_id ) {
+    $choices = [];
+    
+    $schools_selected = get_field( 'easl-schools-all_programme_information_schools', $submission_id );
+    
+    if ( isset( $schools_selected[0] ) ) {
+        $choices['first_choice'] = 'Motivation Letter - School ' . ucfirst( $schools_selected[0] );
+    }
+    if ( isset( $schools_selected[1] ) ) {
+        $choices['second_choice'] = 'Motivation Letter - School ' . ucfirst( $schools_selected[1] );
+    }
+    
+    return $choices;
+}

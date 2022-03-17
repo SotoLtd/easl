@@ -56,7 +56,19 @@ $category = get_field( 'programme-category', $programme->ID );
                 <td><?= $submission['name']; ?></td>
                 <td><?= $submission['date']->format( 'Y-m-d' ); ?></td>
                 <td><?= $submission['numberReviews']; ?></td>
-                <td><?= $submission['averageScore'] ? $submission['averageScore'] : '-'; ?></td>
+                <td>
+                    <?php
+                    if ( 'easl-schools-all' == $category ){
+                        $choices = easl_app_get_schools_selected($submission['id']);
+                        echo $choices['first_choice'] . ': ' .  $submission['averageScore1'];
+                        if($choices['second_choice']) {
+                            echo '<br>' . $choices['second_choice'] . ': ' .  $submission['averageScore2'];
+                        }
+                    }else{
+                        echo $submission['averageScore'];
+                    }
+                    ?>
+                </td>
                 <td>
                     <a href="<?= $reviewManager->getUrl( EASLAppReview::PAGE_SUBMISSION, [ 'submissionId' => $submission['id'] ] ); ?>" class="button">Review</a>
                     <a href="<?= get_edit_post_link( $submission['id'] ); ?>" class="button">Edit</a>

@@ -78,7 +78,7 @@ $category = get_field( 'programme-category', $programme->ID );
                     <?php endif;?>
                     <td>
                         <?php  if($field):?>
-                            <?php if (is_string($field)):?>
+                            <?php if (is_scalar($field)):?>
                                 <?=$field;?>
                             <?php elseif ($field['type'] == 'file'):?>
                                 <?php if ($field['value']):?>
@@ -119,7 +119,19 @@ $category = get_field( 'programme-category', $programme->ID );
                 <th>Score breakdown</th>
                 </thead>
                 <tbody>
-                <?php foreach($reviews as $review):?>
+                <?php
+                $scoring_criteria_searches = [];
+                $scoring_criteria_replaces = [];
+                foreach ($scoringCriteria as $sc) {
+                    if(empty(!empty($sc['criteria_label']))) {
+                        continue;
+                    }
+                    $scoring_criteria_searches[] = $sc['criteria_name'];
+                    $scoring_criteria_replaces[] = $sc['criteria_label'];
+                }
+                
+                foreach($reviews as $review):
+                    ?>
                     <tr>
                         <td><?=$review['reviewer_name'];?> (<?=$review['reviewer_email'];?>)</td>
                         <td><?=$review['review_text'];?></td>
@@ -127,7 +139,7 @@ $category = get_field( 'programme-category', $programme->ID );
                         <td>
                             <?php foreach($review['scoring'] as $score):?>
                                 <div>
-                                    <strong><?=$score['name'];?>: </strong> <?=$score['score'];?>
+                                    <strong><?=str_replace($scoring_criteria_searches, $scoring_criteria_replaces, $score['name']);?>: </strong> <?=$score['score'];?>
                                 </div>
                             <?php endforeach;?>
                         </td>
