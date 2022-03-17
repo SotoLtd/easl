@@ -23,6 +23,8 @@ function easl_vc_get_shortcodes() {
 		'easl_staffs',
 		'easl_table',
 		'easl_yt_player',
+		'easl_studio_upcoming_episodes',
+		'easl_studio_past_episodes',
 	);
 
 	return $shortcodes;

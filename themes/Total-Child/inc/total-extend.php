@@ -419,6 +419,13 @@ function easl_get_blog_page_header_height() {
 
 	return $title_height;
 }
+function easl_get_studio_page_header_height() {
+	$page_id      = wpex_get_mod( 'easl_studio_page', 26866 );
+	$title_height = get_post_meta( $page_id, 'wpex_post_title_height', true );
+	$title_height = $title_height ? $title_height : wpex_get_mod( 'page_header_table_height' );
+
+	return $title_height;
+}
 
 function easl_get_news_page_header_overlay_style() {
 	$page_id = wpex_get_mod( 'blog_page', 5626 );
@@ -430,6 +437,13 @@ function easl_get_news_page_header_overlay_style() {
 
 function easl_get_blog_page_header_overlay_style() {
 	$page_id = wpex_get_mod( 'easl_blog_page', 22015 );
+	$style   = get_post_meta( $page_id, 'wpex_post_title_background_overlay', true );
+	$style   = $style == 'none' ? '' : $style;
+
+	return $style;
+}
+function easl_get_studio_page_header_overlay_style() {
+	$page_id = wpex_get_mod( 'easl_studio_page', 26866 );
 	$style   = get_post_meta( $page_id, 'wpex_post_title_background_overlay', true );
 	$style   = $style == 'none' ? '' : $style;
 
@@ -451,6 +465,19 @@ function easl_get_news_page_header_bg( $post_id ) {
 
 function easl_get_blog_page_header_bg( $post_id ) {
 	$page_id  = wpex_get_mod( 'easl_blog_page', 22015 );
+	$new_meta = get_post_meta( $page_id, 'wpex_post_title_background_redux', true );
+	$image    = '';
+	if ( is_array( $new_meta ) && ! empty( $new_meta['url'] ) ) {
+		$image = isset( $new_meta['url'] ) ? $new_meta['url'] : $image;
+	} else {
+		$image = $new_meta ? $new_meta : $image;
+	}
+
+	return $image;
+}
+
+function easl_get_studio_page_header_bg( $post_id ) {
+	$page_id  = wpex_get_mod( 'easl_studio_page', 26866 );
 	$new_meta = get_post_meta( $page_id, 'wpex_post_title_background_redux', true );
 	$image    = '';
 	if ( is_array( $new_meta ) && ! empty( $new_meta['url'] ) ) {
@@ -572,6 +599,9 @@ function easl_page_header_title_height( $height ) {
     if ( is_singular('blog') || is_tax('blog_category') ) {
         return easl_get_blog_page_header_height();
     }
+    if ( is_singular('easl_studio_episode') ) {
+        return easl_get_studio_page_header_height();
+    }
 	if ( is_single() || is_tag() ) {
 		return easl_get_news_page_header_height();
 	}
@@ -594,6 +624,9 @@ function easl_page_header_overlay_style( $style ) {
 	}
     if ( is_singular('blog') || is_tax('blog_category') || is_tax('blog_tag')  ) {
 		return easl_get_blog_page_header_overlay_style();
+	}
+    if ( is_singular('easl_studio_episode')  ) {
+		return easl_get_studio_page_header_overlay_style();
 	}
 	if(is_tax(Publication_Config::get_tag_slug())) {
 		return easl_get_publication_tag_header_overlay_style();
@@ -618,6 +651,9 @@ function easl_page_header_bg( $image, $post_id ) {
 	}
     if ( is_singular('blog') || is_tax('blog_category') || is_tax('blog_tag')  ) {
 		$cusotm_bg = easl_get_blog_page_header_bg( $post_id );
+	}
+    if ( is_singular('easl_studio_episode') ) {
+		$cusotm_bg = easl_get_studio_page_header_bg( $post_id );
 	}
 	if(is_tax(Publication_Config::get_tag_slug())) {
 		return easl_get_publication_tag_header_bg();
@@ -886,24 +922,27 @@ add_filter('wpex_get_sidebar', 'easl_sidebar_override');
 
 add_filter('wpex_single_blocks', 'easl_single_blocks', 20, 2);
 function easl_single_blocks( $blocks, $post_type ) {
-    if ( 'blog' != $post_type ) {
-        return $blocks;
+    if ( 'blog' == $post_type ) {
+        $hide_related_articles = get_field( 'hide_related_articles', get_queried_object_id() );
+        $blocks = array(
+            'meta',
+            'title',
+            'content',
+            'tags',
+            'love-button',
+            'suggested-articles',
+        );
+        if ( ! $hide_related_articles ) {
+            $blocks[] = 'related-articles';
+        }
+        $blocks[] = 'comments';
+    }
+    if ( 'easl_studio_episode' == $post_type ) {
+        $blocks = array(
+            'studio-content'
+        );
     }
     
-    $hide_related_articles = get_field( 'hide_related_articles', get_queried_object_id() );
-    
-    $blocks = array(
-        'meta',
-        'title',
-        'content',
-        'tags',
-        'love-button',
-        'suggested-articles',
-    );
-    if ( ! $hide_related_articles ) {
-        $blocks[] = 'related-articles';
-    }
-    $blocks[] = 'comments';
     return $blocks;
 }
 
@@ -930,6 +969,9 @@ function easl_blog_layout_class($layout, $instance) {
         $layout = 'full-width';
     }
     if('singular_post' == $instance && !is_active_sidebar(wpex_get_sidebar())) {
+        $layout = 'full-width';
+    }
+    if('singular_easl_studio_episode' == $instance && !is_active_sidebar(wpex_get_sidebar())) {
         $layout = 'full-width';
     }
     return $layout;

@@ -7237,8 +7237,10 @@ ul.suggestions {
     margin-bottom: 25px;
 }
 
-.single-post .page-header-title {
+.single-post .page-header-title,
+.single-easl_studio_episode .page-header-title {
     position: relative;
+    z-index: 3;
 }
 
 .page-header-title .easl-title-back-link {
@@ -7307,7 +7309,90 @@ ul.suggestions {
 .easl-tags a:hover {
     background-color: #104f85;
 }
+/* Single Studio Episode */
+.studio-episode-details {
+    padding-top: 20px;
+}
+.studio-episode-details > h1,
+.studio-episode-content > h2,
+.studio-episode-content > h3 {
+    color: #004b87;
+    margin: 0 0 1em;
+}
+.studio-episode-poster {
+    margin: 0 0 25px;
+}
+.studio-episode-od-link {
+    margin: 0 0 25px;
+}
+.studio-episode-poster img {
+    display: block;
+}
+.studio-episode-speakers {
+    margin: 0 0 25px;
+}
+.studio-episode-speakers > h3 {
+    color: #004b87;
+    font-size: 22px;
+    font-weight: 700;
+    margin: 0 0 20px;
+}
+.studio-speaker-name {
+    font-weight: 700;
+    color: inherit;
+    text-align: center;
+    margin: 0 0 10px;
+}
+.studio-speaker-institution {
+    font-weight: 400;
+    color: inherit;
+    text-align: center;
+    margin: -3px 0 10px;
+}
+.studio-speaker-photo {
+    width: 100%;
+    margin: 0 auto 15px;
+}
+.easl-col-3.easl-studio-col .studio-speaker-photo {
+    max-width: 200px;
+}
+.easl-col-4.easl-studio-col .studio-speaker-photo {
+    max-width: 150px;
+}
+.studio-speaker-photo figure{
+    width: 100%;
+    height: 0;
+    padding-top: 100%;
+    position: relative;
+}
+.studio-speaker-photo img {
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: top center;
+}
+.studio-speaker-bio > p {
 
+}
+.studio-speaker-bio .vc_toggle_title h4 {
+    color: #004b87;
+    line-height: 1.5em;
+    font-weight: 700;
+    margin: 0 0 20px;
+    padding: 0;
+}
+.studio-speaker-bio .vc_toggle_content p {
+    margin: 0 0 15px;
+}
+.studio-add-to-calendar, .studio-survey {
+    margin: 0 0 20px;
+}
+.single-studio-past-episodes {
+    margin-bottom: 25px;
+}
 /* EASL Heading Image Box */
 .easl-heading-image-box {
     position: relative;
@@ -11343,6 +11428,61 @@ body .mentors-application-title {
     background: #80c4e5;
 }
 
+/* Shortcode: Studio Upcoming Episodes */
+.wpb_easl_studio_uc_episodes > h2 {
+    font-size: 32px;
+    color: #71c5e8;
+    text-align: left;
+    margin: 0 0 35px;
+}
+.easl-studio-item {
+    margin-bottom: 15px;
+}
+.easl-studio-item h5{
+    color: #5bc2e7;
+    font-size: 18px;
+    font-weight: 700;
+    margin: 0 0 8px;
+}
+.easl-studio-item h3 {
+    font-size: 18px;
+    margin: 0 0 8px;
+}
+.easl-studio-item figure {
+    margin: 0 0 10px;
+}
+.easl-studio-item figure img {
+    display: block;
+}
+.wpb_easl_studio_uc_episodes .easl-studio-button-wrap {
+    text-align: center;
+}
+.easl-studio-button-wrap .easl-generic-button .easl-generic-button-icon {
+    font-size: 1em;
+}
+.wpb_easl_studio_past_episodes {
+    background-color: #f2f2f2;
+    padding: 20px;
+}
+.wpb_easl_studio_past_episodes > h2 {
+    font-size: 32px;
+    color: #004b87;
+    margin: 0 0 20px;
+}
+.wpb_easl_studio_past_episodes .easl-studio-item figure {
+    margin: 0 0 10px;
+}
+.wpb_easl_studio_past_episodes .easl-studio-item h3 {
+    color: #004b87;
+    font-size: 17px;
+    font-weight: 400;
+    line-height: 1.3em;
+    margin: 0 0 15px;
+    padding: 0;
+}
+.easl-studio-past-episodes {
+    margin-bottom: 25px;
+}
 /* Shortcode: Sitemap */
 
 .easl-sitmap-center .easl-sitemap-menu-wrap {

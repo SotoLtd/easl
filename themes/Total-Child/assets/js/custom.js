@@ -822,7 +822,17 @@
             $(this).css({'max-height': mh});
         });
     }
-
+    function easlSameHeightElements($els) {
+        var h = 0;
+        $els.css({'height': 'auto'});
+        if(easlIsMobile()) {
+            return;
+        }
+        $els.each(function (){
+            h = Math.max(h, $(this).height());
+        });
+        h > 0 && $els.css({'height': h + 'px'});
+    }
     $(document).ready(function () {
         $body = $('body');
         bodyOffsetTop = $body.offset().top;
@@ -834,6 +844,7 @@
         easlLoveTheArticle();
         easlArticleHitCount();
         easlSetSteSubmenuSize();
+        easlSameHeightElements($('.wpb_easl_studio_uc_episodes .easl-studio-item-title'));
 
         $body.on("mz_reload_custom_fields", function (event, $context) {
             easlCustomCheckbox();
@@ -1070,6 +1081,7 @@
         function easlResizeEvent() {
             setCardBlockHeight();
             easlSetSteSubmenuSize();
+            easlSameHeightElements($('.wpb_easl_studio_uc_episodes .easl-studio-item-title'));
             $(window).trigger('easl_resize_sampled');
         }
 

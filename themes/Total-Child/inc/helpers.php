@@ -301,3 +301,17 @@ function easl_event_subpage_maybe_found_in_subpage($subpage, $subpage_request) {
 	}
 	return $found;
 }
+
+function easl_get_studio_episodes_page_title( $id ) {
+    $live_date_time = get_field( 'episode_live_date_time', $id );
+    if ( $live_date_time ) {
+        $live_date_time = DateTime::createFromFormat( 'Y-m-d H:i:s', $live_date_time );
+    }
+    
+    $title = 'EASL Studio';
+    if ( $live_date_time ) {
+        $title .= ' - ' . $live_date_time->format( 'j F' ) . '<br>';
+        $title .= ' (Live at ' . $live_date_time->format( 'H:i' ) . ' CET)';
+    }
+    return $title;
+}

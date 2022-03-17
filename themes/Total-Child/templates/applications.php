@@ -8,7 +8,7 @@
 if ( ! defined( 'ABSPATH' ) ) {
     exit;
 }
-
+do_action('easl_application_page_start');
 $is_submit_page = true;
 
 acf_form_head();

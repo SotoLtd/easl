@@ -72,6 +72,10 @@ if(is_singular(EASL_Event_Config::get_event_slug())){
 	$string = wpex_title(get_the_ID());
 }
 
+if(is_singular('easl_studio_episode')) {
+    $string = easl_get_studio_episodes_page_title(get_the_ID());
+}
+
 // Sanitize
 $html_tag = wp_strip_all_tags( $html_tag );
 
@@ -111,6 +115,9 @@ echo '<' . $html_tag . ' class="page-header-title wpex-clr"' . $schema_markup . 
 	}elseif (is_tax(Publication_Config::get_tag_slug())){
 		$back_url = get_the_permalink(2015);
 	}
+    if(is_singular('easl_studio_episode')){
+        $back_url = '';
+    }
 	if($back_url){
 		echo '<a class="easl-title-back-link" href="'. esc_url($back_url) .'"><span class="ticon ticon-angle-left" aria-hidden="true"></span> ' . __('Back', 'total-child') . '</a>';
 	}
