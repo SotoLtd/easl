@@ -43,8 +43,8 @@ $query_args = array(
     'meta_query'     => array(
         array(
             'key'     => 'episode_status',
-            'value'   => 'upcoming',
-            'compare' => '=',
+            'value'   => ['upcoming', 'live'],
+            'compare' => 'IN',
         ),
     )
 );

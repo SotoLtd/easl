@@ -5150,7 +5150,8 @@ body.single-event {
     color: #71c5e8;
 }
 
-.event-sidebar-item {
+.event-sidebar-item,
+.ste-sidebar-item {
     margin-bottom: 30px;
 }
 
@@ -5357,10 +5358,14 @@ ul.event-links-list li:before {
     display: block;
 }
 
-.event-sidebar-item > :last-child {
+.event-sidebar-item > :last-child,
+.ste-sidebar-item > :last-child {
     margin-bottom: 0;
 }
-
+.ste-sidebar-item .ste-widget-title {
+    color: #004b87;
+    font-weight: 700;
+}
 .event-social-share-section {
 
 }
@@ -8467,6 +8472,9 @@ ul.suggestions {
 }
 
 /* Structured Events */
+.page-ste-wrap {
+    padding-top: 40px;
+}
 .ste-wrap {
     display: flex;
     flex-wrap: nowrap;
