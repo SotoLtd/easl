@@ -3,7 +3,7 @@
  * Written by Goloborodko M misha.gm@gmail.com (2009), corrections by Iгор Kоновал */
 (function($) {
 	'use strict';
-	$.countdown.regionalOptions.uk = {
+	$.easlCountdown.regionalOptions.uk = {
 		labels: ['Років','Місяців','Тижнів','Днів','Годин','Хвилин','Секунд'],
 		labels1: ['Рік','Місяць','Тиждень','День','Година','Хвилина','Секунда'],
 		labels2: ['Роки','Місяці','Тижні','Дні','Години','Хвилини','Секунди'],
@@ -15,5 +15,5 @@
 		timeSeparator: ':',
 		isRTL: false
 	};
-	$.countdown.setDefaults($.countdown.regionalOptions.uk);
+	$.easlCountdown.setDefaults($.easlCountdown.regionalOptions.uk);
 })(jQuery);

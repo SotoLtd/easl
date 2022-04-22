@@ -3,7 +3,7 @@
    Written by Carl (carl@nordenfelt.com). */
 (function($) {
 	'use strict';
-	$.countdown.regionalOptions.sv = {
+	$.easlCountdown.regionalOptions.sv = {
 		labels: ['År','Månader','Veckor','Dagar','Timmar','Minuter','Sekunder'],
 		labels1: ['År','Månad','Vecka','Dag','Timme','Minut','Sekund'],
 		compactLabels: ['Å','M','V','D'],
@@ -12,5 +12,5 @@
 		timeSeparator: ':',
 		isRTL: false
 	};
-	$.countdown.setDefaults($.countdown.regionalOptions.sv);
+	$.easlCountdown.setDefaults($.easlCountdown.regionalOptions.sv);
 })(jQuery);

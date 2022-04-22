@@ -3,7 +3,7 @@
    Written by Kalle Vänskä and Juha Suni (juhis.suni@gmail.com). Corrected by Olli. */
 (function($) {
 	'use strict';
-	$.countdown.regionalOptions.fi = {
+	$.easlCountdown.regionalOptions.fi = {
 		labels: ['vuotta','kuukautta','viikkoa','päivää','tuntia','minuuttia','sekuntia'],
 		labels1: ['vuosi','kuukausi','viikko','päivä','tunti','minuutti','sekunti'],
 		compactLabels: ['v','kk','vk','pv'],
@@ -12,5 +12,5 @@
 		timeSeparator: ':',
 		isRTL: false
 	};
-	$.countdown.setDefaults($.countdown.regionalOptions.fi);
+	$.easlCountdown.setDefaults($.easlCountdown.regionalOptions.fi);
 })(jQuery);

@@ -3,7 +3,7 @@
  * Written by Davide Bellettini (davide.bellettini@gmail.com) and Roberto Chiaveri Feb 2008. */
 (function($) {
 	'use strict';
-	$.countdown.regionalOptions.it = {
+	$.easlCountdown.regionalOptions.it = {
 		labels: ['Anni','Mesi','Settimane','Giorni','Ore','Minuti','Secondi'],
 		labels1: ['Anno','Mese','Settimana','Giorno','Ora','Minuto','Secondo'],
 		compactLabels: ['a','m','s','g'],
@@ -12,5 +12,5 @@
 		timeSeparator: ':',
 		isRTL: false
 	};
-	$.countdown.setDefaults($.countdown.regionalOptions.it);
+	$.easlCountdown.setDefaults($.easlCountdown.regionalOptions.it);
 })(jQuery);

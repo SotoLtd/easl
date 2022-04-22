@@ -3,7 +3,7 @@
  * Written by Sahil Jariwala jariwala.sahil@gmail.com (2012) */
 (function($) {
 	'use strict';
-	$.countdown.regionalOptions.gu = {
+	$.easlCountdown.regionalOptions.gu = {
 		labels: ['વર્ષ','મહિનો','અઠવાડિયા','દિવસ','કલાક','મિનિટ','સેકન્ડ'],
 		labels1: ['વર્ષ','મહિનો','અઠવાડિયા','દિવસ','કલાક','મિનિટ','સેકન્ડ'],
 		compactLabels: ['વ','મ','અ','દિ'],
@@ -12,5 +12,5 @@
 		timeSeparator: ':',
 		isRTL: false
 	};
-	$.countdown.setDefaults($.countdown.regionalOptions.gu);
+	$.easlCountdown.setDefaults($.easlCountdown.regionalOptions.gu);
 })(jQuery);

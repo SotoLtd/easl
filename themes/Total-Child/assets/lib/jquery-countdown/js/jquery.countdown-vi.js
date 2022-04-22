@@ -3,7 +3,7 @@
  * Written by Pham Tien Hung phamtienhung@gmail.com (2010) */
 (function($) {
 	'use strict';
-	$.countdown.regionalOptions.vi = {
+	$.easlCountdown.regionalOptions.vi = {
 		labels: ['Năm','Tháng','Tuần','Ngày','Giờ','Phút','Giây'],
 		labels1: ['Năm','Tháng','Tuần','Ngày','Giờ','Phút','Giây'],
 		compactLabels: ['năm','th','tu','ng'],
@@ -12,5 +12,5 @@
 		timeSeparator: ':',
 		isRTL: false
 	};
-	$.countdown.setDefaults($.countdown.regionalOptions.vi);
+	$.easlCountdown.setDefaults($.easlCountdown.regionalOptions.vi);
 })(jQuery);

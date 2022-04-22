@@ -3,7 +3,7 @@
    Written by Kasper Friis Christensen (kasper@friischristensen.com). */
 (function($) {
 	'use strict';
-	$.countdown.regionalOptions.fo = {
+	$.easlCountdown.regionalOptions.fo = {
 		labels: ['Ár','Mánaðir','Vikur','Dagar','Tímar','Minuttir','Sekund'],
 		labels1: ['Ár','Mánaður','Vika','Dagur','Tími','Minuttur','Sekund'],
 		compactLabels: ['Á','M','V','D'],
@@ -12,5 +12,5 @@
 		timeSeparator: ':',
 		isRTL: false
 	};
-	$.countdown.setDefaults($.countdown.regionalOptions.fo);
+	$.easlCountdown.setDefaults($.easlCountdown.regionalOptions.fo);
 })(jQuery);

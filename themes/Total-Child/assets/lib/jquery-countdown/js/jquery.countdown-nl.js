@@ -3,7 +3,7 @@
    Written by Mathias Bynens <http://mathiasbynens.be/> Mar 2008. */
 (function($) {
 	'use strict';
-	$.countdown.regionalOptions.nl = {
+	$.easlCountdown.regionalOptions.nl = {
 		labels: ['Jaren','Maanden','Weken','Dagen','Uren','Minuten','Seconden'],
 		labels1: ['Jaar','Maand','Week','Dag','Uur','Minuut','Seconde'],
 		compactLabels: ['j','m','w','d'],
@@ -12,5 +12,5 @@
 		timeSeparator: ':',
 		isRTL: false
 	};
-	$.countdown.setDefaults($.countdown.regionalOptions.nl);
+	$.easlCountdown.setDefaults($.easlCountdown.regionalOptions.nl);
 })(jQuery);

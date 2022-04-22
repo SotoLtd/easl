@@ -3,7 +3,7 @@
    Written by Keith Wood (wood.keith{at}optusnet.com.au) Jan 2008. */
 (function($) {
 	'use strict';
-	$.countdown.regionalOptions.fr = {
+	$.easlCountdown.regionalOptions.fr = {
 		labels: ['Années','Mois','Semaines','Jours','Heures','Minutes','Secondes'],
 		labels1: ['Année','Mois','Semaine','Jour','Heure','Minute','Seconde'],
 		compactLabels: ['a','m','s','j'],
@@ -14,5 +14,5 @@
 		timeSeparator: ':',
 		isRTL: false
 	};
-	$.countdown.setDefaults($.countdown.regionalOptions.fr);
+	$.easlCountdown.setDefaults($.easlCountdown.regionalOptions.fr);
 })(jQuery);

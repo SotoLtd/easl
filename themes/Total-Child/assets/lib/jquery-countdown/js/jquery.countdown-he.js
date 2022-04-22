@@ -3,7 +3,7 @@
  * Translated by Nir Livne, Dec 2008 */
 (function($) {
 	'use strict';
-	$.countdown.regionalOptions.he = {
+	$.easlCountdown.regionalOptions.he = {
 		labels: ['שנים','חודשים','שבועות','ימים','שעות','דקות','שניות'],
 		labels1: ['שנה','חודש','שבוע','יום','שעה','דקה','שנייה'],
 		compactLabels: ['שנ','ח','שב','י'],
@@ -12,5 +12,5 @@
 		timeSeparator: ':',
 		isRTL: true
 	};
-	$.countdown.setDefaults($.countdown.regionalOptions.he);
+	$.easlCountdown.setDefaults($.easlCountdown.regionalOptions.he);
 })(jQuery);

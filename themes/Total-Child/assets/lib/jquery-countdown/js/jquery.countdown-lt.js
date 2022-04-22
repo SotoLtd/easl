@@ -3,7 +3,7 @@
  * Written by Moacir P. de Sá Pereira (moacir{at}gmail.com) (2009) */
 (function($) {
 	'use strict';
-	$.countdown.regionalOptions.lt = {
+	$.easlCountdown.regionalOptions.lt = {
 		labels: ['Metų','Mėnesių','Savaičių','Dienų','Valandų','Minučių','Sekundžių'],
 		labels1: ['Metai','Mėnuo','Savaitė','Diena','Valanda','Minutė','Sekundė'],
 		compactLabels: ['m','m','s','d'],
@@ -12,5 +12,5 @@
 		timeSeparator: ':',
 		isRTL: false
 	};
-	$.countdown.setDefaults($.countdown.regionalOptions.lt);
+	$.easlCountdown.setDefaults($.easlCountdown.regionalOptions.lt);
 })(jQuery);

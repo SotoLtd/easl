@@ -3,7 +3,7 @@
  * Written by Moncho Pena ramon.pena.rodriguez@gmail.com (2009) and Angel Farrapeira */
 (function($) {
 	'use strict';
-	$.countdown.regionalOptions.gl = {
+	$.easlCountdown.regionalOptions.gl = {
 		labels: ['Anos','Meses','Semanas','Días','Horas','Minutos','Segundos'],
 		labels1: ['Ano','Mes','Semana','Día','Hora','Minuto','Segundo'],
 		compactLabels: ['a','m','s','g'],
@@ -12,5 +12,5 @@
 		timeSeparator: ':',
 		isRTL: false
 	};
-	$.countdown.setDefaults($.countdown.regionalOptions.gl);
+	$.easlCountdown.setDefaults($.easlCountdown.regionalOptions.gl);
 })(jQuery);

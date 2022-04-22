@@ -3,7 +3,7 @@
  * Written by Artur Martirosyan. (artur{at}zoom.am) October 2011. */
 (function($) {
 	'use strict';
-	$.countdown.regionalOptions.hy = {
+	$.easlCountdown.regionalOptions.hy = {
 		labels: ['Տարի','Ամիս','Շաբաթ','Օր','Ժամ','Րոպե','Վարկյան'],
 		labels1: ['Տարի','Ամիս','Շաբաթ','Օր','Ժամ','Րոպե','Վարկյան'],
 		compactLabels: ['տ','ա','շ','օ'], 
@@ -12,5 +12,5 @@
 		timeSeparator: ':',
 		isRTL: false
 	};
-	$.countdown.setDefaults($.countdown.regionalOptions.hy);
+	$.easlCountdown.setDefaults($.easlCountdown.regionalOptions.hy);
 })(jQuery);

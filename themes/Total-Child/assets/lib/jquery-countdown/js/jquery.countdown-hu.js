@@ -3,7 +3,7 @@
  * Written by Edmond L. (webmond@gmail.com). */
 (function($) {
 	'use strict';
-	$.countdown.regionalOptions.hu = {
+	$.easlCountdown.regionalOptions.hu = {
 		labels: ['Év','Hónap','Hét','Nap','Óra','Perc','Másodperc'],
 		labels1: ['Év','Hónap','Hét','Nap','Óra','Perc','Másodperc'],
 		compactLabels: ['É','H','Hé','N'],
@@ -12,5 +12,5 @@
 		timeSeparator: ':',
 		isRTL: false
 	};
-	$.countdown.setDefaults($.countdown.regionalOptions.hu);
+	$.easlCountdown.setDefaults($.easlCountdown.regionalOptions.hu);
 })(jQuery);

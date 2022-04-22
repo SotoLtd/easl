@@ -3,7 +3,7 @@
    Written by Cloudream (cloudream@gmail.com). */
 (function($) {
 	'use strict';
-	$.countdown.regionalOptions['zh-CN'] = {
+	$.easlCountdown.regionalOptions['zh-CN'] = {
 		labels: ['年','月','周','天','时','分','秒'],
 		labels1: ['年','月','周','天','时','分','秒'],
 		compactLabels: ['年','月','周','天'],
@@ -13,5 +13,5 @@
 		timeSeparator: ':',
 		isRTL: false
 	};
-	$.countdown.setDefaults($.countdown.regionalOptions['zh-CN']);
+	$.easlCountdown.setDefaults($.easlCountdown.regionalOptions['zh-CN']);
 })(jQuery);

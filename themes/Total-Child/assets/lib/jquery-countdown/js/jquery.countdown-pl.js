@@ -3,7 +3,7 @@
  * Written by Pawel Lewtak lewtak@gmail.com (2008) */
 (function($) {
 	'use strict';
-	$.countdown.regionalOptions.pl = {
+	$.easlCountdown.regionalOptions.pl = {
 		labels: ['lat','miesięcy','tygodni','dni','godzin','minut','sekund'],
 		labels1: ['rok','miesiąc','tydzień','dzień','godzina','minuta','sekunda'],
 		labels2: ['lata','miesiące','tygodnie','dni','godziny','minuty','sekundy'],
@@ -18,5 +18,5 @@
 		timeSeparator: ':',
 		isRTL: false
 	};
-	$.countdown.setDefaults($.countdown.regionalOptions.pl);
+	$.easlCountdown.setDefaults($.easlCountdown.regionalOptions.pl);
 })(jQuery);

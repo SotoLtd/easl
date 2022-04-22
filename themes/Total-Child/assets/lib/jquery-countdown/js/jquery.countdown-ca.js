@@ -3,7 +3,7 @@
    Written by Amanida Media www.amanidamedia.com (2010) */
 (function($) {
 	'use strict';
-	$.countdown.regionalOptions.ca = {
+	$.easlCountdown.regionalOptions.ca = {
 		labels: ['Anys','Mesos','Setmanes','Dies','Hores','Minuts','Segons'],
 		labels1: ['Anys','Mesos','Setmanes','Dies','Hores','Minuts','Segons'],
 		compactLabels: ['a','m','s','g'],
@@ -12,5 +12,5 @@
 		timeSeparator: ':',
 		isRTL: false
 	};
-	$.countdown.setDefaults($.countdown.regionalOptions.ca);
+	$.easlCountdown.setDefaults($.easlCountdown.regionalOptions.ca);
 })(jQuery);

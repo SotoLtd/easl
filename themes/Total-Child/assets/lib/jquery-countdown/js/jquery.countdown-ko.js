@@ -3,7 +3,7 @@
    Written by Ryan Yu (ryanyu79@gmail.com). */
 (function($) {
 	'use strict';
-	$.countdown.regionalOptions.ko = {
+	$.easlCountdown.regionalOptions.ko = {
 		labels: ['년','월','주','일','시','분','초'],
 		labels1: ['년','월','주','일','시','분','초'],
 		compactLabels: ['년','월','주','일'],
@@ -13,5 +13,5 @@
 		timeSeparator: ':',
 		isRTL: false
 	};
-	$.countdown.setDefaults($.countdown.regionalOptions.ko);
+	$.easlCountdown.setDefaults($.easlCountdown.regionalOptions.ko);
 })(jQuery);

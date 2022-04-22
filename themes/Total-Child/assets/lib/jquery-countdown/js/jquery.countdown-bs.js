@@ -3,7 +3,7 @@
  * Written by Miralem Mehic miralem@mehic.info (2011) */
 (function($) {
 	'use strict';
-	$.countdown.regionalOptions.bs = {
+	$.easlCountdown.regionalOptions.bs = {
 		labels: ['Godina','Mjeseci','Sedmica','Dana','Sati','Minuta','Sekundi'],
 		labels1: ['Godina','Mjesec','Sedmica','Dan','Sat','Minuta','Sekunda'],
 		labels2: ['Godine','Mjeseca','Sedmica','Dana','Sata','Minute','Sekunde'],
@@ -15,5 +15,5 @@
 		timeSeparator: ':',
 		isRTL: false
 	};
-	$.countdown.setDefaults($.countdown.regionalOptions.bs);
+	$.easlCountdown.setDefaults($.easlCountdown.regionalOptions.bs);
 })(jQuery);

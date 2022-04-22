@@ -3,7 +3,7 @@
  * Written by Sergey K. (xslade{at}gmail.com) June 2010. */
 (function($) {
 	'use strict';
-	$.countdown.regionalOptions.ru = {
+	$.easlCountdown.regionalOptions.ru = {
 		labels: ['Лет','Месяцев','Недель','Дней','Часов','Минут','Секунд'],
 		labels1: ['Год','Месяц','Неделя','День','Час','Минута','Секунда'],
 		labels2: ['Года','Месяца','Недели','Дня','Часа','Минуты','Секунды'],
@@ -19,5 +19,5 @@
 		timeSeparator: ':',
 		isRTL: false
 	};
-	$.countdown.setDefaults($.countdown.regionalOptions.ru);
+	$.easlCountdown.setDefaults($.easlCountdown.regionalOptions.ru);
 })(jQuery);

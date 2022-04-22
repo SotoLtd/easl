@@ -3,7 +3,7 @@
    Written by Samuel Wulf. */
 (function($) {
 	'use strict';
-	$.countdown.regionalOptions.de = {
+	$.easlCountdown.regionalOptions.de = {
 		labels: ['Jahre','Monate','Wochen','Tage','Stunden','Minuten','Sekunden'],
 		labels1: ['Jahr','Monat','Woche','Tag','Stunde','Minute','Sekunde'],
 		compactLabels: ['J','M','W','T'],
@@ -12,5 +12,5 @@
 		timeSeparator: ':',
 		isRTL: false
 	};
-	$.countdown.setDefaults($.countdown.regionalOptions.de);
+	$.easlCountdown.setDefaults($.easlCountdown.regionalOptions.de);
 })(jQuery);

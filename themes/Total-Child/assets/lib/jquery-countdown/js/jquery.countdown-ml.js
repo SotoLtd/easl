@@ -4,7 +4,7 @@
 (function($) {
 	'use strict';
 	/* jshint -W100 */
-    $.countdown.regionalOptions.ml = {
+    $.easlCountdown.regionalOptions.ml = {
         labels: ['വര്‍ഷങ്ങള്‍','മാസങ്ങള്‍','ആഴ്ചകള്‍','ദിവസങ്ങള്‍','മണിക്കൂറുകള്‍','മിനിറ്റുകള്‍','സെക്കന്റുകള്‍'],
         labels1: ['വര്‍ഷം','മാസം','ആഴ്ച','ദിവസം','മണിക്കൂര്‍','മിനിറ്റ്','സെക്കന്റ്'],
         compactLabels: ['വ','മ','ആ','ദി'],
@@ -14,5 +14,5 @@
         timeSeparator: ':',
 		isRTL: false
 	};
-    $.countdown.setDefaults($.countdown.regionalOptions.ml);
+    $.easlCountdown.setDefaults($.easlCountdown.regionalOptions.ml);
 })(jQuery);

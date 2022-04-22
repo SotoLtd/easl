@@ -3,7 +3,7 @@
    Translated by Azhar Rasheed (azhar.rasheed19@gmail.com), November 2013. */
 (function($) {
 	'use strict';
-	$.countdown.regionalOptions.ur = {
+	$.easlCountdown.regionalOptions.ur = {
 		labels: ['سال','مہينے','ہفتے','دن','گھنٹے','منٹس','سيکنڑز'],
 		labels1: ['سال','ماہ','ہفتہ','دن','گھنٹہ','منٹ','سیکنڈز'],
 		compactLabels: ['(ق)','سینٹ','ایک','J'],
@@ -12,5 +12,5 @@
 		timeSeparator: ':',
 		isRTL: true
 	};
-	$.countdown.setDefaults($.countdown.regionalOptions.ur);
+	$.easlCountdown.setDefaults($.easlCountdown.regionalOptions.ur);
 })(jQuery);

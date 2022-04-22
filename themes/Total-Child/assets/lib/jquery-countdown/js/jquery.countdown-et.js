@@ -3,7 +3,7 @@
    Written by Helmer <helmer{at}city.ee> */
 (function($) {
 	'use strict';
-    $.countdown.regionalOptions.et = {
+    $.easlCountdown.regionalOptions.et = {
         labels: ['Aastat','Kuud','Nädalat','Päeva','Tundi','Minutit','Sekundit'],
         labels1: ['Aasta','Kuu','Nädal','Päev','Tund','Minut','Sekund'],
         compactLabels: ['a','k','n','p'],
@@ -12,5 +12,5 @@
         timeSeparator: ':',
 		isRTL: false
 	};
-    $.countdown.setDefaults($.countdown.regionalOptions.et);
+    $.easlCountdown.setDefaults($.easlCountdown.regionalOptions.et);
 })(jQuery);

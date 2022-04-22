@@ -3,7 +3,7 @@
  * Written by Jānis Peisenieks janis.peisenieks@gmail.com (2010) */
 (function($) {
 	'use strict';
-	$.countdown.regionalOptions.lv = {
+	$.easlCountdown.regionalOptions.lv = {
 		labels: ['Gadi','Mēneši','Nedēļas','Dienas','Stundas','Minūtes','Sekundes'],
 		labels1: ['Gads','Mēnesis','Nedēļa','Diena','Stunda','Minūte','Sekunde'],
 		compactLabels: ['l','m','n','d'],
@@ -13,5 +13,5 @@
 		timeSeparator: ':',
 		isRTL: false
 	};
-	$.countdown.setDefaults($.countdown.regionalOptions.lv);
+	$.easlCountdown.setDefaults($.easlCountdown.regionalOptions.lv);
 })(jQuery);

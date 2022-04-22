@@ -4,7 +4,7 @@
  * updated by Jan Zavrl (jan@iuvo.si) (2015) */
 (function($) {
 	'use strict';
-	$.countdown.regionalOptions.sl = {
+	$.easlCountdown.regionalOptions.sl = {
 		labels: ['Let','Mesecev','Tednov','Dni','Ur','Minut','Sekund'], // Plurals
 		labels1: ['Leto','Mesec','Teden','Dan','Ura','Minuta','Sekunda'], // Singles
 		labels2: ['Leti','Meseca','Tedna','Dneva','Uri','Minuti','Sekundi'], // Doubles
@@ -18,5 +18,5 @@
 		timeSeparator: ':',
 		isRTL: false
 	};
-	$.countdown.setDefaults($.countdown.regionalOptions.sl);
+	$.easlCountdown.setDefaults($.easlCountdown.regionalOptions.sl);
 })(jQuery);

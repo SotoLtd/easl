@@ -3,7 +3,7 @@
    Written by Erzen Komoni. */
 (function($) {
 	'use strict';
-    $.countdown.regionalOptions.sq = {
+    $.easlCountdown.regionalOptions.sq = {
         labels: ['Vite','Muaj','Javë','Ditë','Orë','Minuta','Sekonda'],
         labels1: ['Vit','Muaj','Javë','Dit','Orë','Minutë','Sekond'],
         compactLabels: ['V','M','J','D'],
@@ -12,5 +12,5 @@
         timeSeparator: ':',
 		isRTL: false
 	};
-    $.countdown.setDefaults($.countdown.regionalOptions.sq);
+    $.easlCountdown.setDefaults($.easlCountdown.regionalOptions.sq);
 })(jQuery);

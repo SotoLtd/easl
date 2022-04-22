@@ -3,7 +3,7 @@
    Written by Pornchai Sakulsrimontri (li_sin_th@yahoo.com). */
 (function($) {
 	'use strict';
-	$.countdown.regionalOptions.th = {
+	$.easlCountdown.regionalOptions.th = {
 		labels: ['ปี','เดือน','สัปดาห์','วัน','ชั่วโมง','นาที','วินาที'],
 		labels1: ['ปี','เดือน','สัปดาห์','วัน','ชั่วโมง','นาที','วินาที'],
 		compactLabels: ['ปี','เดือน','สัปดาห์','วัน'],
@@ -12,5 +12,5 @@
 		timeSeparator: ':',
 		isRTL: false
 	};
-	$.countdown.setDefaults($.countdown.regionalOptions.th);
+	$.easlCountdown.setDefaults($.easlCountdown.regionalOptions.th);
 })(jQuery);

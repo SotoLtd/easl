@@ -3,7 +3,7 @@
    Written by Philip. */
 (function($) {
 	'use strict';
-	$.countdown.regionalOptions.el = {
+	$.easlCountdown.regionalOptions.el = {
 		labels: ['Χρόνια','Μήνες','Εβδομάδες','Μέρες','Ώρες','Λεπτά','Δευτερόλεπτα'],
 		labels1: ['Χρόνος','Μήνας','Εβδομάδα','Ημέρα','Ώρα','Λεπτό','Δευτερόλεπτο'],
 		compactLabels: ['Χρ.','Μην.','Εβδ.','Ημ.'],
@@ -12,5 +12,5 @@
 		timeSeparator: ':',
 		isRTL: false
 	};
-	$.countdown.setDefaults($.countdown.regionalOptions.el);
+	$.easlCountdown.setDefaults($.easlCountdown.regionalOptions.el);
 })(jQuery);

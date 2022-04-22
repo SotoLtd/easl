@@ -3,7 +3,7 @@
  * Written by Roman Chlebec (creamd@c64.sk) (2008) */
 (function($) {
 	'use strict';
-	$.countdown.regionalOptions.sk = {
+	$.easlCountdown.regionalOptions.sk = {
 		labels: ['Rokov','Mesiacov','Týždňov','Dní','Hodín','Minút','Sekúnd'],
 		labels1: ['Rok','Mesiac','Týždeň','Deň','Hodina','Minúta','Sekunda'],
 		labels2: ['Roky','Mesiace','Týždne','Dni','Hodiny','Minúty','Sekundy'],
@@ -15,5 +15,5 @@
 		timeSeparator: ':',
 		isRTL: false
 	};
-	$.countdown.setDefaults($.countdown.regionalOptions.sk);
+	$.easlCountdown.setDefaults($.easlCountdown.regionalOptions.sk);
 })(jQuery);

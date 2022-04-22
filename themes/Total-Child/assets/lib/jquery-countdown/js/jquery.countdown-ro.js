@@ -3,7 +3,7 @@
  * Written by Edmond L. (webmond@gmail.com). */
 (function($) {
 	'use strict';
-	$.countdown.regionalOptions.ro = {
+	$.easlCountdown.regionalOptions.ro = {
 		labels: ['Ani','Luni','Saptamani','Zile','Ore','Minute','Secunde'],
 		labels1: ['An','Luna','Saptamana','Ziua','Ora','Minutul','Secunda'],
 		compactLabels: ['A','L','S','Z'],
@@ -12,5 +12,5 @@
 		timeSeparator: ':',
 		isRTL: false
 	};
-	$.countdown.setDefaults($.countdown.regionalOptions.ro);
+	$.easlCountdown.setDefaults($.easlCountdown.regionalOptions.ro);
 })(jQuery);

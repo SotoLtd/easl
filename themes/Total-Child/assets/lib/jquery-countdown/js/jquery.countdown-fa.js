@@ -4,7 +4,7 @@
    Digits corrected by Hamed Ramezanian Feb 2013. */
 (function($) {
 	'use strict';
-	$.countdown.regionalOptions.fa = {
+	$.easlCountdown.regionalOptions.fa = {
 		labels: ['سال','ماه','هفته','روز','ساعت','دقیقه','ثانیه'],
 		labels1: ['سال','ماه','هفته','روز','ساعت','دقیقه','ثانیه'],
 		compactLabels: ['س','م','ه','ر'],
@@ -13,5 +13,5 @@
 		timeSeparator: ':',
 		isRTL: true
 	};
-	$.countdown.setDefaults($.countdown.regionalOptions.fa);
+	$.easlCountdown.setDefaults($.easlCountdown.regionalOptions.fa);
 })(jQuery);

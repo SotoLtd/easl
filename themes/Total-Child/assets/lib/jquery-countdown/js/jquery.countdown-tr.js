@@ -3,7 +3,7 @@
 * Written by Bekir Ahmetoğlu (bekir@cerek.com) Aug 2008. */
 (function($) {
 	'use strict';
-	$.countdown.regionalOptions.tr = {
+	$.easlCountdown.regionalOptions.tr = {
 		labels: ['Yıl','Ay','Hafta','Gün','Saat','Dakika','Saniye'],
 		labels1: ['Yıl','Ay','Hafta','Gün','Saat','Dakika','Saniye'],
 		compactLabels: ['y','a','h','g'],
@@ -12,5 +12,5 @@
 		timeSeparator: ':',
 		isRTL: false
 	};
-	$.countdown.setDefaults($.countdown.regionalOptions.tr);
+	$.easlCountdown.setDefaults($.easlCountdown.regionalOptions.tr);
 })(jQuery);

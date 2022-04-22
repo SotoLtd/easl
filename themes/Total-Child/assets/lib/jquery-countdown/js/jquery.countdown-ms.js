@@ -3,7 +3,7 @@
    Written by Jason Ong (jason{at}portalgroove.com) May 2010. */
 (function($) {
 	'use strict';
-	$.countdown.regionalOptions.ms = {
+	$.easlCountdown.regionalOptions.ms = {
 		labels: ['Tahun','Bulan','Minggu','Hari','Jam','Minit','Saat'],
 		labels1: ['Tahun','Bulan','Minggu','Hari','Jam','Minit','Saat'],
 		compactLabels: ['t','b','m','h'],
@@ -12,5 +12,5 @@
 		timeSeparator: ':',
 		isRTL: false
 	};
-	$.countdown.setDefaults($.countdown.regionalOptions.ms);
+	$.easlCountdown.setDefaults($.easlCountdown.regionalOptions.ms);
 })(jQuery);

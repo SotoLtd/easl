@@ -3,7 +3,7 @@
  * Written by Gorast Cvetkovski cvetkovski@gorast.com (2016) */
 (function($) {
 	'use strict';
-	$.countdown.regionalOptions.mk = {
+	$.easlCountdown.regionalOptions.mk = {
 		labels: ['Години','Месеци','Недели','Дена','Часа','Минути','Секунди'],
 		labels1: ['Година','Месец','Недела','Ден','Час','Минута','Секунда'],
 		compactLabels: ['l','m','n','d'],
@@ -13,5 +13,5 @@
 		timeSeparator: ':',
 		isRTL: false
 	};
-	$.countdown.setDefaults($.countdown.regionalOptions.mk);
+	$.easlCountdown.setDefaults($.easlCountdown.regionalOptions.mk);
 })(jQuery);

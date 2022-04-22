@@ -3,7 +3,7 @@
  * Written by Mohammed Tajuddin (tajuddin@chittagong-it.com) Jan 2011. */
 (function($) {
 	'use strict';
-    $.countdown.regionalOptions.bn = {
+    $.easlCountdown.regionalOptions.bn = {
         labels: ['বছর','মাস','সপ্তাহ','দিন','ঘন্টা','মিনিট','সেকেন্ড'],
         labels1: ['বছর','মাস','সপ্তাহ','দিন','ঘন্টা','মিনিট','সেকেন্ড'],
         compactLabels: ['ব','মা','স','দি'],
@@ -12,5 +12,5 @@
         timeSeparator: ':',
 		isRTL: false
     };
-    $.countdown.setDefaults($.countdown.regionalOptions.bn);
+    $.easlCountdown.setDefaults($.easlCountdown.regionalOptions.bn);
 })(jQuery);

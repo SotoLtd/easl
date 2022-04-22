@@ -3,7 +3,7 @@
    Translated by Talal Al Asmari (talal@psdgroups.com), April 2009. */
 (function($) {
 	'use strict';
-	$.countdown.regionalOptions.ar = {
+	$.easlCountdown.regionalOptions.ar = {
 		labels: ['سنوات','أشهر','أسابيع','أيام','ساعات','دقائق','ثواني'],
 		labels1: ['سنة','شهر','أسبوع','يوم','ساعة','دقيقة','ثانية'],
 		compactLabels: ['س','ش','أ','ي'],
@@ -12,5 +12,5 @@
 		timeSeparator: ':',
 		isRTL: true
 	};
-	$.countdown.setDefaults($.countdown.regionalOptions.ar);
+	$.easlCountdown.setDefaults($.easlCountdown.regionalOptions.ar);
 })(jQuery);

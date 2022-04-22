@@ -3,7 +3,7 @@
         $('.easl-clock-countdown').each(function (){
             var $clock = $(this);
             var dateTime = $clock.data('datetime');
-            $clock.countdown({
+            $clock.easlCountdown({
                 until: new Date(Date.UTC(dateTime.year, dateTime.month-1, dateTime.day, dateTime.hour, dateTime.min, dateTime.sec)),
                 format: 'YDHMS'
             });

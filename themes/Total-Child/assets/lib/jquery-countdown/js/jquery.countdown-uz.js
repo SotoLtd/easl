@@ -3,7 +3,7 @@
  * Written by Alisher U. (ulugbekov{at}gmail.com) August 2012. */
 (function($) {
 	'use strict';
-	$.countdown.regionalOptions.uz = {
+	$.easlCountdown.regionalOptions.uz = {
 		labels: ['Yil','Oy','Hafta','Kun','Soat','Daqiqa','Soniya'],
 		labels1: ['Yil','Oy','Hafta','Kun','Soat','Daqiqa','Soniya'],
 		compactLabels: ['y','o','h','k'],
@@ -12,5 +12,5 @@
 		timeSeparator: ':',
 		isRTL: false
 	};
-	$.countdown.setDefaults($.countdown.regionalOptions.uz);
+	$.easlCountdown.setDefaults($.easlCountdown.regionalOptions.uz);
 })(jQuery);

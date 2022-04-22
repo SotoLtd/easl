@@ -64,7 +64,7 @@ $clock_title = get_field( 'easl_clock_title', 'option' );
     }
     ?>
     <script src="<?php echo get_stylesheet_directory_uri(); ?>/assets/lib/jquery-countdown/js/jquery.plugin.min.js?ver=2.1.0"></script>
-    <script src="<?php echo get_stylesheet_directory_uri(); ?>/assets/lib/jquery-countdown/js/jquery.countdown.min.js?ver=2.1.0"></script>
+    <script src="<?php echo get_stylesheet_directory_uri(); ?>/assets/lib/jquery-countdown/js/jquery.countdown.min.js?ver=2.1.1"></script>
     <script src="<?php echo get_stylesheet_directory_uri(); ?>/assets/js/easl-clock.js?ver=<?php echo EASL_VC_EASL_Clock::$clock_version; ?>"></script>
 </head>
 <body>

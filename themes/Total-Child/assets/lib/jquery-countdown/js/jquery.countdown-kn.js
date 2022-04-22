@@ -3,7 +3,7 @@
  * Written by Guru Chaturvedi guru@gangarasa.com (2011) */
 (function($) {
 	'use strict';
-	$.countdown.regionalOptions.kn = {
+	$.easlCountdown.regionalOptions.kn = {
 		labels: ['ವರ್ಷಗಳು','ತಿಂಗಳು','ವಾರಗಳು','ದಿನಗಳು','ಘಂಟೆಗಳು','ನಿಮಿಷಗಳು','ಕ್ಷಣಗಳು'],
 		labels1: ['ವರ್ಷ','ತಿಂಗಳು','ವಾರ','ದಿನ','ಘಂಟೆ','ನಿಮಿಷ','ಕ್ಷಣ'],
 		compactLabels: ['ವ','ತಿ','ವಾ','ದಿ'],
@@ -12,5 +12,5 @@
 		timeSeparator: ':',
 		isRTL: false
 	};
-	$.countdown.setDefaults($.countdown.regionalOptions.kn);
+	$.easlCountdown.setDefaults($.easlCountdown.regionalOptions.kn);
 })(jQuery);

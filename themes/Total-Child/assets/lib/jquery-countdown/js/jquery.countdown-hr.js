@@ -4,7 +4,7 @@
  * Improved by zytzagoo (2014) */
 (function($) {
 	'use strict';
-	$.countdown.regionalOptions.hr = {
+	$.easlCountdown.regionalOptions.hr = {
 		labels: ['Godina','Mjeseci','Tjedana','Dana','Sati','Minuta','Sekundi'], // plurals
 		labels1: ['Godina','Mjesec','Tjedan','Dan','Sat','Minutu','Sekundu'], // singles
 		labels2: ['Godine','Mjeseca','Tjedana','Dana','Sata','Minute','Sekunde'], // paucals
@@ -23,5 +23,5 @@
 		timeSeparator: ':',
 		isRTL: false
 	};
-	$.countdown.setDefaults($.countdown.regionalOptions.hr);
+	$.easlCountdown.setDefaults($.easlCountdown.regionalOptions.hr);
 })(jQuery);

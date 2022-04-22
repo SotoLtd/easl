@@ -3,7 +3,7 @@
  * Written by Manol Trendafilov manol@rastermania.com (2010) */
 (function($) {
 	'use strict';
-	$.countdown.regionalOptions.bg = {
+	$.easlCountdown.regionalOptions.bg = {
 		labels: ['Години','Месеца','Седмица','Дни','Часа','Минути','Секунди'],
 		labels1: ['Година','Месец','Седмица','Ден','Час','Минута','Секунда'],
 		compactLabels: ['l','m','n','d'],
@@ -13,5 +13,5 @@
 		timeSeparator: ':',
 		isRTL: false
 	};
-	$.countdown.setDefaults($.countdown.regionalOptions.bg);
+	$.easlCountdown.setDefaults($.easlCountdown.regionalOptions.bg);
 })(jQuery);

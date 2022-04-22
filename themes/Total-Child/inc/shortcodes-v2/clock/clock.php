@@ -5,7 +5,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 
 class EASL_VC_EASL_Clock extends EASL_ShortCode {
-    public static $clock_version = '1.1';
+    public static $clock_version = '2.1';
     private static $clock_count = 0;
     public static function get_clock_count() {
         return self::$clock_count;
@@ -22,7 +22,7 @@ class EASL_VC_EASL_Clock extends EASL_ShortCode {
         wp_enqueue_script( 'jquery_countdown', get_stylesheet_directory_uri() . '/assets/lib/jquery-countdown/js/jquery.countdown.min.js', array(
             'jquery',
             'jquery_countdown_plugin'
-        ), '2.1.0' );
+        ), '2.1.1' );
         wp_enqueue_script( 'easl-clock', get_stylesheet_directory_uri() . '/assets/js/easl-clock.js', array(
             'jquery',
             'jquery_countdown'

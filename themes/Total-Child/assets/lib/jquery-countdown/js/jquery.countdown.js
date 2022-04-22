@@ -48,7 +48,7 @@
 			@global
 			@callback CountdownServerSyncCallback
 			@return {Date} The current date/time on the server as expressed in the local timezone.
-			@this <code>$.countdown</code>
+			@this <code>$.easlCountdown</code>
 			@example serverSync: function() {
   var time = null;
   $.ajax({url: 'http://myserver.com/serverTime.php',
@@ -145,7 +145,7 @@ timezone: -60
 						(years, months, weeks, days, hours, minutes, seconds - based on
 						<code>format</code>) and <code>this</code> is the containing element.
 			@example onTick: function(periods) {
-  var secs = $.countdown.periodsToSeconds(periods);
+  var secs = $.easlCountdown.periodsToSeconds(periods);
   if (secs < 300) { // Last five minutes
     ...
   }
@@ -251,7 +251,7 @@ timezone: -60
 			if (!requestAnimationFrame || $.noRequestAnimationFrame) {
 				$.noRequestAnimationFrame = null;
 				// Fall back to good old setInterval
-				$.countdown._timer = setInterval(function() { self._updateElems(); }, 1000);
+				$.easlCountdown._timer = setInterval(function() { self._updateElems(); }, 1000);
 			}
 			else {
 				animationStartTime = window.animationStartTime ||
@@ -271,8 +271,8 @@ timezone: -60
 			@param {number} [secs] The second (omit if <code>year</code> is a <code>Date</code>).
 			@param {number} [ms] The millisecond (omit if <code>year</code> is a <code>Date</code>).
 			@return {Date} The equivalent UTC date/time.
-			@example $.countdown.UTCDate(+10, 2013, 12-1, 25, 12, 0)
-$.countdown.UTCDate(-7, new Date(2013, 12-1, 25, 12, 0)) */
+			@example $.easlCountdown.UTCDate(+10, 2013, 12-1, 25, 12, 0)
+$.easlCountdown.UTCDate(-7, new Date(2013, 12-1, 25, 12, 0)) */
 		UTCDate: function(tz, year, month, day, hours, mins, secs, ms) {
 			if (typeof year === 'object' && year instanceof Date) {
 				ms = year.getMilliseconds();
@@ -299,14 +299,14 @@ $.countdown.UTCDate(-7, new Date(2013, 12-1, 25, 12, 0)) */
 			Averaged for months and years.
 			@param {number[]} periods The periods per year/month/week/day/hour/minute/second.
 			@return {number} The corresponding number of seconds.
-			@example var secs = $.countdown.periodsToSeconds(periods) */
+			@example var secs = $.easlCountdown.periodsToSeconds(periods) */
 		periodsToSeconds: function(periods) {
 			return periods[0] * 31557600 + periods[1] * 2629800 + periods[2] * 604800 +
 				periods[3] * 86400 + periods[4] * 3600 + periods[5] * 60 + periods[6];
 		},
 
 		/** Resynchronise the countdowns with the server.
-			@example $.countdown.resync() */
+			@example $.easlCountdown.resync() */
 		resync: function() {
 			var self = this;
 			$('.' + this._getMarker()).each(function() { // Each countdown

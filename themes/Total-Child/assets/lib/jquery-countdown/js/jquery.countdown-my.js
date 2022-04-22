@@ -3,7 +3,7 @@
    Written by Win Lwin Moe (winnlwinmoe@gmail.com) Dec 2009. */
 (function($) {
 	'use strict';
-	$.countdown.regionalOptions.my = {
+	$.easlCountdown.regionalOptions.my = {
 		labels: ['နွစ္','လ','ရက္သတဿတပတ္','ရက္','နာရီ','မိနစ္','စကဿကန့္'],
 		labels1: ['နွစ္','လ','ရက္သတဿတပတ္','ရက္','နာရီ','မိနစ္','စကဿကန့္'],
 		compactLabels: ['နွစ္','လ','ရက္သတဿတပတ္','ရက္'],
@@ -12,5 +12,5 @@
 		timeSeparator: ':',
 		isRTL: false
 	};
-	$.countdown.setDefaults($.countdown.regionalOptions.my);
+	$.easlCountdown.setDefaults($.easlCountdown.regionalOptions.my);
 })(jQuery);

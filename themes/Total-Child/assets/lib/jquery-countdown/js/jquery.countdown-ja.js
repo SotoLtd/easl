@@ -3,7 +3,7 @@
    Written by Ken Ishimoto (ken@ksroom.com) Aug 2009. */
 (function($) {
 	'use strict';
-	$.countdown.regionalOptions.ja = {
+	$.easlCountdown.regionalOptions.ja = {
 		labels: ['年','月','週','日','時','分','秒'],
 		labels1: ['年','月','週','日','時','分','秒'],
 		compactLabels: ['年','月','週','日'],
@@ -12,5 +12,5 @@
 		timeSeparator: ':',
 		isRTL: false
 	};
-	$.countdown.setDefaults($.countdown.regionalOptions.ja);
+	$.easlCountdown.setDefaults($.easlCountdown.regionalOptions.ja);
 })(jQuery);

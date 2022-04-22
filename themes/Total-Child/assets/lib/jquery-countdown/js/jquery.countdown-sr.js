@@ -3,7 +3,7 @@
  * Written by Predrag Leka lp@lemurcake.com (2010) */
 (function($) {
 	'use strict';
-	$.countdown.regionalOptions.sr = {
+	$.easlCountdown.regionalOptions.sr = {
 		labels: ['Година','Месеци','Недеља','Дана','Часова','Минута','Секунди'],
 		labels1: ['Година','месец','Недеља','Дан','Час','Минут','Секунда'],
 		labels2: ['Године','Месеца','Недеље','Дана','Часа','Минута','Секунде'],
@@ -15,5 +15,5 @@
 		timeSeparator: ':',
 		isRTL: false
 	};
-	$.countdown.setDefaults($.countdown.regionalOptions.sr);
+	$.easlCountdown.setDefaults($.easlCountdown.regionalOptions.sr);
 })(jQuery);
