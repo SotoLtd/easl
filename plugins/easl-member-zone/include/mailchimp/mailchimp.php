@@ -380,6 +380,11 @@ class EASL_MZ_Mailchimp {
         return $interests;
     }
     
+    /**
+     * @param $request_data
+     *
+     * @return bool
+     */
     public static function sign_up( $request_data ) {
         
         $api = easl_mz_get_manager()->getApi();
@@ -397,6 +402,8 @@ class EASL_MZ_Mailchimp {
         $interests             = self::get_interests_fields( $request_data );
         $data['email_address'] = $request_data['email1'];
         $data['status']        = 'subscribed';
+        $data['status_if_new']        = 'subscribed';
+        $data['skip_merge_validation']        = true;
         $data['merge_fields']  = $merge_fields;
         
         if ( count( $merge_fields ) > 0 ) {
@@ -405,33 +412,121 @@ class EASL_MZ_Mailchimp {
         if ( count( $interests ) > 0 ) {
             $data['interests'] = $interests;
         }
+    
+        $subscriber_hash = md5(strtolower($data['email_address']));
         $json = json_encode( $data );
         $api->get_request_object()->add_log( date( 'c', time() ) . ' :: Subscribe member to Mailchimp ' );
         $api->get_request_object()->add_log( 'Request Data:' );
         $api->get_request_object()->add_log( print_r( $data, true ) );
         $api->get_request_object()->add_log( $json );
         
-        $url = 'https://us1.api.mailchimp.com/3.0/lists/' . $list_id . '/members';
+        $url = 'https://us1.api.mailchimp.com/3.0/lists/' . $list_id . '/members/'. $subscriber_hash;
         
         $ch = curl_init( $url );
         curl_setopt( $ch, CURLOPT_USERPWD, 'user:' . $api_key );
         curl_setopt( $ch, CURLOPT_HTTPHEADER, [ 'Content-Type: application/json' ] );
         curl_setopt( $ch, CURLOPT_RETURNTRANSFER, true );
         curl_setopt( $ch, CURLOPT_TIMEOUT, 10 );
-        curl_setopt( $ch, CURLOPT_CUSTOMREQUEST, 'POST' );
+        curl_setopt( $ch, CURLOPT_CUSTOMREQUEST, 'PUT' );
         curl_setopt( $ch, CURLOPT_SSL_VERIFYPEER, false );
         curl_setopt( $ch, CURLOPT_POSTFIELDS, $json );
         
         $result   = curl_exec( $ch );
         $httpCode = curl_getinfo( $ch, CURLINFO_HTTP_CODE );
         curl_close( $ch );
-    
-    
+        
+        $result = $result ? json_decode($result) : [];
+        
         $api->get_request_object()->add_log( 'Response Code: ' . $httpCode );
         $api->get_request_object()->add_log( 'Response Body: ' );
-        $api->get_request_object()->add_log( print_r( json_decode($result), true ) );
+        $api->get_request_object()->add_log( print_r( $result, true ) );
         $api->get_request_object()->close_logger();
         
-        return $httpCode;
+        if(!$result || empty($result->status) || ('subscribed' != $result->status)) {
+            return false;
+        }
+        
+        return true;
+    }
+    
+    /**
+     * @param $email
+     *
+     * @return bool
+     */
+    public static function unsubscribe( $email ) {
+        
+        $api_key = get_field( 'mz_mailchimp_api_key', 'options' );
+        $list_id = get_field( 'mz_mailchimp_list_id', 'options' );
+        
+        if ( ! $api_key || ! $list_id ) {
+            return false;
+        }
+    
+        $subscriber_hash = md5(strtolower($email));
+        $data = [
+            'status' => 'unsubscribed',
+            'skip_merge_validation' => true,
+        ];
+        $json = json_encode( $data );
+        
+        $url = 'https://us1.api.mailchimp.com/3.0/lists/' . $list_id . '/members/' . $subscriber_hash;
+        
+        $ch = curl_init( $url );
+        curl_setopt( $ch, CURLOPT_USERPWD, 'user:' . $api_key );
+        curl_setopt( $ch, CURLOPT_HTTPHEADER, [ 'Content-Type: application/json' ] );
+        curl_setopt( $ch, CURLOPT_RETURNTRANSFER, true );
+        curl_setopt( $ch, CURLOPT_TIMEOUT, 10 );
+        curl_setopt( $ch, CURLOPT_CUSTOMREQUEST, 'PATCH' );
+        curl_setopt( $ch, CURLOPT_SSL_VERIFYPEER, false );
+        curl_setopt( $ch, CURLOPT_POSTFIELDS, $json );
+        
+        $result   = curl_exec( $ch );
+        curl_close( $ch );
+    
+        $result = $result ? json_decode($result) : false;
+        
+        if(!$result || empty($result->status) || !in_array($result->status, ['404', 'unsubscribed'])) {
+            return false;
+        }
+        
+        return true;
+    }
+    
+    /**
+     * @param $email
+     *
+     * @return bool
+     */
+    public static function email_is_subscribed( $email ) {
+        
+        $api_key = get_field( 'mz_mailchimp_api_key', 'options' );
+        $list_id = get_field( 'mz_mailchimp_list_id', 'options' );
+        
+        if ( ! $api_key || ! $list_id ) {
+            return false;
+        }
+    
+        $subscriber_hash = md5(strtolower($email));
+        
+        $url = 'https://us1.api.mailchimp.com/3.0/lists/' . $list_id . '/members/' . $subscriber_hash;
+        
+        $ch = curl_init( $url );
+        curl_setopt( $ch, CURLOPT_USERPWD, 'user:' . $api_key );
+        curl_setopt( $ch, CURLOPT_HTTPHEADER, [ 'Content-Type: application/json' ] );
+        curl_setopt( $ch, CURLOPT_RETURNTRANSFER, true );
+        curl_setopt( $ch, CURLOPT_TIMEOUT, 10 );
+        curl_setopt( $ch, CURLOPT_CUSTOMREQUEST, 'GET' );
+        curl_setopt( $ch, CURLOPT_SSL_VERIFYPEER, false );
+        
+        $result   = curl_exec( $ch );
+        curl_close( $ch );
+    
+        $result = $result ? json_decode($result) : false;
+        if(!$result || empty($result->status) || ('subscribed' != $result->status)) {
+            return false;
+        }
+        
+        return true;
     }
 }

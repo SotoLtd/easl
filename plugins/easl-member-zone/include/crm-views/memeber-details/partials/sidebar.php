@@ -130,5 +130,32 @@ $is_member = $member['dotb_mb_id'] && $member['dotb_mb_current_status'] === 'act
         <div class="mzms-sbitem mzms-delete-account-request">
             <p>If you need assistance with membership renewal or would like to delete your account, please contact <a href="mailto:membership@easloffice.eu">membership@easloffice.eu</a></p>
         </div>
+        <div class="mzms-sbitem">
+            <?php
+        
+            $subscribe_button_title = '';
+            $subscribe_button_data = '';
+            if($member['dotb_easl_newsletter_agree'] ){
+                $manager = EASL_MZ_Manager::get_instance();
+                require_once $manager->path( 'APP_ROOT', 'include/mailchimp/mailchimp.php' );
+                $is_subscribed = EASL_MZ_Mailchimp::email_is_subscribed( $member['email1'] );
+                if(!$is_subscribed) {
+                    $subscribe_button_title = 'Resubscribe to mailing list';
+                    $subscribe_button_data = 'data-type="subscribe"';
+                }else{
+                    $subscribe_button_title = 'Unsubscribe to mailing list';
+                    $subscribe_button_data = 'data-type="unsubscribe"';
+                }
+            }else{
+                $subscribe_button_title = 'Subscribe to mailing list';
+                $subscribe_button_data = 'data-type="subscribe"';
+            }
+        
+            ?>
+            <button class="mzms-button mzms-sub-unsub-button" <?php echo $subscribe_button_data; ?>>
+                <i class="ticon ticon-spinner ticon-spin"></i>
+                <span><?php echo $subscribe_button_title; ?></span>
+            </button>
+        </div>
     </div>
 </div>

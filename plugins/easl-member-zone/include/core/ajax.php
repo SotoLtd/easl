@@ -548,7 +548,63 @@ class EASL_MZ_Ajax_Handler {
             'skip_dashboard' => $_POST['request_data']['skip_dashboard']
 		), 200, $extra_data );
 	}
-
+    
+    public function subscribe_member_to_mailing_list() {
+        if ( ! easl_mz_is_member_logged_in() ) {
+            $this->respond( 'Member not logged in!', 401 );
+        }
+        if ( empty( $_POST['request_data']['sub_type'] ) ) {
+            $this->respond( 'No fields specified!', 404 );
+        }
+        $sub_type = $_POST['request_data']['sub_type'];
+        $current_member_id = $this->session->get_current_member_id();
+        if ( ! $current_member_id ) {
+            $current_member_id = $this->api->get_member_id();
+            
+            if ( $current_member_id ) {
+                $this->session->add_data( 'member_id', $current_member_id );
+                $this->session->save_session_data();
+            }
+        }
+        if ( ! $current_member_id ) {
+            $this->respond( 'Member not found!', 404 );
+        }
+        $member_details = $this->api->get_member_details( $current_member_id, false );
+        if ( ! $member_details ) {
+            $this->respond( 'Member ' . $current_member_id . ' not found!', 404 );
+        }
+        $manager = EASL_MZ_Manager::get_instance();
+        require_once $manager->path( 'APP_ROOT', 'include/mailchimp/mailchimp.php' );
+        
+        $status_code = 400;
+        if ( 'subscribe' == $sub_type ) {
+            $result = EASL_MZ_Mailchimp::sign_up( $member_details );
+            if ( $result ) {
+                $status_code                   = 200;
+                $response_data['type']         = 'unsubscribe';
+                $response_data['button_title'] = 'Unsubscribe from mailing list';
+                $response_data['msg']          = 'Thank you! You are added to the mailing list.';
+    
+                $this->api->update_member_personal_info( $current_member_id, ['dotb_easl_newsletter_agree' => true] );
+            } else {
+                $status_code          = 400;
+                $response_data['msg'] = 'We are sorry! There is error in adding you in the mailing list. Please try again later.';
+            }
+        } elseif ( 'unsubscribe' == $sub_type ) {
+            $result = EASL_MZ_Mailchimp::unsubscribe( $member_details['email1'] );
+            if ( $result ) {
+                $status_code                   = 200;
+                $response_data['type']         = 'subscribe';
+                $response_data['button_title'] = 'Resubscribe to mailing list';
+                $response_data['msg']          = 'You are unsubscribed! You can always subscribe to the mailing list anytime from your profile page.';
+                $this->api->update_member_personal_info( $current_member_id, ['dotb_easl_newsletter_agree' => false] );
+            } else {
+                $status_code          = 400;
+                $response_data['msg'] = 'We are sorry! There is error while unsubscribing you from the mailing list. Please try again later.';
+            }
+        }
+        $this->respond( '', $status_code, $response_data );
+    }
 	public function update_member_profile() {
         if ( ! easl_mz_is_member_logged_in() ) {
             $this->respond( 'Member not logged in!', 401 );

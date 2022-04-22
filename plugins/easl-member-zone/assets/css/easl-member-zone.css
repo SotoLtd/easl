@@ -1548,6 +1548,16 @@ body .mzms-button::after {
 .mzms-form-button-wrap {
     text-align: right;
 }
+.mzms-sub-unsub-button {
+}
+.mzms-sub-unsub-button > .ticon {
+    display: none;
+}
+
+.mzms-sub-unsub-button.easl-button-processing > .ticon {
+    display: inline-block;;
+    margin-right: 4px;
+}
 
 .mzms-fields-con .mzms-field-label,
 .mzms-fields-con .easl-custom-checkbox span, .acf-fields .acf-field .acf-label label {

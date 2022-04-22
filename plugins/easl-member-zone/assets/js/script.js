@@ -82,6 +82,7 @@
             "memberCard": 'get_member_card',
             "featuredMember": 'get_featured_member',
             "membershipForm": 'get_membership_form',
+            "subscribeMailList": 'subscribe_member_to_mailing_list',
             "membershipBanner": 'get_membership_banner',
             "newMembershipForm": 'get_new_membership_form',
             "submitMemberShipForm": "update_member_profile",
@@ -355,6 +356,10 @@
                 event.preventDefault();
                 _this.changePassword($el);
             });
+            $(".mzms-sub-unsub-button", $el).on("click", function (event) {
+                event.preventDefault();
+                _this.subscribeMemberToMailList($(this), $el);
+            });
             $(".mzms-button-has-empty-fields", $el).on("click", function (event) {
                 event.preventDefault();
                 var $button = $(this);
@@ -509,8 +514,44 @@
             });
             this.request(this.methods.deleteMyAccount, $form, {"id": $form.find('#mzf_id').val()});
         },
+        subscribeMemberToMailList: function($button, $el) {
+            var _this = this;
+            var data = {
+                sub_type: $button.attr('data-type')
+            }
+            if($button.hasClass('easl-button-processing')) {
+                return;
+            }
+            $button.addClass('easl-button-processing');
+            $button.one("mz_loaded:" + this.methods.subscribeMailList, function (event, response, method) {
+                $button.removeClass('easl-button-processing');
+                if (response.Status === 200) {
+                    mzModal.init();
+                    mzModal.show('<div class="mz-modal-response-msg">'+ response.Data.msg +'</div>', 'account.subscribed.ok');
+                    $button.attr('data-type', response.Data.type);
+                    $button.find('span').html(response.Data.button_title);
+                }
+                if (response.Status === 404) {
+                    mzModal.init();
+                    mzModal.show('<div class="mz-modal-response-msg">We could not process your request. Please try again.</div>', 'account.subscribed.failed');
+                }
+                if (response.Status === 400) {
+                    mzModal.init();
+                    mzModal.show('<div class="mz-modal-response-msg">'+ response.Data.msg +'</div>', 'account.subscribed.failed');
+                }
+                if (response.Status === 401) {
+                    mzModal.init();
+                    mzModal.$el.one("mz.modal.hidden.account.update.unauthorized", function () {
+                        //may be refresh here
+                    });
+                    mzModal.show('<div class="mz-modal-password-changed">Unauthorized! Refresh the page.</div>', 'account.update.unauthorized');
+                }
+            });
+    
+            _this.request(this.methods.subscribeMailList, $button, data);
+        },
         submitMemberShipForm: function ($form, successCB) {
-            _this = this;
+            var _this = this;
             this.clearFieldErrors($form);
             $form.closest(".wpb_easl_mz_membership").addClass("easl-mz-form-processing").append('<div class="easl-mz-membership-loader">' + this.loaderHtml + '</div>');
             $("html, body").stop().animate({
