@@ -305,7 +305,7 @@ function easl_mz_get_members_allowed_categories( $member ) {
 		unset( $categories['emeritus'] );
 		unset( $categories['emeritus_jhep'] );
 	}
-
+    /*
 	if ( ( $geo_reg != 'europe' ) && ( $member[ 'primary_address_country' != 'ISR' ] ) ) {
 		unset( $categories['regular'] );
 		unset( $categories['regular_jhep'] );
@@ -314,7 +314,7 @@ function easl_mz_get_members_allowed_categories( $member ) {
 		unset( $categories['corresponding'] );
 		unset( $categories['corresponding_jhep'] );
 	}
-
+    */
 	return $categories;
 }
 
@@ -329,6 +329,63 @@ function easl_mz_calculate_age( $dob ) {
 	return $interval->y;
 }
 
+function easl_mz_get_europe_countries(){
+    $europe_ccs = array(
+        "ALB",
+        "AND",
+        "ARM",
+        "AUT",
+        "AZE",
+        "BLR",
+        "BEL",
+        "BIH",
+        "BGR",
+        "HRV",
+        "CYP",
+        "CZE",
+        "DNK",
+        "EST",
+        "FIN",
+        "FRA",
+        "GEO",
+        "DEU",
+        "GRC",
+        "HUN",
+        "ISL",
+        "IRL",
+        "ISR",
+        "ITA",
+        "KAZ",
+        "KGZ",
+        "LVA",
+        "LTU",
+        "LUX",
+        "MKD",
+        "MLT",
+        "MDA",
+        "MCO",
+        "MNE",
+        "NLD",
+        "NOR",
+        "POL",
+        "PRT",
+        "ROU",
+        "RUS",
+        "SMR",
+        "SRB",
+        "SVK",
+        "SVN",
+        "ESP",
+        "SWE",
+        "CHE",
+        "TUR",
+        "TKM",
+        "UKR",
+        "GBR",
+        "UZB",
+    );
+    return $europe_ccs;
+}
 function easl_mz_get_geo_reg( $country_code ) {
 	$map = array(
 		"ALB" => "europe",

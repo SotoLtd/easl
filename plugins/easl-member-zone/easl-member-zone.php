@@ -14,7 +14,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 
 
-define( 'EASL_MZ_VERSION', '1.4.10' );
+define( 'EASL_MZ_VERSION', '1.5.0' );
 
 //define( 'EASL_MZ_VERSION', time() );
 
@@ -468,14 +468,14 @@ class EASL_MZ_Manager {
 		if ( ! $membership_cat_name ) {
 			$this->set_message( 'membership_error', 'Membership category not found.' );
 
-			return;
+			return false;
 		}
 
 
 		if ( ! easl_mz_is_member_logged_in() ) {
 			$this->set_message( 'membership_error', 'You are not allowed to change your profile picture.' );
 
-			return;
+			return false;
 		}
 		$current_member_id = $this->session->get_current_member_id();
 		if ( ! $current_member_id ) {
@@ -489,7 +489,7 @@ class EASL_MZ_Manager {
 		if ( ! $current_member_id || ( $current_member_id != $member_id ) ) {
 			$this->set_message( 'membership_error', 'You are not allowed to change your profile picture.' );
 
-			return;
+			return false;
 		}
 
 		$membership_name = $member_name . ' - ' . $membership_cat_name;
@@ -907,10 +907,9 @@ class EASL_MZ_Manager {
 			'messages'       => $this->get_messages(),
 			'mapAPIkey'      => get_field( 'mz_map_api_key', 'option' ),
 			'membershipFees' => easl_mz_get_membership_category_fees_calculation(),
+            'europeCCs'      => easl_mz_get_europe_countries(),
 			'loaderHtml'     => '<div class="easl-mz-loader"><img src="' . get_stylesheet_directory_uri() . '/images/easl-loader.gif" alt="loading..."></div>',
 		);
-
-		$this->get_messages();
 
 		wp_localize_script( 'easl-mz-script', 'EASLMZSETTINGS', $script_settings );
 	}

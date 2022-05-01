@@ -827,9 +827,18 @@
                     $mzf_eilf_amount_wrapper.removeClass('easl-other-active');
                 }
             });
+            $("#mzf_primary_address_country", $el).on('change', function (e){
+                _this.updateMemCatDDc();
+            });
             var $termsCondition = $("#mzf_terms_condition", $el);
             $("form", $el).on("submit", function (event) {
                 var hasError = false;
+                if(!$mzf_membership_category.val()) {
+                    hasError = true;
+                    _this.showFieldError("membership_category", "Please select a category.", $el);
+                }else{
+                    _this.clearSingleFieldError("membership_category", $el);
+                }
                 if (!$termsCondition.prop("checked")) {
                     hasError = true;
                     _this.showFieldError("terms_condition", "You must agree to our terms and conditions.", $el);
@@ -857,6 +866,25 @@
                 }
             });
         },
+        updateMemCatDDc: function($el) {
+            var cc = $("#mzf_primary_address_country", $el).val();
+            var $memCatDD = $("#mzf_membership_category", $el);
+            var memCat = $memCatDD.val();
+            var isEurope = EASLMZSETTINGS.europeCCs.indexOf(cc) >= 0;
+            if(isEurope){
+                $memCatDD.find('option[value="regular"],option[value="regular_jhep"]').prop('disabled', false);
+                $memCatDD.find('option[value="corresponding"],option[value="corresponding_jhep"]').prop('disabled', true);
+                if(memCat === 'corresponding' || memCat === 'corresponding_jhep') {
+                    $memCatDD.val(null).trigger('change');
+                }
+            }else{
+                $memCatDD.find('option[value="regular"],option[value="regular_jhep"]').prop('disabled', true);
+                $memCatDD.find('option[value="corresponding"],option[value="corresponding_jhep"]').prop('disabled', false);
+                if(memCat === 'regular' || memCat === 'regular_jhep') {
+                    $memCatDD.val(null).trigger('change');
+                }
+            }
+        },
         getNewMembershipForm: function () {
             var _this = this;
             var $el = $(".easl-mz-new-membership-form");
@@ -865,6 +893,7 @@
                 $el.on("mz_loaded:" + this.methods.newMembershipForm, function (event, response, method) {
                     _this.loadHtml($(this), response);
                     $("body").trigger("mz_reload_custom_fields");
+                    _this.updateMemCatDDc($el);
                     $(".easl-mz-select2", $(this)).select2({
                         closeOnSelect: true,
                         allowClear: true,
