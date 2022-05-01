@@ -448,8 +448,9 @@ class EASLApplicationsPlugin {
         $reviewers = get_post_meta( get_post_meta( $app_id, 'programme_id', true ), 'reviewers', true );
         if ( $reviewers ) {
             $reviewers = wp_list_pluck( $reviewers, 'email' );
+            $reviewers = array_map('strtolower', $reviewers);
         }
-        if ( $reviewers && is_array( $reviewers ) && ! empty( $sessionData['member_id'] ) && in_array( $sessionData['member_data']['email1'], $reviewers ) ) {
+        if ( $reviewers && is_array( $reviewers ) && ! empty( $sessionData['member_id'] ) && in_array( strtolower($sessionData['member_data']['email1']), $reviewers ) ) {
             return true;
         }
         return false;

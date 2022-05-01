@@ -215,7 +215,8 @@ class EASLAppReview {
         $scoringCriteriaNames = wp_list_pluck($scoringCriteria, 'criteria_name');
         foreach($reviewers as $reviewer) {
             $reviewerName   = $reviewer['firstName'] . ' ' . $reviewer['lastName'];
-            $headerFields[] = $reviewerName . ' Review total score';
+            $headerFields[] = $reviewerName . ' Review total score - first choice';
+            $headerFields[] = $reviewerName . ' Review total score - second choice';
             $headerFields[] = $reviewerName . ' Review text';
             foreach ( $scoringCriteria as $category ) {
                 $criteria_label = isset($category['criteria_label']) ? $category['criteria_label'] : $category['criteria_name'];
@@ -225,18 +226,19 @@ class EASLAppReview {
 
         foreach($this->getSubmissions($programmeId, null) as $sub) {
             $sub_data = array_values( $this->getSubmissionDetails( $sub['submission'], true ) );
-            $reviews  = $this->getSubmissionReviewsAllFields( $sub['id'], $scoringCriteriaNames );
+            $reviews  = $this->getSubmissionReviewsAllFields( $sub['id'], $scoringCriteriaNames, $is_combined_school );
             if ( ! $reviews ) {
                 $reviews = array();
             }
             foreach ( $reviewers_emails as $reviewer_email ) {
                 if($is_combined_school){
                     if ( isset( $reviews[ $reviewer_email ] ) ) {
-                        $sub_data[ $reviewer_email . ' total_score' ] = $reviews[ $reviewer_email ]['total_score'];
+                        $sub_data[ $reviewer_email . ' total_score_1' ] = $reviews[ $reviewer_email ]['total_scores']['choice1'];
+                        $sub_data[ $reviewer_email . ' total_score_2' ] = $reviews[ $reviewer_email ]['total_scores']['choice2'];
                         $sub_data[ $reviewer_email . ' review_text' ] = preg_replace( '/[\s]+/', ' ', $data = str_replace( ';', '-', $reviews[ $reviewer_email ]['review_text'] ) );
                         $sub_data                                     = array_merge( $sub_data, array_values( $reviews[ $reviewer_email ]['scoring'] ) );
                     } else {
-                        $sub_data = array_merge( $sub_data, array_fill( 0, 2 + count( $scoringCriteriaNames ), '' ) );
+                        $sub_data = array_merge( $sub_data, array_fill( 0, 3 + count( $scoringCriteriaNames ), '' ) );
                     }
                 }else {
                     if ( isset( $reviews[ $reviewer_email ] ) ) {
@@ -346,7 +348,7 @@ class EASLAppReview {
         return true;
     }
     
-    protected function getSubmissionReviewsAllFields( $submissionID, $scoringCriteriaNames ) {
+    protected function getSubmissionReviewsAllFields( $submissionID, $scoringCriteriaNames, $is_combined_school=false ) {
         global $wpdb;
         $sql = "SELECT p.ID, rt.meta_value AS review_text, re.meta_value AS reviewer_email, ts.meta_value AS total_score, sc.meta_value AS scoring  FROM {$wpdb->posts} AS p";
         $sql .= " INNER JOIN {$wpdb->postmeta} ON ( p.ID = {$wpdb->postmeta}.post_id )";
@@ -366,6 +368,18 @@ class EASLAppReview {
         if ( ! $result ) {
             return array();
         }
+        $schools_selected = [];
+        $exclude_schools_fc = [];
+        $exclude_school_sc = [];
+        if($is_combined_school){
+            $schools_selected = get_field( 'easl-schools-all_programme_information_schools', $submissionID );
+            if ( isset( $schools_selected[0] ) ) {
+                $exclude_schools_fc = easl_app_school_exclude_list_for_review($submissionID, 0);
+            }
+            if ( isset( $schools_selected[1] ) ) {
+                $exclude_school_sc = easl_app_school_exclude_list_for_review($submissionID, 1);
+            }
+        }
         
         $data = array();
         foreach ( $result as $row ) {
@@ -381,43 +395,75 @@ class EASLAppReview {
             foreach ( $scoringCriteriaNames as $scoring_criteria_name ) {
                 $scores[ $scoring_criteria_name ] = isset( $score_data[ $scoring_criteria_name ] ) ? $score_data[ $scoring_criteria_name ] : '';
             }
-            $data[ $row->reviewer_email ] = array(
+            $reviewer_data = array(
                 'review_text'    => $row->review_text,
                 'reviewer_email' => $row->reviewer_email,
                 'total_score'    => $row->total_score,
                 'scoring'        => $scores,
             );
+            if($is_combined_school){
+                $reviewer_data['total_scores'] = easl_app_total_scoring_per_choices($schools_selected, $exclude_schools_fc, $exclude_school_sc, $scores);
+            }
+            $data[ strtolower($row->reviewer_email) ] = $reviewer_data;
         }
         
         return $data;
     }
 
     protected function getSubmissionReviews($submissionId) {
-        $reviews = get_posts([
+        $args = [
             'post_type' => 'submission-review',
             'post_status' => 'any',
-            'meta_key' => 'submission_id',
-            'meta_value' => $submissionId
-        ]);
-        $reviewData = array_map(function($review) {
+            'meta_query' => [
+                'relation' => 'AND',
+                [
+                    'key' => 'submission_id',
+                    'value' => $submissionId,
+                    'compare' => '='
+                ]
+            ],
+        ];
+        $reviewers = $this->getProgrammeReviewers(get_post_meta($submissionId, 'programme_id', true));
+        $reviewers_emails = false;
+        if (is_array($reviewers)) {
+            $reviewers_emails = wp_list_pluck($reviewers, 'email');
+        }
+        if($reviewers_emails) {
+            $args['meta_query'][] = [
+                'key' => 'reviewer_email',
+                'value' => $reviewers_emails,
+                'compare' => 'IN'
+            ];
+        }
+    
+        $reviews = get_posts($args);
+        $reviewData = [];
+        $reviewers_emails_found = [];
+        foreach ( $reviews as $review ) {
             $meta = get_post_meta($review->ID);
-
-            $keys = ['reviewer_name', 'review_text', 'reviewer_email', 'total_score', 'scoring'];
-
-            $out = ['id' => $review->ID];
-
-            foreach($keys as $key) {
-                if (isset($meta[$key]) && isset($meta[$key][0])) {
-                    $out[$key] = $meta[$key][0];
-                } else {
-                    return null;
-                }
+            if(
+                empty($meta['reviewer_name'][0]) ||
+                empty($meta['review_text'][0]) ||
+                empty($meta['reviewer_email'][0]) ||
+                empty($meta['total_score'][0]) ||
+                empty($meta['scoring'][0])
+            ) {
+                continue;
             }
-            $out['scoring'] = unserialize($out['scoring']);
-            return $out;
-        }, $reviews);
-
-        return array_filter($reviewData);
+            if(in_array($meta['reviewer_email'][0], $reviewers_emails_found)) {
+                continue;
+            }
+            $reviewers_emails_found[] = $meta['reviewer_email'][0];
+    
+            $out = ['id' => $review->ID];
+            $out['reviewer_name'] = $meta['reviewer_name'][0];
+            $out['review_text'] = $meta['review_text'][0];
+            $out['reviewer_email'] = $meta['reviewer_email'][0];
+            $out['total_score'] = $meta['total_score'][0];
+            $out['scoring'] = maybe_unserialize($meta['scoring'][0]);
+            $reviewData[] = $out;
+        }
+        return $reviewData;
     }
 
     protected function findReviewByUser($reviews, $reviewerEmail) {
@@ -714,7 +760,7 @@ class EASLAppReview {
                 if ( empty( $pr['email'] ) || empty( $pr['schools'] ) ) {
                     continue;
                 }
-                if ( $pr['email'] == $reviewer_email ) {
+                if ( strtolower($pr['email']) == strtolower($reviewer_email) ) {
                     $current_reviewer_schools = $pr['schools'];
                     break;
                 }
@@ -809,7 +855,7 @@ class EASLAppReview {
             $reviewers = $this->getProgrammeReviewers($programmeId);
 
             if (array_filter($reviewers, function($r) use ($email) {
-                return $r['email'] == $email;
+                return strtolower($r['email']) == strtolower($email);
             })) {
 
                 //The reviewer already exists for this programme
@@ -843,7 +889,7 @@ class EASLAppReview {
 //            echo $reviewer['email'] . '<br>';
 //            print_r($reviewer);
 //            die();
-            return $reviewer['email'] != $email;
+            return strtolower($reviewer['email']) != strtolower($email);
         });
 
         update_post_meta($programmeId, 'reviewers', $reviewers);

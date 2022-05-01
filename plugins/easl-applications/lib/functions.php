@@ -183,3 +183,26 @@ function easl_app_get_schools_selected_for_scoring( $submission_id ) {
     
     return $choices;
 }
+
+function easl_app_total_scoring_per_choices($schools_selected, $exclude_schools_fc, $exclude_school_sc, $scores) {
+    $total_score_1 = 0;
+    $total_score_2 = 0;
+    
+    foreach ($scores as $score_item_name => $score) {
+        if ( isset( $schools_selected[0] ) ) {
+            if ( ! in_array( $score_item_name, $exclude_schools_fc ) ) {
+                $total_score_1 += $score;
+            }
+        }
+        if ( isset( $schools_selected[1] ) ) {
+            if ( ! in_array( $score_item_name, $exclude_school_sc ) ) {
+                $total_score_2 += $score;
+            }
+        }
+    }
+    $total_scores = [
+        'choice1' => $total_score_1 > 0 ? $total_score_1: '',
+        'choice2' => $total_score_2 > 0 ? $total_score_2 : '',
+    ];
+    return $total_scores;
+}
