@@ -40,7 +40,7 @@ class EASL_MZ_SSO {
 
     public function get_logout_url() {
         $data = [
-            'redirect_uri' => 'https://slo.easl.eu/?slo_app_id=easlapp'
+            'redirect_uri' => 'https://slo.easl.eu/?slo_app_id=easldev'
         ];
         $query_string = build_query($data);
         return $this->base_url . '/logout?' . $query_string;
@@ -108,10 +108,14 @@ class EASL_MZ_SSO {
 	    $this->request->get('/userinfo');
 
 	    $response = $this->request->get_response_body();
-
-	    if(empty($response->sugarcrm_userid)) {
+        var_dump($response->email);
+	    if(empty($response->email)) {
 	    	return false;
 	    }
+        $crm_api = easl_mz_get_manager()->getApi();
+        $crm_api->get_user_auth_token();
+        $member_details = $crm_api->get_member_by_email($response->email, false);
+        var_dump($member_details);die();
 
 	    $member_data = array(
 	    	'member_id' => $response->sugarcrm_userid,
