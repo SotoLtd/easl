@@ -260,8 +260,13 @@
 }
 
 .vc_tta-color-grey .vc_tta-panel .vc_tta-panel-title > a,
-.vc_tta-panel .vc_tta-panel-heading.easl-color-grey.vc_tta-panel-title > a {
+.vc_tta-panel .vc_tta-panel-heading.easl-color-grey .vc_tta-panel-title > a {
     background-color: #7e6a73;
+    color: #fff
+}
+.vc_tta-color-green .vc_tta-panel .vc_tta-panel-title > a,
+.vc_tta-panel .vc_tta-panel-heading.easl-color-green .vc_tta-panel-title > a {
+    background-color: #508541;
     color: #fff
 }
 
@@ -361,6 +366,11 @@
 .vc_tta-color-grey.vc_tta-style-outline .vc_tta-panel .vc_tta-panel-title > a,
 .vc_tta-style-outline .vc_tta-panel .vc_tta-panel-heading.easl-color-grey .vc_tta-panel-title > a {
     color: #7e6a73
+}
+
+.vc_tta-color-green.vc_tta-style-outline .vc_tta-panel .vc_tta-panel-title > a,
+.vc_tta-style-outline .vc_tta-panel .vc_tta-panel-heading.easl-color-green .vc_tta-panel-title > a {
+    color: #508541
 }
 
 .vc_tta-color-yellow.vc_tta-style-outline .vc_tta-panel .vc_tta-panel-title > a,
@@ -744,6 +754,9 @@
 .vc_tta-color-grey.vcsc_tta-tab .vc_tta-tabs-container {
     border-color: #7e6a73;
 }
+.vc_tta-color-green.vcsc_tta-tab .vc_tta-tabs-container {
+    border-color: #508541;
+}
 
 .vc_tta-color-yellow.vcsc_tta-tab .vc_tta-tabs-container {
     border-color: #f9bc49;
@@ -798,6 +811,10 @@
 .vcsc_tta-tab.vc_tta .vc_tta-tab.easl-color-grey > a {
     background-color: #7e6a73;
 }
+.vc_tta-color-green.vcsc_tta-tab .vc_tta-tab > a,
+.vcsc_tta-tab.vc_tta .vc_tta-tab.easl-color-green > a {
+    background-color: #508541;
+}
 
 .vc_tta-color-yellow.vcsc_tta-tab .vc_tta-tab > a,
 .vcsc_tta-tab.vc_tta .vc_tta-tab.easl-color-yellow > a{
@@ -845,6 +862,12 @@
     color: #7e6a73;
 }
 
+.vc_tta-color-green.vcsc_tta-tab.vc_tta .vc_tta-tab.vc_active > a,
+.vcsc_tta-tab.vc_tta.vc_general .vc_tta-tab.easl-color-green.vc_active > a,
+.vcsc_tta-tab.vc_tta.vc_general .vc_tta-tab.easl-color-green > a:hover {
+    color: #508541;
+}
+
 .vc_tta-color-yellow.vcsc_tta-tab.vc_tta .vc_tta-tab.vc_active > a,
 .vcsc_tta-tab.vc_tta.vc_general .vc_tta-tab.easl-color-yellow.vc_active > a,
 .vcsc_tta-tab.vc_tta.vc_general .vc_tta-tab.easl-color-yellow > a:hover {
@@ -883,6 +906,10 @@
 
 .vc_tta-color-grey.vc_tta.vcsc_tta-tour {
     border-color: #7e6a73;
+}
+
+.vc_tta-color-green.vc_tta.vcsc_tta-tour {
+    border-color: #508541;
 }
 
 .vc_tta-color-yellow.vc_tta.vcsc_tta-tour {
@@ -1053,6 +1080,11 @@
     color: #7e6a73;
 }
 
+.vc_tta-color-green.vcsc_tta-tour .vc_tta-tab > a,
+.vcsc_tta-tour.vc_tta .vc_tta-tab.easl-color-green > a {
+    color: #508541;
+}
+
 .vc_tta-color-yellow.vcsc_tta-tour .vc_tta-tab > a,
 .vcsc_tta-tour.vc_tta .vc_tta-tab.easl-color-yellow > a {
     color: #f9bc49;
@@ -1102,6 +1134,9 @@
 
 .vc_toggle_color_grey .vc_toggle_title {
     background-color: #7e6a73;
+}
+.vc_toggle_color_green .vc_toggle_title {
+    background-color: #508541;
 }
 
 .vc_toggle_color_yellow .vc_toggle_title {

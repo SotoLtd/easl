@@ -65,6 +65,7 @@ function easl_vc_modify_existing_shortcode_params() {
                 __( 'Teal', 'total-child' )                  => 'teal',
                 __( 'Orange', 'total-child' )                => 'orange',
                 __( 'Grey', 'total-child' )                  => 'grey',
+                __( 'Green', 'total-child' )                 => 'green',
                 __( 'Yellow', 'total-child' )                => 'yellow',
             ),
         ) );
@@ -89,6 +90,7 @@ function easl_vc_modify_existing_shortcode_params() {
                 __( 'Teal', 'total-child' )                  => 'teal',
                 __( 'Orange', 'total-child' )                => 'orange',
                 __( 'Grey', 'total-child' )                  => 'grey',
+                __( 'Green', 'total-child' )                 => 'green',
                 __( 'Yellow', 'total-child' )                => 'yellow',
             ),
         ) );
@@ -118,6 +120,7 @@ function easl_vc_modify_existing_shortcode_params() {
                 __( 'Teal', 'total-child' )                  => 'teal',
                 __( 'Orange', 'total-child' )                => 'orange',
                 __( 'Grey', 'total-child' )                  => 'grey',
+                __( 'Green', 'total-child' )                 => 'green',
                 __( 'Yellow', 'total-child' )                => 'yellow',
             ),
         ) );
@@ -141,6 +144,7 @@ function easl_vc_modify_existing_shortcode_params() {
                 __( 'Teal', 'total-child' )                  => 'teal',
                 __( 'Orange', 'total-child' )                => 'orange',
                 __( 'Grey', 'total-child' )                  => 'grey',
+                __( 'Green', 'total-child' )                 => 'green',
                 __( 'Yellow', 'total-child' )                => 'yellow',
                 __( 'No Color', 'total-child' )              => 'transparent',
             ),
@@ -170,6 +174,7 @@ function easl_vc_modify_existing_shortcode_params() {
                 __( 'Teal', 'total-child' )                  => 'teal',
                 __( 'Orange', 'total-child' )                => 'orange',
                 __( 'Grey', 'total-child' )                  => 'grey',
+                __( 'Green', 'total-child' )                 => 'green',
                 __( 'Yellow', 'total-child' )                => 'yellow',
             ),
             'description' => esc_html__( 'Select section/tab title bg color.', 'js_composer' ),
@@ -237,6 +242,7 @@ function easl_tiny_mce_settings($mceInit, $editor_id) {
         '523178', 'Purple',
         '101820', 'Black',
         'A2ACAB', 'Grey',
+        '508541', 'Green',
         'EF3340', 'Red 1',
         'FF6720', 'Orange',
         '508541', 'Green',

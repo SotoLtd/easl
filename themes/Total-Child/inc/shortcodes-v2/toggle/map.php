@@ -49,6 +49,7 @@ return array(
                 __( 'Teal', 'total-child' )                  => 'teal',
                 __( 'Orange', 'total-child' )                => 'orange',
                 __( 'Grey', 'total-child' )                  => 'grey',
+                __( 'Green', 'total-child' )                 => 'green',
                 __( 'Yellow', 'total-child' )                => 'yellow',
             ),
             'description' => esc_html__( 'Select title bg color.', 'js_composer' ),
