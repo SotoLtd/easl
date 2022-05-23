@@ -72,12 +72,25 @@ if ( $query->have_posts() ):
                 while ( $query->have_posts() ) {
                     $query->the_post();
                     $episode_season              = get_field( 'episode_season' );
-                    $episode_season              = $episode_season - 2020;
                     $episode_number              = get_field( 'episode_number' );
                     $poster_image_id             = get_field( 'episode_poster' );
                     $episode_live_screen_capture = get_field( 'episode_live_screen_capture' );
                     $episode_on_demand_url       = get_field( 'episode_on_demand_url' );
-                    $episode_title               = "Season {$episode_season}, Episode {$episode_number} - " . get_the_title();
+                    $episode_title = '';
+                    if ( $episode_season ) {
+                        $episode_season = $episode_season - 2020;
+                        $episode_title .= "Season {$episode_season}";
+                    }
+                    if ( $episode_number ) {
+                        if ( $episode_season ) {
+                            $episode_title .= ', ';
+                        }
+                        $episode_title .= "Episode {$episode_number}";
+                    }
+                    if ( $episode_title ) {
+                        $episode_title .= ' - ';
+                    }
+                    $episode_title .= get_the_title();
                     
                     $listing_image_src = '';
                     if ( $episode_live_screen_capture ) {

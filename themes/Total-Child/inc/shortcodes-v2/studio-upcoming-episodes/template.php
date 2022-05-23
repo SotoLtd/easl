@@ -67,10 +67,23 @@ if ( $query->have_posts() ):
                         $live_date_time = DateTime::createFromFormat( 'Y-m-d H:i:s', $live_date_time );
                     }
                     $episode_season  = get_field( 'episode_season' );
-                    $episode_season  = $episode_season - 2020;
                     $episode_number  = get_field( 'episode_number' );
                     $poster_image_id = get_field( 'episode_poster' );
-                    $episode_title = "Season {$episode_season}, Episode {$episode_number} - " . get_the_title();
+                    $episode_title = '';
+                    if ( $episode_season ) {
+                        $episode_season = $episode_season - 2020;
+                        $episode_title .= "Season {$episode_season}";
+                    }
+                    if ( $episode_number ) {
+                        if ( $episode_season ) {
+                            $episode_title .= ', ';
+                        }
+                        $episode_title .= "Episode {$episode_number}";
+                    }
+                    if ( $episode_title ) {
+                        $episode_title .= ' - ';
+                    }
+                    $episode_title .= get_the_title();
                     if ( $live_date_time ) {
                         $episode_title .= ' (Live from ' .  $live_date_time->format( 'H:i' ) . ' CET)';
                     }
