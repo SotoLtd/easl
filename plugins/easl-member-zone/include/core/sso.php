@@ -108,17 +108,18 @@ class EASL_MZ_SSO {
 	    $this->request->get('/userinfo');
 
 	    $response = $this->request->get_response_body();
-        var_dump($response->email);
 	    if(empty($response->email)) {
 	    	return false;
 	    }
         $crm_api = easl_mz_get_manager()->getApi();
         $crm_api->get_user_auth_token();
         $member_details = $crm_api->get_member_by_email($response->email, false);
-        var_dump($member_details);die();
+        if(!$member_details) {
+            return false;
+        }
 
 	    $member_data = array(
-	    	'member_id' => $response->sugarcrm_userid,
+	    	'member_id' => $member_details->id,
 	    	'email' => $response->email,
 	    	'title' => $response->title,
 	    	'first_name' => $response->given_name,

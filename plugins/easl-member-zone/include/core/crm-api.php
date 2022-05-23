@@ -184,7 +184,6 @@ class EASL_MZ_API {
             'Cache-Control' => 'no-cache'
         );
         if ( ! $this->post( '/oauth2/token', $headers, $request_body ) ) {
-            var_dump($this->request->get_response_body());die();
             return false;
         }
 
@@ -428,19 +427,22 @@ class EASL_MZ_API {
     public function get_member_by_email( $email, $id_only = true ) {
         $filter_args = array(
             'max_num' => 1,
-            'fields'  => 'id',
             'filter'  => array(
                 array( 'portal_name' => $email ),
             )
         );
+        if ( ! $id_only ) {
+            $filter_args['fields'] = 'id';
+        } else {
+            $filter_args['fields'] = 'id,salutation,first_name,last_name,dotb_mb_current_status';
+        }
         $headers     = array(
             'Content-Type'  => 'application/json',
             'Cache-Control' => 'no-cache',
             'OAuth-Token'   => $this->get_access_token(),
         );
-        $result      = $this->get( '/Contacts/filter', false, $headers, $filter_args );
-        var_dump($headers);
-        var_dump($result);
+        $result      = $this->get( '/Contacts/filter', $headers, $filter_args );
+
         if ( ! $result ) {
             return false;
         }
