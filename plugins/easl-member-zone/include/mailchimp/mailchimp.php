@@ -306,8 +306,8 @@ class EASL_MZ_Mailchimp {
                 $merge_fields['USERCAT'] = easl_mz_get_list_item_name( 'user_categories', $request_data['dotb_user_category'] );
             }
         }
-        if ( ! empty( $request_data['dotb_easl_specialty'] ) && in_array( 'other', $request_data['dotb_easl_specialty'] ) && !empty( $request_data['dotb_easl_specialty_other'] ) ) {
-            $merge_fields['SPECALIT_O'] = $request_data['dotb_easl_specialty_other'];
+        if ( ! empty( $request_data['medical_speciality_c'] ) && in_array( 'other', $request_data['medical_speciality_c'] ) && !empty( $request_data['medical_speciality_c_other'] ) ) {
+            $merge_fields['SPECALIT_O'] = $request_data['medical_speciality_c_other'];
         }
         if ( ! empty( $request_data['dotb_place_of_work'] ) ) {
             $merge_fields['PLACEWORK'] = easl_mz_get_list_item_name( 'places_of_work', $request_data['dotb_place_of_work'] );
@@ -360,8 +360,8 @@ class EASL_MZ_Mailchimp {
             'Viral Hepatitis'                            => '9b95ed5fe4',
         );
         $interests            = array();
-        if ( ! empty( $request_data['dotb_easl_specialty'] ) ) {
-            foreach ( $request_data['dotb_easl_specialty'] as $sp ) {
+        if ( ! empty( $request_data['medical_speciality_c'] ) ) {
+            foreach ( $request_data['medical_speciality_c'] as $sp ) {
                 $sp = easl_mz_get_list_item_name( 'specialities', $sp );
                 if ( $sp && array_key_exists( $sp, $speciality_interests ) ) {
                     $interests[ $speciality_interests[ $sp ] ] = true;

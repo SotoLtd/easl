@@ -62,19 +62,19 @@ if ( ! defined( 'ABSPATH' ) ) {
 <div class="mzms-fields-row easl-row easl-row-col-2">
     <div class="easl-col">
         <div class="easl-col-inner mzms-fields-con">
-            <label class="mzms-field-label" for="mzf_dotb_easl_specialty">Specialty <span class="mzms-asteric">*</span></label>
+            <label class="mzms-field-label" for="mzf_medical_speciality_c">Specialty <span class="mzms-asteric">*</span></label>
             <div class="mzms-field-wrap">
-                <select class="easl-mz-select2" name="dotb_easl_specialty[]" id="mzf_dotb_easl_specialty" multiple="multiple" data-placeholder="Select one/more options" style="width: 100%;">
+                <select class="easl-mz-select2" name="medical_speciality_c[]" id="mzf_medical_speciality_c" multiple="multiple" data-placeholder="Select one/more options" style="width: 100%;">
                     <?php echo easl_mz_get_crm_dropdown_items( 'specialities'); ?>
                 </select>
             </div>
         </div>
     </div>
     <div class="easl-col">
-        <div class="easl-col-inner mzms-fields-con" id="mzms-fields-con-dotb_easl_specialty_other">
-            <label class="mzms-field-label" for="mzf_dotb_easl_specialty_other">Specialty - Other <span class="mzms-asteric">*</span></label>
+        <div class="easl-col-inner mzms-fields-con" id="mzms-fields-con-medical_speciality_c_other">
+            <label class="mzms-field-label" for="mzf_medical_speciality_c_other">Specialty - Other <span class="mzms-asteric">*</span></label>
             <div class="mzms-field-wrap">
-                <input type="text" placeholder="" name="dotb_easl_specialty_other" id="mzf_dotb_easl_specialty_other" autocomplete="off">
+                <input type="text" placeholder="" name="medical_speciality_c_other" id="mzf_medical_speciality_c_other" autocomplete="off">
             </div>
         </div>
     </div>

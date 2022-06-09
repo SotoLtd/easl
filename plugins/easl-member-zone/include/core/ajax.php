@@ -167,7 +167,7 @@ class EASL_MZ_Ajax_Handler {
 			'max_num'  => $num,
 			'offset'   => ( $page_offset - 1 ) * $num,
 			'order_by' => 'date_modified:ASC',
-			'fields'   => 'id,name,salutation,first_name,last_name,picture,dotb_public_profile,dotb_public_profile_fields,primary_address_country,description,dotb_easl_specialty,title,dotb_job_function,dotb_job_function_other,department'
+			'fields'   => 'id,name,salutation,first_name,last_name,picture,dotb_public_profile,dotb_public_profile_fields,primary_address_country,description,medical_speciality_c,title,dotb_job_function,dotb_job_function_other,department'
 		);
 		$filter      = array();
 		$filter[]    = array(
@@ -230,7 +230,7 @@ class EASL_MZ_Ajax_Handler {
 		}
 		if ( $speciality ) {
 			$filter[] = array(
-				'dotb_easl_specialty' => array(
+				'medical_speciality_c' => array(
 					'$contains' => $speciality
 				)
 			);
@@ -518,9 +518,9 @@ class EASL_MZ_Ajax_Handler {
             $request_data['dotb_job_function_other'] = ucfirst( $request_data['dotb_job_function_other'] );
             $uc_fied_data['dotb_job_function_other'] = $request_data['dotb_job_function_other'];
         }
-        if ( ! empty( $request_data['dotb_easl_specialty_other'] ) ) {
-            $request_data['dotb_easl_specialty_other'] = ucfirst( $request_data['dotb_easl_specialty_other'] );
-            $uc_fied_data['dotb_easl_specialty_other'] = $request_data['dotb_easl_specialty_other'];
+        if ( ! empty( $request_data['medical_speciality_c_other'] ) ) {
+            $request_data['medical_speciality_c_other'] = ucfirst( $request_data['medical_speciality_c_other'] );
+            $uc_fied_data['medical_speciality_c_other'] = $request_data['medical_speciality_c_other'];
         }
         if ( ! empty( $request_data['dotb_user_category_other'] ) ) {
             $request_data['dotb_user_category_other'] = ucfirst( $request_data['dotb_user_category_other'] );
@@ -665,8 +665,8 @@ class EASL_MZ_Ajax_Handler {
         if ( ! empty( $request_data['dotb_job_function_other'] ) ) {
             $request_data['dotb_job_function_other'] = ucfirst( $request_data['dotb_job_function_other'] );
         }
-        if ( ! empty( $request_data['dotb_easl_specialty_other'] ) ) {
-            $request_data['dotb_easl_specialty_other'] = ucfirst( $request_data['dotb_easl_specialty_other'] );
+        if ( ! empty( $request_data['medical_speciality_c_other'] ) ) {
+            $request_data['medical_speciality_c_other'] = ucfirst( $request_data['medical_speciality_c_other'] );
         }
         if ( ! empty( $request_data['dotb_user_category_other'] ) ) {
             $request_data['dotb_user_category_other'] = ucfirst( $request_data['dotb_user_category_other'] );

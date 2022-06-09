@@ -64,11 +64,11 @@ if ( $member['last_name'] ) {
         </div>
     </div>
 	<?php
-	if ( $member['dotb_easl_specialty'] ):
+	if ( $member['medical_speciality_c'] ):
 		$specialities = array();
-		foreach ( $member['dotb_easl_specialty'] as $speciality ) {
+		foreach ( $member['medical_speciality_c'] as $speciality ) {
 			if ( $speciality == 'other' ) {
-				$specialities[] = $member['dotb_easl_specialty_other'];
+				$specialities[] = $member['medical_speciality_c_other'];
 			} else {
 				$specialities[] = easl_mz_get_list_item_name( 'specialities', $speciality );
 			}
