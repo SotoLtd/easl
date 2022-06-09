@@ -368,8 +368,8 @@ class EASL_MZ_Mailchimp {
                 }
             }
         }
-        if ( ! empty( $request_data['dotb_area_of_interest'] ) ) {
-            foreach ( $request_data['dotb_area_of_interest'] as $aoi ) {
+        if ( ! empty( $request_data['area_of_interest_c'] ) ) {
+            foreach ( $request_data['area_of_interest_c'] as $aoi ) {
                 $aoi = easl_mz_get_list_item_name( 'area_of_interests', $aoi );
                 if ( $aoi && array_key_exists( $aoi, $aoi_interests ) ) {
                     $interests[ $aoi_interests[ $aoi ] ] = true;

@@ -28,9 +28,9 @@ if ( ! defined( 'ABSPATH' ) ) {
 <div class="mzms-fields-row easl-row easl-row-col-2">
     <div class="easl-col">
         <div class="easl-col-inner mzms-fields-con">
-            <label class="mzms-field-label" for="mzf_dotb_area_of_interest">Area of interest <span class="mzms-asteric">*</span></label>
+            <label class="mzms-field-label" for="mzf_area_of_interest_c">Area of interest <span class="mzms-asteric">*</span></label>
             <div class="mzms-field-wrap">
-                <select class="easl-mz-select2" name="dotb_area_of_interest[]" id="mzf_dotb_area_of_interest" multiple="multiple" data-placeholder="Select one/more options"  style="width: 100%;">
+                <select class="easl-mz-select2" name="area_of_interest_c[]" id="mzf_area_of_interest_c" multiple="multiple" data-placeholder="Select one/more options"  style="width: 100%;">
                     <?php echo easl_mz_get_crm_dropdown_items( 'area_of_interests' ); ?>
                 </select>
             </div>
