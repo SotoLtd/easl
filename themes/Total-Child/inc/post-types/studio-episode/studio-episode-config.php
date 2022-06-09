@@ -24,6 +24,9 @@ class EASL_Studio_Episode_Config {
         add_action( 'acf/input/admin_enqueue_scripts', [ $this, 'acf_register_episode_scripts' ] );
         
         add_action( 'wp_ajax_es_get_episode_number', [ $this, 'ajax_get_episode_auto_number' ] );
+        
+        add_filter( 'wpseo_opengraph_image', [ $this, 'wpseo_opengraph_image' ] );
+        add_filter( 'wpseo_twitter_image', [ $this, 'wpseo_twitter_image' ] );
     }
     
     /**
@@ -67,8 +70,9 @@ class EASL_Studio_Episode_Config {
     }
     
     function acf_episode_number_default( $field ) {
-        $season = date( 'Y' );
-        $field['default_value'] = $this->get_episode_auto_number($season);
+        $season                 = date( 'Y' );
+        $field['default_value'] = $this->get_episode_auto_number( $season );
+        
         return $field;
     }
     
@@ -110,12 +114,60 @@ class EASL_Studio_Episode_Config {
         if ( ! $episode_number ) {
             return 1;
         }
-        $episode_number++;
+        $episode_number ++;
+        
         return $episode_number;
     }
     
     function acf_register_episode_scripts() {
         wp_enqueue_script( 'acf-episode-script', get_stylesheet_directory_uri() . '/assets/js/admin/acf-episode-script.js', array( 'jquery' ), time(), true );
+    }
+    
+    public function wpseo_opengraph_image( $image_url ) {
+        if ( ! is_singular( $this->type ) ) {
+            return $image_url;
+        }
+        $post_id = get_queried_object_id();
+        if (
+            get_post_meta( $post_id, '_yoast_wpseo_opengraph-image', true ) ||
+            get_post_meta( $post_id, '_yoast_wpseo_twitter-image', true )
+        ) {
+            return $image_url;
+        }
+        
+        $poster_image_id = get_field( 'episode_poster', $post_id );
+        if ( $poster_image_id ) {
+            $poster_image_src = wp_get_attachment_image_url( $poster_image_id, 'medium_large' );
+        }
+        if ( ! $poster_image_src ) {
+            return $image_url;
+        }
+        
+        return $poster_image_src;
+    }
+    
+    public function wpseo_twitter_image( $image_url ) {
+        if ( ! is_singular( $this->type ) ) {
+            return $image_url;
+        }
+        $post_id = get_queried_object_id();
+        if (
+            get_post_meta( $post_id, '_yoast_wpseo_opengraph-image', true ) ||
+            get_post_meta( $post_id, '_yoast_wpseo_twitter-image', true )
+        ) {
+            return $image_url;
+        }
+        
+        $poster_image_id = get_field( 'episode_poster', $post_id );
+        if ( $poster_image_id ) {
+            $poster_image_src = wp_get_attachment_image_url( $poster_image_id, 'medium_large' );
+        }
+        
+        if ( ! $poster_image_src ) {
+            return $image_url;
+        }
+        
+        return $poster_image_src;
     }
 }
 
