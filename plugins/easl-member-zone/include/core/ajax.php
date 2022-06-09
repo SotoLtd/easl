@@ -522,9 +522,9 @@ class EASL_MZ_Ajax_Handler {
             $request_data['medical_speciality_c_other'] = ucfirst( $request_data['medical_speciality_c_other'] );
             $uc_fied_data['medical_speciality_c_other'] = $request_data['medical_speciality_c_other'];
         }
-        if ( ! empty( $request_data['dotb_user_category_other'] ) ) {
-            $request_data['dotb_user_category_other'] = ucfirst( $request_data['dotb_user_category_other'] );
-            $uc_fied_data['dotb_user_category_other'] = $request_data['dotb_user_category_other'];
+        if ( ! empty( $request_data['participant_type_c_other'] ) ) {
+            $request_data['participant_type_c_other'] = ucfirst( $request_data['participant_type_c_other'] );
+            $uc_fied_data['participant_type_c_other'] = $request_data['participant_type_c_other'];
         }
         if ( ! empty( $request_data['title'] ) ) {
             $request_data['title'] = ucfirst( $request_data['title'] );
@@ -668,8 +668,8 @@ class EASL_MZ_Ajax_Handler {
         if ( ! empty( $request_data['medical_speciality_c_other'] ) ) {
             $request_data['medical_speciality_c_other'] = ucfirst( $request_data['medical_speciality_c_other'] );
         }
-        if ( ! empty( $request_data['dotb_user_category_other'] ) ) {
-            $request_data['dotb_user_category_other'] = ucfirst( $request_data['dotb_user_category_other'] );
+        if ( ! empty( $request_data['participant_type_c_other'] ) ) {
+            $request_data['participant_type_c_other'] = ucfirst( $request_data['participant_type_c_other'] );
         }
         if ( ! empty( $request_data['title'] ) ) {
             $request_data['title'] = ucfirst( $request_data['title'] );

@@ -25,8 +25,8 @@ function easl_mz_parse_crm_contact_data( $response ) {
 		'title'                         => $response->title,
 		'medical_speciality_c'           => $response->medical_speciality_c,
 		'medical_speciality_c_other'     => $response->medical_speciality_c_other,
-		'dotb_user_category'            => $response->dotb_user_category,
-		'dotb_user_category_other'      => $response->dotb_user_category_other,
+		'participant_type_c'            => $response->participant_type_c,
+		'participant_type_c_other'      => $response->participant_type_c_other,
 		'dotb_place_of_work'            => $response->dotb_place_of_work,
 		'dotb_easl_newsletter_agree'    => $response->dotb_easl_newsletter_agree,
 		'department'                    => $response->department,
@@ -153,7 +153,7 @@ function easl_mz_validate_new_member_form($data = array()) {
         'email1',
         'dotb_place_of_work',
         'primary_address_country',
-        'dotb_user_category',
+        'participant_type_c',
     ];
 
     $errors = validate_required_fields($required_fields, $data);
@@ -180,8 +180,8 @@ function easl_mz_validate_new_member_form($data = array()) {
     if ( ! empty( $data['medical_speciality_c'] ) && in_array( 'other', $data['medical_speciality_c'] ) && empty( $data['medical_speciality_c_other'] ) ) {
         $errors['medical_speciality_c_other'] = 'Mandatory field';
     }
-    if ( ! empty( $data['dotb_user_category'] ) && ( 'other' == $data['dotb_user_category'] ) && empty( $data['dotb_user_category_other'] ) ) {
-        $errors['dotb_user_category_other'] = 'Mandatory field';
+    if ( ! empty( $data['participant_type_c'] ) && ( 'other' == $data['participant_type_c'] ) && empty( $data['participant_type_c_other'] ) ) {
+        $errors['participant_type_c_other'] = 'Mandatory field';
     }
     if ( ! empty( $data['birthdate'] ) && ! preg_match( "/^[0-9]{4}-(0[1-9]|1[0-2])-(0[1-9]|[1-2][0-9]|3[0-1])$/", $data['birthdate'] ) ) {
         $errors['birthdate'] = 'Enter date in yyyy-mm-dd format.';

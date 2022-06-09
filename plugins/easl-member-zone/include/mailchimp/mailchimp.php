@@ -298,12 +298,12 @@ class EASL_MZ_Mailchimp {
                 $merge_fields['JOBFUNC'] = easl_mz_get_list_item_name( 'job_functions', $request_data['dotb_job_function'] );
             }
         }
-        if ( ! empty( $request_data['dotb_user_category'] ) ) {
-            if ( 'other' == $request_data['dotb_user_category'] ) {
+        if ( ! empty( $request_data['participant_type_c'] ) ) {
+            if ( 'other' == $request_data['participant_type_c'] ) {
                 $merge_fields['USERCAT']   = 'Other';
-                $merge_fields['USERCAT_O'] = $request_data['mzf_dotb_user_category_other'];
+                $merge_fields['USERCAT_O'] = $request_data['mzf_participant_type_c_other'];
             } else {
-                $merge_fields['USERCAT'] = easl_mz_get_list_item_name( 'user_categories', $request_data['dotb_user_category'] );
+                $merge_fields['USERCAT'] = easl_mz_get_list_item_name( 'user_categories', $request_data['participant_type_c'] );
             }
         }
         if ( ! empty( $request_data['medical_speciality_c'] ) && in_array( 'other', $request_data['medical_speciality_c'] ) && !empty( $request_data['medical_speciality_c_other'] ) ) {
