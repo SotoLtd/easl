@@ -335,7 +335,7 @@
             });
 
             // Change password form events
-            $(".mzms-change-password", $el).on("click", function (event) {
+            $(".mzms-change-password_disabled", $el).on("click", function (event) {
                 event.preventDefault();
                 $el.addClass("mz-show-password-change-form");
             });
@@ -1015,7 +1015,7 @@
         init: function () {
             this.events();
             this.showModuleLoading();
-            this.getMemberCard();
+            //this.getMemberCard();
             this.initNewMemberForm();
             this.resetPassword();
         }

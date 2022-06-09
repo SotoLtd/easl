@@ -35,18 +35,13 @@ if ( isset( $member['dotb_mb_id'] ) && in_array( $member['dotb_mb_current_status
 }
 ?>
 <div class="mz-member-card-inner">
-    <div class="mz-member-avatar">
-        <a href="<?php echo esc_url( $member_profile_url ); ?>"><img src="<?php echo $member_image; ?>" alt=""></a>
-    </div>
     <div class="mz-member-welcome-block">
-        <p class="mz-member-welcome-row">Welcome back</p>
-        <p class="mz-member-welcome-row">
-            <span class="mz-member-name"><?php echo implode( ' ', $member_name_parts ); ?></span>
-            <span class="mz-seperator">|</span>
+        <p class="mz-member-welcome-row">Welcome back <span class="mz-member-name"><?php echo implode( ' ', $member_name_parts ); ?></span></p>
+        <p class="mz-member-duration-row">Your membership is active until 23/12/2022</p>
+        <p class="mz-member-buttons-row">
+            <a class="mz-member-panel-button" href="<?php echo esc_url( $member_profile_url ); ?>">My portal</a>
+            <span class="mz-buttonsep">|</span>
             <a class="mz-logout-link" href="<?php echo EASL_MZ_SSO::get_instance()->get_logout_url(); ?>">Logout</a>
-        </p>
-        <p class="mz-member-welcome-row mz-member-welcome-button">
-            <a class="mz-member-panel-button" href="<?php echo esc_url( $member_dashboard_url ); ?>"><?php echo strip_tags( $member_zone_button_title ); ?></a>
         </p>
     </div>
 </div>

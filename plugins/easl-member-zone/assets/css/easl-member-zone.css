@@ -218,11 +218,22 @@ body .mzms-button::after {
 .mz-loggedout-buttons.header-aside-buttons {
     position: relative;
     overflow: hidden;
+    padding-top: 67px;
     width: 630px;
+}
+.mz-loggedout-buttons.header-aside-buttons .easl-mz-header-login-button {
+    background-color: #9D9D9D;
+    color: #fff;
+    border-radius: 5px;
+    padding: 6px 10px;
+}
+.mz-loggedout-buttons.header-aside-buttons .easl-mz-header-login-button:hover {
+    background-color: #104f85;
 }
 
 .easl-header-sticky-active .mz-loggedout-buttons.header-aside-buttons {
     height: 62px;
+    padding-top: 15px;
 }
 
 .easl-mz-login-form {
@@ -366,7 +377,7 @@ body .mzms-button::after {
 .easl-mz-header-member-card {
     display: flex;
     flex-wrap: nowrap;
-    align-items: stretch;
+    align-items: center;
     margin: 7px 0;
     height: 103px;
 }
@@ -385,7 +396,6 @@ body .mzms-button::after {
     background: #62cff5;
     color: #005499;
     padding: 5px;
-    font-family: "KnockoutHTF51Middleweight", "Helvetica Neue", Helvetica, Arial, sans-serif;
     font-size: 16px;
     line-height: 20px;
     margin: 0 0 15px;
@@ -403,14 +413,49 @@ body .mzms-button::after {
 }
 
 .easl-mz-membercard {
-    padding: 8px;
-    border-bottom: 4px solid #62cff5;
-    margin: 0 0 0 15px;
-    min-width: 255px;
+    padding: 0;
+    margin: 0;
 }
 
-.easl-mz-membercard {
-    background: #d0d0d0;
+.mz-member-welcome-block {
+    padding: 15px 17px;
+    margin: 0;
+    min-width: 255px;
+    background: #808080;
+    border-radius: 15px;
+    text-align: right;
+    font-size: 16px;
+    line-height: 16px;
+    color: #fff;
+}
+.mz-member-welcome-block p {
+    margin: 0 0 10px;
+}
+.mz-member-welcome-block p:last-child {
+    margin-bottom: 0;
+}
+.mz-member-welcome-block .mz-member-duration-row {
+    color: #008001;
+}
+.mz-member-welcome-block .mz-member-buttons-row {
+
+}
+.mz-member-welcome-block .mz-member-buttons-row a {
+    color: inherit;
+}
+.mz-member-welcome-block .mz-member-buttons-row .mz-buttonsep {
+    color: inherit;
+}
+
+.easl-header-sticky-active .mz-member-welcome-block {
+    padding: 4px 10px;
+    border-radius: 5px;
+}
+.easl-header-sticky-active .mz-member-welcome-block p {
+    margin-bottom: 3px;
+}
+.easl-header-sticky-active .mz-member-welcome-block p:last-child {
+    margin-bottom: 0;
 }
 
 .easl-member-banner {
@@ -451,9 +496,6 @@ body .mzms-button::after {
 }
 
 .mz-member-card-inner {
-    display: flex;
-    flex-direction: row;
-    flex-wrap: nowrap;
 }
 
 .mz-member-avatar {
@@ -468,23 +510,10 @@ body .mzms-button::after {
     margin: 0 !important;
 }
 
-.mz-member-welcome-block {
-    flex: 1 1 0;
-    text-align: left;
-    font-family: "KnockoutHTF51Middleweight", "Helvetica Neue", Helvetica, Arial, sans-serif;
-    font-size: 16px;
-    line-height: 16px;
-    color: #666;
-}
-
-.mz-member-welcome-block .mz-member-welcome-row {
-    white-space: nowrap;
-    margin: 0 0 8px;
-}
 
 .mz-member-welcome-block .mz-member-welcome-button {
     white-space: nowrap;
-    margin: 0px;
+    margin: 0;
     padding-top: 8px;
 }
 
@@ -545,29 +574,12 @@ body .mzms-button::after {
 
 .easl-header-sticky-active .easl-mz-membercard {
     border-bottom: 0 none;
-    padding-top: 4px;
-    padding-bottom: 4px;
 }
 
 .easl-header-sticky-active .mz-member-avatar {
     height: 40px;
     width: 40px;
     margin-right: 12px;
-}
-
-.easl-header-sticky-active .mz-member-welcome-block .mz-member-welcome-row {
-    display: inline-block;
-    margin: 0;
-}
-
-.easl-header-sticky-active .mz-member-welcome-block .mz-member-welcome-row.mz-member-welcome-button {
-    margin-left: 10px;
-}
-
-.easl-header-sticky-active .mz-member-welcome-block .mz-member-welcome-row.mz-member-welcome-button a {
-    display: inline-block;
-    padding-left: 10px;
-    padding-right: 10px;
 }
 
 /*Member Zone*/

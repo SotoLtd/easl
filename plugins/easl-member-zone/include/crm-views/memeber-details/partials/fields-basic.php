@@ -24,7 +24,7 @@ if(!$member_image) {
         <a class="mzms-button mzms-change-image" href="#"><?php echo $change_picture_title; ?></a>
     </div>
     <div class="mzms-passwor-button-wrap">
-        <a class="mzms-button mzms-change-password" href="#">Change Password</a>
+        <a class="mzms-button mzms-change-password" href="https://sso.easl.eu/realms/easl/account/password/">Change Password</a>
     </div>
     <div class="mzms-form-button-wrap">
         <button class="mzms-button mzms-save-membership-form">Save Changes</button>
