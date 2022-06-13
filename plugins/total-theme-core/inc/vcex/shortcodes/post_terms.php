@@ -1,13 +1,12 @@
 <?php
+defined( 'ABSPATH' ) || exit;
+
 /**
  * Post Terms Shortcode.
  *
  * @package TotalThemeCore
- * @version 1.2.8
+ * @version 1.3.1
  */
-
-defined( 'ABSPATH' ) || exit;
-
 if ( ! class_exists( 'VCEX_Post_Terms_Shortcode' ) ) {
 
 	class VCEX_Post_Terms_Shortcode {
@@ -52,6 +51,18 @@ if ( ! class_exists( 'VCEX_Post_Terms_Shortcode' ) ) {
 						'ul'      => esc_html__( 'UL List', 'total-theme-core' ),
 						'ol'      => esc_html__( 'OL List', 'total-theme-core' ),
 					),
+				),
+				array(
+					'type' => 'textfield',
+					'heading' => esc_html__( 'Max Width', 'total-theme-core' ),
+					'param_name' => 'max_width',
+					'description' => vcex_shortcode_param_description( 'width' ),
+				),
+				array(
+					'type' => 'vcex_text_alignments',
+					'heading' => esc_html__( 'Aligment', 'total-theme-core' ),
+					'param_name' => 'align',
+					'dependency' => array( 'element' => 'max_width', 'not_empty' => true ),
 				),
 				array(
 					'type' => 'dropdown',
@@ -240,6 +251,9 @@ if ( ! class_exists( 'VCEX_Post_Terms_Shortcode' ) ) {
 					'param_name' => 'button_background',
 					'dependency' => array( 'element' => 'style', 'value' => 'buttons' ),
 					'group' => esc_html__( 'Style', 'total-theme-core' ),
+					'extra_choices' => array(
+						esc_html__( 'Term Color', 'total-theme-core' ) => 'term_color',
+					),
 				),
 				array(
 					'type' => 'vcex_colorpicker',
@@ -247,12 +261,18 @@ if ( ! class_exists( 'VCEX_Post_Terms_Shortcode' ) ) {
 					'param_name' => 'button_hover_background',
 					'dependency' => array( 'element' => 'style', 'value' => 'buttons' ),
 					'group' => esc_html__( 'Style', 'total-theme-core' ),
+					'extra_choices' => array(
+						esc_html__( 'Term Color', 'total-theme-core' ) => 'term_color',
+					),
 				),
 				array(
 					'type' => 'vcex_colorpicker',
 					'heading' => esc_html__( 'Color', 'total-theme-core' ),
 					'param_name' => 'button_color',
 					'group' => esc_html__( 'Style', 'total-theme-core' ),
+					'extra_choices' => array(
+						esc_html__( 'Term Color', 'total-theme-core' ) => 'term_color',
+					),
 				),
 				array(
 					'type' => 'vcex_colorpicker',
@@ -260,6 +280,9 @@ if ( ! class_exists( 'VCEX_Post_Terms_Shortcode' ) ) {
 					'param_name' => 'button_hover_color',
 					'dependency' => array( 'element' => 'style', 'value' => 'buttons' ),
 					'group' => esc_html__( 'Style', 'total-theme-core' ),
+					'extra_choices' => array(
+						esc_html__( 'Term Color', 'total-theme-core' ) => 'term_color',
+					),
 				),
 				array(
 					'type' => 'textfield',

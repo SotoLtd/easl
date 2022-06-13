@@ -8,11 +8,11 @@ final class Shortcode_Ticon {
 	public function __construct() {
 
 		if ( ! shortcode_exists( 'font_awesome' ) ) {
-			add_shortcode( 'font_awesome', array( __CLASS__, 'output' ) );
+			add_shortcode( 'font_awesome', __CLASS__ . '::output' );
 		}
 
 		if ( ! shortcode_exists( 'ticon' ) ) {
-			add_shortcode( 'ticon', array( __CLASS__, 'output' ) );
+			add_shortcode( 'ticon', __CLASS__ . '::output' );
 		}
 
 	}

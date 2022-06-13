@@ -4,14 +4,12 @@
  *
  * @package Total WordPress Theme
  * @subpackage Total Theme Core
- * @version 1.2.8
+ * @version 1.3.2
  */
 
 defined( 'ABSPATH' ) || exit;
 
-$shortcode_tag = 'vcex_staff_grid';
-
-if ( ! vcex_maybe_display_shortcode( $shortcode_tag, $atts ) ) {
+if ( ! vcex_maybe_display_shortcode( 'vcex_staff_grid', $atts ) ) {
 	return;
 }
 
@@ -30,7 +28,7 @@ $og_atts = $atts;
 $entry_count = ! empty( $og_atts['entry_count'] ) ? $og_atts['entry_count'] : 0;
 
 // Get and extract shortcode attributes
-$atts = vcex_shortcode_atts( $shortcode_tag, $atts, $this );
+$atts = vcex_shortcode_atts( 'vcex_staff_grid', $atts, $this );
 
 // Extract shortcode atts
 extract( $atts );
@@ -62,7 +60,7 @@ if ( $vcex_query->have_posts() ) :
 	$grid_classes       = array( 'wpex-row', 'vcex-staff-grid', 'entries', 'wpex-clr' );
 	$grid_data          = array();
 	$is_isotope         = false;
-	$excerpt_length     = $excerpt_length ? $excerpt_length : '30';
+	$excerpt_length     = $excerpt_length ?: '30';
 	$css_animation      = ( $css_animation && 'true' != $filter ) ? vcex_get_css_animation( $css_animation ) : false;
 	$equal_heights_grid = ( 'true' == $equal_heights_grid && $columns > '1' ) ? true : false;
 
@@ -118,7 +116,7 @@ if ( $vcex_query->have_posts() ) :
 
 	// Wrap classes
 	if ( $visibility ) {
-		$wrap_classes[] = $visibility;
+		$wrap_classes[] = vcex_parse_visibility_class( $visibility );
 	}
 
 	if ( $bottom_margin ) {
@@ -170,7 +168,7 @@ if ( $vcex_query->have_posts() ) :
 		}
 	} else {
 
-		$isotope_transition_duration = apply_filters( 'vcex_isotope_transition_duration', null, $shortcode_tag );
+		$isotope_transition_duration = apply_filters( 'vcex_isotope_transition_duration', null, 'vcex_staff_grid' );
 		if ( $isotope_transition_duration ) {
 			$grid_data[] = 'data-transition-duration="' . esc_attr( $isotope_transition ) . '"';
 		}
@@ -188,7 +186,7 @@ if ( $vcex_query->have_posts() ) :
 	$grid_data     = $grid_data ? ' '. implode( ' ', $grid_data ) : '';
 
 	// VC filter
-	$wrap_classes = vcex_parse_shortcode_classes( $wrap_classes, $shortcode_tag, $atts );
+	$wrap_classes = vcex_parse_shortcode_classes( $wrap_classes, 'vcex_staff_grid', $atts );
 
 	// Begin shortcode output
 	$output .= '<div class="' . esc_attr( $wrap_classes ) . '"' . vcex_get_unique_id( $unique_id ) . '>';
@@ -210,7 +208,7 @@ if ( $vcex_query->have_posts() ) :
 		if ( 'true' == $filter && ! empty( $filter_terms ) ) {
 
 			// parse all text
-			$all_text = $all_text ? $all_text : esc_html__( 'All', 'total' );
+			$all_text = $all_text ?: esc_html__( 'All', 'total' );
 
 			// Filter button classes
 			$filter_button_classes = vcex_get_button_classes( $filter_button_style, $filter_button_color );
@@ -292,12 +290,12 @@ if ( $vcex_query->have_posts() ) :
 				if ( 'true' == $atts['excerpt'] || 'true' == $thumb_lightbox_caption ) {
 					$atts['post_excerpt'] = vcex_get_excerpt( array(
 						'length'  => $excerpt_length,
-						'context' => $shortcode_tag,
+						'context' => 'vcex_staff_grid',
 					) );
 				}
 
 				// Apply filters to attributes
-				$latts = apply_filters( 'vcex_shortcode_loop_atts', $atts, $shortcode_tag );
+				$latts = apply_filters( 'vcex_shortcode_loop_atts', $atts, 'vcex_staff_grid' );
 
 				// Add to the counter var
 				$entry_count++;
@@ -345,7 +343,7 @@ if ( $vcex_query->have_posts() ) :
 				/*--------------------------------*/
 				$output .= '<div ' . vcex_grid_get_post_class( $entry_classes, $latts['post_id'] ) . '>';
 
-					$output .= '<div class="' . esc_attr( implode( ' ', vcex_get_entry_inner_class( array( 'staff-entry-inner' ), $shortcode_tag, $latts ) ) ) . '">';
+					$output .= '<div class="' . esc_attr( implode( ' ', vcex_get_entry_inner_class( array( 'staff-entry-inner' ), 'vcex_staff_grid', $latts ) ) ) . '">';
 
 						/*--------------------------------*/
 						/* [ Entry Media ]
@@ -355,7 +353,7 @@ if ( $vcex_query->have_posts() ) :
 
 							$latts['media_type'] = 'thumbnail'; // so overlays can work
 
-							$media_output .= '<div class="' . esc_attr( implode( ' ', vcex_get_entry_media_class( array( 'staff-entry-media' ), $shortcode_tag, $latts ) ) ) . '">';
+							$media_output .= '<div class="' . esc_attr( implode( ' ', vcex_get_entry_media_class( array( 'staff-entry-media' ), 'vcex_staff_grid', $latts ) ) ) . '">';
 
 								// Thumbnail with link
 								if ( ! in_array( $thumb_link, array( 'none', 'nowhere' ) ) ) {
@@ -396,7 +394,7 @@ if ( $vcex_query->have_posts() ) :
 									// Thumbnail class
 									$thumbnail_class = implode( ' ' , vcex_get_entry_thumbnail_class(
 										array( 'staff-entry-media-img staff-entry-img wpex-align-middle' ),
-										$shortcode_tag,
+										'vcex_staff_grid',
 										$latts
 									) );
 
@@ -419,7 +417,7 @@ if ( $vcex_query->have_posts() ) :
 									$media_output .= vcex_get_post_thumbnail( $thumbnail_args );
 
 									// Inner Overlay
-									$media_output .= vcex_get_entry_image_overlay( 'inside_link', $shortcode_tag, $latts );
+									$media_output .= vcex_get_entry_image_overlay( 'inside_link', 'vcex_staff_grid', $latts );
 
 								// Close link
 								if ( ! in_array( $thumb_link, array( 'none', 'nowhere' ) ) ) {
@@ -427,10 +425,10 @@ if ( $vcex_query->have_posts() ) :
 								}
 
 								// After media output
-								$media_output .= vcex_get_entry_media_after( $shortcode_tag );
+								$media_output .= vcex_get_entry_media_after( 'vcex_staff_grid' );
 
 								// Outer link overlay HTML
-								$media_output .= vcex_get_entry_image_overlay( 'outside_link', $shortcode_tag, $latts );
+								$media_output .= vcex_get_entry_image_overlay( 'outside_link', 'vcex_staff_grid', $latts );
 
 							$media_output .= '</div>';
 
@@ -483,7 +481,7 @@ if ( $vcex_query->have_posts() ) :
 
 							}
 
-							$output .= '<div class="' . esc_attr( implode( ' ', vcex_get_entry_details_class( array( 'staff-entry-details' ), $shortcode_tag, $latts ) ) ) . '"' . $content_style .'>';
+							$output .= '<div class="' . esc_attr( implode( ' ', vcex_get_entry_details_class( array( 'staff-entry-details' ), 'vcex_staff_grid', $latts ) ) ) . '"' . $content_style .'>';
 
 								// Open equal height container
 								// Equal height div
@@ -513,7 +511,7 @@ if ( $vcex_query->have_posts() ) :
 									}
 
 									// Open title tag
-									$title_output .= '<' . $title_tag_escaped . ' class="' . esc_attr( implode( ' ', vcex_get_entry_title_class( array( 'staff-entry-title' ), $shortcode_tag, $latts ) ) ) . '"' . $heading_style . '>';
+									$title_output .= '<' . $title_tag_escaped . ' class="' . esc_attr( implode( ' ', vcex_get_entry_title_class( array( 'staff-entry-title' ), 'vcex_staff_grid', $latts ) ) ) . '"' . $heading_style . '>';
 
 										// Display title and link to post
 										if ( 'post' == $title_link ) {
@@ -563,7 +561,7 @@ if ( $vcex_query->have_posts() ) :
 
 									if ( $get_position ) {
 
-										$position_output .= '<div class="' . esc_attr( implode( ' ', vcex_get_entry_staff_position_class( array( 'staff-entry-position' ), $shortcode_tag, $atts ) ) ) . '"' . $position_style . '>';
+										$position_output .= '<div class="' . esc_attr( implode( ' ', vcex_get_entry_staff_position_class( array( 'staff-entry-position' ), 'vcex_staff_grid', $atts ) ) ) . '"' . $position_style . '>';
 
 											$position_output .= apply_filters( 'wpex_staff_entry_position', wp_kses_post( $get_position ) );
 
@@ -602,7 +600,7 @@ if ( $vcex_query->have_posts() ) :
 
 									if ( $get_categories ) {
 
-										$categories_output .= '<div class="' . esc_attr( implode( ' ', vcex_get_entry_categories_class( array( 'staff-entry-categories' ), $shortcode_tag, $atts ) ) ) . '"' . $categories_style . '"' . $categories_style . '>';
+										$categories_output .= '<div class="' . esc_attr( implode( ' ', vcex_get_entry_categories_class( array( 'staff-entry-categories' ), 'vcex_staff_grid', $atts ) ) ) . '"' . $categories_style . '"' . $categories_style . '>';
 
 											$categories_output .= $get_categories;
 
@@ -626,7 +624,7 @@ if ( $vcex_query->have_posts() ) :
 										) );
 									}
 
-									$excerpt_output .= '<div class="' . esc_attr( implode( ' ', vcex_get_entry_excerpt_class( array( 'staff-entry-excerpt' ), $shortcode_tag, $latts ) ) ) . '"' . $excerpt_style . '>';
+									$excerpt_output .= '<div class="' . esc_attr( implode( ' ', vcex_get_entry_excerpt_class( array( 'staff-entry-excerpt' ), 'vcex_staff_grid', $latts ) ) ) . '"' . $excerpt_style . '>';
 
 										$excerpt_output .= $latts['post_excerpt'];
 
@@ -672,7 +670,7 @@ if ( $vcex_query->have_posts() ) :
 									if ( $first_run ) {
 
 										// Readmore text
-										$read_more_text = $read_more_text ? $read_more_text : esc_html__( 'read more', 'total' );
+										$read_more_text = $read_more_text ?: esc_html__( 'Read more', 'total' );
 
 										// Readmore classes
 										$readmore_classes = vcex_get_button_classes( $readmore_style, $readmore_style_color );
@@ -689,11 +687,11 @@ if ( $vcex_query->have_posts() ) :
 
 										// Readmore hover data
 										$readmore_hover_data = array();
-										if ( $readmore_hover_background ) {
-											$readmore_hover_data['background'] = $readmore_hover_background;
+										if ( ! empty( $atts['readmore_hover_background'] ) ) {
+											$readmore_hover_data['background'] = vcex_parse_color( $atts['readmore_hover_background'] );
 										}
-										if ( $readmore_hover_color ) {
-											$readmore_hover_data['color'] = $readmore_hover_color;
+										if ( ! empty( $atts['readmore_hover_color'] ) ) {
+											$readmore_hover_data['color'] = vcex_parse_color( $atts['readmore_hover_color'] );
 										}
 										if ( $readmore_hover_data ) {
 											$readmore_hover_data = htmlspecialchars( wp_json_encode( $readmore_hover_data ) );
@@ -701,7 +699,7 @@ if ( $vcex_query->have_posts() ) :
 
 									}
 
-									$readmore_output .= '<div class="' . esc_attr( implode( ' ', vcex_get_entry_button_wrap_class( array( 'staff-entry-readmore-wrap' ), $shortcode_tag, $latts ) ) ) . '">';
+									$readmore_output .= '<div class="' . esc_attr( implode( ' ', vcex_get_entry_button_wrap_class( array( 'staff-entry-readmore-wrap' ), 'vcex_staff_grid', $latts ) ) ) . '">';
 
 										$attrs = array(
 											'href'   => esc_url( $latts['post_permalink'] ),
@@ -727,6 +725,7 @@ if ( $vcex_query->have_posts() ) :
 									$readmore_output .= '</div>';
 
 								}
+
 								$output .= apply_filters( 'vcex_staff_grid_readmore', $readmore_output, $latts );
 
 								// Close Equal height div
@@ -762,7 +761,7 @@ if ( $vcex_query->have_posts() ) :
 			if ( ! empty( $vcex_query->max_num_pages ) ) {
 				vcex_loadmore_scripts();
 				$og_atts['entry_count'] = $entry_count; // Update counter
-				$output .= vcex_get_loadmore_button( $shortcode_tag, $og_atts, $vcex_query );
+				$output .= vcex_get_loadmore_button( 'vcex_staff_grid', $og_atts, $vcex_query );
 			}
 		}
 

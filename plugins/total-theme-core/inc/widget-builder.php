@@ -1,18 +1,16 @@
 <?php
-/**
- * Widget Builder.
- *
- * @package TotalThemeCore
- * @version 1.2.8
- */
-
 namespace TotalThemeCore;
-
 use \WP_Query;
 use \WP_Widget;
 
 defined( 'ABSPATH' ) || exit;
 
+/**
+ * Widget Builder.
+ *
+ * @package TotalThemeCore
+ * @version 1.3.2
+ */
 class WidgetBuilder extends WP_Widget {
 
 	/**
@@ -66,7 +64,7 @@ class WidgetBuilder extends WP_Widget {
 		// Set widget vars
 		$this->name    = wp_strip_all_tags( $args['name'] );
 		$this->id_base = wp_strip_all_tags( $args['id_base'] );
-		$this->options = isset( $args['options'] ) ? $args['options'] : '';
+		$this->options = $args['options'] ?? '';
 		$this->fields  = $args['fields'];
 
 		// Add filter to options
@@ -99,7 +97,7 @@ class WidgetBuilder extends WP_Widget {
 				reset( $field['choices'] );
 				$field['default'] = key( $field['choices'] );
 			}
-			$defaults[$field['id']] = isset( $field['default'] ) ? $field['default'] : '';
+			$defaults[$field['id']] = $field['default'] ?? '';
 		}
 		return $defaults;
 	}
@@ -155,10 +153,10 @@ class WidgetBuilder extends WP_Widget {
 
 			$field_id   = $field['id'];
 			$field_type = $field['type'];
-			$field_val  = isset( $new_instance[$field_id] ) ? $new_instance[$field_id] : null;
-			$default    = isset( $field['default'] ) ? $field['default'] : '';
+			$field_val  = $new_instance[$field_id] ?? null;
+			$default    = $field['default'] ?? '';
 
-			if ( 'notice' == $field_type ) {
+			if ( 'notice' === $field_type ) {
 				continue;
 			}
 
@@ -166,14 +164,14 @@ class WidgetBuilder extends WP_Widget {
 			if ( $field_val ) {
 
 				// Save checkbox field
-				if ( 'checkbox' == $field_type ) {
+				if ( 'checkbox' === $field_type ) {
 
 					$instance[$field_id] = (bool) true;
 
 				}
 
 				// Save select field
-				elseif ( 'select' == $field_type ) {
+				elseif ( 'select' === $field_type ) {
 
 					$array_to_check = array();
 
@@ -191,7 +189,7 @@ class WidgetBuilder extends WP_Widget {
 				}
 
 				// Save repeater field
-				elseif ( 'repeater' == $field_type ) {
+				elseif ( 'repeater' === $field_type ) {
 
 					$fields = $field[ 'fields' ];
 					$new_val = array();
@@ -227,9 +225,9 @@ class WidgetBuilder extends WP_Widget {
 
 				} else {
 
-					$sanitize = isset( $field['sanitize'] ) ? $field['sanitize'] : $field_type;
+					$sanitize = $field['sanitize'] ?? $field_type;
 
-					if ( 'text' == $field_type || 'image' == $field_type || 'media_upload' == $field_type ) {
+					if ( 'text' === $field_type || 'image' === $field_type || 'media_upload' === $field_type ) {
 						$sanitize = 'text_field';
 					}
 
@@ -246,7 +244,7 @@ class WidgetBuilder extends WP_Widget {
 			/* Field value is empty */
 			else {
 
-				if ( 'checkbox' == $field_type ) {
+				if ( 'checkbox' === $field_type ) {
 					$instance[$field_id] = (bool) false;
 				} else {
 					$instance[$field_id] = '';
@@ -275,17 +273,20 @@ class WidgetBuilder extends WP_Widget {
 
 			foreach ( $this->fields as $field ) {
 
-				$id             = $field['id'];
+				$id = $field['id'];
 				$field['class'] = 'widefat';
-				$field['id']    = $this->get_field_id( $id );
-				$field['name']  = $this->get_field_name( $id );
+				$field['id'] = $this->get_field_id( $id );
+				$field['name'] = $this->get_field_name( $id );
+
 				if ( empty( $instance ) ) {
-					$default = isset( $field['std'] ) ? $field['std'] : ''; // new instance
-					$default = isset( $field['default'] ) ? $field['default'] : $default;
+					$default = $field['std'] ?? ''; // new instance
+					$default = $field['default'] ?? $default;
 				} else {
-					$default = isset( $field['default'] ) ? $field['default'] : ''; // already saved instance
+					$default = $field['default'] ?? ''; // already saved instance
 				}
-				$field['value'] = isset( $instance[$id] ) ? $instance[$id] : $default;
+
+				$field['value'] = $instance[$id] ?? $default;
+
 				$this->add_field( $field );
 
 			}
@@ -305,7 +306,7 @@ class WidgetBuilder extends WP_Widget {
 	 */
 	public function add_field( $field ) {
 
-		$type = isset( $field['type' ] ) ? $field['type' ] : '';
+		$type = $field['type' ] ?? '';
 
 		$method_name = 'field_' . $type;
 		$description = '';
@@ -313,7 +314,7 @@ class WidgetBuilder extends WP_Widget {
 		if ( method_exists( $this, $method_name ) ) {
 
 			if ( isset( $field['description'] ) && 'notice' != $type ) {
-				$description = '<br /><small class="description" style="display:block;padding:6px 0 0;clear:both;">' . wp_kses_post( $field['description'] ) . '</small>';
+				$description = '<small class="description" style="display:block;padding:6px 0 0;clear:both;">' . wp_kses_post( $field['description'] ) . '</small>';
 			}
 
 			echo '<p>' . $this->$method_name( $field ) . $description . '</p>';
@@ -390,8 +391,8 @@ class WidgetBuilder extends WP_Widget {
 			$output .= ' class="' . esc_attr( $field['class'] ) . '"';
 		}
 
-		$default = isset( $field['default'] ) ? $field['default'] : '';
-		$value   = isset( $field['value'] ) ? $field['value'] : $default;
+		$default = $field['default'] ?? '';
+		$value   = $field['value'] ?? $default;
 
 		if ( ! empty( $field['repeater'] ) ) {
 			$id = '';
@@ -405,7 +406,7 @@ class WidgetBuilder extends WP_Widget {
 			$output .= ' size="' . esc_attr( $field['size'] ) . '" ';
 		}
 
-		$output .= ' />';
+		$output .= '>';
 
 		return $output;
 
@@ -429,7 +430,7 @@ class WidgetBuilder extends WP_Widget {
 			$output .= ' class="' . esc_attr( $field['class'] ) . '"';
 		}
 
-		$default = isset( $field['default'] ) ? $field['default'] : '';
+		$default = $field['default'] ?? '';
 		$value   = isset( $field['value'] ) ? esc_url( $field['value'] ) : $default;
 
 		if ( ! empty( $field['repeater'] ) ) {
@@ -444,7 +445,7 @@ class WidgetBuilder extends WP_Widget {
 			$output .= ' size="' . esc_attr( $field['size'] ) . '" ';
 		}
 
-		$output .= ' />';
+		$output .= '>';
 
 		return $output;
 
@@ -470,13 +471,13 @@ class WidgetBuilder extends WP_Widget {
 
 			$output .= ' id="' . esc_attr( $field['id'] ) . '" name="' . esc_attr( $field['name'] ) . '"';
 
-			$rows = isset( $field['rows'] ) ? $field['rows'] : 5;
+			$rows = $field['rows'] ?? 5;
 			$output .= ' rows="' . esc_attr( $rows ) . '"';
 
 		$output .= '>';
 
-		$default = isset( $field['default'] ) ? $field['default'] : '';
-		$value   = isset( $field['value'] ) ? $field['value'] : $default;
+		$default = $field['default'] ?? '';
+		$value   = $field['value'] ?? $default;
 
 		if ( $value ) {
 
@@ -518,7 +519,7 @@ class WidgetBuilder extends WP_Widget {
 			$output .= ' class="' . esc_attr( $field['class'] ) . '"';
 		}
 
-		$default = isset( $field['default'] ) ? $field['default'] : '';
+		$default = $field['default'] ?? '';
 		$value   = isset( $field['value'] ) ? esc_attr( $field['value'] ) : $default;
 
 		if ( ! empty( $field['repeater'] ) ) {
@@ -533,9 +534,9 @@ class WidgetBuilder extends WP_Widget {
 			$output .= ' size="' . esc_attr( $field['size'] ) . '" ';
 		}
 
-		$output .= ' />';
+		$output .= '>';
 
-		$output .= '<input style="margin-top:8px;" class="wpex-upload-button button button-secondary" type="button" value="'. esc_html__( 'Upload/Select', 'total-theme-core' ) .'" />';
+		$output .= '<input style="margin-top:8px;" class="wpex-upload-button button button-secondary" type="button" value="'. esc_html__( 'Upload/Select', 'total-theme-core' ) .'">';
 
 		return $output;
 
@@ -556,8 +557,8 @@ class WidgetBuilder extends WP_Widget {
 		}
 
 		$fields  = $field[ 'fields' ];
-		$default = isset( $field[ 'default' ] ) ? $field[ 'default' ] : '';
-		$value   = isset( $field[ 'value' ] ) ? $field[ 'value' ] : $default;
+		$default = $field[ 'default' ] ?? '';
+		$value   = $field[ 'value' ] ?? $default;
 
 		if ( empty( $fields ) || ! is_array( $fields ) ) {
 			return;
@@ -577,8 +578,8 @@ class WidgetBuilder extends WP_Widget {
 						foreach ( $fields as $subfield ) {
 
 							$subfield['repeater'] = true;
-							$subfield['name']     = $field[ 'name' ] . '[' . $subfield[ 'id' ] . '][]'; // same name for each
-							$subfield['value']    = isset( $value[ $k ][ $subfield[ 'id' ] ] ) ? $value[ $k ][ $subfield[ 'id' ] ] : '';
+							$subfield['name'] = $field[ 'name' ] . '[' . $subfield[ 'id' ] . '][]'; // same name for each
+							$subfield['value'] = $value[ $k ][ $subfield[ 'id' ] ] ?? '';
 
 							$method = 'field_' . $subfield['type'];
 
@@ -665,8 +666,8 @@ class WidgetBuilder extends WP_Widget {
 
 		$output .= '>';
 
-		$default = isset( $field['default'] ) ? $field['default'] : '';
-		$value   = isset( $field['value'] ) ? $field['value'] : $default;
+		$default = $field['default'] ?? '';
+		$value   = $field['value'] ?? $default;
 
 		foreach( $choices as $id => $label ) {
 
@@ -717,8 +718,8 @@ class WidgetBuilder extends WP_Widget {
 
 		$output .= '>';
 
-		$default = isset( $field['default'] ) ? $field['default'] : '';
-		$value   = isset( $field['value'] ) ? $field['value'] : $default;
+		$default = $field['default'] ?? '';
+		$value   = $field['value'] ?? $default;
 
 		$output .= '<option value="" '. selected( $value, '', false ) . '>&#8212; ' . esc_html( 'Select', 'total-theme-core' ) . ' &#8212;</option>';
 
@@ -764,14 +765,14 @@ class WidgetBuilder extends WP_Widget {
 				$output .= ' class="' . esc_attr( $field['class'] ) . '"';
 			}
 
-			$default = isset( $field['default'] ) ? $field['default'] : 'off';
-			$value   = isset( $field['value'] ) ? $field['value'] : $default;
+			$default = $field['default'] ?? 'off';
+			$value   = $field['value'] ?? $default;
 
 			$output .= ' id="' . esc_attr( $field['id'] ) . '" name="' . esc_attr( $field['name'] ) . '"';
 
 			$output .= ' ' . checked( (bool) $value, true, false );
 
-		$output .= ' />';
+		$output .= '>';
 
 		$output .= $this->field_label( $field, false );
 
@@ -797,11 +798,11 @@ class WidgetBuilder extends WP_Widget {
 			$output .= ' class="' . esc_attr( $field['class'] ) . '"';
 		}
 
-		$default = isset( $field['default'] ) ? $field['default'] : '';
+		$default = $field['default'] ?? '';
 		$value   = isset( $field['value'] ) ? floatval( $field['value'] ) : $default;
-		$min     = isset( $field['min'] ) ? $field['min'] : '';
-		$max     = isset( $field['max'] ) ? $field['max'] : '';
-		$step    = isset( $field['step'] ) ? $field['step'] : '';
+		$min     = $field['min'] ?? '';
+		$max     = $field['max'] ?? '';
+		$step    = $field['step'] ?? '';
 
 		$output .= ' id="' . esc_attr( $field['id'] ) . '" name="' . esc_attr( $field['name'] ) . '" value="' . esc_attr( $value ) . '"';
 
@@ -809,7 +810,7 @@ class WidgetBuilder extends WP_Widget {
 		$output .= ' max="' . esc_attr( $max ) . '" ';
 		$output .= ' step="' . esc_attr( $step ) . '" ';
 
-		$output .= ' />';
+		$output .= '>';
 
 		return $output;
 

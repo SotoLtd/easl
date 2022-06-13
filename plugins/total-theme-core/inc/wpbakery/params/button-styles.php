@@ -1,14 +1,14 @@
 <?php
-/**
- * WPBakery Param => Button Styles.
- *
- * @package TotalThemeCore
- * @version 1.2.8
- */
 namespace TotalThemeCore\WPBakery\Params;
 
 defined( 'ABSPATH' ) || exit;
 
+/**
+ * WPBakery Param => Button Styles.
+ *
+ * @package TotalThemeCore
+ * @version 1.3.2
+ */
 final class Button_Styles {
 
 	public static function output( $settings, $value ) {
@@ -21,7 +21,7 @@ final class Button_Styles {
 				. esc_attr( $settings['param_name'] )
 				. ' ' . esc_attr( $settings['type'] ) .'">';
 
-			$excluded = isset( $settings['exclude_choices'] ) ? $settings['exclude_choices'] : array();
+			$excluded = $settings['exclude_choices'] ?? array();
 
 			$options = wpex_button_styles();
 
@@ -41,7 +41,7 @@ final class Button_Styles {
 			$output = vcex_total_exclusive_notice();
 			$output .= '<input type="hidden" class="wpb_vc_param_value '
 					. esc_attr( $settings['param_name'] ) . ' '
-					. esc_attr( $settings['type'] ) . '" name="' . esc_attr( $settings['param_name'] ) . '" value="' . esc_attr( $value ) . '"/>';
+					. esc_attr( $settings['type'] ) . '" name="' . esc_attr( $settings['param_name'] ) . '" value="' . esc_attr( $value ) . '">';
 		}
 
 		return $output;

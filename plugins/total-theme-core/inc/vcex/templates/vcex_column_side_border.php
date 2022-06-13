@@ -4,23 +4,21 @@
  *
  * @package Total WordPress Theme
  * @subpackage Total Theme Core
- * @version 1.2
+ * @version 1.3.2
  */
 
 defined( 'ABSPATH' ) || exit;
 
-$shortcode_tag = 'vcex_column_side_border';
-
-if ( ! vcex_maybe_display_shortcode( $shortcode_tag, $atts ) ) {
+if ( ! vcex_maybe_display_shortcode( 'vcex_column_side_border', $atts ) ) {
 	return;
 }
 
 if ( vcex_vc_is_inline() ) {
-	echo '<div class="wpex-alert wpex-text-center">' . __( 'Column Side Border Placeholder', 'total-theme-code' ) . '</div>';
+	echo '<div class="wpex-alert wpex-text-center">' . esc_html__( 'Column Side Border Placeholder', 'total-theme-core' ) . '</div>';
 	return;
 }
 
-$atts = vcex_shortcode_atts( $shortcode_tag, $atts, $this );
+$atts = vcex_shortcode_atts( 'vcex_column_side_border', $atts, $this );
 
 $shortcode_class = 'vcex-column-side-border';
 
@@ -35,10 +33,10 @@ if ( ! $atts['position'] ) {
 $shortcode_class .= ' vcex-' . sanitize_html_class( $atts['position'] );
 
 if ( $atts['visibility'] ) {
-    $shortcode_class .= ' ' . sanitize_html_class( $atts['visibility'] );
+    $shortcode_class .= ' ' . vcex_parse_visibility_class( $atts['visibility'] );
 }
 
-$shortcode_class = vcex_parse_shortcode_classes( $shortcode_class, $shortcode_tag, $atts );
+$shortcode_class = vcex_parse_shortcode_classes( $shortcode_class, 'vcex_column_side_border', $atts );
 
 $style = '';
 

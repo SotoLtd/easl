@@ -4,23 +4,21 @@
  *
  * @package Total WordPress Theme
  * @subpackage Total Theme Core
- * @version 1.2.8
+ * @version 1.3.2
  */
 
 defined( 'ABSPATH' ) || exit;
 
-$shortcode_tag = 'vcex_terms_grid';
-
-if ( ! vcex_maybe_display_shortcode( $shortcode_tag, $atts ) ) {
+if ( ! vcex_maybe_display_shortcode( 'vcex_terms_grid', $atts ) ) {
 	return;
 }
 
-// Get and extract shortcode attributes
-$atts = vcex_shortcode_atts( $shortcode_tag, $atts, $this );
+// Get and extract shortcode attributes.
+$atts = vcex_shortcode_atts( 'vcex_terms_grid', $atts, $this );
 extract( $atts );
 
 // Get current taxonomy.
-if ( 'tax_children' === $query_type && is_tax() ) {
+if ( ( 'tax_children' === $query_type || 'tax_parent' === $query_type ) && is_tax() ) {
 	$taxonomy = get_query_var( 'taxonomy' );
 }
 
@@ -46,20 +44,28 @@ if ( vcex_validate_boolean( $parent_terms ) ) {
 if ( $child_of ) {
 	$child_of = get_term_by( 'slug', $child_of, $taxonomy );
 	if ( $child_of && ! is_wp_error( $child_of ) ) {
-		$query_args[ 'child_of' ] = $child_of->term_id;
+		$query_args['child_of'] = $child_of->term_id;
 	}
 }
 
 // Add arguments based on query_type.
-switch ( $query_type ) {
-	case 'post_terms':
-		$query_args['object_ids'] = vcex_get_the_ID();
-		break;
-	case 'tax_children':
-		if ( is_tax() ) {
-			$query_args['child_of'] = get_queried_object_id();
-		}
-		break;
+if ( $query_type ) {
+	switch ( $query_type ) {
+		case 'post_terms':
+			$query_args['object_ids'] = vcex_get_the_ID();
+			break;
+		case 'tax_children':
+			if ( is_tax() ) {
+				$query_args['child_of'] = get_queried_object_id();
+				unset( $query_args['parent'] ); // prevent issues.
+			}
+			break;
+		case 'tax_parent':
+			if ( is_tax() ) {
+				$query_args['parent'] = get_queried_object_id();
+			}
+			break;
+	}
 }
 
 // Get terms
@@ -72,12 +78,12 @@ if ( ! $terms || is_wp_error( $terms ) ) {
 }
 
 // Sanitize atts.
-$exclude_terms = $exclude_terms ? preg_split( '/\,[\s]*/', $exclude_terms ) : array();
-$title_tag_escaped = $title_tag ? tag_escape( $title_tag ) : 'h2';
-$title_overlay_align_items = $title_overlay_align_items ? $title_overlay_align_items : 'center';
-$title_overlay_opacity = $title_overlay_opacity ? $title_overlay_opacity : '60';
-$title_overlay_style = '';
-$archive_link = vcex_validate_boolean( $archive_link );
+$exclude_terms             = $exclude_terms ? preg_split( '/\,[\s]*/', $exclude_terms ) : array();
+$title_tag_escaped         = $title_tag ? tag_escape( $title_tag ) : 'h2';
+$title_overlay_align_items = $title_overlay_align_items ?: 'center';
+$title_overlay_opacity     = $title_overlay_opacity ?: '60';
+$title_overlay_style       = '';
+$archive_link              = vcex_validate_boolean( $archive_link );
 
 if ( $title_overlay_bg ) {
 	$title_overlay_style = vcex_inline_style( array(
@@ -93,15 +99,6 @@ $description      = vcex_validate_boolean( $description );
 $term_count       = vcex_validate_boolean( $term_count );
 $term_count_block = vcex_validate_boolean( $term_count_block );
 $button           = vcex_validate_boolean( $button );
-
-// Load Google Fonts if needed.
-if ( $title_font_family ) {
-	vcex_enqueue_font( $title_font_family );
-}
-
-if ( $description_font_family ) {
-	vcex_enqueue_font( $description_font_family );
-}
 
 // Define post type based on the taxonomy.
 $taxonomy  = get_taxonomy( $taxonomy );
@@ -129,14 +126,14 @@ if ( $bottom_margin ) {
 }
 
 if ( $visibility ) {
-	$wrap_classes[] = sanitize_html_class( $visibility );
+	$wrap_classes[] = vcex_parse_visibility_class( $visibility );
 }
 
 if ( $classes ) {
 	$wrap_classes[] = vcex_get_extra_class( $classes );
 }
 
-$wrap_classes = vcex_parse_shortcode_classes( implode( ' ', $wrap_classes ), $shortcode_tag, $atts );
+$wrap_classes = vcex_parse_shortcode_classes( implode( ' ', $wrap_classes ), 'vcex_terms_grid', $atts );
 
 // Entry CSS wrapper.
 $entry_css_class = $entry_css ? vcex_vc_shortcode_custom_css_class( $entry_css ) : '';
@@ -219,8 +216,8 @@ $output .= '<div class="' . esc_attr( $wrap_classes ) . '">';
 				$entry_classes[] = 'col';
 			}
 
-			if ( $css_animation && 'none' != $css_animation ) {
-				$entry_classes[] = vcex_get_css_animation( $css_animation );
+			if ( $css_animation_class = vcex_get_css_animation( $css_animation ) ) {
+				$entry_classes[] = $css_animation_class;
 			}
 
 			$entry_classes = implode( ' ', $entry_classes );
@@ -393,14 +390,14 @@ $output .= '<div class="' . esc_attr( $wrap_classes ) . '">';
 								$atts['overlay_excerpt' ] = $term->description;
 
 								// Inner Overlay.
-								$output .= vcex_get_entry_image_overlay( 'inside_link', $shortcode_tag, $atts );
+								$output .= vcex_get_entry_image_overlay( 'inside_link', 'vcex_terms_grid', $atts );
 
 							if ( $archive_link && ! empty( $term_link ) ) {
 								$output .= '</a>';
 							}
 
 							// Outside Overlay.
-							$output .= vcex_get_entry_image_overlay( 'outside_link', $shortcode_tag, $atts );
+							$output .= vcex_get_entry_image_overlay( 'outside_link', 'vcex_terms_grid', $atts );
 
 						$output .= '</div>';
 
@@ -452,9 +449,15 @@ $output .= '<div class="' . esc_attr( $wrap_classes ) . '">';
 
 						if ( $first_run ) {
 
-							$button_data    = array();
-							$button_text    = $button_text ? $button_text : esc_html__( 'visit category', 'total' );
-							$button_align   = $button_align ? ' text' . $button_align  : '';
+							if ( ! $button_text ) {
+								$button_text = esc_html__( 'visit category', 'total' );
+							}
+
+							if ( ! $button_align ) {
+								$button_align = ' text' . sanitize_html_class( $button_align );
+							}
+
+							$button_data = array();
 							$button_classes = vcex_get_button_classes( $button_style, $button_style_color );
 
 							$button_style = vcex_inline_style( array(

@@ -1,19 +1,15 @@
 window.wpexMetaFactory = window.wpexMetaFactory || {};
 
 ( function( $, mf, l10n ) {
-
 	'use strict';
 
 	var $document = $( document );
 
 	$document.ready( function() {
-
 		mf.init();
-
 	} );
 
 	mf.init = function() {
-
 		var $metabox = mf.metabox();
 
 		mf.fieldColorPicker( $metabox );
@@ -24,7 +20,6 @@ window.wpexMetaFactory = window.wpexMetaFactory || {};
 		$metabox.on( 'click', '.wpex-mf-upload', mf.handleUploadClick );
 		$metabox.on( 'click', '.wpex-mf-clone-group', mf.cloneGroup );
 		$metabox.on( 'click', '.wpex-mf-remove-group', mf.removeGroup );
-
 	};
 
 	mf.metabox = function() {
@@ -36,14 +31,10 @@ window.wpexMetaFactory = window.wpexMetaFactory || {};
 	};
 
 	mf.fieldColorPicker = function( $metabox ) {
-
 		if ( 'function' == typeof $.fn.wpColorPicker ) {
-
 			$( '.wpex-mf-colorpicker', $metabox ).wpColorPicker();
-
 		}
-
-	}
+	};
 
 	mf.fieldSelectIcon = function( $metabox ) {
 
@@ -90,36 +81,31 @@ window.wpexMetaFactory = window.wpexMetaFactory || {};
 	};
 
 	mf.handleKeydown = function( e ) {
-
 		if ( event.keyCode == 27 ) {
 			var $modal = $( '.wpex-mf-icon-select-modal' );
 			if ( $modal.hasClass( 'wpex-mf-active' ) ) {
 				$modal.removeClass( 'wpex-mf-active' );
 			}
 		}
-
 	};
 
 	mf.handleUploadChange = function( e ) {
-
 		var $this = $( this );
-		var $preview = $this.closest( 'td' ).find( '.wpex-mf-upload-preview' );
+		var $preview = $this.closest( 'td' ).find( '.wpex-mf-upload-preview__content' );
 
 		if ( $preview.length && ! $( this ).val() ) {
 			$preview.empty();
 		}
-
 	};
 
 	mf.handleUploadClick = function( e ) {
 		e.preventDefault();
 
-		var $el       = $( this ),
-			$td       = $el.closest( 'td' ),
-			$field    = $td.find( 'input[type="text"]' );
+		var $el = $( this ),
+			$td = $el.closest( 'td' ),
+			$field = $td.find( 'input[type="text"]' );
 
 		mf.fieldUpload( $field );
-
 	};
 
 	mf.fieldUpload = function( field ) {
@@ -135,30 +121,59 @@ window.wpexMetaFactory = window.wpexMetaFactory || {};
 		}
 
 		file_frame = wp.media.frames.file_frame = wp.media( {
-			id            : 'wpex-mf-metabox-upload',
-			frame         : 'post',
-			state         : 'insert',
-			filterable    : 'uploaded',
-			multiple      : false,
-			syncSelection : false,
-			autoSelect    : true
+			id: 'wpex-mf-metabox-upload',
+			frame: 'post',
+			state: 'insert',
+			filterable: 'uploaded',
+			multiple: false,
+			syncSelection: false,
+			autoSelect: true
 		} );
 
 		var $preview = field.closest( 'td' ).find( '.wpex-mf-upload-preview' );
-
 		file_frame.on( 'insert', function() {
 			var getSelection = file_frame.state().get( 'selection' ).first().toJSON();
-			field.val( getSelection[field.data( 'selection' )] );
+			var fieldVal = getSelection[field.data( 'selection' )];
+			field.val( fieldVal );
 			if ( $preview.length ) {
-				$preview.html( '<img src="' + getSelection.url  + '">' );
+				mf.fieldPreviewAJAX( $preview, fieldVal );
 			}
 		} );
 
 		file_frame.open();
 	};
 
-	mf.cloneGroup = function( e ) {
+	mf.fieldPreviewAJAX = function( $previewEl, fieldVal ) {
+		var $previewContent = $previewEl.find( '.wpex-mf-upload-preview__content' );
+		$previewContent.empty();
 
+		var $loader = $previewEl.find( '.wpex-mf-upload-preview__loader' );
+		$loader.show();
+
+
+		var xhr = new XMLHttpRequest();
+
+		var data = 'action=wpex_mf_field_preview_ajax&field_value=' + fieldVal + '&nonce=' + l10n.ajax_nonce;
+
+		xhr.onload = function() {
+			if ( 4 == xhr.readyState && 200 == xhr.status ) {
+				var newPreview = this.responseText;
+				if ( newPreview ) {
+					$previewContent.html( newPreview );
+				}
+			} else {
+				console.log( this.responseText );
+			}
+			$loader.hide();
+		};
+
+		xhr.open( 'POST', window.ajaxurl, true );
+		xhr.setRequestHeader( 'Content-Type', 'application/x-www-form-urlencoded; charset=UTF-8' );
+		xhr.send( data );
+
+	};
+
+	mf.cloneGroup = function( e ) {
 		e.preventDefault();
 
 		var $el       = $( this );
@@ -173,7 +188,6 @@ window.wpexMetaFactory = window.wpexMetaFactory || {};
 		mf.updateIndexes( $groupSet );
 
 		mf.setFocus( $clone );
-
 	};
 
 	mf.resetFields = function( el ) {
@@ -186,7 +200,6 @@ window.wpexMetaFactory = window.wpexMetaFactory || {};
 	};
 
 	mf.updateIndexes = function( el ) {
-
 		var $groups = el.find( '.wpex-mf-group' );
 
 		$groups.each( function( i ) {
@@ -207,11 +220,9 @@ window.wpexMetaFactory = window.wpexMetaFactory || {};
 			} );
 
 		} );
-
 	};
 
 	mf.removeGroup = function( e ) {
-
 		e.preventDefault();
 
 		if ( confirm( l10n.delete_group_confirm ) ) {
@@ -234,7 +245,6 @@ window.wpexMetaFactory = window.wpexMetaFactory || {};
 			}
 
 		}
-
 	};
 
 	mf.setFocus = function( el) {

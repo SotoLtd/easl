@@ -4,19 +4,17 @@
  *
  * @package Total WordPress Theme
  * @subpackage Total Theme Core
- * @version 1.2.8
+ * @version 1.3.2
  */
 
 defined( 'ABSPATH' ) || exit;
 
-$shortcode_tag = 'vcex_list_item';
-
-if ( ! vcex_maybe_display_shortcode( $shortcode_tag, $atts ) ) {
+if ( ! vcex_maybe_display_shortcode( 'vcex_list_item', $atts ) ) {
 	return;
 }
 
 // Get and extract shortcode attributes.
-$atts = vcex_shortcode_atts( $shortcode_tag, $atts, $this );
+$atts = vcex_shortcode_atts( 'vcex_list_item', $atts, $this );
 extract( $atts );
 
 // Sanitize content/text.
@@ -37,20 +35,15 @@ if ( empty( $content ) ) {
 // Output var.
 $output = '';
 
-// Load custom font.
-if ( $font_family ) {
-	vcex_enqueue_font( $font_family );
-}
-
 // Get link.
-$url = isset( $atts['url'] ) ? $atts['url'] : '';
+$url = $atts['url'] ?? '';
 if ( $link ) {
 	$link_url_temp = $link;
 	$link_url = vcex_get_link_data( 'url', $link_url_temp );
 	if ( $link_url ) {
 		$url = $link_url;
-		$link_title = isset( $atts['link_title'] ) ? $atts['link_title'] : '';
-		$link_target = isset( $atts['link_target'] ) ? $atts['link_target'] : '';
+		$link_title = $atts['link_title'] ?? '';
+		$link_target = $atts['link_target'] ?? '';
 	}
 }
 
@@ -74,12 +67,12 @@ if ( $bottom_margin ) {
 	$wrap_class[] = 'wpex-mb-5';
 }
 
-if ( $css_animation && 'none' != $css_animation ) {
-	$wrap_class[] = vcex_get_css_animation( $css_animation );
+if ( $css_animation_class = vcex_get_css_animation( $css_animation ) ) {
+	$wrap_class[] = $css_animation_class;
 }
 
 if ( $visibility ) {
-	$wrap_class[] = sanitize_html_class( $visibility );
+	$wrap_class[] = vcex_parse_visibility_class( $visibility );
 }
 
 if ( $css ) {
@@ -106,18 +99,30 @@ if ( 'true' == $responsive_font_size ) {
 			$min_font_size = $min_font_size * vcex_get_body_font_size();
 		}
 
-		// Add wrap classes and data
+		// Add wrap classes and data.
 		$wrap_class[] = 'wpex-responsive-txt';
 		$wrap_attrs['data-max-font-size'] = absint( $font_size );
 		$wrap_attrs['data-min-font-size'] = absint( $min_font_size );
+
+		// Enqueue scripts.
+		wp_enqueue_script( 'vcex-responsive-text' );
 
 	}
 
 } else {
 
-	// Get responsive font-size.
-	if ( $responsive_data = vcex_get_module_responsive_data( $font_size, 'font_size' ) ) {
-		$wrap_attrs['data-wpex-rcss'] = $responsive_data;
+	// Responsive styles.
+	$unique_classname = vcex_element_unique_classname();
+
+	$el_responsive_styles = array(
+		'font_size' => $font_size,
+	);
+
+	$responsive_css = vcex_element_responsive_css( $el_responsive_styles, $unique_classname );
+
+	if ( $responsive_css ) {
+		$wrap_class[] = $unique_classname;
+		$output .= '<style>' . $responsive_css . '</style>';
 	}
 
 }
@@ -136,14 +141,14 @@ $wrap_attrs['style'] = vcex_inline_style( array(
 	'animation_duration' => $atts['animation_duration'],
 ) );
 
-$extra_classes = vcex_get_shortcode_extra_classes( $atts, $shortcode_tag );
+$extra_classes = vcex_get_shortcode_extra_classes( $atts, 'vcex_list_item' );
 
 if ( $extra_classes ) {
 	$wrap_class = array_merge( $wrap_class, $extra_classes );
 }
 
 // Turn classes into string, apply filters and sanitize.
-$wrap_attrs['class'] = esc_attr( vcex_parse_shortcode_classes( $wrap_class, $shortcode_tag, $atts ) );
+$wrap_attrs['class'] = esc_attr( vcex_parse_shortcode_classes( $wrap_class, 'vcex_list_item', $atts ) );
 
 // Begin output.
 $output .= '<div' . vcex_parse_html_attributes( $wrap_attrs ) . '>';
@@ -180,27 +185,6 @@ $output .= '<div' . vcex_parse_html_attributes( $wrap_attrs ) . '>';
 
 		if ( $icon || $icon_alternative_classes ) {
 
-			if ( ! $icon_height && $icon_size ) {
-				$icon_height = $icon_size;
-			}
-
-			$style_args = array(
-				'background'    => $atts['icon_background'],
-				'width'         => $atts['icon_width'],
-				'border_radius' => $atts['icon_border_radius'],
-				'height'        => $atts['icon_height'],
-				'font_size'     => $atts['icon_size'],
-				'color'         => $atts['color'],
-			);
-
-			if ( is_rtl() ) {
-				$style_args['margin_left'] = $margin_right;
-			} else {
-				$style_args['margin_right'] = $margin_right;
-			}
-
-			$icon_style = vcex_inline_style( $style_args );
-
 			$icon_classes = array(
 				'vcex-list-item-icon',
 			);
@@ -211,9 +195,34 @@ $output .= '<div' . vcex_parse_html_attributes( $wrap_attrs ) . '>';
 				$icon_classes[] = 'wpex-mr-10';
 			}
 
-			$output .= '<div class="' . esc_attr( implode( ' ', $icon_classes ) ) . '">';
+			$style_args = array();
 
-				$output .= '<div class="vcex-icon-wrap wpex-inline-flex wpex-justify-center wpex-items-center"' . $icon_style . '>';
+			if ( $atts['margin_right'] ) {
+				if ( is_rtl() ) {
+					$style_args['margin_left'] = $atts['margin_right'];
+				} else {
+					$style_args['margin_right'] = $atts['margin_right'];
+				}
+			}
+
+			// List item icon.
+			$output .= '<div class="' . esc_attr( implode( ' ', $icon_classes ) ) . '"' . vcex_inline_style( $style_args ) . '>';
+
+				// List item icon wrap.
+				if ( ! $icon_height && $icon_size ) {
+					$icon_height = $icon_size;
+				}
+
+				$style_args = array(
+					'background'    => $atts['icon_background'],
+					'width'         => $atts['icon_width'],
+					'border_radius' => $atts['icon_border_radius'],
+					'height'        => $atts['icon_height'],
+					'font_size'     => $atts['icon_size'],
+					'color'         => $atts['color'],
+				);
+
+				$output .= '<div class="vcex-icon-wrap wpex-inline-flex wpex-justify-center wpex-items-center"' . vcex_inline_style( $style_args ) . '>';
 
 				if ( $icon_alternative_classes ) {
 

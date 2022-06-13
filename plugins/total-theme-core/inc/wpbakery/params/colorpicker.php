@@ -1,14 +1,14 @@
 <?php
-/**
- * WPBakery Param => Color Picker.
- *
- * @package TotalThemeCore
- * @version 1.2.8
- */
 namespace TotalThemeCore\WPBakery\Params;
 
 defined( 'ABSPATH' ) || exit;
 
+/**
+ * WPBakery Param => Color Picker.
+ *
+ * @package TotalThemeCore
+ * @version 1.3.1
+ */
 final class Colorpicker {
 
 	public static function output( $settings, $value ) {
@@ -40,10 +40,16 @@ final class Colorpicker {
 					}
 				}
 
+				if ( isset( $settings['extra_choices'] ) && is_array( $settings['extra_choices'] ) ) {
+					foreach ( $settings['extra_choices'] as $label => $val ) {
+						$output .= '<option value="' . esc_attr( $val ) . '" ' . selected( $value, $val, false ) . ' data-color="' . esc_attr( $val ) . '">' . esc_html( $label ) . '</option>';
+					}
+				}
+
 			$output .= '</select>';
 
 			// Color Picker.
-			$output .= '<input class="vcex-color-param__picker vc_color-control" name="vcex-color-param__picker" class="vc_color-control" type="text" value="' . esc_attr( $custom_color ) . '" />';
+			$output .= '<input class="vcex-color-param__picker vc_color-control" name="vcex-color-param__picker" class="vc_color-control" type="text" value="' . esc_attr( $custom_color ) . '">';
 
 			// Color Preview
 			$output .= '<div class="vcex-color-param__preview"></div>';

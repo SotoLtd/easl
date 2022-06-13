@@ -1,22 +1,25 @@
-( function( $ ) {
+( function() {
 
-	if ( typeof vc === 'undefined' || typeof vc.shortcode_view === 'undefined' ) {
+	'use strict';
+
+	if ( 'object' !== typeof vc || 'function' !== typeof vc.shortcode_view ) {
 		return false;
 	}
 
 	window.vcexIconBoxVcBackendView = vc.shortcode_view.extend( {
-		changeShortcodeParams: function ( model ) {
+		changeShortcodeParams: function( model ) {
 			window.vcexIconBoxVcBackendView.__super__.changeShortcodeParams.call( this, model );
-			var heading = model.getParam( 'heading' );
-			var target  = this.$el.find( '.vcex-heading-text > span' );
-			if ( target.length ) {
+			var heading, target;
+			target = this.$el[0].querySelector( '.vcex-heading-text > span' );
+			if ( target ) {
+				heading = model.getParam( 'heading' );
 				if ( heading && _.isString( heading ) && ! heading.match(/^#E\-8_/) ) {
-					target.html( ': ' + heading );
+					target.textContent = ': ' + heading;
 				} else {
-					target.html( '' );
+					target.textContent = '';
 				}
 			}
 		}
 	} );
 
-} ) ( jQuery );
+})();

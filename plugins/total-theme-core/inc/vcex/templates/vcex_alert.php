@@ -4,18 +4,16 @@
  *
  * @package Total WordPress Theme
  * @subpackage Total Theme Core
- * @version 1.2.8
+ * @version 1.3.2
  */
 
 defined( 'ABSPATH' ) || exit;
 
-$shortcode_tag = 'vcex_alert';
-
-if ( ! vcex_maybe_display_shortcode( $shortcode_tag, $atts ) ) {
+if ( ! vcex_maybe_display_shortcode( 'vcex_alert', $atts ) ) {
 	return;
 }
 
-$atts = vcex_shortcode_atts( $shortcode_tag, $atts, $this );
+$atts = vcex_shortcode_atts( 'vcex_alert', $atts, get_class() );
 
 if ( empty( $content ) ) {
 	return;
@@ -30,13 +28,13 @@ if ( $atts['type'] ) {
 	$shortcode_class[] = 'wpex-alert-' . sanitize_html_class( $atts['type'] );
 }
 
-$extra_classes = vcex_get_shortcode_extra_classes( $atts, $shortcode_tag );
+$extra_classes = vcex_get_shortcode_extra_classes( $atts, 'vcex_alert' );
 
 if ( $extra_classes ) {
 	$shortcode_class = array_merge( $shortcode_class, $extra_classes );
 }
 
-$shortcode_class = vcex_parse_shortcode_classes( $shortcode_class, $shortcode_tag, $atts );
+$shortcode_class = vcex_parse_shortcode_classes( $shortcode_class, 'vcex_alert', $atts );
 
 $shortcode_style = vcex_inline_style( array(
 	'animation_delay' => $atts['animation_delay'],

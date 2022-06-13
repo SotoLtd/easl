@@ -4,14 +4,12 @@
  *
  * @package Total WordPress Theme
  * @subpackage Total Theme Core
- * @version 1.2.8
+ * @version 1.3.2
  */
 
 defined( 'ABSPATH' ) || exit;
 
-$shortcode_tag = 'vcex_bullets';
-
-if ( ! vcex_maybe_display_shortcode( $shortcode_tag, $atts ) ) {
+if ( ! vcex_maybe_display_shortcode( 'vcex_bullets', $atts ) ) {
 	return;
 }
 
@@ -27,7 +25,7 @@ $content_escaped = wp_kses_post( $content );
 $output = '';
 
 // Get shortcode attributes.
-$atts = vcex_shortcode_atts( $shortcode_tag, $atts, $this );
+$atts = vcex_shortcode_atts( 'vcex_bullets', $atts, $this );
 
 // Check if icon is enabled.
 $has_icon = isset( $atts['has_icon'] ) && 'true' == $atts['has_icon'] ? true : false;
@@ -43,6 +41,18 @@ $shortcode_class = array(
 	'vcex-module',
 	'vcex-bullets',
 );
+
+if ( 'horizontal' === $atts['alignment'] ) {
+	$shortcode_class[] = 'vcex-bullets--horizontal';
+	if ( ! empty( $atts['gap'] ) ) {
+		$shortcode_class[] = 'wpex-gap-' . sanitize_html_class( absint( $atts['gap'] ) );
+	} else {
+		$shortcode_class[] = 'wpex-gap-20';
+	}
+	if ( $justify = vcex_parse_justify_content_class( $atts['justify'] ) ) {
+		$shortcode_class[] = $justify;
+	}
+}
 
 if ( $has_icon ) {
 
@@ -108,25 +118,29 @@ $shortcode_attrs['style'] = vcex_inline_style( array(
 	'animation_duration' => $atts['animation_duration'],
 ) );
 
-// Load custom font.
-if ( ! empty( $atts['font_family'] ) ) {
-	vcex_enqueue_font( $atts['font_family'] );
-}
+// Responsive styles.
+$unique_classname = vcex_element_unique_classname();
 
-// Responsive settings.
-if ( $responsive_data = vcex_get_module_responsive_data( $atts['font_size'], 'font_size' ) ) {
-	$shortcode_attrs['data-wpex-rcss'] = $responsive_data;
+$el_responsive_styles = array(
+	'font_size' => $atts['font_size'],
+);
+
+$responsive_css = vcex_element_responsive_css( $el_responsive_styles, $unique_classname );
+
+if ( $responsive_css ) {
+	$shortcode_class[] = $unique_classname;
+	$output .= '<style>' . $responsive_css . '</style>';
 }
 
 // Get extra classes.
-$extra_classes = vcex_get_shortcode_extra_classes( $atts, $shortcode_tag );
+$extra_classes = vcex_get_shortcode_extra_classes( $atts, 'vcex_bullets' );
 
 if ( $extra_classes ) {
 	$shortcode_class = array_merge( $shortcode_class, $extra_classes );
 }
 
 // Turn shortcode classes array into string.
-$shortcode_class = vcex_parse_shortcode_classes( $shortcode_class, $shortcode_tag, $atts );
+$shortcode_class = vcex_parse_shortcode_classes( $shortcode_class, 'vcex_bullets', $atts );
 
 // Add filters to shortcode classes and add to attributes.
 $shortcode_attrs['class'] = esc_attr( $shortcode_class );

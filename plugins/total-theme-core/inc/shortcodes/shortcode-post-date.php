@@ -8,7 +8,7 @@ final class Shortcode_Post_Date {
 	public function __construct() {
 
 		if ( ! shortcode_exists( 'post_publish_date' ) ) {
-			add_shortcode( 'post_publish_date', array( __CLASS__, 'output' ) );
+			add_shortcode( 'post_publish_date', __CLASS__ . '::output' );
 		}
 
 	}

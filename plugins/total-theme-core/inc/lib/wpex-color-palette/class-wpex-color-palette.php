@@ -28,33 +28,19 @@ if ( ! class_exists( 'WPEX_Color_Palette' ) ) {
 		public static $registered_colors = array();
 
 		/**
-		 * Our single WPEX_Color_Palette instance.
+		 * Instance.
+		 *
+		 * @access private
+		 * @var object Class object.
 		 */
 		private static $instance;
-
-		/**
-		 * Disable instantiation.
-		 */
-		private function __construct() {}
-
-		/**
-		 * Disable the cloning of this class.
-		 *
-		 * @return void
-		 */
-		final public function __clone() {}
-
-		/**
-		 * Disable the wakeup of this class.
-		 */
-		final public function __wakeup() {}
 
 		/**
 		 * Create or retrieve the instance of WPEX_Color_Palette.
 		 */
 		public static function instance() {
 			if ( is_null( static::$instance ) ) {
-				static::$instance = new WPEX_Color_Palette;
+				static::$instance = new self();
 				static::$instance->init_hooks();
 				static::$instance->gutenberg_support();
 			}

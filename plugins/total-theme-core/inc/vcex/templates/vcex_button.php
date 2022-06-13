@@ -4,14 +4,12 @@
  *
  * @package Total WordPress Theme
  * @subpackage Total Theme Core
- * @version 1.2.8
+ * @version 1.3.2
  */
 
 defined( 'ABSPATH' ) || exit;
 
-$shortcode_tag = 'vcex_button';
-
-if ( ! vcex_maybe_display_shortcode( $shortcode_tag, $atts ) ) {
+if ( ! vcex_maybe_display_shortcode( 'vcex_button', $atts ) ) {
 	return;
 }
 
@@ -19,14 +17,14 @@ if ( ! vcex_maybe_display_shortcode( $shortcode_tag, $atts ) ) {
 $output = '';
 
 // Get shortcode attributes.
-$atts = vcex_shortcode_atts( $shortcode_tag, $atts, $this );
+$atts = vcex_shortcode_atts( 'vcex_button', $atts, $this );
 extract( $atts );
 
 // Sanitize & declare vars.
 $button_data = array();
 
 // Define URL.
-$url = $url ? $url : '#';
+$url = $url ?: '#';
 
 // Internal links.
 if ( 'internal_link' === $atts['onclick'] ) {
@@ -52,17 +50,16 @@ if ( empty( $content ) ) {
 	return;
 }
 
-// Load custom font.
-if ( $font_family ) {
-	vcex_enqueue_font( $font_family );
-}
-
 // Button Classes.
 $button_classes = array(
 	'vcex-button'
 );
 
 $button_classes[] = vcex_get_button_classes( $style, $color, $size, $align );
+
+if ( $state ) {
+	$button_classes[] = sanitize_html_class( $state );
+}
 
 if ( $bottom_margin ) {
 	$button_classes[] = vcex_sanitize_margin_class( $bottom_margin, 'wpex-mb-' );
@@ -81,20 +78,40 @@ if ( $hover_animation ) {
 	vcex_enque_style( 'hover-animations' );
 }
 
-if ( 'local_scroll' === $atts['onclick'] ) {
-	$button_classes[] = 'local-scroll-link';
-}
-
 if ( $css_animation && 'none' != $css_animation && ! $css_wrap ) {
 	$button_classes[] = vcex_get_css_animation( $css_animation );
 }
 
+if ( $shadow_class = vcex_parse_shadow_class( $atts['shadow'] ) ) {
+	$button_classes[] = $shadow_class;
+}
+
+if ( $width ) {
+	$button_classes[] = 'wpex-flex-shrink-0';
+}
+
 if ( $visibility ) {
-	$button_classes[] = $visibility;
+	$button_classes[] = vcex_parse_visibility_class( $visibility );
+}
+
+// LocalScroll
+if ( 'local_scroll' === $atts['onclick'] ) {
+	$button_classes[] = 'local-scroll-link';
+}
+
+// Go back link
+elseif ( 'go_back' === $atts['onclick'] ) {
+	$url = '#';
+	$button_classes[] = 'wpex-go-back';
+}
+
+// Toggle Element
+elseif ( 'toggle_element' === $atts['onclick'] ) {
+	$button_classes[] = 'wpex-toggle-element-trigger';
 }
 
 // Custom field link.
-if ( 'custom_field' === $atts['onclick'] ) {
+elseif ( 'custom_field' === $atts['onclick'] ) {
 	if ( ! empty( $url_custom_field ) && is_string( $url_custom_field ) ) {
 		$url = get_post_meta( vcex_get_the_ID(), $url_custom_field, true );
 	}
@@ -157,7 +174,7 @@ if ( 'lightbox' === $atts['onclick'] || 'image' === $atts['onclick'] ) {
 
 	// Html5 lightbox.
 	elseif ( 'html5' === $lightbox_type ) {
-		$lightbox_video_html5_webm = $lightbox_video_html5_webm ? $lightbox_video_html5_webm : $url;
+		$lightbox_video_html5_webm = $lightbox_video_html5_webm ?: $url;
 		$button_classes[] = 'wpex-lightbox';
 		if ( $lightbox_video_html5_webm ) {
 			$url = $lightbox_video_html5_webm;
@@ -224,7 +241,7 @@ if ( $wrap_classes ) {
 	$wrap_classes   = implode( ' ', $wrap_classes );
 }
 
-$wrap_classes = vcex_parse_shortcode_classes( $wrap_classes, $shortcode_tag, $atts );
+$wrap_classes = vcex_parse_shortcode_classes( $wrap_classes, 'vcex_button', $atts );
 
 // Custom Style.
 $inline_style = vcex_inline_style( array(
@@ -244,10 +261,6 @@ $inline_style = vcex_inline_style( array(
 	'animation_duration' => $animation_duration,
 ), false );
 
-if ( $custom_color && 'outline' == $style ) {
-	$inline_style .= 'border-color:'. $custom_color .';';
-}
-
 if ( $inline_style ) {
 	$inline_style = ' style="'. esc_attr( $inline_style ) .'"';
 }
@@ -264,11 +277,6 @@ if ( $hover_data ) {
 	$button_data[] = "data-wpex-hover='" . htmlspecialchars( wp_json_encode( $hover_data ) ) . "'";
 }
 
-// Get responsive data.
-if ( $responsive_data = vcex_get_module_responsive_data( $atts ) ) {
-	$button_data['data-wpex-rcss'] = $responsive_data;
-}
-
 // Define button icon_classes.
 $icon_left  = vcex_get_icon_class( $atts, 'icon_left' );
 $icon_right = vcex_get_icon_class( $atts, 'icon_right' );
@@ -278,6 +286,20 @@ if ( $icon_right ) {
 	$icon_right_style = vcex_inline_style ( array(
 		'padding_left' => $icon_right_padding,
 	) );
+}
+
+// Responsive styles.
+$unique_classname = vcex_element_unique_classname();
+
+$el_responsive_styles = array(
+	'font_size' => $atts['font_size'],
+);
+
+$responsive_css = vcex_element_responsive_css( $el_responsive_styles, $unique_classname );
+
+if ( $responsive_css ) {
+	$button_classes[] = $unique_classname;
+	$output .= '<style>' . $responsive_css . '</style>';
 }
 
 // Turn arrays into strings.
@@ -300,9 +322,11 @@ if ( $css_wrap ) {
 		$output .= '<div class="' . esc_attr( $wrap_classes ) . '">';
 	}
 
+		$href = esc_url( do_shortcode( $url ) );
+
 		$link_attrs = array(
 			'id'       => vcex_get_unique_id( $unique_id ),
-			'href'     => esc_url( do_shortcode( $url ) ),
+			'href'     => $href,
 			'title'    => $title ? esc_attr( do_shortcode( $title ) ) : '',
 			'class'    => esc_attr( $button_classes ),
 			'target'   => $target,
@@ -311,6 +335,11 @@ if ( $css_wrap ) {
 			'data'     => $button_data,
 			'download' => ( 'true' == $download_attribute ) ? 'download' : '',
 		);
+
+		if ( 'toggle_element' === $atts['onclick'] ) {
+			$link_attrs['aria-expanded'] = ( 'active' === $state ) ? 'true' : 'false';
+			$link_attrs['aria-controls'] = $href;
+		}
 
 		// Open Link.
 		$output .= '<a' . vcex_parse_html_attributes( $link_attrs ) . '>';

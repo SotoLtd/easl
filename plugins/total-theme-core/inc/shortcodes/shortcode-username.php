@@ -10,7 +10,7 @@ final class Shortcode_Username {
 	public function __construct() {
 
 		if ( ! shortcode_exists( 'username' ) ) {
-			add_shortcode( 'username', array( __CLASS__, 'output' ) );
+			add_shortcode( 'username', __CLASS__ . '::output' );
 		}
 
 	}

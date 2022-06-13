@@ -8,38 +8,24 @@ defined( 'ABSPATH' ) || exit;
  * Class registers the vcex_leader shortcode with the WPBakery page builder.
  *
  * @package TotalThemeCore
- * @version 1.2.8
+ * @version 1.3
  */
 final class Vcex_Leader {
 
 	/**
-	 * Our single instance.
+	 * Instance.
+	 *
+	 * @access private
+	 * @var object Class object.
 	 */
 	private static $instance;
-
-	/**
-	 * Disable instantiation.
-	 */
-	private function __construct() {}
-
-	/**
-	 * Disable the cloning of this class.
-	 *
-	 * @return void
-	 */
-	final public function __clone() {}
-
-	/**
-	 * Disable the wakeup of this class.
-	 */
-	final public function __wakeup() {}
 
 	/**
 	 * Create or retrieve the class instance.
 	 */
 	public static function instance() {
 		if ( is_null( static::$instance ) ) {
-			static::$instance = new Vcex_Leader;
+			static::$instance = new self();
 			static::$instance->init_hooks();
 		}
 
@@ -68,7 +54,7 @@ final class Vcex_Leader {
 			'name'        => esc_html__( 'Leader (Menu Items)', 'total-theme-core' ),
 			'description' => esc_html__( 'CSS dot or line leader (menu item)', 'total-theme-core' ),
 			'base'        => 'vcex_leader',
-			'icon'        => 'vcex-leader vcex-icon ticon ticon-long-arrow-right',
+			'icon'        => 'vcex_element-icon vcex_element-icon--leader',
 			'category'    => vcex_shortcodes_branding(),
 			'params'      => VCEX_Leader_Shortcode::get_params(),
 		);

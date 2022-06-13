@@ -1,5 +1,4 @@
 ( function( $ ) {
-
 	"use strict";
 
 	$( document ).ready( function() {
@@ -22,11 +21,6 @@
 
 		init: function() {
 			var that = this;
-
-			// Lazy load the screenshots.
-			$( 'img.wpex-lazyload' ).lazyload({
-				effect: "fadeIn"
-			} );
 
 			// When a screenshot is clicked, get the name of the corresponding demo
 			// and load the corresponding content for the popup.
@@ -57,11 +51,6 @@
 					}
 				} );
 
-				// load images for the currently visible demos.
-				setTimeout( function() {
-					$( 'img.wpex-lazyload' ).lazyload();
-				}, 500 );
-
 				// remove the category selection.
 				if ( currentInput ) {
 					$( '.wpex-selected-category' ).removeClass( 'wpex-selected-category' );
@@ -88,11 +77,6 @@
 					}
 
 				} );
-
-				// load images for the currently visible demos.
-				setTimeout( function() {
-					$( 'img.wpex-lazyload' ).lazyload();
-				}, 500 );
 
 			} );
 
@@ -354,17 +338,9 @@
 			// When all the selected content has been imported.
 			if ( importData.contentToImport.length === 0 ) {
 
-				/* show the "import complete" screen after 2 second.
-				setTimeout(function() {
-					$( '.wpex-demo-import-loading' ).hide();
-					$( '.wpex-import-complete' ).show();
-				}, 2000 ); */
-
-				$( '.wpex-demo-import-loading' ).hide();
-				$( '.wpex-import-complete' ).show();
-
-				// Notify the server that the importing process is complete.
-				$.ajax({
+				// Notify the server that the importing process is complete &
+				// run extra functions.
+				$.ajax( {
 					url: wpex_js_vars.ajaxurl,
 					type: 'post',
 					data: {
@@ -374,7 +350,8 @@
 						wpex_import_is_xml: importData.isXML
 					},
 					complete: function( data ) {
-
+						$( '.wpex-demo-import-loading' ).hide();
+						$( '.wpex-import-complete' ).show();
 					}
 				} );
 
@@ -401,7 +378,7 @@
 					importData.contentToImport.splice( contentIndex, 1 );
 
 					// Get the AJAX action name that corresponds to the current content.
-					ajaxData.action = this.importData[ key ]['action'];
+					ajaxData.action = this.importData[key]['action'];
 
 					// If the current content is 'XML Data' check if 'XML Attachments' is also selected
 					// because they will need to be imported at the same time.
@@ -420,13 +397,14 @@
 			}
 
 			// Tell the user which content is currently being imported.
-			$( '.wpex-demo-import-status' ).append( '<p class="wpex-demo-import-status__content">' + this.importData[ currentContent ]['preloader'] + '</p>' );
+			$( '.wpex-demo-import-status' ).append( '<p class="wpex-demo-import-status__content">' + this.importData[currentContent]['preloader'] + '</p>' );
 
 			// Tell the server to import the current content.
-			var ajaxRequest = $.ajax({
+			var ajaxRequest = $.ajax( {
 				url: wpex_js_vars.ajaxurl,
 				type: 'post',
 				data: ajaxData,
+				timeout: 0,
 				complete: function( data ) {
 					clearTimeout( importingLimit );
 
@@ -477,29 +455,28 @@
 
 					// Continue with the loading only if an important error was not encountered.
 					if ( continueProcess === true ) {
-
 						// Load the next content in the list.
 						that.importContent( importData );
+					} else {
+						console.log( 'import aborted due to error' );
 					}
 
 					console.log( that.importData[ currentContent ]['preloader'] + ': ' + ( ( Date.now() - timerStart ) / 1000 ).toString() + ' seconds.' );
 				}
 			} );
 
-			// Set a time limit of 15 minutes for the importing process.
-			importingLimit = setTimeout(function() {
-
+			// Set a time limit of 25 minutes for the importing process.
+			importingLimit = setTimeout( function() {
 				// Abort the AJAX request.
 				ajaxRequest.abort();
 
 				// Allow the popup to be closed.
 				that.allowPopupClosing = true;
-
 				$( '.wpex-demo-import-status__content' )
 					.addClass( 'wpex-demo-import-failed-notice' )
 					.removeClass( 'wpex-demo-import-status__content' )
 					.text( wpex_js_vars.content_importing_error );
-			}, 15 * 60 * 1000);
+			}, 1500000 );
 		}
 
 	};

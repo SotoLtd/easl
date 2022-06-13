@@ -3,7 +3,7 @@
  * Milestone Shortcode.
  *
  * @package TotalThemeCore
- * @version 1.2.6
+ * @version 1.3.2
  *
  * @todo add alignment option.
  */
@@ -23,12 +23,49 @@ if ( ! class_exists( 'VCEX_Milestone_Shortcode' ) ) {
 		 * Main constructor.
 		 */
 		public function __construct() {
+			add_action( 'wp_enqueue_scripts', __CLASS__ . '::register_scripts' );
 			add_shortcode( 'vcex_milestone', array( $this, 'output' ) );
 
 			if ( function_exists( 'vc_lean_map' ) ) {
 				TotalThemeCore\WPBakery\Map\Vcex_Milestone::instance();
 			}
 
+		}
+
+		/**
+		 * Register scripts.
+		 */
+		public static function register_scripts() {
+
+			$js_extension = '.js';
+
+			if ( defined( 'WPEX_MINIFY_JS' ) && WPEX_MINIFY_JS ) {
+				$js_extension = '.min.js';
+			}
+
+			wp_register_script(
+				'countUp',
+				vcex_asset_url( 'js/lib/countUp' . $js_extension ),
+				array(),
+				'1.9.3',
+				true
+			);
+
+			wp_register_script(
+				'vcex-milestone',
+				vcex_asset_url( 'js/shortcodes/vcex-milestone' . $js_extension ),
+				array( 'countUp' ),
+				TTC_VERSION,
+				true
+			);
+
+		}
+
+		/**
+		 * Enqueue scripts.
+		 */
+		public function enqueue_scripts() {
+			wp_enqueue_script( 'vcex-milestone' );
 		}
 
 		/**
@@ -57,7 +94,7 @@ if ( ! class_exists( 'VCEX_Milestone_Shortcode' ) ) {
 					'admin_label' => true,
 					'heading' => esc_html__( 'Element ID', 'total-theme-core' ),
 					'param_name' => 'unique_id',
-					'description' => sprintf( esc_html__( 'Enter element ID (Note: make sure it is unique and valid according to %sw3c specification%s).', 'total-theme-core' ), '<a href="https://www.w3schools.com/tags/att_global_id.asp" target="_blank" rel="noopener noreferrer">', '</a>' ),
+					'description' => vcex_shortcode_param_description( 'unique_id' ),
 				),
 				array(
 					'type' => 'textfield',
@@ -502,37 +539,6 @@ if ( ! class_exists( 'VCEX_Milestone_Shortcode' ) ) {
 			);
 
 			return apply_filters( 'vcex_shortcode_params', $params, 'vcex_milestone' );
-
-		}
-
-		/**
-		 * Enqueue scripts.
-		 */
-		public function enqueue_scripts() {
-
-			wp_enqueue_script(
-				'appear',
-				vcex_asset_url( 'js/lib/jquery.appear.min.js' ),
-				array( 'jquery' ),
-				'1.0',
-				true
-			);
-
-			wp_enqueue_script(
-				'countUp',
-				vcex_asset_url( 'js/lib/countUp.min.js' ),
-				array( 'jquery' ),
-				'1.9.3',
-				true
-			);
-
-			wp_enqueue_script(
-				'vcex-milestone',
-				vcex_asset_url( 'js/shortcodes/vcex-milestone.min.js' ),
-				array( 'jquery', 'appear', 'countUp' ),
-				TTC_VERSION,
-				true
-			);
 
 		}
 

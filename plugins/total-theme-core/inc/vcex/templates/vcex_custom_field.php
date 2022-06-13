@@ -4,19 +4,17 @@
  *
  * @package Total WordPress Theme
  * @subpackage Total Theme Core
- * @version 1.2.8
+ * @version 1.3.2
  */
 
 defined( 'ABSPATH' ) || exit;
 
-$shortcode_tag = 'vcex_custom_field';
-
-if ( ! vcex_maybe_display_shortcode( $shortcode_tag, $atts ) ) {
+if ( ! vcex_maybe_display_shortcode( 'vcex_custom_field', $atts ) ) {
 	return;
 }
 
 // Get shortcode attributes.
-$atts = vcex_shortcode_atts( $shortcode_tag, $atts, $this );
+$atts = vcex_shortcode_atts( 'vcex_custom_field', $atts, $this );
 
 // Name required.
 if ( empty( $atts['name'] ) ) {
@@ -27,10 +25,12 @@ $output = '';
 $cf_value = '';
 $custom_field_name = $atts['name'];
 
+// Get value from ACF.
 if ( shortcode_exists( 'acf' ) ) {
 	$cf_value = do_shortcode( '[acf field="' . $custom_field_name . '" post_id="' . vcex_get_the_ID() . '"]' );
 }
 
+// Get value using core WP functions.
 if ( empty( $cf_value ) && 0 !== $cf_value ) {
 	$cf_value = get_post_meta( vcex_get_the_ID(), $custom_field_name, true );
 	if ( $cf_value && is_string( $cf_value ) ) {
@@ -38,10 +38,17 @@ if ( empty( $cf_value ) && 0 !== $cf_value ) {
 	}
 }
 
+// Parses the value based on user callback.
+if ( ! empty( $atts['parse_callback'] ) && is_callable( $atts['parse_callback'] ) ) {
+	$cf_value = call_user_func( $atts['parse_callback'], $cf_value );
+}
+
+// Fallback value.
 if ( empty( $cf_value ) && 0 !== $cf_value && ! empty( $atts['fallback'] ) ) {
 	$cf_value = $atts['fallback'];
 }
 
+// No need to show anything if value is empty.
 if ( empty( $cf_value ) || ! is_string( $cf_value ) ) {
 	return;
 }
@@ -61,13 +68,29 @@ if ( 'true' == $atts['italic'] ) {
 	$shortcode_class[] = 'wpex-italic';
 }
 
-$extra_classes = vcex_get_shortcode_extra_classes( $atts, $shortcode_tag );
+// Responsive styles.
+$unique_classname = vcex_element_unique_classname();
+
+$el_responsive_styles = array(
+	'font_size' => $atts['font_size'],
+);
+
+$responsive_css = vcex_element_responsive_css( $el_responsive_styles, $unique_classname );
+
+if ( $responsive_css ) {
+	$shortcode_class[] = $unique_classname;
+	$output .= '<style>' . $responsive_css . '</style>';
+}
+
+// Add extra shortcode classes.
+$extra_classes = vcex_get_shortcode_extra_classes( $atts, 'vcex_custom_field' );
 
 if ( $extra_classes ) {
 	$shortcode_class = array_merge( $shortcode_class, $extra_classes );
 }
 
-$shortcode_class = vcex_parse_shortcode_classes( $shortcode_class, $shortcode_tag, $atts );
+// Parse shortcode classes.
+$shortcode_class = vcex_parse_shortcode_classes( $shortcode_class, 'vcex_custom_field', $atts );
 
 // Inline style.
 $shortcode_style = vcex_inline_style( array(
@@ -89,11 +112,6 @@ $shortcode_attrs = array(
 	'class' => esc_attr( $shortcode_class ),
 	'style' => $shortcode_style,
 );
-
-// Get responsive data.
-if ( $responsive_data = vcex_get_module_responsive_data( $atts ) ) {
-	$shortcode_attrs['data-wpex-rcss'] = $responsive_data;
-}
 
 // Shortcode Output.
 $output .= '<div' . vcex_parse_html_attributes( $shortcode_attrs ) . '>';

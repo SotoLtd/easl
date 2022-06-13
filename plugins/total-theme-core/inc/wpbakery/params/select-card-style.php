@@ -1,14 +1,14 @@
 <?php
+namespace TotalThemeCore\WPBakery\Params;
+
+defined( 'ABSPATH' ) || exit;
+
 /**
  * WPBakery Param => Select Card Style.
  *
  * @package TotalThemeCore
  * @version 1.2.8
  */
-namespace TotalThemeCore\WPBakery\Params;
-
-defined( 'ABSPATH' ) || exit;
-
 final class Select_Card_Style {
 
 	public static function output( $settings, $value ) {

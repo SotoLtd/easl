@@ -107,7 +107,7 @@ if ( ! class_exists( 'VCEX_Grid_Item_Post_Video' ) ) {
 			$shortcodes['vcex_gitem_post_video'] = array(
 				'name'        => esc_html__( 'Post Video', 'total-theme-core' ),
 				'base'        => 'vcex_gitem_post_video',
-				'icon'        => 'vcex-gitem-post-video vcex-icon fa fa-film',
+				'icon'        => 'vcex_element-icon vcex_element-icon--video',
 				'category'    => vcex_shortcodes_branding(),
 				'description' => esc_html__( 'Featured post video.', 'total-theme-core' ),
 				'post_type'   => Vc_Grid_Item_Editor::postType(),

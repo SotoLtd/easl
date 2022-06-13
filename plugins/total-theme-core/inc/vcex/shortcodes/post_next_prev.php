@@ -3,7 +3,7 @@
  * Next & Previous Posts Shortcode.
  *
  * @package TotalThemeCore
- * @version 1.2.8
+ * @version 1.3.1
  */
 
 defined( 'ABSPATH' ) || exit;
@@ -42,11 +42,15 @@ if ( ! class_exists( 'VCEX_Post_Next_Prev_Shortcode' ) ) {
 
 			$params = array(
 				array(
-					'type' => 'dropdown',
-					'heading' => esc_html__( 'Bottom Margin', 'total-theme-core' ),
-					'param_name' => 'bottom_margin',
-					'value' => vcex_margin_choices(),
-					'admin_label' => true,
+					'type' => 'vcex_select_buttons',
+					'std' => 'icon',
+					'heading' => esc_html__( 'Link Format', 'total-theme-core' ),
+					'param_name' => 'link_format',
+					'choices' => array(
+						'icon' => esc_html__( 'Icon Only', 'total-theme-core' ),
+						'title' => esc_html__( 'Post Name', 'total-theme-core' ),
+						'custom' => esc_html__( 'Custom Text', 'total-theme-core' ),
+					),
 				),
 				array(
 					'type' => 'dropdown',
@@ -63,17 +67,6 @@ if ( ! class_exists( 'VCEX_Post_Next_Prev_Shortcode' ) ) {
 						esc_html__( 'Caret', 'total-theme-core' ) => 'caret',
 						esc_html__( 'Cirle', 'total-theme-core' ) => 'arrow-circle',
 						esc_html__( 'None', 'total-theme-core' ) => '',
-					),
-				),
-				array(
-					'type' => 'vcex_select_buttons',
-					'std' => 'icon',
-					'heading' => esc_html__( 'Link Format', 'total-theme-core' ),
-					'param_name' => 'link_format',
-					'choices' => array(
-						'icon' => esc_html__( 'Icon Only', 'total-theme-core' ),
-						'title' => esc_html__( 'Post Name', 'total-theme-core' ),
-						'custom' => esc_html__( 'Custom Text', 'total-theme-core' ),
 					),
 				),
 				array(
@@ -94,25 +87,6 @@ if ( ! class_exists( 'VCEX_Post_Next_Prev_Shortcode' ) ) {
 					'heading' => esc_html__( 'Next Text', 'total-theme-core' ),
 					'param_name' => 'next_link_custom_text',
 					'dependency' => array( 'element' => 'link_format', 'value' => 'custom' )
-				),
-				array(
-					'type' => 'vcex_ofswitch',
-					'std' => 'false',
-					'heading' => esc_html__( 'Expand', 'total-theme-core' ),
-					'param_name' => 'expand',
-				),
-				array(
-					'type' => 'vcex_text_alignments',
-					'heading' => esc_html__( 'Align', 'total-theme-core' ),
-					'param_name' => 'align',
-					'dependency' => array( 'element' => 'expand', 'value' => 'false' ),
-				),
-				array(
-					'type' => 'dropdown',
-					'heading' => esc_html__( 'Button Spacing', 'total' ),
-					'param_name' => 'spacing',
-					'value' => vcex_margin_choices(),
-					'description' => esc_html__( 'Margin applied to each button. If you want a 10px spacing between your buttons select 5px.', 'total' ),
 				),
 				array(
 					'type' => 'vcex_ofswitch',
@@ -172,37 +146,82 @@ if ( ! class_exists( 'VCEX_Post_Next_Prev_Shortcode' ) ) {
 				),
 				// Style
 				array(
-					'type' => 'vcex_button_styles',
-					'heading' => esc_html__( 'Button Style', 'total-theme-core' ),
-					'param_name' => 'button_style',
+					'type' => 'dropdown',
+					'heading' => esc_html__( 'Bottom Margin', 'total-theme-core' ),
+					'param_name' => 'bottom_margin',
+					'value' => vcex_margin_choices(),
+					'admin_label' => true,
 					'group' => esc_html__( 'Style', 'total-theme-core' ),
+				),
+				array(
+					'type' => 'textfield',
+					'heading' => esc_html__( 'Max Width', 'total-theme-core' ),
+					'param_name' => 'max_width',
+					'description' => vcex_shortcode_param_description( 'width' ),
+					'group' => esc_html__( 'Style', 'total-theme-core' ),
+				),
+				array(
+					'type' => 'vcex_text_alignments',
+					'heading' => esc_html__( 'Aligment', 'total-theme-core' ),
+					'param_name' => 'float', // can't use "align" because it's already taken for the Text Align.
+					'dependency' => array( 'element' => 'max_width', 'not_empty' => true ),
+					'group' => esc_html__( 'Style', 'total-theme-core' ),
+				),
+				array(
+					'type' => 'vcex_ofswitch',
+					'std' => 'false',
+					'heading' => esc_html__( 'Expand', 'total-theme-core' ),
+					'param_name' => 'expand',
+					'group' => esc_html__( 'Style', 'total-theme-core' ),
+				),
+				array(
+					'type' => 'vcex_text_alignments',
+					'heading' => esc_html__( 'Text Align', 'total-theme-core' ),
+					'param_name' => 'align',
+					'dependency' => array( 'element' => 'expand', 'value' => 'false' ),
+					'group' => esc_html__( 'Style', 'total-theme-core' ),
+				),
+				array(
+					'type' => 'dropdown',
+					'heading' => esc_html__( 'Button Spacing', 'total' ),
+					'param_name' => 'spacing',
+					'value' => vcex_margin_choices(),
+					'description' => esc_html__( 'Margin applied to each button. If you want a 10px spacing between your buttons select 5px.', 'total' ),
+					'group' => esc_html__( 'Style', 'total-theme-core' ),
+				),
+				// Buttons
+				array(
+					'type' => 'vcex_button_styles',
+					'heading' => esc_html__( 'Style', 'total-theme-core' ),
+					'param_name' => 'button_style',
+					'group' => esc_html__( 'Buttons', 'total-theme-core' ),
 				),
 				array(
 					'type' => 'textfield',
 					'heading' => esc_html__( 'Font Size', 'total-theme-core' ),
 					'param_name' => 'font_size',
 					'description' => vcex_shortcode_param_description( 'font_size' ),
-					'group' => esc_html__( 'Style', 'total-theme-core' ),
+					'group' => esc_html__( 'Buttons', 'total-theme-core' ),
 				),
 				array(
 					'type' => 'vcex_button_colors',
 					'heading' => esc_html__( 'Color', 'total-theme-core' ),
 					'param_name' => 'button_color',
-					'group' => esc_html__( 'Style', 'total-theme-core' ),
+					'group' => esc_html__( 'Buttons', 'total-theme-core' ),
 				),
 				array(
 					'type' => 'textfield',
 					'heading' => esc_html__( 'Line Height', 'total-theme-core' ),
 					'param_name' => 'line_height',
 					'description' => vcex_shortcode_param_description( 'line_height' ),
-					'group' => esc_html__( 'Style', 'total-theme-core' ),
+					'group' => esc_html__( 'Buttons', 'total-theme-core' ),
 				),
 				array(
 					'type' => 'textfield',
 					'heading' => esc_html__( 'Min-Width', 'total-theme-core' ),
 					'param_name' => 'button_min_width',
 					'description' => vcex_shortcode_param_description( 'width' ),
-					'group' => esc_html__( 'Style', 'total-theme-core' ),
+					'group' => esc_html__( 'Buttons', 'total-theme-core' ),
 				),
 			);
 

@@ -1,12 +1,12 @@
 <?php
+defined( 'ABSPATH' ) || exit;
+
 /**
  * Post Cards Shortcode.
  *
  * @package TotalThemeCore
- * @version 1.2.10
+ * @version 1.3.2
  */
-
-defined( 'ABSPATH' ) || exit;
 
 if ( ! class_exists( 'WPEX_Post_Cards_Shortcode' ) ) {
 
@@ -242,7 +242,7 @@ if ( ! class_exists( 'WPEX_Post_Cards_Shortcode' ) ) {
 							if ( 'masonry' == $atts['grid_style'] ) {
 								$inner_class[] = 'wpex-masonry-grid';
 								if ( function_exists( 'wpex_enqueue_masonry_scripts' ) ) {
-									wpex_enqueue_masonry_scripts();
+									wpex_enqueue_masonry_scripts(); // uses theme masonry scripts.
 								}
 							}
 
@@ -278,7 +278,7 @@ if ( ! class_exists( 'WPEX_Post_Cards_Shortcode' ) ) {
 								continue;
 							}
 
-							$post_type            = get_post_type( $post_id );
+							$post_type = get_post_type( $post_id );
 							$card_args['post_id'] = $post_id;
 
 							$entry_count++;
@@ -324,7 +324,7 @@ if ( ! class_exists( 'WPEX_Post_Cards_Shortcode' ) ) {
 									}
 
 									if ( vcex_validate_boolean( $atts['grid_columns_responsive'] ) ) {
-										$rs = vcex_parse_multi_attribute( $atts['grid_columns_responsive_settings'], array() );
+										$rs = vcex_parse_multi_attribute( $atts['grid_columns_responsive_settings'] );
 										foreach ( $rs as $key => $val ) {
 											if ( $val ) {
 												$item_class[] = 'span_1_of_' . sanitize_html_class( $val ) . '_' . sanitize_html_class( $key );
@@ -344,7 +344,6 @@ if ( ! class_exists( 'WPEX_Post_Cards_Shortcode' ) ) {
 						if ( $terms ) {
 							$item_class[] = $terms;
 						}
-
 						// Begin entry output.
 						$output .= '<div class="' . esc_attr( implode( ' ', $item_class ) ) . '">';
 
@@ -413,12 +412,11 @@ if ( ! class_exists( 'WPEX_Post_Cards_Shortcode' ) ) {
 			// If no posts are found display message.
 			} else {
 
-				// Display no posts found error if function exists.
 				$output .= vcex_no_posts_found_message( $atts );
 
-			// End post check.
-			}
+			} // End post check.
 
+			// Return shortcode output.
 			return $output;
 
 		}
@@ -462,6 +460,10 @@ if ( ! class_exists( 'WPEX_Post_Cards_Shortcode' ) ) {
 				$args['title_font_size'] = $atts['title_font_size'];
 			}
 
+			if ( ! empty( $atts['title_tag'] ) ) {
+				$args['title_tag'] = $atts['title_tag'];
+			}
+
 			if ( ! empty( $atts['css_animation'] ) ) {
 				$args['css_animation'] = $atts['css_animation'];
 			}
@@ -498,6 +500,14 @@ if ( ! class_exists( 'WPEX_Post_Cards_Shortcode' ) ) {
 
 			if ( ! empty( $atts['thumbnail_filter'] ) ) {
 				$args['thumbnail_filter'] = $atts['thumbnail_filter'];
+			}
+
+			if ( ! empty( $atts['media_el_class'] ) ) {
+				$args['media_el_class'] = $atts['media_el_class'];
+			}
+
+			if ( ! empty( $atts['card_el_class'] ) ) {
+				$args['el_class'] = $atts['card_el_class'];
 			}
 
 			if ( isset( $atts['excerpt_length'] ) && '' !== $atts['excerpt_length'] ) {
@@ -539,7 +549,6 @@ if ( ! class_exists( 'WPEX_Post_Cards_Shortcode' ) ) {
 		 * @since 5.0
 		 */
 		private function get_featured_card_args( $post_id, $atts ) {
-
 			$featured_card_style = ! empty( $atts['featured_style'] ) ? $atts['featured_style'] : $atts['card_style'];
 
 			$args = array(
@@ -550,6 +559,10 @@ if ( ! class_exists( 'WPEX_Post_Cards_Shortcode' ) ) {
 
 			if ( ! empty( $atts['featured_title_font_size'] ) ) {
 				$args['title_font_size'] = $atts['featured_title_font_size'];
+			}
+
+			if ( ! empty( $atts['featured_title_tag'] ) ) {
+				$args['title_tag'] = $atts['featured_title_tag'];
 			}
 
 			if ( empty( $atts['featured_thumbnail_size'] ) || 'wpex_custom' == $atts['featured_thumbnail_size'] ) {
@@ -586,6 +599,14 @@ if ( ! class_exists( 'WPEX_Post_Cards_Shortcode' ) ) {
 				$args['thumbnail_filter'] = $atts['thumbnail_filter'];
 			}
 
+			if ( ! empty( $atts['media_el_class'] ) ) {
+				$args['media_el_class'] = $atts['media_el_class'];
+			}
+
+			if ( ! empty( $atts['featured_el_class'] ) ) {
+				$args['el_class'] = $atts['featured_el_class'];
+			}
+
 			if ( ! empty( $atts['modal_title'] ) ) {
 				$args['modal_title'] = $atts['modal_title'];
 			}
@@ -610,8 +631,15 @@ if ( ! class_exists( 'WPEX_Post_Cards_Shortcode' ) ) {
 				$args['media_width'] = $atts['featured_media_width'];
 			}
 
-			return apply_filters( 'wpex_post_cards_featured_card_args', $args, $atts );
+			/**
+			 * Filters the wpex_post_card featured card args.
+			 *
+			 * @param array $args
+			 * @param array $shortcode_attributes
+			 */
+			$args = (array) apply_filters( 'wpex_post_cards_featured_card_args', $args, $atts );
 
+			return $args;
 		}
 
 		/**
@@ -620,7 +648,7 @@ if ( ! class_exists( 'WPEX_Post_Cards_Shortcode' ) ) {
 		 * @since 5.0
 		 */
 		public function is_featured_card_top( $atts ) {
-			if ( 'left' == $atts['featured_location'] || 'right' == $atts['featured_location'] ) {
+			if ( 'left' === $atts['featured_location'] || 'right' === $atts['featured_location'] ) {
 				return false;
 			} else {
 				return true;
@@ -633,7 +661,6 @@ if ( ! class_exists( 'WPEX_Post_Cards_Shortcode' ) ) {
 		 * @since 5.0
 		 */
 		public function featured_divider( $atts = array() ) {
-
 			$divider_class = array(
 				'wpex-post-cards-featured-card-divider',
 				'wpex-divider',
@@ -667,7 +694,6 @@ if ( ! class_exists( 'WPEX_Post_Cards_Shortcode' ) ) {
 			}
 
 			return '<div class="' . esc_attr( implode( ' ', $divider_class ) ) . '"' . $divider_style . '></div>';
-
 		}
 
 		/**
@@ -676,7 +702,6 @@ if ( ! class_exists( 'WPEX_Post_Cards_Shortcode' ) ) {
 		 * @since 5.0
 		 */
 		public function list_divider( $atts = array() ) {
-
 			$divider_class = array(
 				'wpex-card-list-divider',
 				'wpex-divider',
@@ -705,21 +730,20 @@ if ( ! class_exists( 'WPEX_Post_Cards_Shortcode' ) ) {
 			}
 
 			return '<div class="' . esc_attr( implode( ' ', $divider_class ) ) . '"' . $divider_style . '></div>';
-
 		}
 
 		/**
 		 * Array of shortcode parameters.
 		 */
 		public static function get_params() {
-
 			$params = array(
 				// General
 				array(
 					'type' => 'vcex_wpex_card_select',
 					'heading' => esc_html__( 'Card Style', 'total-theme-core' ),
 					'param_name' => 'card_style',
-					'description' => esc_html__( 'Select your card style. Note: Not all settings are used for every card style.', 'total-theme-core' ),
+					'description' => esc_html__( 'Select your card style. Note: Not all settings are used for every card style.', 'total-theme-core' ) . ' ' . sprintf( esc_html__( '%sPreview card styles%s', 'total-theme-core' ), '<a href="https://total.wpexplorer.com/features/cards/" target="_blank" rel="noopener noreferrer">', '</a>' ),
+					'admin_label' => true,
 				),
 				array(
 					'type' => 'dropdown',
@@ -826,7 +850,7 @@ if ( ! class_exists( 'WPEX_Post_Cards_Shortcode' ) ) {
 					'heading' => esc_html__( 'Element ID', 'total-theme-core' ),
 					'param_name' => 'unique_id',
 					'admin_label' => true,
-					'description' => sprintf( esc_html__( 'Enter element ID (Note: make sure it is unique and valid according to %sw3c specification%s).', 'total-theme-core' ), '<a href="https://www.w3schools.com/tags/att_global_id.asp" target="_blank" rel="noopener noreferrer">', '</a>' ),
+					'description' => vcex_shortcode_param_description( 'unique_id' ),
 				),
 				array(
 					'type' => 'textfield',
@@ -943,7 +967,7 @@ if ( ! class_exists( 'WPEX_Post_Cards_Shortcode' ) ) {
 					'heading' => esc_html__( 'Offset', 'total-theme-core' ),
 					'param_name' => 'offset',
 					'group' => esc_html__( 'Query', 'total-theme-core' ),
-					'description' => esc_html__( 'Number of post to displace or pass over. Warning: Setting the offset parameter overrides/ignores the paged parameter and breaks pagination. The offset parameter is ignored when posts per page is set to -1.', 'total-theme-core' ),
+					'description' => esc_html__( 'Number of post to displace or pass over.', 'total-theme-core' ),
 					'dependency' => array( 'element' => 'custom_query', 'value' => 'false' ),
 				),
 				array(
@@ -1046,20 +1070,42 @@ if ( ! class_exists( 'WPEX_Post_Cards_Shortcode' ) ) {
 					'group' => esc_html__( 'Query', 'total-theme-core' ),
 					'dependency' => array( 'element' => 'orderby', 'value' => array( 'meta_value_num', 'meta_value' ) ),
 				),
+				array(
+					'type' => 'textarea',
+					'heading' => esc_html__( 'No Posts Found Message', 'total-theme-core' ),
+					'param_name' => 'no_posts_found_message',
+					'group' => esc_html__( 'Query', 'total-theme-core' ),
+					'description' => esc_html__( 'Leave empty to disable.', 'total-theme-core' ),
+				),
 				// Entry
 				array(
 					'type' => 'dropdown',
-					'heading' => esc_html__( 'Title Font Size', 'total' ),
+					'heading' => esc_html__( 'Title Font Size', 'total-theme-core' ),
 					'param_name' => 'title_font_size',
 					'value' => vcex_font_size_choices(),
 					'group' => esc_html__( 'Entry', 'total-theme-core' ),
 				),
 				array(
 					'type' => 'dropdown',
-					'heading' => esc_html__( 'Media Width', 'total' ),
+					'heading' => esc_html__( 'Title Tag', 'total-theme-core' ),
+					'param_name' => 'title_tag',
+					'value' => array(
+						esc_html__( 'Default', 'total-theme-core' ) => '',
+						'h2' => 'h2',
+						'h3' => 'h3',
+						'h4' => 'h4',
+						'h5' => 'h5',
+						'h6' => 'h6',
+						'div' => 'div',
+					),
+					'group' => esc_html__( 'Entry', 'total-theme-core' ),
+				),
+				array(
+					'type' => 'dropdown',
+					'heading' => esc_html__( 'Media Width', 'total-theme-core' ),
 					'param_name' => 'media_width',
 					'value' => array(
-						esc_html__( 'Default', 'total' ) => '',
+						esc_html__( 'Default', 'total-theme-core' ) => '',
 						'20%'  => '20',
 						'25%'  => '25',
 						'30%'  => '30',
@@ -1114,6 +1160,12 @@ if ( ! class_exists( 'WPEX_Post_Cards_Shortcode' ) ) {
 					'param_name' => 'more_link_text',
 					'group' => esc_html__( 'Entry', 'total-theme-core' ),
 					'description' => esc_html__( 'You can enter "0" to disable.', 'total-theme-core' ),
+				),
+				array(
+					'type' => 'textfield',
+					'heading' => esc_html__( 'Extra class name', 'total-theme-core' ),
+					'param_name' => 'card_el_class',
+					'group' => esc_html__( 'Entry', 'total-theme-core' ),
 				),
 				// Carousel Settings
 				array(
@@ -1271,6 +1323,12 @@ if ( ! class_exists( 'WPEX_Post_Cards_Shortcode' ) ) {
 					'param_name' => 'thumbnail_filter',
 					'group' => esc_html__( 'Media', 'total-theme-core' ),
 				),
+				array(
+					'type' => 'textfield',
+					'heading' => esc_html__( 'Extra class name', 'total-theme-core' ),
+					'param_name' => 'media_el_class',
+					'group' => esc_html__( 'Media', 'total-theme-core' ),
+				),
 				// Link
 				array(
 					'type' => 'dropdown',
@@ -1367,7 +1425,7 @@ if ( ! class_exists( 'WPEX_Post_Cards_Shortcode' ) ) {
 				),
 				array(
 					'type' => 'dropdown',
-					'heading' => esc_html__( 'Breakpoint', 'total' ),
+					'heading' => esc_html__( 'Breakpoint', 'total-theme-core' ),
 					'param_name' => 'featured_breakpoint',
 					'value' => vcex_breakpoint_choices(),
 					'dependency' => array( 'element' => 'featured_location', 'value' => array( 'left', 'right' ) ),
@@ -1419,7 +1477,7 @@ if ( ! class_exists( 'WPEX_Post_Cards_Shortcode' ) ) {
 				),
 				array(
 					'type' => 'dropdown',
-					'heading' => esc_html__( 'Title Font Size', 'total' ),
+					'heading' => esc_html__( 'Title Font Size', 'total-theme-core' ),
 					'param_name' => 'featured_title_font_size',
 					'value' => vcex_font_size_choices(),
 					'group' => esc_html__( 'Featured', 'total-theme-core' ),
@@ -1427,10 +1485,26 @@ if ( ! class_exists( 'WPEX_Post_Cards_Shortcode' ) ) {
 				),
 				array(
 					'type' => 'dropdown',
-					'heading' => esc_html__( 'Media Width', 'total' ),
+					'heading' => esc_html__( 'Title Tag', 'total-theme-core' ),
+					'param_name' => 'featured_title_tag',
+					'value' => array(
+						esc_html__( 'Default', 'total-theme-core' ) => '',
+						'h2' => 'h2',
+						'h3' => 'h3',
+						'h4' => 'h4',
+						'h5' => 'h5',
+						'h6' => 'h6',
+						'div' => 'div',
+					),
+					'group' => esc_html__( 'Featured', 'total-theme-core' ),
+					'dependency' => array( 'element' => 'featured_card', 'value' => 'true' ),
+				),
+				array(
+					'type' => 'dropdown',
+					'heading' => esc_html__( 'Media Width', 'total-theme-core' ),
 					'param_name' => 'featured_media_width',
 					'value' => array(
-						esc_html__( 'Default', 'total' ) => '',
+						esc_html__( 'Default', 'total-theme-core' ) => '',
 						'20%'  => '20',
 						'25%'  => '25',
 						'30%'  => '30',
@@ -1489,6 +1563,12 @@ if ( ! class_exists( 'WPEX_Post_Cards_Shortcode' ) ) {
 					'group' => esc_html__( 'Featured', 'total-theme-core' ),
 					'dependency' => array( 'element' => 'featured_card', 'value' => 'true' ),
 				),
+				array(
+					'type' => 'textfield',
+					'heading' => esc_html__( 'Extra class name', 'total-theme-core' ),
+					'param_name' => 'featured_el_class',
+					'group' => esc_html__( 'Featured', 'total-theme-core' ),
+				),
 				// Hidden fields
 				array( 'type' => 'hidden', 'param_name' => 'query_vars' ), // used for load more
 				array( 'type' => 'hidden', 'param_name' => 'last_post_id' ),
@@ -1513,8 +1593,15 @@ if ( ! class_exists( 'WPEX_Post_Cards_Shortcode' ) ) {
 				'dependency' => array( 'element' => 'custom_query', 'value' => 'false' ),
 			),*/
 
-			return apply_filters( 'vcex_shortcode_params', $params, 'wpex_post_cards' );
+			/**
+			 * Filters the wpex_post_card shortcode parameters.
+			 *
+			 * @param array $params
+			 * @param string shortcode_tag | wpex_post_cards
+			 */
+			$params = (array) apply_filters( 'vcex_shortcode_params', $params, 'wpex_post_cards' );
 
+			return $params;
 		}
 
 	}

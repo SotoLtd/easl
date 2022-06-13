@@ -4,19 +4,17 @@
  *
  * @package Total WordPress Theme
  * @subpackage Total Theme Core
- * @version 1.2.9
+ * @version 1.3.2
  */
 
 defined( 'ABSPATH' ) || exit;
 
-$shortcode_tag = 'vcex_post_type_flexslider';
-
-if ( ! vcex_maybe_display_shortcode( $shortcode_tag, $atts ) ) {
+if ( ! vcex_maybe_display_shortcode( 'vcex_post_type_flexslider', $atts ) ) {
 	return;
 }
 
 // Get and extract shortcode attributes.
-$atts = vcex_shortcode_atts( $shortcode_tag, $atts, $this );
+$atts = vcex_shortcode_atts( 'vcex_post_type_flexslider', $atts, $this );
 extract( $atts );
 
 // Query posts with thumbnails_only.
@@ -55,7 +53,7 @@ if ( $vcex_query->have_posts() ) :
 		$wrap_data[] = 'data-fade="true"';
 	}
 
-	if ( apply_filters( 'vcex_sliders_disable_desktop_swipe', true, $shortcode_tag ) ) {
+	if ( apply_filters( 'vcex_sliders_disable_desktop_swipe', true, 'vcex_post_type_flexslider' ) ) {
 		$wrap_data[] = 'data-touch-swipe-desktop="false"';
 	}
 
@@ -135,7 +133,7 @@ if ( $vcex_query->have_posts() ) :
 	}
 
 	if ( $visibility ) {
-		$wrap_classes[] = sanitize_html_class( $visibility );
+		$wrap_classes[] = vcex_parse_visibility_class( $visibility );
 	}
 
 	if ( 'true' == $excerpt && $excerpt_length ) {
@@ -149,7 +147,7 @@ if ( $vcex_query->have_posts() ) :
 	$wrap_classes[] = 'wpex-clr';
 
 	// Apply filters.
-	$wrap_classes = vcex_parse_shortcode_classes( implode( ' ', $wrap_classes ), $shortcode_tag, $atts );
+	$wrap_classes = vcex_parse_shortcode_classes( implode( ' ', $wrap_classes ), 'vcex_post_type_flexslider', $atts );
 
 	// Open css wrapper.
 	if ( $css ) {
@@ -246,12 +244,12 @@ if ( $vcex_query->have_posts() ) :
 							) );
 
 							// Inner overlay.
-							$output .= vcex_get_entry_image_overlay( 'inside_link', $shortcode_tag, $atts );
+							$output .= vcex_get_entry_image_overlay( 'inside_link', 'vcex_post_type_flexslider', $atts );
 
 						$output .= '</a>';
 
 						// Outer overlay.
-						$output .= vcex_get_entry_image_overlay( 'outside_link', $shortcode_tag, $atts );
+						$output .= vcex_get_entry_image_overlay( 'outside_link', 'vcex_post_type_flexslider', $atts );
 
 						if ( $has_overlay ) {
 							$output .= '</div>';
@@ -466,6 +464,10 @@ if ( $vcex_query->have_posts() ) :
 
 								}
 
+								ob_start();
+									do_action( 'vcex_hook_post_type_flexslider_caption_bottom', $atts );
+								$output .= ob_get_clean();
+
 							$output .= '</div>';
 
 						}
@@ -510,8 +512,8 @@ if ( $vcex_query->have_posts() ) :
 					$thumb_args['class'] = 'wpex-slider-thumbnail sp-nc-thumbnail';
 					if ( $control_thumbs_height || $control_thumbs_width ) {
 						$thumb_args['size']   = null;
-						$thumb_args['width']  = $control_thumbs_width ? $control_thumbs_width : null;
-						$thumb_args['height'] = $control_thumbs_height ? $control_thumbs_height : null;
+						$thumb_args['width']  = $control_thumbs_width ?: null;
+						$thumb_args['height'] = $control_thumbs_height ?: null;
 					}
 				}
 

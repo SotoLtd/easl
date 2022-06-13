@@ -1,14 +1,14 @@
 <?php
-/**
- * WPBakery Param => Text Transform.
- *
- * @package TotalThemeCore
- * @version 1.2.8
- */
 namespace TotalThemeCore\WPBakery\Params;
 
 defined( 'ABSPATH' ) || exit;
 
+/**
+ * WPBakery Param => Text Transform.
+ *
+ * @package TotalThemeCore
+ * @version 1.3.1
+ */
 final class Text_Transform {
 
 	public static function output( $settings, $value ) {
@@ -34,7 +34,7 @@ final class Text_Transform {
 		} else {
 			$output .= '<input type="text" class="wpb_vc_param_value '
 				. esc_attr( $settings['param_name'] ) . ' '
-				. esc_attr( $settings['type'] ) . '" name="' . esc_attr( $settings['param_name'] ) . '" value="' . esc_attr( $value ) . '"/>';
+				. esc_attr( $settings['type'] ) . '" name="' . esc_attr( $settings['param_name'] ) . '" value="' . esc_attr( $value ) . '">';
 		}
 
 		return $output;

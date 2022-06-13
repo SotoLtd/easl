@@ -3,7 +3,7 @@
  * WPBakery Grid Builder Post Excerpt element.
  *
  * @package TotalThemeCore
- * @version 1.2.9
+ * @version 1.3.2
  */
 
 defined( 'ABSPATH' ) || exit;
@@ -63,13 +63,13 @@ if ( ! class_exists( 'VCEX_Grid_Item_Post_Excerpt' ) ) {
 			if ( function_exists( 'wpex_get_excerpt' ) ) {
 				$excerpt = wpex_get_excerpt( array(
 					'post_id' => $post->ID,
-					'length'  => isset( $atts['length'] ) ? $atts['length'] : '30',
+					'length'  => $atts['length'] ?? 30,
 				) );
 			} else {
 				$excerpt = get_the_excerpt( $post );
 			}
 
-			if ( ! $excerpt && 'vc_grid_item' == get_post_type( $post->ID ) ) {
+			if ( ! $excerpt && 'vc_grid_item' === get_post_type( $post->ID ) ) {
 				$excerpt = esc_html__( 'Sample text for item preview.', 'total-theme-core' );
 			}
 
@@ -82,14 +82,14 @@ if ( ! class_exists( 'VCEX_Grid_Item_Post_Excerpt' ) ) {
 			);
 
 			$attrs['style'] = vcex_inline_style( array(
-				'color'          => isset( $atts['color'] ) ? $atts['color'] : '',
-				'font_family'    => isset( $atts['font_family'] ) ? $atts['font_family'] : '',
-				'font_size'      => isset( $atts['font_size'] ) ? $atts['font_size'] : '',
-				'letter_spacing' => isset( $atts['letter_spacing'] ) ? $atts['letter_spacing'] : '',
-				'font_weight'    => isset( $atts['font_weight'] ) ? $atts['font_weight'] : '',
-				'text_align'     => isset( $atts['text_align'] ) ? $atts['text_align'] : '',
-				'line_height'    => isset( $atts['line_height'] ) ? $atts['line_height'] : '',
-				'width'          => isset( $atts['width'] ) ? $atts['width'] : '',
+				'color'          => $atts['color'] ?? '',
+				'font_family'    => $atts['font_family'] ?? '',
+				'font_size'      => $atts['font_size'] ?? '',
+				'letter_spacing' => $atts['letter_spacing'] ?? '',
+				'font_weight'    => $atts['font_weight'] ?? '',
+				'text_align'     => $atts['text_align'] ?? '',
+				'line_height'    => $atts['line_height'] ?? '',
+				'width'          => $atts['width'] ?? '',
 				'font_style'     => ( isset( $atts['italic'] ) && 'true' == $atts['italic'] ) ? 'italic' : '',
 			), false );
 
@@ -114,7 +114,7 @@ if ( ! class_exists( 'VCEX_Grid_Item_Post_Excerpt' ) ) {
 			$shortcodes['vcex_gitem_post_excerpt'] = array(
 				'name'        => esc_html__( 'Post Excerpt', 'total-theme-core' ),
 				'base'        => $this->shortcode,
-				'icon'        => 'vcex-gitem-post-video vcex-icon fa fa-film',
+				'icon'        => 'vcex_element-icon vcex_element-icon--post-content',
 				'category'    => vcex_shortcodes_branding(),
 				'description' => esc_html__( 'Post Excerpt.', 'total-theme-core' ),
 				'post_type'   => Vc_Grid_Item_Editor::postType(),

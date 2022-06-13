@@ -3,7 +3,7 @@
  * Post Meta Shortcode.
  *
  * @package TotalThemeCore
- * @version 1.2.8
+ * @version 1.3.2
  */
 
 defined( 'ABSPATH' ) || exit;
@@ -74,6 +74,7 @@ if ( ! class_exists( 'VCEX_Post_Meta_Shortcode' ) ) {
 							'value' => apply_filters( 'vcex_post_meta_sections', array(
 								esc_html__( 'Date', 'total-theme-core' ) => 'date',
 								esc_html__( 'Author', 'total-theme-core' ) => 'author',
+								esc_html__( 'Author Avatar + Name', 'total-theme-core' ) => 'author_w_avatar',
 								esc_html__( 'Comments', 'total-theme-core' ) => 'comments',
 								esc_html__( 'Post Terms', 'total-theme-core' ) => 'post_terms',
 								esc_html__( 'Last Updated', 'total-theme-core' ) => 'modified_date',
@@ -108,12 +109,29 @@ if ( ! class_exists( 'VCEX_Post_Meta_Shortcode' ) ) {
 							'param_name' => 'callback_function',
 							'dependency' => array( 'element' => 'type', 'value' => 'callback' )
 						),
+						// Avatar size
+						array(
+							'type' => 'textfield',
+							'heading' => esc_html__( 'Avatar Size', 'total-theme-core' ),
+							'param_name' => 'avatar_size',
+							'dependency' => array( 'element' => 'type', 'value' => 'author_w_avatar' ),
+							'description' => esc_html__( 'Default', 'total-theme-core' ) . ': 25',
+						),
+						// Has link section option
+						array(
+							'type' => 'vcex_ofswitch',
+							'std' => 'false',
+							'heading' => esc_html__( 'Enable Link', 'total-theme-core' ),
+							'param_name' => 'has_link',
+							'dependency' => array( 'element' => 'type', 'value' => 'comments' ),
+						),
 						// Icon select
 						array(
 							'type' => 'dropdown',
 							'heading' => esc_html__( 'Icon library', 'total-theme-core' ),
 							'param_name' => 'icon_type',
 							'description' => esc_html__( 'Select icon library.', 'total-theme-core' ),
+							'dependency' => array( 'element' => 'type', 'value_not_equal_to' => 'author_w_avatar' ),
 							'value' => array(
 								esc_html__( 'Theme Icons', 'total-theme-core' )  => '',
 								esc_html__( 'Font Awesome', 'total-theme-core' ) => 'fontawesome',
@@ -174,7 +192,7 @@ if ( ! class_exists( 'VCEX_Post_Meta_Shortcode' ) ) {
 					'param_name' => 'animation_delay',
 					'description' => esc_html__( 'Enter your custom time in seconds (decimals allowed).', 'total' ),
 				),
-				// General
+				// Style
 				array(
 					'type' => 'vcex_select_buttons',
 					'heading' => esc_html__( 'Style', 'total-theme-core' ),
@@ -186,9 +204,18 @@ if ( ! class_exists( 'VCEX_Post_Meta_Shortcode' ) ) {
 					'group' => esc_html__( 'Style', 'total-theme-core' ),
 				),
 				array(
-					'type' => 'vcex_text_alignments',
-					'heading' => esc_html__( 'Align', 'total-theme-core' ),
-					'param_name' => 'align',
+					'type' => 'dropdown',
+					'heading' => esc_html__( 'Separator', 'total-theme-core' ),
+					'param_name' => 'separator',
+					'value' => array(
+						esc_html__( 'Empty Space', 'total-theme-core' ) => 'empty_space',
+						esc_html__( 'Dot', 'total-theme-core' ) => 'dot',
+						esc_html__( 'Dash', 'total-theme-core' ) => 'dash',
+						esc_html__( 'Forward Slash', 'total-theme-core' ) => 'forward_slash',
+						esc_html__( 'Backslash', 'total-theme-core' ) => 'backslash',
+						esc_html__( 'Pipe', 'total-theme-core' ) => 'pipe',
+					),
+					'dependency' => array( 'element' => 'style', 'value_not_equal_to' => 'vertical' ),
 					'group' => esc_html__( 'Style', 'total-theme-core' ),
 				),
 				array(
@@ -199,7 +226,27 @@ if ( ! class_exists( 'VCEX_Post_Meta_Shortcode' ) ) {
 					'admin_label' => true,
 					'group' => esc_html__( 'Style', 'total-theme-core' ),
 				),
+				array(
+					'type' => 'textfield',
+					'heading' => esc_html__( 'Max Width', 'total-theme-core' ),
+					'param_name' => 'max_width',
+					'description' => vcex_shortcode_param_description( 'width' ),
+					'group' => esc_html__( 'Style', 'total-theme-core' ),
+				),
+				array(
+					'type' => 'vcex_text_alignments',
+					'heading' => esc_html__( 'Aligment', 'total-theme-core' ),
+					'param_name' => 'float', // can't use "align" because it was already taken for the text align.
+					'dependency' => array( 'element' => 'max_width', 'not_empty' => true ),
+					'group' => esc_html__( 'Style', 'total-theme-core' ),
+				),
 				// Typography
+				array(
+					'type' => 'vcex_text_alignments',
+					'heading' => esc_html__( 'Text Align', 'total-theme-core' ),
+					'param_name' => 'align',
+					'group' => esc_html__( 'Typography', 'total-theme-core' ),
+				),
 				array(
 					'type' => 'textfield',
 					'heading' => esc_html__( 'Font Size', 'total-theme-core' ),

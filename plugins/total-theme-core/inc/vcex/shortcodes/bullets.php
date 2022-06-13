@@ -3,7 +3,7 @@
  * Bullets Shortcodes.
  *
  * @package TotalThemeCore
- * @version 1.2.8
+ * @version 1.3.2
  */
 
 defined( 'ABSPATH' ) || exit;
@@ -50,7 +50,7 @@ if ( ! class_exists( 'VCEX_Bullets_Shortcode' ) ) {
 			$params = array(
 				array(
 					'type' => 'textarea_html',
-					'heading' => esc_html__( 'Bullets', 'total-theme-core' ),
+					'heading' => esc_html__( 'List', 'total-theme-core' ),
 					'param_name' => 'content',
 					'holder' => 'div',
 					'value' => '<ul><li>List 1</li><li>List 2</li><li>List 3</li><li>List 4</li></ul>',
@@ -60,6 +60,7 @@ if ( ! class_exists( 'VCEX_Bullets_Shortcode' ) ) {
 					'type' => 'textfield',
 					'heading' => esc_html__( 'Element ID', 'total-theme-core' ),
 					'param_name' => 'unique_id',
+					'admin_label' => true,
 					'description' => vcex_shortcode_param_description( 'unique_id' ),
 				),
 				array(
@@ -210,6 +211,32 @@ if ( ! class_exists( 'VCEX_Bullets_Shortcode' ) ) {
 					'value' => vcex_margin_choices(),
 					'admin_label' => true,
 					'group' => esc_html__( 'Style', 'total-theme-core' ),
+				),
+				array(
+					'type' => 'vcex_select_buttons',
+					'heading' => esc_html__( 'Alignment', 'total-theme-core' ),
+					'param_name' => 'alignment',
+					'group' => esc_html__( 'Style', 'total-theme-core' ),
+					'choices' => array(
+						'vertical' => esc_html__( 'Vertical', 'total-theme-core' ),
+						'horizontal' => esc_html__( 'Horizontal', 'total-theme-core' ),
+					),
+				),
+				array(
+					'type' => 'dropdown',
+					'heading' => esc_html__( 'Gap', 'total-theme-core' ),
+					'param_name' => 'gap',
+					'value' => vcex_margin_choices(),
+					'group' => esc_html__( 'Style', 'total-theme-core' ),
+					'dependency' => array( 'element' => 'alignment', 'value' => 'horizontal' ),
+				),
+				array(
+					'type' => 'dropdown',
+					'heading' => esc_html__( 'Justify', 'total-theme-core' ),
+					'param_name' => 'justify',
+					'value' => vcex_justify_content_choices(),
+					'group' => esc_html__( 'Style', 'total-theme-core' ),
+					'dependency' => array( 'element' => 'alignment', 'value' => 'horizontal' ),
 				),
 				array(
 					'type' => 'vcex_colorpicker',

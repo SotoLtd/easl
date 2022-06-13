@@ -3,7 +3,7 @@
  * Social Share Shortcode.
  *
  * @package TotalThemeCore
- * @version 1.2.8
+ * @version 1.3.1
  */
 
 defined( 'ABSPATH' ) || exit;
@@ -81,9 +81,15 @@ if ( ! class_exists( 'VCEX_Social_Share_Shortcode' ) ) {
 						esc_html__( 'Minimal', 'total-theme-core' ) => 'minimal',
 						esc_html__( '3D', 'total-theme-core' )      => 'three-d',
 						esc_html__( 'Rounded', 'total-theme-core' ) => 'rounded',
+						esc_html__( 'Magazine', 'total-theme-core' ) => 'mag',
 						esc_html__( 'Custom', 'total-theme-core' )  => 'custom',
 					),
 					'description' => esc_html__( 'You can customize your social share buttons under Appearance > Customize > General Theme Options > Social Share Buttons.', 'total-theme-core' ),
+				),
+				array(
+					'type' => 'vcex_text_alignments',
+					'heading' => esc_html__( 'Alignment', 'total-theme-core' ),
+					'param_name' => 'align',
 				),
 				array(
 					'type' => 'dropdown',

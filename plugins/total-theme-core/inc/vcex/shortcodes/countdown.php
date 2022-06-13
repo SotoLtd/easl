@@ -3,7 +3,7 @@
  * Countdown Shortcode.
  *
  * @package TotalThemeCore
- * @version 1.2.8
+ * @version 1.3
  */
 
 defined( 'ABSPATH' ) || exit;
@@ -96,17 +96,20 @@ if ( ! class_exists( 'VCEX_Countdown_Shortcode' ) ) {
 					'heading' => esc_html__( 'End Month', 'total' ),
 					'param_name' => 'end_month',
 					'value' => array( '1', '2', '3', '4', '5', '6', '7', '8', '9', '10', '11', '12' ),
+					'admin_label' => true,
 				),
 				array(
 					'type' => 'dropdown',
 					'heading' => esc_html__( 'End Day', 'total' ),
 					'param_name' => 'end_day',
 					'value' => array( '1', '2', '3', '4', '5', '6', '7', '8', '9', '10', '11', '12', '13', '14', '15', '16', '17', '18', '19', '20', '21', '22', '23', '24', '25', '26', '27', '28', '29', '30', '31' ),
+					'admin_label' => true,
 				),
 				array(
 					'type' => 'textfield',
 					'heading' => esc_html__( 'End Year', 'total' ),
 					'param_name' => 'end_year',
+					'admin_label' => true,
 				),
 				array(
 					'type' => 'textfield',

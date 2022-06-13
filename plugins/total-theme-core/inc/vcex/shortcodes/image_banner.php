@@ -3,7 +3,7 @@
  * Image Banner Shortcode.
  *
  * @package TotalThemeCore
- * @version 1.2.8
+ * @version 1.3.1
  */
 
 defined( 'ABSPATH' ) || exit;
@@ -50,10 +50,28 @@ if ( ! class_exists( 'VCEX_Image_Banner_Shortcode' ) ) {
 				),
 				array(
 					'type' => 'textfield',
+					'heading' => esc_html__( 'Minimum Height', 'total-theme-core' ),
+					'param_name' => 'min_height',
+					'description' => vcex_shortcode_param_description( 'height' ),
+				),
+				array(
+					'type' => 'dropdown',
+					'heading' => esc_html__( 'Justify Content', 'total-theme-core' ),
+					'param_name' => 'justify_content',
+					'std' => 'center',
+					'value' => array(
+						esc_html__( 'Top', 'total-theme-core' ) => 'start',
+						esc_html__( 'Center', 'total-theme-core' ) => 'center',
+						esc_html__( 'Bottom', 'total-theme-core' ) => 'end',
+					),
+					'dependency' => array( 'element' => 'min_height', 'not_empty' => true ),
+				),
+				array(
+					'type' => 'textfield',
 					'heading' => esc_html__( 'Fixed Width', 'total-theme-core' ),
 					'param_name' => 'width',
 					'description' => vcex_shortcode_param_description( 'width' ),
-					'value' => '',
+					'value' => '', // @todo can we remove this? why is it here?
 				),
 				array(
 					'type' => 'vcex_text_alignments',
@@ -84,6 +102,12 @@ if ( ! class_exists( 'VCEX_Image_Banner_Shortcode' ) ) {
 					'value' => vcex_border_radius_choices(),
 				),
 				array(
+					'type' => 'dropdown',
+					'heading' => esc_html__( 'Shadow', 'total' ),
+					'param_name' => 'shadow',
+					'value' => vcex_shadow_choices(),
+				),
+				array(
 					'type' => 'textfield',
 					'heading' => esc_html__( 'Text Width', 'total-theme-core' ),
 					'param_name' => 'content_width',
@@ -111,19 +135,20 @@ if ( ! class_exists( 'VCEX_Image_Banner_Shortcode' ) ) {
 				// Image
 				array(
 					'type' => 'dropdown',
-					'heading' => esc_html__( 'Background Image Source', 'total-theme-core' ),
+					'heading' => esc_html__( 'Image Source', 'total-theme-core' ),
 					'param_name' => 'image_source',
 					'std' => 'media_library',
 					'value' => array(
 						esc_html__( 'Media Library', 'total-theme-core' ) => 'media_library',
 						esc_html__( 'Custom Field', 'total-theme-core' ) => 'custom_field',
 						esc_html__( 'Featured Image', 'total-theme-core' ) => 'featured',
+						esc_html__( 'External', 'total-theme-core' ) => 'external',
 					),
 					'group' => esc_html__( 'Image', 'total-theme-core' ),
 				),
 				array(
 					'type' => 'attach_image',
-					'heading' => esc_html__( 'Background Image', 'total-theme-core' ),
+					'heading' => esc_html__( 'Image', 'total-theme-core' ),
 					'param_name' => 'image',
 					'dependency' => array( 'element' => 'image_source', 'value' => 'media_library' ),
 					'group' => esc_html__( 'Image', 'total-theme-core' ),
@@ -137,7 +162,14 @@ if ( ! class_exists( 'VCEX_Image_Banner_Shortcode' ) ) {
 				),
 				array(
 					'type' => 'textfield',
-					'heading' => esc_html__( 'Background Image Position', 'total-theme-core' ),
+					'heading' => esc_html__( 'External Image URL', 'total-theme-core' ),
+					'param_name' => 'external_image',
+					'dependency' => array( 'element' => 'image_source', 'value' => 'external' ),
+					'group' => esc_html__( 'Image', 'total-theme-core' ),
+				),
+				array(
+					'type' => 'textfield',
+					'heading' => esc_html__( 'Image Position', 'total-theme-core' ),
 					'param_name' => 'image_position',
 					'description' => esc_html__( 'Enter your custom background position. Example: "center center"', 'total-theme-core' ),
 					'group' => esc_html__( 'Image', 'total-theme-core' ),
@@ -153,14 +185,13 @@ if ( ! class_exists( 'VCEX_Image_Banner_Shortcode' ) ) {
 				array(
 					'type' => 'dropdown',
 					'heading' => esc_html__( 'Content Align', 'total-theme-core' ),
-					'param_name' => 'flex_align',
+					'param_name' => 'flex_align', // @todo would be good to rename to "content_align_items".
 					'std' => 'center',
 					'value' => array(
 						esc_html__( 'Top', 'total-theme-core' ) => 'start',
 						esc_html__( 'Center', 'total-theme-core' ) => 'center',
 						esc_html__( 'Bottom', 'total-theme-core' ) => 'end',
 					),
-					'dependency' => array( 'element' => 'use_img_tag', 'value' => 'true' ),
 					'group' => esc_html__( 'Image', 'total-theme-core' ),
 				),
 				array(
@@ -205,7 +236,6 @@ if ( ! class_exists( 'VCEX_Image_Banner_Shortcode' ) ) {
 					'heading' => esc_html__( 'Overlay Color', 'total-theme-core' ),
 					'param_name' => 'overlay_color',
 					'group' => esc_html__( 'Overlay', 'total-theme-core' ),
-					'description' => esc_html__( 'If you select a custom overlay color make sure to select a custom alpha transparency so that your background image is still visible.', 'total-theme-core' ),
 				),
 				array(
 					'type' => 'textfield',
@@ -567,7 +597,7 @@ if ( ! class_exists( 'VCEX_Image_Banner_Shortcode' ) ) {
 				),
 			);
 
-			return apply_filters( 'vcex_shortcode_params', $params, 'vcex_alert' );
+			return apply_filters( 'vcex_shortcode_params', $params, 'vcex_image_banner' );
 
 		}
 

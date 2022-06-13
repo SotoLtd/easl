@@ -8,7 +8,7 @@ final class Shortcode_Enqueue_Imagesloaded {
 	public function __construct() {
 
 		if ( ! shortcode_exists( 'enqueue_imagesloaded' ) ) {
-			add_shortcode( 'enqueue_imagesloaded', array( __CLASS__, 'output' ) );
+			add_shortcode( 'enqueue_imagesloaded', __CLASS__ . '::output' );
 		}
 
 	}

@@ -4,14 +4,12 @@
  *
  * @package Total WordPress Theme
  * @subpackage Total Theme Core
- * @version 1.2.8
+ * @version 1.3.2
  */
 
 defined( 'ABSPATH' ) || exit;
 
-$shortcode_tag = 'vcex_testimonials_carousel';
-
-if ( ! vcex_maybe_display_shortcode( $shortcode_tag, $atts ) ) {
+if ( ! vcex_maybe_display_shortcode( 'vcex_testimonials_carousel', $atts ) ) {
 	return;
 }
 
@@ -19,7 +17,7 @@ if ( ! vcex_maybe_display_shortcode( $shortcode_tag, $atts ) ) {
 $output = '';
 
 // Get and extract shortcode attributes.
-$atts = vcex_shortcode_atts( $shortcode_tag, $atts, $this );
+$atts = vcex_shortcode_atts( 'vcex_testimonials_carousel', $atts, $this );
 
 // Define attributes.
 $atts['post_type'] = 'testimonials';
@@ -55,7 +53,7 @@ if ( $vcex_query->have_posts() ) :
 		'wpex-clr',
 	);
 
-	$arrows_style = $arrows_style ? $arrows_style : 'default';
+	$arrows_style = $arrows_style ?: 'default';
 	$wrap_classes[] = 'arrwstyle-' . sanitize_html_class( $arrows_style );
 
 	if ( $arrows_position && 'default' !== $arrows_position ) {
@@ -67,7 +65,7 @@ if ( $vcex_query->have_posts() ) :
 	}
 
 	if ( $visibility ) {
-		$wrap_classes[] = $visibility;
+		$wrap_classes[] = vcex_parse_visibility_class( $visibility );
 	}
 
 	if ( $css_animation_class = vcex_get_css_animation( $css_animation ) ) {
@@ -82,7 +80,7 @@ if ( $vcex_query->have_posts() ) :
 		$wrap_classes[] = vcex_vc_shortcode_custom_css_class( $css );
 	}
 
-	$wrap_attrs['class'] = esc_attr( vcex_parse_shortcode_classes( implode( ' ', $wrap_classes ) , $shortcode_tag, $atts ) );
+	$wrap_attrs['class'] = esc_attr( vcex_parse_shortcode_classes( implode( ' ', $wrap_classes ) , 'vcex_testimonials_carousel', $atts ) );
 
 	// Disable autoplay.
 	if ( vcex_vc_is_inline() || '1' == count( $vcex_query->posts ) ) {
@@ -93,9 +91,6 @@ if ( $vcex_query->have_posts() ) :
 	$img_style = vcex_inline_style( array(
 		'border_radius' => $img_border_radius,
 	), false );
-
-	// Load custom title font
-	vcex_enqueue_font( $title_font_family );
 
 	// Title style.
 	$title_style = '';
@@ -138,7 +133,7 @@ if ( $vcex_query->have_posts() ) :
 	/*--------------------------------*/
 	/* [ Carousel Start ]
 	/*--------------------------------*/
-	$output .= '<div' . vcex_parse_html_attributes( $wrap_attrs ) . ' data-wpex-carousel="' . vcex_get_carousel_settings( $atts, $shortcode_tag ) . '"' . $wrap_style . '>';
+	$output .= '<div' . vcex_parse_html_attributes( $wrap_attrs ) . ' data-wpex-carousel="' . vcex_get_carousel_settings( $atts, 'vcex_testimonials_carousel' ) . '"' . $wrap_style . '>';
 
 		// Start loop
 		while ( $vcex_query->have_posts() ) :
@@ -234,7 +229,7 @@ if ( $vcex_query->have_posts() ) :
 										$read_more_rarr_html = '';
 									}
 
-									// Read more text
+									// Read more text.
 									if ( is_rtl() ) {
 										$read_more_link = '&#8230;<a href="' . esc_url( $atts['post_permalink'] ) . '" title="' . esc_attr( $read_more_text ) . '">' . wp_kses_post( $read_more_text ) .'</a>';
 									} else {
@@ -252,13 +247,13 @@ if ( $vcex_query->have_posts() ) :
 									'post_id' => $atts['post_id'],
 									'length'  => $excerpt_length,
 									'more'    => $read_more_link,
-									'context' => $shortcode_tag,
+									'context' => 'vcex_testimonials_carousel',
 								) );
 
 							// Display full post content.
 							else :
 
-								$excerpt_output .= vcex_the_content( get_the_content(), $shortcode_tag );
+								$excerpt_output .= vcex_the_content( get_the_content(), 'vcex_testimonials_carousel' );
 
 							// End excerpt check.
 							endif;

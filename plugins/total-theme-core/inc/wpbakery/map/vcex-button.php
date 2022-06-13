@@ -8,38 +8,24 @@ defined( 'ABSPATH' ) || exit;
  * Class registers the vcex_button shortcode with the WPBakery page builder.
  *
  * @package TotalThemeCore
- * @version 1.2.8
+ * @version 1.3
  */
 final class Vcex_Button {
 
 	/**
-	 * Our single instance.
+	 * Instance.
+	 *
+	 * @access private
+	 * @var object Class object.
 	 */
 	private static $instance;
-
-	/**
-	 * Disable instantiation.
-	 */
-	private function __construct() {}
-
-	/**
-	 * Disable the cloning of this class.
-	 *
-	 * @return void
-	 */
-	final public function __clone() {}
-
-	/**
-	 * Disable the wakeup of this class.
-	 */
-	final public function __wakeup() {}
 
 	/**
 	 * Create or retrieve the class instance.
 	 */
 	public static function instance() {
 		if ( is_null( static::$instance ) ) {
-			static::$instance = new Vcex_Button;
+			static::$instance = new self();
 			static::$instance->init_hooks();
 		}
 
@@ -84,7 +70,7 @@ final class Vcex_Button {
 			'description' => esc_html__( 'Customizable button', 'total-theme-core' ),
 			'base'        => 'vcex_button',
 			'category'    => vcex_shortcodes_branding(),
-			'icon'        => 'vcex-total-button vcex-icon ticon ticon-external-link-square',
+			'icon'        => 'vcex_element-icon vcex_element-icon--button',
 			'params'      => VCEX_Button_Shortcode::get_params(),
 		);
 	}

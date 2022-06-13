@@ -1,14 +1,14 @@
 <?php
-/**
- * WPBakery Param => Hover Animation.
- *
- * @package TotalThemeCore
- * @version 1.2.8
- */
 namespace TotalThemeCore\WPBakery\Params;
 
 defined( 'ABSPATH' ) || exit;
 
+/**
+ * WPBakery Param => Hover Animation.
+ *
+ * @package TotalThemeCore
+ * @version 1.3.1
+ */
 final class Hover_Animation {
 
 	public static function output( $settings, $value ) {
@@ -36,7 +36,7 @@ final class Hover_Animation {
 			$output = vcex_total_exclusive_notice();
 			$output .= '<input type="hidden" class="wpb_vc_param_value '
 				. esc_attr( $settings['param_name'] ) . ' '
-				. esc_attr( $settings['type'] ) . '" name="' . esc_attr( $settings['param_name'] ) . '" value="' . esc_attr( $value ) . '"/>';
+				. esc_attr( $settings['type'] ) . '" name="' . esc_attr( $settings['param_name'] ) . '" value="' . esc_attr( $value ) . '">';
 		}
 
 		return $output;

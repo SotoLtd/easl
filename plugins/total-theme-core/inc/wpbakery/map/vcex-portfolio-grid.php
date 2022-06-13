@@ -8,38 +8,24 @@ defined( 'ABSPATH' ) || exit;
  * Class registers the vcex_alert shortcode with the WPBakery page builder.
  *
  * @package TotalThemeCore
- * @version 1.2.8
+ * @version 1.3
  */
 final class Vcex_Portfolio_Grid {
 
 	/**
-	 * Our single instance.
+	 * Instance.
+	 *
+	 * @access private
+	 * @var object Class object.
 	 */
 	private static $instance;
-
-	/**
-	 * Disable instantiation.
-	 */
-	private function __construct() {}
-
-	/**
-	 * Disable the cloning of this class.
-	 *
-	 * @return void
-	 */
-	final public function __clone() {}
-
-	/**
-	 * Disable the wakeup of this class.
-	 */
-	final public function __wakeup() {}
 
 	/**
 	 * Create or retrieve the class instance.
 	 */
 	public static function instance() {
 		if ( is_null( static::$instance ) ) {
-			static::$instance = new Vcex_Portfolio_Grid;
+			static::$instance = new self();
 			static::$instance->init_hooks();
 		}
 
@@ -124,7 +110,7 @@ final class Vcex_Portfolio_Grid {
 			'description' => esc_html__( 'Recent portfolio posts grid', 'total-theme-core' ),
 			'base'        => 'vcex_portfolio_grid',
 			'category'    => vcex_shortcodes_branding(),
-			'icon'        => 'vcex-portfolio-grid vcex-icon ticon ticon-folder-open',
+			'icon'        => 'vcex_element-icon vcex_element-icon--portfolio',
 			'params'      => VCEX_Portfolio_Grid_Shortcode::get_params(),
 		);
 	}

@@ -4,18 +4,16 @@
  *
  * @package Total WordPress Theme
  * @subpackage Total Theme Core
- * @version 1.2.8
+ * @version 1.3.2
  */
 
 defined( 'ABSPATH' ) || exit;
 
-$shortcode_tag = 'vcex_term_description';
-
-if ( ! vcex_maybe_display_shortcode( $shortcode_tag, $atts ) ) {
+if ( ! vcex_maybe_display_shortcode( 'vcex_term_description', $atts ) ) {
 	return;
 }
 
-$atts = vcex_shortcode_atts( $shortcode_tag, $atts, $this );
+$atts = vcex_shortcode_atts( 'vcex_term_description', $atts, $this );
 
 if ( vcex_vc_is_inline() ) {
 	$term_description = esc_html( 'Term description placeholder for the live builder.', 'total' );
@@ -27,24 +25,41 @@ if ( empty( $term_description ) ) {
 	return;
 }
 
+// Define output.
+$output = '';
+
+// Default shortcode classes.
 $shortcode_class = array(
 	'vcex-module',
 	'vcex-term-description',
 	'wpex-last-mb-0',
 );
 
-$extra_classes = vcex_get_shortcode_extra_classes( $atts, $shortcode_tag );
+// Custom user classes.
+$extra_classes = vcex_get_shortcode_extra_classes( $atts, 'vcex_term_description' );
 
 if ( $extra_classes ) {
 	$shortcode_class = array_merge( $shortcode_class, $extra_classes );
 }
 
-$shortcode_class = vcex_parse_shortcode_classes( $shortcode_class, $shortcode_tag, $atts );
+// Responsive styles.
+$unique_classname = vcex_element_unique_classname();
 
-if ( $atts['font_family'] ) {
-	vcex_enqueue_font( $atts['font_family'] );
+$el_responsive_styles = array(
+	'font_size' => $atts['font_size'],
+);
+
+$responsive_css = vcex_element_responsive_css( $el_responsive_styles, $unique_classname );
+
+if ( $responsive_css ) {
+	$shortcode_class[] = $unique_classname;
+	$output .= '<style>' . $responsive_css . '</style>';
 }
 
+// Parses shortcode classes to apply filters.
+$shortcode_class = vcex_parse_shortcode_classes( $shortcode_class, 'vcex_term_description', $atts );
+
+// Inline shortcode styles.
 $shortcode_style = vcex_inline_style( array(
 	'color'              => $atts['color'],
 	'font_family'        => $atts['font_family'],
@@ -55,13 +70,8 @@ $shortcode_style = vcex_inline_style( array(
 	'animation_duration' => $atts['animation_duration'],
 ), true );
 
-$shortcode_data = '';
-if ( $rfont_size = vcex_get_responsive_font_size_data( $atts['font_size'] ) ) {
-	$shortcode_data = "data-wpex-rcss='" . htmlspecialchars( wp_json_encode( array( 'font-size' => $rfont_size ) ) ) . "'";
-}
-
 // Begin output
-$output = '<div class="' . esc_attr( trim( $shortcode_class ) ) . '"' . $shortcode_style . $shortcode_data . '>';
+$output .= '<div class="' . esc_attr( trim( $shortcode_class ) ) . '"' . $shortcode_style . '>';
 	$output .= do_shortcode( wp_kses_post( $term_description ) );
 $output .= '</div>';
 

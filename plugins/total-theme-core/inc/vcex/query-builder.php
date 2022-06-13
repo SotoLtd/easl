@@ -1,18 +1,17 @@
 <?php
+namespace TotalThemeCore\Vcex;
+use \WP_Query;
+
+defined( 'ABSPATH' ) || exit;
+
 /**
  * Used to build WP Queries for vcex elements.
  *
  * @package TotalThemeCore
- * @version 1.2.9
+ * @version 1.3.2
  *
  * @todo change main filter to vcex_query_args_
  */
-
-namespace TotalThemeCore\Vcex;
-
-use \WP_Query;
-
-defined( 'ABSPATH' ) || exit;
 
 final class Query_Builder {
 	public $args = array();
@@ -189,6 +188,7 @@ final class Query_Builder {
 		if ( vcex_validate_boolean( $value ) ) {
 			$this->args['post__in'] = get_option( 'sticky_posts' );
 			$this->args['ignore_sticky_posts'] = true;
+			unset( $this->args['offset'] );
 		}
 	}
 
@@ -206,9 +206,6 @@ final class Query_Builder {
 	 * Offset.
 	 */
 	private function parse_offset( $value ) {
-		if ( empty( $value ) || $this->has_loadmore() ) {
-			return;
-		}
 		$this->args['offset'] = $value;
 	}
 
@@ -234,7 +231,7 @@ final class Query_Builder {
 	 * Count.
 	 */
 	private function parse_count( $value ) {
-		$value = $value ? $value : '-1';
+		$value = $value ?: '-1';
 		$this->args['posts_per_page'] = (int) $value;
 	}
 
@@ -242,7 +239,7 @@ final class Query_Builder {
 	 * Posts Per Page.
 	 */
 	private function parse_posts_per_page( $value ) {
-		$value = $value ? $value : '-1';
+		$value = $value ?: '-1';
 		$this->args['posts_per_page'] = (int) $value;
 	}
 
@@ -322,7 +319,7 @@ final class Query_Builder {
 	 * Post Types.
 	 */
 	private function parse_post_type( $value ) {
-		$value = $value ? $value : 'post';
+		$value = $value ?: 'post';
 		$this->args['post_type'] = $this->string_to_array( $value );
 	}
 
@@ -330,7 +327,7 @@ final class Query_Builder {
 	 * Post Types.
 	 */
 	private function parse_post_types( $value ) {
-		$value = $value ? $value : 'post';
+		$value = $value ?: 'post';
 		$this->args['post_type'] = $this->string_to_array( $value );
 	}
 
@@ -346,8 +343,6 @@ final class Query_Builder {
 	 * Tax Query.
 	 */
 	private function parse_tax_query( $value ) {
-
-		// Return if set to false.
 		if ( 'false' === $value ) {
 			return;
 		}
@@ -528,7 +523,6 @@ final class Query_Builder {
 	 * Get the terms to include in the Query.
 	 */
 	private function get_terms() {
-
 		$terms = array(
 			'include' => array(),
 			'exclude' => array(),
@@ -549,7 +543,6 @@ final class Query_Builder {
 		}
 
 		return $terms;
-
 	}
 
 	/**
@@ -594,7 +587,6 @@ final class Query_Builder {
 	 * Converts a string to an Array.
 	 */
 	private function string_to_array( $value ) {
-
 		if ( ! $value ) {
 			return;
 		}
@@ -614,14 +606,12 @@ final class Query_Builder {
 		}
 
 		return $array;
-
 	}
 
 	/**
 	 * Sanitizes autocomplete data and returns ID's of terms to include or exclude.
 	 */
 	private function sanitize_autocomplete( $terms, $taxonomy ) {
-
 		if ( is_string( $terms ) ) {
 			$terms = preg_split( '/\,[\s]*/', $terms );
 		}
@@ -648,16 +638,13 @@ final class Query_Builder {
 
 		}
 
-		// Return array.
 		return $return;
-
 	}
 
 	/**
 	 * Returns related tax query.
 	 */
 	private function add_related_args() {
-
 		$post_id = $this->get_current_post_ID();
 
 		if ( empty( $this->args['post_type'] ) ) {
@@ -732,14 +719,12 @@ final class Query_Builder {
 
 			}
 		}
-
 	}
 
 	/**
 	 * This function allows for dynamic values when building queries.
 	 */
 	private function parse_dynamic_values( $args ) {
-
 		if ( ! is_array( $args ) ) {
 			return $args;
 		}
@@ -769,7 +754,6 @@ final class Query_Builder {
 		}
 
 		return $args;
-
 	}
 
 	/**
@@ -786,15 +770,13 @@ final class Query_Builder {
 	 * Return correct post ID.
 	 */
 	private function get_current_post_ID() {
-
 		$id = '';
 
 		if ( $this->doing_ajax ) {
 			$id = url_to_postid( wp_get_referer() );
 		}
 
-		return $id ? $id : vcex_get_the_ID();
-
+		return $id ?: vcex_get_the_ID();
 	}
 
 	/**
@@ -815,7 +797,6 @@ final class Query_Builder {
 	 * Get the singular post type that is being displayed.
 	 */
 	private function get_post_type() {
-
 		$post_type = null;
 
 		if ( isset( $this->args['post_type'] ) ) {
@@ -827,14 +808,54 @@ final class Query_Builder {
 		}
 
 		return $post_type;
-
 	}
 
 	/**
-	 * Get current term.
+	 * Exclude offset posts.
 	 */
-	private function final_checks() {
+	private function maybe_exclude_offset_posts() {
+		if ( empty( $this->args['offset'] ) ) {
+			return;
+		}
 
+		$query_args = $this->args;
+		$query_args['posts_per_page'] = $this->args['offset'];
+		$query_args['fields'] = 'ids';
+
+		// Exclude sticky posts when finding the offset items.
+		if ( isset( $this->args['post__not_in'] ) && is_array( $this->args['post__not_in'] ) ) {
+			$query_args['post__not_in'] = array_merge( $this->args['post__not_in'], get_option( 'sticky_posts' ) );
+		} else {
+			$query_args['post__not_in'] = get_option( 'sticky_posts' );
+		}
+
+		unset( $query_args['offset'] );
+
+		$excluded_posts = new WP_Query( $query_args );
+
+		if ( $excluded_posts->have_posts() ) {
+
+			$excluded_posts = $excluded_posts->posts;
+
+			if ( is_array( $excluded_posts ) ) {
+
+				if ( isset( $this->args['post__not_in'] ) && is_array( $this->args['post__not_in'] ) ) {
+					$this->args['post__not_in'] = array_merge( $this->args['post__not_in'], $excluded_posts );
+				} else {
+					$this->args['post__not_in'] = $excluded_posts;
+				}
+
+				unset( $this->args['offset'] );
+
+			}
+
+		}
+	}
+
+	/**
+	 * Exclude featured card from query.
+	 */
+	private function maybe_exclude_featured_card() {
 		if ( ! empty( $this->atts['featured_card'] )
 			&& ! empty( $this->args['posts_per_page'] )
 			&& vcex_validate_boolean( $this->atts['featured_card'] )
@@ -851,7 +872,14 @@ final class Query_Builder {
 				$this->args['posts_per_page'] = absint( $this->args['posts_per_page'] ) - 1;
 			}
 		}
+	}
 
+	/**
+	 * Get current term.
+	 */
+	private function final_checks() {
+		$this->maybe_exclude_offset_posts();
+		$this->maybe_exclude_featured_card();
 	}
 
 	/**

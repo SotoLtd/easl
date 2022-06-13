@@ -1,71 +1,66 @@
-var wpexTermThumbnails = wpexTermThumbnails || {};
-
-( function( $, obj ) {
-
+( function() {
 	'use strict';
 
-	/*	-----------------------------------------------------------------------------------------------
-		Function Calls
-	--------------------------------------------------------------------------------------------------- */
-	$( document ).ready( function() {
-		obj.selectThumbnail.init();
+	// Add image.
+	document.addEventListener( 'click', function( event ) {
+		var button = event.target.closest( '#wpex-add-term-thumbnail' );
+		if ( ! button || 'undefined' === typeof wp ) {
+			return;
+		}
+		event.preventDefault();
+
+		var preview_img = document.querySelector( '#wpex-term-thumbnail-preview img' );
+
+		var image = wp.media( {
+			library: {
+				type: 'image'
+			},
+			multiple: false
+		} ).on( 'select', function( e ) {
+			var selected = image.state().get( 'selection' ).first();
+			var imageID = selected.toJSON().id;
+			var imageURL = selected.toJSON().url;
+
+			var thumbRemoveBtn = document.querySelector( '#wpex-term-thumbnail-remove' );
+
+			if ( thumbRemoveBtn ) {
+				thumbRemoveBtn.style.display = '';
+			}
+
+			if ( preview_img ) {
+				preview_img.src = imageURL;
+			} else {
+				var previewContainer = document.querySelector( '#wpex-term-thumbnail-preview' );
+				if ( previewContainer ) {
+					var imgSize = previewContainer.dataset.imageSize || '40';
+					var img = document.createElement( 'img' );
+					img.src = imageURL;
+					img.setAttribute( 'height', imgSize );
+					img.setAttribute( 'width', imgSize );
+					img.style.marginTop = '10px';
+					previewContainer.appendChild( img );
+				}
+			}
+
+			var input = document.querySelector( '#wpex_term_thumbnail' );
+			if ( input ) {
+				input.value = imageID;
+			}
+
+		} ).open();
+
 	} );
 
-	/*	-----------------------------------------------------------------------------------------------
-		Check if user agent is a mobile device
-	--------------------------------------------------------------------------------------------------- */
-	obj.selectThumbnail = {
-
-		init: function() {
-			this.addButton();
-			this.removeButton();
-		},
-
-		addButton: function() {
-
-			$( document ).on( 'click', '#wpex-add-term-thumbnail', function( e ) {
-				e.preventDefault();
-
-				var $preview_img = $( '#wpex-term-thumbnail-preview img' );
-
-				var image = wp.media( {
-					library  : {
-						type : 'image'
-					},
-					multiple: false
-				} ).on( 'select', function( e ) {
-					var selected = image.state().get( 'selection' ).first();
-					var imageID  = selected.toJSON().id;
-					var imageURL = selected.toJSON().url;
-
-					$( '#wpex-term-thumbnail-remove' ).show();
-
-					if ( $preview_img.length ) {
-						$preview_img.attr( 'src', imageURL );
-					} else {
-						var $preview = $( '#wpex-term-thumbnail-preview' );
-						var $imgSize = $preview.data( 'image-size' ) ? $preview.data( 'image-size' ) : '80';
-						$preview.append( '<img src="'+ imageURL +'" height="' + $imgSize + '" width="'+ $imgSize + '" style="margin-top:10px;" />' );
-					}
-
-					$( '#wpex_term_thumbnail' ).val( imageID ).trigger( 'change' );
-
-				} )
-				.open();
-			} );
-
-		},
-
-		removeButton: function() {
-			$( document ).on( 'click', '#wpex-term-thumbnail-remove', function( e ) {
-				e.preventDefault();
-				var $this = $( this );
-				$( '#wpex_term_thumbnail' ).val( '' );
-				$( '#wpex-term-thumbnail-preview' ).find( 'img' ).remove();
-				$this.hide();
-			} );
+	// Remove image.
+	document.addEventListener( 'click', function( event ) {
+		var button = event.target.closest( '#wpex-term-thumbnail-remove' );
+		if ( ! button ) {
+			return;
 		}
+		event.preventDefault();
+		document.querySelector( '#wpex_term_thumbnail' ).value = '';
+		document.querySelector( '#wpex-term-thumbnail-preview' ).removeChild( document.querySelector( '#wpex-term-thumbnail-preview img' ) );
+		button.style.display = 'none';
+	} );
 
-	};
-
-} ) ( jQuery, wpexTermThumbnails );
+})();

@@ -7,51 +7,42 @@ defined( 'ABSPATH' ) || exit;
  * Custom view for displaying images in the WPBakery backend editor.
  *
  * @package TotalThemeCore
- * @version 1.2.8
+ * @version 1.3.2
  */
 final class Image {
 
 	/**
-	 * Our single Image instance.
+	 * Instance.
+	 *
+	 * @access private
+	 * @var object Class object.
 	 */
 	private static $instance;
-
-	/**
-	 * Disable instantiation.
-	 */
-	private function __construct() {}
-
-	/**
-	 * Disable the cloning of this class.
-	 *
-	 * @return void
-	 */
-	final public function __clone() {}
-
-	/**
-	 * Disable the wakeup of this class.
-	 */
-	final public function __wakeup() {}
 
 	/**
 	 * Create or retrieve the instance of Image.
 	 */
 	public static function instance() {
 		if ( is_null( static::$instance ) ) {
-			static::$instance = new Image;
-			static::$instance->init_hooks();
+			static::$instance = new self();
 		}
-
 		return static::$instance;
 	}
 
-	public function init_hooks() {
+	/**
+	 * Constructor.
+	 */
+	public function __construct() {
 		add_action( 'wp_ajax_vcex_wpbakery_backend_view_image', array( $this, 'generate' ) );
 	}
 
+	/**
+	 * AJAX callback.
+	 */
 	public function generate() {
+
 		if ( ! function_exists( 'vc_user_access' ) ) {
-			return;
+			die();
 		}
 
 		vc_user_access()->checkAdminNonce()->validateDie()->wpAny( 'edit_posts', 'edit_pages' )->validateDie();

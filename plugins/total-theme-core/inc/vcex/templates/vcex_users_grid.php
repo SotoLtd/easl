@@ -4,19 +4,17 @@
  *
  * @package Total WordPress Theme
  * @subpackage Total Theme Core
- * @version 1.2.8
+ * @version 1.3.2
  */
 
 defined( 'ABSPATH' ) || exit;
 
-$shortcode_tag = 'vcex_users_grid';
-
-if ( ! vcex_maybe_display_shortcode( $shortcode_tag, $atts ) ) {
+if ( ! vcex_maybe_display_shortcode( 'vcex_users_grid', $atts ) ) {
 	return;
 }
 
 // Get shortcode attributes.
-$atts = vcex_shortcode_atts( $shortcode_tag, $atts, $this );
+$atts = vcex_shortcode_atts( 'vcex_users_grid', $atts, $this );
 extract( $atts );
 
 // Declare and sanitize main vars.
@@ -88,15 +86,15 @@ if ( $bottom_margin_class = vcex_parse_margin_class( $bottom_margin, 'wpex-mb-' 
 	$wrap_classes[] = $bottom_margin_class;
 }
 
-if ( $visibility ) {
-	$wrap_classes[] = sanitize_html_class( $visibility );
+if ( $visibility_class = vcex_parse_visibility_class( $visibility ) ) {
+	$wrap_classes[] = $visibility_class;
 }
 
 if ( $el_class = vcex_get_extra_class( $classes ) ) {
 	$wrap_classes[] = $el_class;
 }
 
-$wrap_classes = vcex_parse_shortcode_classes( implode( ' ', $wrap_classes ), $shortcode_tag, $atts );
+$wrap_classes = vcex_parse_shortcode_classes( implode( ' ', $wrap_classes ), 'vcex_users_grid', $atts );
 
 // Begin output.
 $output .= '<div class="' . esc_attr( $wrap_classes ) . '"' . vcex_get_unique_id( $unique_id ) . '>';
@@ -137,12 +135,12 @@ $output .= '<div class="' . esc_attr( $wrap_classes ) . '"' . vcex_get_unique_id
 				$entry_classes[] = 'col';
 			}
 
-			if ( $css_animation && 'none' !== $css_animation ) {
-				$entry_classes[] = vcex_get_css_animation( $css_animation );
+			if ( $css_animation_class = vcex_get_css_animation( $css_animation ) ) {
+				$entry_classes[] = $css_animation_class;
 			}
 
 			if ( $content_alignment ) {
-				$entry_classes[] = 'text'. sanitize_html_class( $content_alignment );
+				$entry_classes[] = 'text' . sanitize_html_class( $content_alignment );
 			}
 
 			$entry_classes[] = 'wpex-last-mb-0';
@@ -179,7 +177,7 @@ $output .= '<div class="' . esc_attr( $wrap_classes ) . '"' . vcex_get_unique_id
 
 				}
 
-				$output .= '<div class="' . esc_attr( implode( ' ', vcex_get_entry_media_class( null, $shortcode_tag, $atts ) ) ) . '">';
+				$output .= '<div class="' . esc_attr( implode( ' ', vcex_get_entry_media_class( null, 'vcex_users_grid', $atts ) ) ) . '">';
 
 					if ( 'disable' !== $onclick ) {
 
@@ -233,7 +231,7 @@ $output .= '<div class="' . esc_attr( $wrap_classes ) . '"' . vcex_get_unique_id
 
 							} else {
 
-								$output .= '<img src="' . esc_url( $avatar ) . '" alt="' . esc_attr( $user->display_name ) . '" />';
+								$output .= '<img src="' . esc_url( $avatar ) . '" alt="' . esc_attr( $user->display_name ) . '">';
 
 							}
 
@@ -271,7 +269,7 @@ $output .= '<div class="' . esc_attr( $wrap_classes ) . '"' . vcex_get_unique_id
 				) );
 
 				// Open details el.
-				$output .= '<div class="' . esc_attr( implode( ' ', vcex_get_entry_details_class( array( 'vcex-users-grid-details' ), $shortcode_tag, $atts ) ) ) . '"' . $details_style . '>';
+				$output .= '<div class="' . esc_attr( implode( ' ', vcex_get_entry_details_class( array( 'vcex-users-grid-details' ), 'vcex_users_grid', $atts ) ) ) . '"' . $details_style . '>';
 
 					// Display name.
 					if ( 'true' == $name ) {
@@ -332,7 +330,7 @@ $output .= '<div class="' . esc_attr( $wrap_classes ) . '"' . vcex_get_unique_id
 
 						}
 
-						$output .= '<div class="' . esc_attr( implode( ' ', vcex_get_entry_excerpt_class( null, $shortcode_tag, $atts ) ) ) . '" '. $description_css .'>';
+						$output .= '<div class="' . esc_attr( implode( ' ', vcex_get_entry_excerpt_class( null, 'vcex_users_grid', $atts ) ) ) . '" '. $description_css .'>';
 
 							$output .= wpautop( wp_kses_post( $get_description ) );
 

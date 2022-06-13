@@ -3,7 +3,7 @@
  * Shortcode onclick functions.
  *
  * @package TotalThemeCore
- * @version 1.2.8
+ * @version 1.3.2
  */
 
 defined( 'ABSPATH' ) || exit;
@@ -20,7 +20,7 @@ function vcex_get_shortcode_onclick_attributes( $atts = array(), $shortcode_tag 
 
 	$has_lightbox = false;
 
-	$onclick = isset( $atts['onclick'] ) ? $atts['onclick'] : '';
+	$onclick = $atts['onclick'] ?? '';
 
 	switch ( $onclick ) {
 
@@ -112,6 +112,15 @@ function vcex_get_shortcode_onclick_attributes( $atts = array(), $shortcode_tag 
 				$attrs['class'][] = 'local-scroll-link';
 				unset( $atts['target'] );
 				unset( $atts['rel'] );
+			}
+			break;
+
+		case 'toggle_element':
+			$attrs['href'] = $atts['onclick_url'];
+			$attrs['class'][] = 'wpex-toggle-element-trigger';
+			$attrs['aria-controls'] = $atts['onclick_url'];
+			if ( empty( $atts['onclick_data_attributes'] ) || false === strpos( $atts['onclick_data_attributes'], 'aria-expanded' ) ) {
+				$attrs['aria-expanded'] = 'false';
 			}
 			break;
 

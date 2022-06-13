@@ -8,7 +8,7 @@ final class Shortcode_Post_Permalink {
 	public function __construct() {
 
 		if ( ! shortcode_exists( 'post_permalink' ) ) {
-			add_shortcode( 'post_permalink', array( __CLASS__, 'output' ) );
+			add_shortcode( 'post_permalink', __CLASS__ . '::output' );
 		}
 
 	}

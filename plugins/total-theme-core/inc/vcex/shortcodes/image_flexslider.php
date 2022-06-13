@@ -3,7 +3,7 @@
  * Image Slider Shortcode.
  *
  * @package TotalThemeCore
- * @version 1.2.8
+ * @version 1.3.2
  */
 
 defined( 'ABSPATH' ) || exit;
@@ -77,7 +77,8 @@ if ( ! class_exists( 'VCEX_Image_Flexslider_Shortcode' ) ) {
 					'type' => 'textfield',
 					'heading' => esc_html__( 'Element ID', 'total-theme-core' ),
 					'param_name' => 'unique_id',
-					'description' => sprintf( esc_html__( 'Enter element ID (Note: make sure it is unique and valid according to %sw3c specification%s).', 'total-theme-core' ), '<a href="https://www.w3schools.com/tags/att_global_id.asp" target="_blank" rel="noopener noreferrer">', '</a>' ),
+					'admin_label' => true,
+					'description' => vcex_shortcode_param_description( 'unique_id' ),
 				),
 				array(
 					'type' => 'textfield',
@@ -325,8 +326,8 @@ if ( ! class_exists( 'VCEX_Image_Flexslider_Shortcode' ) ) {
 					'type' => 'vcex_visibility',
 					'heading' => esc_html__( 'Visibility', 'total-theme-core' ),
 					'param_name' => 'caption_visibility',
-					'group' => esc_html__( 'Caption', 'total-theme-core' ),
 					'dependency' => array( 'element' => 'caption', 'value' => 'true' ),
+					'group' => esc_html__( 'Caption', 'total-theme-core' ),
 				),
 				array(
 					'type' => 'vcex_select_buttons',
@@ -336,6 +337,7 @@ if ( ! class_exists( 'VCEX_Image_Flexslider_Shortcode' ) ) {
 					'choices' => array(
 						'black' => esc_html__( 'Black', 'total-theme-core' ),
 						'white' => esc_html__( 'White', 'total-theme-core' ),
+						'none' => esc_html__( 'None', 'total-theme-core' ),
 					),
 					'dependency' => array( 'element' => 'caption', 'value' => 'true' ),
 					'group' => esc_html__( 'Caption', 'total-theme-core' ),
@@ -352,8 +354,8 @@ if ( ! class_exists( 'VCEX_Image_Flexslider_Shortcode' ) ) {
 						esc_html__( 'Left', 'total-theme-core' ) => 'left',
 						esc_html__( 'Right', 'total-theme-core' ) => 'right',
 					),
-					'group' => esc_html__( 'Caption', 'total-theme-core' ),
 					'dependency' => array( 'element' => 'caption', 'value' => 'true' ),
+					'group' => esc_html__( 'Caption', 'total-theme-core' ),
 				),
 				array(
 					'type' => 'dropdown',
@@ -367,8 +369,8 @@ if ( ! class_exists( 'VCEX_Image_Flexslider_Shortcode' ) ) {
 						esc_html__( 'Left', 'total-theme-core' ) => 'left',
 						esc_html__( 'Right', 'total-theme-core' ) => 'right',
 					),
-					'group' => esc_html__( 'Caption', 'total-theme-core' ),
 					'dependency' => array( 'element' => 'caption', 'value' => 'true' ),
+					'group' => esc_html__( 'Caption', 'total-theme-core' ),
 				),
 				array(
 					'type' => 'textfield',
@@ -376,31 +378,45 @@ if ( ! class_exists( 'VCEX_Image_Flexslider_Shortcode' ) ) {
 					'param_name' => 'caption_width',
 					'value' => '100%',
 					'description' => esc_html__( 'Enter a pixel or percentage value. You can also enter "auto" for content dependent width.', 'total-theme-core' ),
-					'group' => esc_html__( 'Caption', 'total-theme-core' ),
 					'dependency' => array( 'element' => 'caption', 'value' => 'true' ),
+					'group' => esc_html__( 'Caption', 'total-theme-core' ),
 				),
 				array(
-					'type' => 'textfield',
+					'type' => 'vcex_responsive_sizes',
 					'heading' => esc_html__( 'Font Size', 'total-theme-core' ),
 					'param_name' => 'caption_font_size',
-					'group' => esc_html__( 'Caption', 'total-theme-core' ),
 					'description' => vcex_shortcode_param_description( 'font_size' ),
 					'dependency' => array( 'element' => 'caption', 'value' => 'true' ),
+					'group' => esc_html__( 'Caption', 'total-theme-core' ),
+				),
+				array(
+					'type' => 'vcex_font_weight',
+					'heading' => esc_html__( 'Font Weight', 'total-theme-core' ),
+					'param_name' => 'caption_font_weight',
+					'dependency' => array( 'element' => 'caption', 'value' => 'true' ),
+					'group' => esc_html__( 'Caption', 'total-theme-core' ),
+				),
+				array(
+					'type' => 'vcex_colorpicker',
+					'heading' => esc_html__( 'Color', 'total-theme-core' ),
+					'param_name' => 'caption_color',
+					'dependency' => array( 'element' => 'caption', 'value' => 'true' ),
+					'group' => esc_html__( 'Caption', 'total-theme-core' ),
 				),
 				array(
 					'type' => 'vcex_trbl',
 					'heading' => esc_html__( 'Padding', 'total-theme-core' ),
 					'param_name' => 'caption_padding',
-					'group' => esc_html__( 'Caption', 'total-theme-core' ),
 					'dependency' => array( 'element' => 'caption', 'value' => 'true' ),
+					'group' => esc_html__( 'Caption', 'total-theme-core' ),
 				),
 				array(
 					'type' => 'vcex_ofswitch',
 					'std' => 'false',
 					'heading' => esc_html__( 'Rounded', 'total-theme-core' ),
 					'param_name' => 'caption_rounded',
-					'group' => esc_html__( 'Caption', 'total-theme-core' ),
 					'dependency' => array( 'element' => 'caption', 'value' => 'true' ),
+					'group' => esc_html__( 'Caption', 'total-theme-core' ),
 				),
 				array(
 					'type' => 'dropdown',
@@ -418,23 +434,23 @@ if ( ! class_exists( 'VCEX_Image_Flexslider_Shortcode' ) ) {
 						esc_html__( 'Center Left', 'total-theme-core' ) => 'centerLeft',
 						esc_html__( 'Center Right', 'total-theme-core' ) => 'centerRight',
 					),
-					'group' => esc_html__( 'Caption', 'total-theme-core' ),
 					'dependency' => array( 'element' => 'caption', 'value' => 'true' ),
+					'group' => esc_html__( 'Caption', 'total-theme-core' ),
 				),
 				array(
 					'type' => 'textfield',
 					'heading' => esc_html__( 'Horizontal Offset', 'total-theme-core' ),
 					'param_name' => 'caption_horizontal',
-					'group' => esc_html__( 'Caption', 'total-theme-core' ),
 					'dependency' => array( 'element' => 'caption', 'value' => 'true' ),
+					'group' => esc_html__( 'Caption', 'total-theme-core' ),
 					'description' => vcex_shortcode_param_description( 'px' ),
 				),
 				array(
 					'type' => 'textfield',
 					'heading' => esc_html__( 'Vertical Offset', 'total-theme-core' ),
 					'param_name' => 'caption_vertical',
-					'group' => esc_html__( 'Caption', 'total-theme-core' ),
 					'dependency' => array( 'element' => 'caption', 'value' => 'true' ),
+					'group' => esc_html__( 'Caption', 'total-theme-core' ),
 					'description' => vcex_shortcode_param_description( 'px' ),
 				),
 				array(
@@ -442,8 +458,8 @@ if ( ! class_exists( 'VCEX_Image_Flexslider_Shortcode' ) ) {
 					'heading' => esc_html__( 'Delay', 'total-theme-core' ),
 					'param_name' => 'caption_delay',
 					'std' => '500',
-					'group' => esc_html__( 'Caption', 'total-theme-core' ),
 					'dependency' => array( 'element' => 'caption', 'value' => 'true' ),
+					'group' => esc_html__( 'Caption', 'total-theme-core' ),
 					'description' => vcex_shortcode_param_description( 'ms' ),
 				),
 				// Links
@@ -516,6 +532,27 @@ if ( ! class_exists( 'VCEX_Image_Flexslider_Shortcode' ) ) {
 					'group' => esc_html__( 'Links', 'total-theme-core' ),
 					'description' => esc_html__( 'If enabled the slider will display the image associated with the video in the slider and the video itself in lithbox.', 'total-theme-core' ),
 					'dependency' => array( 'element' => 'thumbnail_link', 'value' => 'lightbox' ),
+				),
+				// Overlay
+				array(
+					'type' => 'vcex_ofswitch',
+					'heading' => esc_html__( 'Overlay', 'total-theme-core' ),
+					'param_name' => 'overlay',
+					'std' => 'false',
+					'group' => esc_html__( 'Overlay', 'total-theme-core' ),
+				),
+				array(
+					'type' => 'vcex_colorpicker',
+					'heading' => esc_html__( 'Overlay Color', 'total-theme-core' ),
+					'param_name' => 'overlay_color',
+					'group' => esc_html__( 'Overlay', 'total-theme-core' ),
+				),
+				array(
+					'type' => 'textfield',
+					'heading' => esc_html__( 'Overlay Opacity', 'total-theme-core' ),
+					'param_name' => 'overlay_opacity',
+					'description' => vcex_shortcode_param_description( 'opacity' ),
+					'group' => esc_html__( 'Overlay', 'total-theme-core' ),
 				),
 				// Design options
 				array(

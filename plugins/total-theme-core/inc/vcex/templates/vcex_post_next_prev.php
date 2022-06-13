@@ -4,26 +4,24 @@
  *
  * @package Total WordPress Theme
  * @subpackage Total Theme Core
- * @version 1.2.8
+ * @version 1.3.2
  */
 
 defined( 'ABSPATH' ) || exit;
 
-$shortcode_tag = 'vcex_post_next_prev';
-
-if ( ! vcex_maybe_display_shortcode( $shortcode_tag, $atts ) ) {
+if ( ! vcex_maybe_display_shortcode( 'vcex_post_next_prev', $atts ) ) {
 	return;
 }
 
 // Get and extract shortcode attributes.
-$atts = vcex_shortcode_atts( $shortcode_tag, $atts, $this );
+$atts = vcex_shortcode_atts( 'vcex_post_next_prev', $atts, $this );
 extract( $atts );
 
 $prev = $next = $icon_left = $icon_right = $prev_format = $next_format = '';
 
 // Sanitize atts.
 $in_same_term  = ( 'true' == $atts['in_same_term'] ) ? true : false;
-$same_term_tax = $same_term_tax ? $same_term_tax : 'category';
+$same_term_tax = $same_term_tax ?: 'category';
 
 $shortcode_class = array(
 	'vcex-post-next-prev',
@@ -46,6 +44,23 @@ if ( $bottom_margin ) {
 	$shortcode_class[] = vcex_sanitize_margin_class( $bottom_margin, 'wpex-mb-' );
 }
 
+if ( ! empty( $atts['max_width'] ) ) {
+
+	switch ( $atts['float'] ) {
+		case 'left':
+			$shortcode_class[] = 'wpex-mr-auto';
+			break;
+		case 'right':
+			$shortcode_class[] = 'wpex-ml-auto';
+			break;
+		case 'center':
+		default:
+			$shortcode_class[] = 'wpex-mx-auto';
+			break;
+	}
+
+}
+
 if ( $atts['el_class'] ) {
 	$shortcode_class[] = vcex_get_extra_class( $el_class );
 }
@@ -54,7 +69,7 @@ if ( $atts['css_animation'] ) {
 	$shortcode_class[] = vcex_get_css_animation( $atts['css_animation'] );
 }
 
-$shortcode_class = vcex_parse_shortcode_classes( $shortcode_class, $shortcode_tag, $atts );
+$shortcode_class = vcex_parse_shortcode_classes( $shortcode_class, 'vcex_post_next_prev', $atts );
 
 // Inline CSS
 $shortcode_style = vcex_inline_style( array(
@@ -62,6 +77,7 @@ $shortcode_style = vcex_inline_style( array(
 	'line_height'        => $atts['line_height'],
 	'animation_delay'    => $atts['animation_delay'],
 	'animation_duration' => $atts['animation_duration'],
+	'max_width'          => $atts['max_width'],
 ) );
 
 // Begin output.

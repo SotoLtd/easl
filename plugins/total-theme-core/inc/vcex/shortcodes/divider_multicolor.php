@@ -3,7 +3,7 @@
  * Divider Multi-Color Shortcode.
  *
  * @package TotalThemeCore
- * @version 1.2.8
+ * @version 1.3
  */
 
 defined( 'ABSPATH' ) || exit;
@@ -130,6 +130,7 @@ if ( ! class_exists( 'VCEX_Multi_Color_Divider_Shortcode' ) ) {
 					'param_name' => 'height',
 					'description' => vcex_shortcode_param_description( 'px' ),
 					'value' => '8px',
+					'admin_label' => true,
 					'group' => esc_html__( 'Style', 'total-theme-core' ),
 				),
 			);

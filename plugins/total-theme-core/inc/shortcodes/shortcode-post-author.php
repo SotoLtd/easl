@@ -8,7 +8,7 @@ final class Shortcode_Post_Author {
 	public function __construct() {
 
 		if ( ! shortcode_exists( 'post_author' ) ) {
-			add_shortcode( 'post_author', array( __CLASS__, 'output' ) );
+			add_shortcode( 'post_author', __CLASS__ . '::output' );
 		}
 
 	}

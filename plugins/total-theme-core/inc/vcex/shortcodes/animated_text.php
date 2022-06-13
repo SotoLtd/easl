@@ -3,7 +3,7 @@
  * Animated Text Shortcode.
  *
  * @package TotalThemeCore
- * @version 1.2.8
+ * @version 1.3.1
  */
 
 defined( 'ABSPATH' ) || exit;
@@ -16,6 +16,7 @@ if ( ! class_exists( 'VCEX_Animated_Text_Shortcode' ) ) {
 		 * Main constructor.
 		 */
 		public function __construct() {
+			add_action( 'wp_enqueue_scripts', __CLASS__ . '::register_scripts' );
 			add_shortcode( 'vcex_animated_text', array( $this, 'output' ) );
 
 			if ( function_exists( 'vc_lean_map' ) ) {
@@ -25,34 +26,39 @@ if ( ! class_exists( 'VCEX_Animated_Text_Shortcode' ) ) {
 		}
 
 		/**
-		 * Shortcode scripts.
+		 * Register scripts.
 		 */
-		public function enqueue_scripts() {
+		public static function register_scripts() {
 
-			wp_enqueue_script(
-				'appear',
-				vcex_asset_url( 'js/lib/jquery.appear.min.js' ),
-				array( 'jquery' ),
-				'1.0',
-				true
-			);
+			$js_extension = '.js';
 
-			wp_enqueue_script(
+			if ( defined( 'WPEX_MINIFY_JS' ) && WPEX_MINIFY_JS ) {
+				$js_extension = '.min.js';
+			}
+
+			wp_register_script(
 				'typed',
-				vcex_asset_url( 'js/lib/typed.min.js' ),
-				array( 'jquery' ),
-				'2.0.6',
+				vcex_asset_url( 'js/lib/typed' . $js_extension ),
+				array(),
+				'2.0.12',
 				true
 			);
 
-			wp_enqueue_script(
+			wp_register_script(
 				'vcex-animated-text',
-				vcex_asset_url( 'js/shortcodes/vcex-animated-text.min.js' ),
-				array( 'jquery', 'appear', 'typed' ),
+				vcex_asset_url( 'js/shortcodes/vcex-animated-text' . $js_extension ),
+				array( 'typed' ),
 				TTC_VERSION,
 				true
 			);
 
+		}
+
+		/**
+		 * Shortcode scripts.
+		 */
+		public function enqueue_scripts() {
+			wp_enqueue_script( 'vcex-animated-text' );
 		}
 
 		/**
@@ -231,6 +237,7 @@ if ( ! class_exists( 'VCEX_Animated_Text_Shortcode' ) ) {
 					'heading' => esc_html__( 'Loop', 'total-theme-core' ),
 					'param_name' => 'loop',
 					'group' => esc_html__( 'Animated Text', 'total-theme-core' ),
+					'admin_label' => true,
 				),
 				array(
 					'type' => 'vcex_ofswitch',
@@ -238,6 +245,7 @@ if ( ! class_exists( 'VCEX_Animated_Text_Shortcode' ) ) {
 					'heading' => esc_html__( 'Cursor', 'total-theme-core' ),
 					'param_name' => 'type_cursor',
 					'group' => esc_html__( 'Animated Text', 'total-theme-core' ),
+					'admin_label' => true,
 				),
 				array(
 					'type' => 'textfield',

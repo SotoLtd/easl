@@ -1,56 +1,38 @@
 <?php
-/**
- * Register custom widgets.
- *
- * @package TotalThemeCore
- * @version 1.2.8
- *
- */
-
 namespace TotalThemeCore;
 
 defined( 'ABSPATH' ) || exit;
 
+/**
+ * Register custom widgets.
+ *
+ * @package TotalThemeCore
+ * @version 1.3.1
+ */
 final class Register_Widgets {
 
 	/**
-	 * Our single Register_Widgets instance.
+	 * Instance.
+	 *
+	 * @access private
+	 * @var object Class object.
 	 */
 	private static $instance;
-
-	/**
-	 * Disable instantiation.
-	 */
-	private function __construct() {}
-
-	/**
-	 * Disable the cloning of this class.
-	 *
-	 * @return void
-	 */
-	final public function __clone() {}
-
-	/**
-	 * Disable the wakeup of this class.
-	 */
-	final public function __wakeup() {}
 
 	/**
 	 * Create or retrieve the instance of Register_Widgets.
 	 */
 	public static function instance() {
 		if ( is_null( static::$instance ) ) {
-			static::$instance = new Register_Widgets;
-			static::$instance->init_hooks();
+			static::$instance = new self();
 		}
-
 		return static::$instance;
 	}
 
 	/**
-	 * Hook into actions and filters.
+	 * Constructor.
 	 */
-	public function init_hooks() {
+	public function __construct() {
 		add_action( 'widgets_init', array( $this, 'init' ) );
 		add_action( 'admin_print_scripts-widgets.php', array( $this, 'widget_scripts' ) );
 	}

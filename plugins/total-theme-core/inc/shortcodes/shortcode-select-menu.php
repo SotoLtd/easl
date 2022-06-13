@@ -8,7 +8,7 @@ final class Shortcode_Select_menu {
 	public function __construct() {
 
 		if ( ! shortcode_exists( 'select_menu' ) ) {
-			add_shortcode( 'select_menu', array( __CLASS__, 'output' ) );
+			add_shortcode( 'select_menu', __CLASS__ . '::output' );
 		}
 
 	}
@@ -44,9 +44,8 @@ final class Shortcode_Select_menu {
 
 		} ?>
 
-		<select id="<?php echo $escaped_menu_id; ?>" class="wpex-select-menu-shortcode" onchange="if (this.value) window.location.href=this.value">
+		<select id="<?php echo $escaped_menu_id; ?>" class="wpex-select-menu-shortcode" onchange="if (this.value) window.location.href=this.value"><?php
 
-			<?php
 			// Make sure we have menu items
 			if ( $menu_items && is_array( $menu_items ) ) {
 
@@ -55,11 +54,15 @@ final class Shortcode_Select_menu {
 					<option value="<?php echo esc_url( $menu_item->url ); ?>"><?php echo esc_attr( $menu_item->title ); ?></option>
 
 				<?php endforeach;
-			} ?>
+			}
 
-		</select>
+		?></select>
 
 		<?php if ( ! empty( $atts['custom_select'] ) ) {
+
+			if ( function_exists( 'wpex_theme_icon_html' ) ) {
+				wpex_theme_icon_html( 'angle-down' );
+			}
 
 			echo '</div>';
 

@@ -43,9 +43,9 @@ function vcex_enqueue_carousel_scripts() {
  * Enqueue isotope scripts.
  */
 function vcex_enqueue_isotope_scripts() {
-	if ( function_exists( 'wpex_enqueue_masonry_scripts' ) ) {
-		wpex_enqueue_masonry_scripts();
-	}
+	wp_enqueue_script( 'imagesloaded' );
+	wp_enqueue_script( 'isotope' );
+	wp_enqueue_script( 'vcex-isotope-grids' );
 }
 
 /**

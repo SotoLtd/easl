@@ -4,37 +4,48 @@
  *
  * @package Total WordPress Theme
  * @subpackage Total Theme Core
- * @version 1.2.8
+ * @version 1.3.2
  */
 
 defined( 'ABSPATH' ) || exit;
 
-$shortcode_tag = 'vcex_social_links';
-
-if ( ! vcex_maybe_display_shortcode( $shortcode_tag, $atts ) ) {
+if ( ! vcex_maybe_display_shortcode( 'vcex_social_links', $atts ) ) {
 	return;
 }
 
+/**
+ * Fallbacks for when you could do something like facebook="" or twitter="" for the social links.
+ * Must run before vcex_shortcode_atts.
+ *
+ * @since 1.3.1
+ */
+$has_social_links = ! empty( $atts['social_links'] );
+
+if ( ! $has_social_links ) {
+	$og_atts = $atts;
+}
+
 // Get and extract shortcode attributes.
-$atts = vcex_shortcode_atts( $shortcode_tag, $atts, $this );
+$atts = vcex_shortcode_atts( 'vcex_social_links', $atts, $this );
+
 extract( $atts );
 
-// Get social profiles array | Used for fallback method and to grab icon styles
+// Get social profiles array | Used for fallback method and to grab icon styles.
 $social_profiles = (array) vcex_social_links_profiles();
 
-// Social profile array can't be empty
+// Social profile array can't be empty.
 if ( ! $social_profiles ) {
 	return;
 }
 
-// Define output var
+// Define output var.
 $output = '';
 
-// Sanitize style
+// Sanitize style.
 $style = $style ? $style : 'flat';
 $expand = vcex_validate_boolean( $expand );
 
-// Get current author social links
+// Get current author social links.
 if ( 'true' == $author_links ) {
 
 	$post_tmp    = get_post( vcex_get_the_ID() );
@@ -61,32 +72,35 @@ if ( 'true' == $author_links ) {
 
 } else {
 
-	// Display custom social links
+	// Display custom social links.
 	// New method since 3.5.0 | must check $atts value due to fallback and default var
-	if ( ! empty( $atts['social_links'] ) ) {
+	if ( $has_social_links ) {
 		$social_links = (array) vcex_vc_param_group_parse_atts( $social_links );
 		$loop = array();
 		foreach ( $social_links as $key => $val ) {
 			$loop[$val['site']] = isset( $val['link'] ) ? do_shortcode( $val['link'] ) : '';
 		}
 	} else {
-		$loop = $social_profiles;
+		$loop = array();
+		foreach( $social_profiles as $key => $val ) {
+			$loop[$key] = '';
+		}
 	}
 
 }
 
-// Loop is required
+// Loop is required.
 if ( ! is_array( $loop ) ) {
 	return;
 }
 
-// Wrap attributes
+// Wrap attributes.
 $wrap_attrs = array(
 	'id'   => $unique_id,
 	'data' => '',
 );
 
-// Wrap classes
+// Wrap classes.
 $wrap_classes = array( 'vcex-module' );
 $wrap_classes[] = 'wpex-social-btns vcex-social-btns';
 
@@ -104,7 +118,7 @@ if ( $align ) {
 }
 
 if ( $visibility ) {
-	$wrap_classes[] = sanitize_html_class( $visibility );
+	$wrap_classes[] = vcex_parse_visibility_class( $visibility );
 }
 
 if ( $css_animation_class = vcex_get_css_animation( $css_animation ) ) {
@@ -117,7 +131,7 @@ if ( $el_class = vcex_get_extra_class( $classes ) ) {
 
 $wrap_classes[] = 'wpex-last-mr-0';
 
-// Wrap style
+// Wrap style.
 $wrap_style = vcex_inline_style( array(
 	'font_size' => $size,
 	'border_radius' => $border_radius,
@@ -125,7 +139,7 @@ $wrap_style = vcex_inline_style( array(
 	'animation_duration' => $animation_duration,
 ), false );
 
-// Link Classes
+// Link Classes.
 $link_class   = array();
 $link_class[] = vcex_get_social_button_class( $style );
 $spacing = $spacing ? absint( $spacing ) : '5';
@@ -156,7 +170,7 @@ $a_style = vcex_inline_style( array(
 	'border_color' => $border_color,
 ), false );
 
-// Reset social button widths/paddings
+// Reset social button widths/paddings.
 if ( $expand || 'true' == $show_label ) {
 
 	$link_class[] = 'wpex-flex-grow';
@@ -209,13 +223,22 @@ if ( $hover_color ) {
 
 $a_hover_data = $a_hover_data ? htmlspecialchars( wp_json_encode( $a_hover_data ) ) : '';
 
-// Responsive settings.
-if ( $responsive_data = vcex_get_module_responsive_data( $size, 'font_size' ) ) {
-	$wrap_attrs['data-wpex-rcss'] = $responsive_data;
+// Responsive styles.
+$unique_classname = vcex_element_unique_classname();
+
+$el_responsive_styles = array(
+	'font_size' => $atts['size'],
+);
+
+$responsive_css = vcex_element_responsive_css( $el_responsive_styles, $unique_classname );
+
+if ( $responsive_css ) {
+	$wrap_classes[] = $unique_classname;
+	$output .= '<style>' . $responsive_css . '</style>';
 }
 
 // Add attributes to array.
-$wrap_attrs['class'] = vcex_parse_shortcode_classes( $wrap_classes, $shortcode_tag, $atts );
+$wrap_attrs['class'] = vcex_parse_shortcode_classes( $wrap_classes, 'vcex_social_links', $atts );
 $wrap_attrs['style'] = $wrap_style;
 
 // Begin output.
@@ -233,8 +256,8 @@ $output .= '<div' . vcex_parse_html_attributes(  $wrap_attrs ) . '>';
 		$profile_class = $key;
 
 		// Get URL.
-		if ( 'true' != $author_links && empty( $atts['social_links'] ) ) {
-			$url = isset( $atts[$key] ) ? $atts[$key] : '';
+		if ( 'true' != $author_links && false === $has_social_links && ! empty( $og_atts ) ) {
+			$url = isset( $og_atts[$key] ) ? $og_atts[$key] : '';
 		} else {
 			$url = $val;
 		}

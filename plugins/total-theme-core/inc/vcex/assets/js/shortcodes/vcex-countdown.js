@@ -1,44 +1,42 @@
-( function( $ ) {
+if ( 'function' !== typeof window.vcexCountDown ) {
+	window.vcexCountDown = function( context ) {
 
-	'use strict';
+		if ( 'undefined' === typeof jQuery || 'function' !== typeof jQuery.fn.countdown ) {
+			return;
+		}
 
-	if ( 'function' !== typeof window.vcexCountDown ) {
-		window.vcexCountDown = function ( $context ) {
+		if ( ! context || ! context.childNodes ) {
+			context = document;
+		}
 
-			if ( 'undefined' === typeof $.fn.countdown ) {
+		context.querySelectorAll( '.vcex-countdown' ).forEach( function( element ) {
+			var endDate = element.dataset.countdown;
+			var days = element.dataset.days;
+			var hours = element.dataset.hours;
+			var minutes = element.dataset.minutes;
+			var seconds = element.dataset.seconds;
+			var timezone = element.dataset.timezone;
+
+			if ( timezone && 'function' === typeof moment.tz ) {
+				endDate = moment.tz( endDate, timezone ).toDate();
+			}
+
+			if ( ! endDate ) {
 				return;
 			}
 
-			$( '.vcex-countdown', $context ).each( function() {
-
-				var $this     = $( this ),
-					endDate  = $this.data( 'countdown' ),
-					days     = $this.data( 'days' ),
-					hours    = $this.data( 'hours' ),
-					minutes  = $this.data( 'minutes' ),
-					seconds  = $this.data( 'seconds' ),
-					timezone = $this.data( 'timezone' );
-
-				if ( timezone && typeof moment.tz !== 'undefined' && $.isFunction( moment.tz ) ) {
-					endDate = moment.tz( endDate, timezone ).toDate();
-				}
-
-				if ( ! endDate ) {
-					return;
-				}
-
-				$this.countdown( endDate, function( event ) {
-					$this.html( event.strftime( '<div class="wpex-days"><span>%-D</span> <small>' + days + '</small></div> <div class="wpex-hours"><span>%-H</span> <small>' + hours + '</small></div class="wpex-months"> <div class="wpex-minutes"><span>%-M</span> <small>' + minutes + '</small></div> <div class="wpex-seconds"><span>%-S</span> <small>' + seconds + '</small></div>' ) );
-				} );
-
+			jQuery( element ).countdown( endDate, function( event ) {
+				jQuery( this ).html( event.strftime( '<div class="wpex-days"><span>%-D</span> <small>' + days + '</small></div> <div class="wpex-hours"><span>%-H</span> <small>' + hours + '</small></div class="wpex-months"> <div class="wpex-minutes"><span>%-M</span> <small>' + minutes + '</small></div> <div class="wpex-seconds"><span>%-S</span> <small>' + seconds + '</small></div>' ) );
 			} );
 
-		};
+		} );
 
-	}
+	};
 
-	$( document ).ready( function() {
-		window.vcexCountDown();
-	} );
+}
 
-} ) ( jQuery );
+if ( document.readyState === 'interactive' || document.readyState === 'complete' ) {
+	setTimeout( vcexCountDown, 0 );
+} else {
+	document.addEventListener( 'DOMContentLoaded', vcexCountDown, false );
+}

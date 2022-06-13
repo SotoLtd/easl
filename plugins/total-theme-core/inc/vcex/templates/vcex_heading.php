@@ -4,19 +4,17 @@
  *
  * @package Total WordPress Theme
  * @subpackage Total Theme Core
- * @version 1.2.8
+ * @version 1.3.2
  */
 
 defined( 'ABSPATH' ) || exit;
 
-$shortcode_tag = 'vcex_heading';
-
-if ( ! vcex_maybe_display_shortcode( $shortcode_tag, $atts ) ) {
+if ( ! vcex_maybe_display_shortcode( 'vcex_heading', $atts ) ) {
 	return;
 }
 
 // Get and extract shortcode attributes.
-$atts = vcex_shortcode_atts( $shortcode_tag, $atts, $this );
+$atts = vcex_shortcode_atts( 'vcex_heading', $atts, $this );
 extract( $atts );
 
 /*-------------------------------------------------*/
@@ -42,7 +40,7 @@ if ( empty( $text ) ) {
 /*-------------------------------------------------*/
 $output               = '';
 $heading_attrs        = array( 'class' => '' );
-$default_tag          = ( $default_tag = get_theme_mod( 'vcex_heading_default_tag', 'div' ) ) ? $default_tag : 'div';
+$default_tag          = ( $default_tag = get_theme_mod( 'vcex_heading_default_tag', 'div' ) ) ?: 'div';
 $tag_escaped          = $tag ? tag_escape( $tag ) : tag_escape( apply_filters( 'vcex_heading_default_tag', $default_tag ) );
 $custom_css           = vcex_vc_shortcode_custom_css_class( $css );
 $icon                 = vcex_get_icon_class( $atts, 'icon' );
@@ -58,13 +56,6 @@ if ( 'plain' === $style || 'side-border' === $style || 'bottom-border' === $styl
 
 if ( 'plain' !== $style ) {
 	$atts['padding_all'] = $atts['background_color'] = $atts['border_radius'] = '' ;
-}
-
-/*-------------------------------------------------*/
-/* [ Load Custom Fonts ]
-/*-------------------------------------------------*/
-if ( $font_family ) {
-	vcex_enqueue_font( $font_family );
 }
 
 /*-------------------------------------------------*/
@@ -190,7 +181,7 @@ if ( 'true' == $atts['italic'] ) {
 }
 
 if ( $visibility ) {
-	$heading_classes[] = sanitize_html_class( $atts['visibility'] );
+	$heading_classes[] = vcex_parse_visibility_class( $atts['visibility'] );
 }
 
 if ( $custom_css && ! $add_css_to_inner ) {
@@ -216,16 +207,14 @@ if ( 'true' == $responsive_text && $font_size ) {
 	if ( $font_size && $min_font_size ) {
 		$heading_classes[] = 'wpex-responsive-txt';
 		$heading_attrs['data-max-font-size'] = absint( $font_size );
-		$min_font_size  = $min_font_size ? $min_font_size : '21px'; // 21px = default heading font size
+		$min_font_size  = $min_font_size ?: '21px'; // 21px = default heading font size
 		$min_font_size  = apply_filters( 'wpex_vcex_heading_min_font_size', $min_font_size );
 		$heading_attrs['data-min-font-size'] = absint( $min_font_size );
+
+		// Enqueue scripts.
+		wp_enqueue_script( 'vcex-responsive-text' );
 	}
 
-}
-
-// Get responsive data.
-if ( $responsive_data = vcex_get_module_responsive_data( $atts ) ) {
-	$heading_attrs['data-wpex-rcss'] = $responsive_data;
 }
 
 /*-------------------------------------------------*/
@@ -274,6 +263,22 @@ if ( $hover_data && ! $add_css_to_inner ) {
 }
 
 /*-------------------------------------------------*/
+/* [ Responsive CSS ]
+/*-------------------------------------------------*/
+$unique_classname = vcex_element_unique_classname();
+
+$el_responsive_styles = array(
+	'font_size' => $atts['font_size'],
+);
+
+$responsive_css = vcex_element_responsive_css( $el_responsive_styles, $unique_classname );
+
+if ( $responsive_css ) {
+	$heading_classes[] = $unique_classname;
+	$output .= '<style>' . $responsive_css . '</style>';
+}
+
+/*-------------------------------------------------*/
 /* [ Parse Heading Attributes ]
 /*-------------------------------------------------*/
 
@@ -283,7 +288,7 @@ if ( $el_class = vcex_get_extra_class( $el_class ) ) {
 }
 
 // Turn wrap classes into string and apply filter.
-$heading_classes = vcex_parse_shortcode_classes( implode( ' ', $heading_classes ), $shortcode_tag, $atts );
+$heading_classes = vcex_parse_shortcode_classes( implode( ' ', $heading_classes ), 'vcex_heading', $atts );
 
 // Add classes to attributes array.
 $heading_attrs['class'] = $heading_classes;
@@ -298,7 +303,7 @@ $heading_attrs['style'] = vcex_inline_style( array(
 	'font_weight'         => $atts['font_weight'],
 	'text_transform'      => $atts['text_transform'],
 	'line_height'         => $atts['line_height'],
-	'border_bottom_color' => $atts['border_color'] ? $atts['border_color'] : $atts['inner_bottom_border_color_main'],
+	'border_bottom_color' => $atts['border_color'] ?: $atts['inner_bottom_border_color_main'],
 	'width'               => $atts['width'],
 	'animation_delay'     => $atts['animation_delay'],
 	'animation_duration'  => $atts['animation_duration'],
@@ -336,7 +341,7 @@ if ( 'side-border' === $style ) {
 	}
 
 	$side_border_style = vcex_inline_style( array(
-		'border_color' => $border_color ? $border_color : $color,
+		'border_color' => $border_color ?: $color,
 	) );
 
 	$side_border_classes = apply_filters( 'vcex_heading_side_border_class', $side_border_classes, $atts );
@@ -370,9 +375,9 @@ $output .= '<' . $tag_escaped . '' . vcex_parse_html_attributes( $heading_attrs 
 
 		$link_attrs = array(
 			'href'   => esc_url( $link['url'] ),
-			'title'  => isset( $link['title'] ) ? $link['title'] : '',
-			'target' => isset( $link['target'] ) ? $link['target'] : '',
-			'rel'    => isset( $link['rel'] ) ? $link['rel'] : '',
+			'title'  => $link['title'] ?? '',
+			'target' => $link['target'] ?? '',
+			'rel'    => $link['rel'] ?? '',
 		);
 
 		$link_classes = array(
@@ -392,7 +397,7 @@ $output .= '<' . $tag_escaped . '' . vcex_parse_html_attributes( $heading_attrs 
 			$link_attrs[ 'class' ] = $link_classes;
 		}
 
-		$output .= '<a' . vcex_parse_html_attributes( $link_attrs ) . '">';
+		$output .= '<a' . vcex_parse_html_attributes( $link_attrs ) . '>';
 	}
 
 	/*-------------------------------------------------*/

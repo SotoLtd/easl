@@ -6,7 +6,7 @@
  *
  * @package Total Theme Core
  * @subpackage Widgets
- * @version 1.2
+ * @version 1.3.2
  *
  * @todo Deprecate completely, force people to use new widget.
  */
@@ -46,20 +46,19 @@ if ( ! class_exists( 'WPEX_Social_Widget' ) ) {
 		 * @param array $instance Saved values from database.
 		 */
 		public function widget( $args, $instance ) {
+			$social_services = $instance['social_services'] ?? '';
 
-			// Get social services and return nothing if none are defined
-			$social_services = isset( $instance['social_services'] ) ? $instance['social_services'] : '';
 			if ( ! $social_services ) {
 				return;
 			}
 
 			// Define vars
-			$output       = '';
-			$title        = isset( $instance['title'] ) ? $instance['title'] : '';
-			$style        = isset( $instance['style'] ) ? $instance['style'] : '';
-			$target       = isset( $instance['target'] ) ? $instance['target'] : '';
-			$size         = isset( $instance['size'] ) ? $instance['size'] : '';
-			$align        = isset( $instance['align'] ) ? $instance['align'] : 'left';
+			$output = '';
+			$title = $instance['title'] ?? '';
+			$style = $instance['style'] ?? '';
+			$target = $instance['target'] ?? '';
+			$size = $instance['size'] ?? '';
+			$align = $instance['align'] ?? 'left';
 			$img_location = wpex_asset_url( 'images/social/' );
 
 			// Sanitize vars
@@ -73,7 +72,7 @@ if ( ! class_exists( 'WPEX_Social_Widget' ) ) {
 			}
 
 			// Apply filters
-			$title        = apply_filters( 'widget_title', $title );
+			$title = apply_filters( 'widget_title', $title );
 			$img_location = apply_filters( 'wpex_social_widget_img_dir', $img_location );
 
 			// Before widget WP hook
@@ -97,7 +96,7 @@ if ( ! class_exists( 'WPEX_Social_Widget' ) ) {
 
 							$output .= '<a href="'. esc_url( $link ) .'" title="' . esc_attr( $name ) . '"' . $target . '>';
 
-								$output .= '<img src="'. esc_url( $img_location . strtolower ( $name ) ) .'.png" alt="'. esc_attr( $name ) .'" height="'. esc_attr( intval( $size ) ) .'" width="'. esc_attr( intval( $size ) ) .'" class="wpex-align-bottom wpex-hover-opacity-80" />';
+								$output .= '<img src="'. esc_url( $img_location . strtolower ( $name ) ) .'.png" alt="'. esc_attr( $name ) .'" height="'. esc_attr( intval( $size ) ) .'" width="'. esc_attr( intval( $size ) ) .'" class="wpex-align-bottom wpex-hover-opacity-80">';
 
 							$output .= '</a>';
 
@@ -130,11 +129,11 @@ if ( ! class_exists( 'WPEX_Social_Widget' ) ) {
 		 */
 		public function update( $new, $old ) {
 			$instance = $old;
-			$instance['title']           = ! empty( $new['title'] ) ? strip_tags( $new['title'] ) : null;
-			$instance['style']           = ! empty( $new['style'] ) ? strip_tags( $new['style'] ) : 'color-square';
-			$instance['target']          = ! empty( $new['target'] ) ? strip_tags( $new['target'] ) : 'blank';
-			$instance['size']            = ! empty( $new['size'] ) ? strip_tags( $new['size'] ) : '32px';
-			$instance['align']           = ! empty( $new['align'] ) ? strip_tags( $new['align'] ) : '';
+			$instance['title'] = ! empty( $new['title'] ) ? strip_tags( $new['title'] ) : null;
+			$instance['style'] = ! empty( $new['style'] ) ? strip_tags( $new['style'] ) : 'color-square';
+			$instance['target'] = ! empty( $new['target'] ) ? strip_tags( $new['target'] ) : 'blank';
+			$instance['size'] = ! empty( $new['size'] ) ? strip_tags( $new['size'] ) : '32px';
+			$instance['align'] = ! empty( $new['align'] ) ? strip_tags( $new['align'] ) : '';
 			$instance['social_services'] = $new['social_services'];
 			return $instance;
 		}
@@ -221,12 +220,12 @@ if ( ! class_exists( 'WPEX_Social_Widget' ) ) {
 
 			<p>
 				<label for="<?php echo esc_attr( $this->get_field_id( 'title' ) ); ?>"><?php esc_attr_e( 'Title', 'total-theme-core' ); ?>:</label>
-				<input class="widefat" id="<?php echo esc_attr( $this->get_field_id( 'title' ) ); ?>" name="<?php echo esc_attr( $this->get_field_name( 'title' ) ); ?>" type="text" value="<?php echo esc_attr( $instance['title'] ); ?>" />
+				<input class="widefat" id="<?php echo esc_attr( $this->get_field_id( 'title' ) ); ?>" name="<?php echo esc_attr( $this->get_field_name( 'title' ) ); ?>" type="text" value="<?php echo esc_attr( $instance['title'] ); ?>">
 			</p>
 
 			<p>
 				<label for="<?php echo esc_attr( $this->get_field_id( 'target' ) ); ?>"><?php esc_attr_e( 'Link Target', 'total-theme-core' ); ?>:</label>
-				<br />
+				<br>
 				<select class='wpex-widget-select' name="<?php echo esc_attr( $this->get_field_name( 'target' ) ); ?>" id="<?php echo esc_attr( $this->get_field_id( 'target' ) ); ?>">
 					<option value="blank" <?php selected( $instance['target'], 'blank', true ); ?>><?php esc_attr_e( 'Blank', 'total-theme-core' ); ?></option>
 					<option value="self" <?php selected( $instance['target'], 'self', true ); ?>><?php esc_attr_e( 'Self', 'total-theme-core' ); ?></option>
@@ -235,7 +234,7 @@ if ( ! class_exists( 'WPEX_Social_Widget' ) ) {
 
 			<p>
 				<label for="<?php echo esc_attr( $this->get_field_id( 'align' ) ); ?>"><?php esc_attr_e( 'Align', 'total-theme-core' ); ?>:</label>
-				<br />
+				<br>
 				<select class='wpex-widget-select' name="<?php echo esc_attr( $this->get_field_name( 'align' ) ); ?>" id="<?php echo esc_attr( $this->get_field_id( 'align' ) ); ?>">
 					<option value="left" <?php selected( $instance['align'], 'left', true ); ?>><?php esc_attr_e( 'Left', 'total-theme-core' ); ?></option>
 					<option value="center" <?php selected( $instance['align'], 'center', true ); ?>><?php esc_attr_e( 'Center', 'total-theme-core' ); ?></option>
@@ -245,7 +244,7 @@ if ( ! class_exists( 'WPEX_Social_Widget' ) ) {
 
 			<p>
 				<label for="<?php echo esc_attr( $this->get_field_id( 'size' ) ); ?>"><?php esc_attr_e( 'Size', 'total-theme-core' ); ?>:</label>
-				<input class="widefat" id="<?php echo esc_attr( $this->get_field_id( 'size' ) ); ?>" name="<?php echo esc_attr( $this->get_field_name( 'size' ) ); ?>" type="text" value="<?php echo esc_attr( $instance['size'] ); ?>" />
+				<input class="widefat" id="<?php echo esc_attr( $this->get_field_id( 'size' ) ); ?>" name="<?php echo esc_attr( $this->get_field_name( 'size' ) ); ?>" type="text" value="<?php echo esc_attr( $instance['size'] ); ?>">
 				<small><?php esc_attr_e( 'Size in pixels. Icon images are 36px.', 'total-theme-core' ); ?></small>
 			</p>
 
@@ -257,24 +256,25 @@ if ( ! class_exists( 'WPEX_Social_Widget' ) ) {
 
 			<ul id="<?php echo esc_attr( $field_id_services ); ?>" class="wpex-social-widget-services-list">
 
-				<input type="hidden" id="<?php echo esc_attr( $field_name_services ); ?>" value="<?php echo esc_attr( $field_name_services ); ?>" class="wpex-social-widget-services-hidden-field" />
+				<input type="hidden" id="<?php echo esc_attr( $field_name_services ); ?>" value="<?php echo esc_attr( $field_name_services ); ?>" class="wpex-social-widget-services-hidden-field">
 
 				<?php
-				$display_services = isset ( $instance['social_services'] ) ? $instance['social_services']: '';
+				$display_services = $instance['social_services'] ?? '';
 
 				if ( ! empty( $display_services ) ) :
 
 					foreach( $display_services as $key => $service ) :
 
-						$url  = isset( $service['url'] ) ? $service['url'] : 0;
+						$url = $service['url'] ?? 0;
+						$name = $service['name'] ?? '';
 
-						$name = isset( $service['name'] )  ? $service['name'] : ''; ?>
+						?>
 
 						<li id="<?php echo esc_attr( $field_id_services ); ?>_0<?php echo esc_attr( $key ); ?>">
 							<p>
 								<label for="<?php echo esc_attr( $field_id_services ); ?>-<?php echo esc_attr( $key ); ?>-name"><?php echo strip_tags( $name ); ?>:</label>
 								<input type="hidden" id="<?php echo esc_attr( $field_id_services ); ?>-<?php echo esc_attr( $key ); ?>-name" name="<?php echo esc_attr( $field_name_services .'['.$key.'][name]' ); ?>" value="<?php echo esc_attr( $name ); ?>">
-								<input type="text" class="widefat" id="<?php echo esc_attr( $field_id_services ); ?>-<?php echo esc_attr( $key ); ?>-url" name="<?php echo esc_attr( $field_name_services .'['.$key.'][url]' ); ?>" value="<?php echo esc_attr( $url ); ?>" />
+								<input type="text" class="widefat" id="<?php echo esc_attr( $field_id_services ); ?>-<?php echo esc_attr( $key ); ?>-url" name="<?php echo esc_attr( $field_name_services .'['.$key.'][url]' ); ?>" value="<?php echo esc_attr( $url ); ?>">
 							</p>
 						</li>
 

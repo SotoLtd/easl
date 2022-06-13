@@ -1,4 +1,10 @@
 <?php
+namespace TotalThemeCore\Widgets;
+use TotalThemeCore\WidgetBuilder as Widget_Builder;
+use WP_Query;
+
+defined( 'ABSPATH' ) || exit;
+
 /**
  * Post With Format Icons widget.
  *
@@ -6,14 +12,6 @@
  * @subpackage Widgets
  * @version 1.2.8
  */
-
-namespace TotalThemeCore\Widgets;
-
-use TotalThemeCore\WidgetBuilder as Widget_Builder;
-use WP_Query;
-
-defined( 'ABSPATH' ) || exit;
-
 class Widget_Recent_Posts_Icons extends Widget_Builder {
 	private $args;
 

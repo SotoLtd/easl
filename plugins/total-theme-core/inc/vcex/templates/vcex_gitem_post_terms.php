@@ -4,7 +4,7 @@
  *
  * @package Total WordPress Theme
  * @subpackage Total Theme Core
- * @version 1.2
+ * @version 1.3.1
  */
 
 defined( 'ABSPATH' ) || exit;
@@ -12,11 +12,6 @@ defined( 'ABSPATH' ) || exit;
 // Taxonomy is required
 if ( ! $atts['taxonomy'] ) {
 	return;
-}
-
-// Load Google Fonts if needed
-if ( $atts['button_font_family'] ) {
-	vcex_enqueue_font( $atts['button_font_family'] );
 }
 
 // Get terms for live preview
@@ -53,7 +48,7 @@ $wrap_classes = 'vcex-post-terms wpex-clr';
 
 if ( $atts['visibility'] ) {
 
-	$wrap_classes .= ' ' . sanitize_html_class( $atts['visibility'] );
+	$wrap_classes .= ' ' . vcex_parse_visibility_class( $atts['visibility'] );
 }
 
 if ( $atts['classes'] ) {
@@ -82,6 +77,7 @@ $button_style = vcex_inline_style( array(
 	'padding'        => $atts['button_padding'],
 	'font_size'      => $atts['button_font_size'],
 	'font_weight'    => $atts['button_font_weight'],
+	'font_family'    => $atts['button_font_family'],
 	'border_radius'  => $atts['button_border_radius'],
 	'text_transform' => $atts['button_text_transform'],
 ) );

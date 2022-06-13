@@ -8,7 +8,7 @@ final class Shortcode_Cf_Value {
 	public function __construct() {
 
 		if ( ! shortcode_exists( 'cf_value' ) ) {
-			add_shortcode( 'cf_value', array( __CLASS__, 'output' ) );
+			add_shortcode( 'cf_value', __CLASS__ . '::output' );
 		}
 
 	}

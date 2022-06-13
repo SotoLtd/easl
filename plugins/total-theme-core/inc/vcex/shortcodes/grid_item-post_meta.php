@@ -132,7 +132,7 @@ if ( ! class_exists( 'VCEX_Grid_Item_Post_Meta' ) ) {
 			$shortcodes['vcex_gitem_post_meta'] = array(
 				'name'        => esc_html__( 'Post Meta', 'total-theme-core' ),
 				'base'        => 'vcex_gitem_post_meta',
-				'icon'        => 'vcex-gitem-post-meta vcex-icon fa fa-list-alt',
+				'icon'        => 'vcex_element-icon vcex_element-icon--divider-dots',
 				'category'    => vcex_shortcodes_branding(),
 				'description' => esc_html__( 'Author, date, comments...', 'total-theme-core' ),
 				'post_type'   => Vc_Grid_Item_Editor::postType(),

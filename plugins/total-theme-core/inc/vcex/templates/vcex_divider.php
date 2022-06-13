@@ -4,30 +4,28 @@
  *
  * @package Total WordPress Theme
  * @subpackage Total Theme Core
- * @version 1.2.8
+ * @version 1.3.2
  */
 
 defined( 'ABSPATH' ) || exit;
 
-$shortcode_tag = 'vcex_divider';
-
-if ( ! vcex_maybe_display_shortcode( $shortcode_tag, $atts ) ) {
+if ( ! vcex_maybe_display_shortcode( 'vcex_divider', $atts ) ) {
 	return;
 }
 
 // Get and extract shortcode attributes
-$atts = vcex_shortcode_atts( $shortcode_tag, $atts, $this );
+$atts = vcex_shortcode_atts( 'vcex_divider', $atts, $this );
 extract( $atts );
 
 // Define output var.
 $output = '';
 
 // Sanitize data.
-$style            = $atts['style'] ? $atts['style'] : 'solid';
-$icon             = vcex_get_icon_class( $atts, 'icon' );
-$icon_spacing     = $atts['icon_spacing'] ? absint( $atts['icon_spacing'] ) : 20;
-$height           = $atts['height'] ? vcex_validate_px( $atts['height'], 'px' ) : '';
-$icon_padding     = ( $atts['icon_height'] || $atts['icon_width'] ) ? '' : $atts['icon_padding'];
+$style        = $atts['style'] ?: 'solid';
+$icon         = vcex_get_icon_class( $atts, 'icon' );
+$icon_spacing = $atts['icon_spacing'] ? absint( $atts['icon_spacing'] ) : 20;
+$height       = $atts['height'] ? vcex_validate_px( $atts['height'], 'px' ) : '';
+$icon_padding = ( $atts['icon_height'] || $atts['icon_width'] ) ? '' : $atts['icon_padding'];
 
 /*-------------------------------------------------*/
 /* [ Style Based Utility Classes ]
@@ -78,8 +76,8 @@ if ( $margin_y ) {
 	$wrap_classes[] = 'wpex-my-' . sanitize_html_class( absint( $margin_y ) );
 }
 
-if ( $css_animation && 'none' != $css_animation ) {
-	$wrap_classes[] = vcex_get_css_animation( $css_animation );
+if ( $css_animation_class = vcex_get_css_animation( $css_animation ) ) {
+	$wrap_classes[] = $css_animation_class;
 }
 
 if ( $align ) {
@@ -87,8 +85,8 @@ if ( $align ) {
 	$wrap_classes[] = 'wpex-float-' . sanitize_html_class( vcex_parse_direction( $align ) );
 }
 
-if ( $visibility ) {
-	$wrap_classes[] = sanitize_html_class( $visibility );
+if ( $visibility_class = vcex_parse_visibility_class( $visibility ) ) {
+	$wrap_classes[] = $visibility_class;
 }
 
 // Add core utility classes.
@@ -138,7 +136,7 @@ if ( $el_class ) {
 }
 
 // Turn wrap classes into a string.
-$wrap_classes = vcex_parse_shortcode_classes( implode( ' ', $wrap_classes ), $shortcode_tag, $atts );
+$wrap_classes = vcex_parse_shortcode_classes( implode( ' ', $wrap_classes ), 'vcex_divider', $atts );
 
 /*-------------------------------------------------*/
 /* [ Icon Checks ]
@@ -152,7 +150,7 @@ if ( $icon ) {
 	$icon_style = vcex_inline_style( array(
 		'font_size'     => $icon_size,
 		'border_radius' => $icon_border_radius,
-		'color'         => $icon_color ? $icon_color : $color,
+		'color'         => $icon_color ?: $color,
 		'background'    => $icon_bg,
 		'padding'       => $icon_padding,
 		'height'        => $icon_height,
@@ -228,8 +226,8 @@ if ( $icon ) {
 $wrap_style = array(
 	'width'              => $width,
 	'margin'             => $margin,
-	'animation_delay'    => ( $css_animation && 'none' !== $css_animation ) ? $animation_delay : '',
-	'animation_duration' => ( $css_animation && 'none' !== $css_animation ) ? $animation_duration : '',
+	'animation_delay'    => $animation_delay,
+	'animation_duration' => $animation_duration,
 );
 
 switch ( $style ) {

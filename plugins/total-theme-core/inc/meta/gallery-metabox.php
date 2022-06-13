@@ -1,17 +1,16 @@
 <?php
+namespace TotalThemeCore\Meta;
+
+defined( 'ABSPATH' ) || exit;
+
 /**
  * Creates a gallery metabox for WordPress.
  *
  * Credits: http://wordpress.org/plugins/easy-image-gallery/
  *
  * @package TotalThemeCore
- * @version 1.2.8
+ * @version 1.3.1
  */
-
-namespace TotalThemeCore\Meta;
-
-defined( 'ABSPATH' ) || exit;
-
 final class Gallery_Metabox {
 
 	/**
@@ -20,33 +19,16 @@ final class Gallery_Metabox {
 	private $post_types;
 
 	/**
-	 * Our single Gallery_Metabox instance.
+	 * Our single Term_Settings instance.
 	 */
 	private static $instance;
-
-	/**
-	 * Disable instantiation.
-	 */
-	private function __construct() {}
-
-	/**
-	 * Disable the cloning of this class.
-	 *
-	 * @return void
-	 */
-	final public function __clone() {}
-
-	/**
-	 * Disable the wakeup of this class.
-	 */
-	final public function __wakeup() {}
 
 	/**
 	 * Create or retrieve the instance of Gallery_Metabox.
 	 */
 	public static function instance() {
 		if ( is_null( static::$instance ) ) {
-			static::$instance = new Gallery_Metabox;
+			static::$instance = new self();
 			static::$instance->init_hooks();
 		}
 
@@ -125,7 +107,7 @@ final class Gallery_Metabox {
 					}
 				} ?>
 			</ul>
-			<input type="hidden" id="wpex_image_gallery_field" name="wpex_image_gallery" value="<?php echo esc_attr( $image_gallery ); ?>" />
+			<input type="hidden" id="wpex_image_gallery_field" name="wpex_image_gallery" value="<?php echo esc_attr( $image_gallery ); ?>">
 			<?php wp_nonce_field( 'wpex_gallery_metabox_nonce', 'wpex_gallery_metabox_nonce' ); ?>
 		</div>
 
@@ -135,7 +117,7 @@ final class Gallery_Metabox {
 
 		<p>
 			<label for="easy_image_gallery_link_images">
-				<input type="checkbox" id="easy_image_gallery_link_images" value="on" name="easy_image_gallery_link_images"<?php echo checked( get_post_meta( get_the_ID(), '_easy_image_gallery_link_images', true ), 'on', false ); ?> /> <?php esc_html_e( 'Single post lightbox?', 'total-theme-core' )?>
+				<input type="checkbox" id="easy_image_gallery_link_images" value="on" name="easy_image_gallery_link_images"<?php echo checked( get_post_meta( get_the_ID(), '_easy_image_gallery_link_images', true ), 'on', false ); ?>> <?php esc_html_e( 'Single post lightbox?', 'total-theme-core' )?>
 			</label>
 		</p>
 

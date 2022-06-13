@@ -9,9 +9,9 @@
 				var id = $( this ).attr( 'id' ),
 					$el = $( '#' + id );
 				$el.sortable( {
-					placeholder : "placeholder",
-					opacity     : 0.6,
-					update      : function( event, ui ) {
+					placeholder: "placeholder",
+					opacity: 0.6,
+					update: function( event, ui ) {
 						if ( wp.customize !== undefined ) {
 							$el.find( 'input.ui-sortable-handle' ).trigger( 'change' );
 						} else {
@@ -61,15 +61,15 @@
 				var id = $( this ).attr( 'id' ),
 					$el = $( '#' + id );
 				$el.sortable( {
-					revert      : false,
-					delay       : 100,
-					cursor      : 'move',
-					placeholder : 'wpex-rpf-placeholder',
-					opacity     : 0.8,
+					revert : false,
+					delay : 100,
+					cursor : 'move',
+					placeholder: 'wpex-rpf-placeholder',
+					opacity: 0.8,
 					start: function( e, ui ) {
 						ui.placeholder.height( ui.item.height() );
 					},
-					update      : function( event, ui ) {
+					update: function( event, ui ) {
 						$el.find( 'input' ).eq(0).trigger( 'change' );
 					}
 				} );
@@ -90,6 +90,8 @@
 
 
 			$( document ).on( 'click', '.wpex-widget-settings-form .wpex-upload-button', function() {
+
+				window.wpActiveEditor = null; // fixes console error.
 
 				var send_attachment_bkp	= wp.media.editor.send.attachment,
 					button = $( this ),
@@ -117,11 +119,8 @@
 		} uploadMediaField();
 
 		// Customizer support.
-		if ( wp.customize !== undefined ) {
-			$( document ).on( 'widget-updated', uploadMediaField );
-			$( document ).on( 'widget-added', uploadMediaField );
-		}
-
+		$( document ).on( 'widget-updated', uploadMediaField );
+		$( document ).on( 'widget-added', uploadMediaField );
 
 	} );
 

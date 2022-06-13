@@ -8,7 +8,7 @@ final class Shortcode_Span {
 	public function __construct() {
 
 		if ( ! shortcode_exists( 'span' ) ) {
-			add_shortcode( 'span', array( __CLASS__, 'output' ) );
+			add_shortcode( 'span', __CLASS__ . '::output' );
 		}
 
 	}

@@ -1,14 +1,14 @@
 <?php
+namespace TotalThemeCore\WPBakery\Params;
+
+defined( 'ABSPATH' ) || exit;
+
 /**
  * WPBakery Param => Sorter.
  *
  * @package TotalThemeCore
  * @version 1.2.8
  */
-namespace TotalThemeCore\WPBakery\Params;
-
-defined( 'ABSPATH' ) || exit;
-
 final class Sorter {
 
 	public static function output( $settings, $value ) {

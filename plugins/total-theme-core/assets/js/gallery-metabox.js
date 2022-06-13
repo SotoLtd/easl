@@ -6,7 +6,7 @@
 
 		// Uploading files.
 		var image_gallery_frame;
-		var $image_gallery_ids   = $( '#wpex_image_gallery_field' );
+		var $image_gallery_ids = $( '#wpex_image_gallery_field' );
 		var $wpex_gallery_images = $( '#wpex_gallery_images_container ul.wpex_gallery_images' );
 
 		jQuery( '.add_wpex_gallery_images' ).on( 'click', 'a', function( event ) {

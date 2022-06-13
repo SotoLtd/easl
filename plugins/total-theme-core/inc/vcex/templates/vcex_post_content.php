@@ -4,14 +4,12 @@
  *
  * @package Total WordPress Theme
  * @subpackage Total Theme Core
- * @version 1.2.10
+ * @version 1.3.2
  */
 
 defined( 'ABSPATH' ) || exit;
 
-$shortcode_tag = 'vcex_post_content';
-
-if ( ! vcex_maybe_display_shortcode( $shortcode_tag, $atts ) ) {
+if ( ! vcex_maybe_display_shortcode( 'vcex_post_content', $atts ) ) {
 	return;
 }
 
@@ -20,7 +18,7 @@ $post_id = vcex_get_the_ID();
 
 // Prevent the module to display in itself when creating templates which would cause an endless loop.
 if ( vcex_vc_is_inline() && 'templatera' === get_post_type() && $post_id === get_queried_object_id() ) {
-	echo '<div class="wpex-alert wpex-text-center">' . __( 'Post Content Placeholder', 'total-theme-code' ) . '</div>';
+	echo '<div class="wpex-alert wpex-text-center">' . esc_html__( 'Post Content Placeholder', 'total-theme-core' ) . '</div>';
 	return;
 }
 
@@ -28,7 +26,7 @@ if ( vcex_vc_is_inline() && 'templatera' === get_post_type() && $post_id === get
 $post_content = get_the_content( '', '', $post_id );
 
 // Return if the current post has this shortcode inside it to prevent infinite loop.
-if ( strpos( $post_content, $shortcode_tag ) !== false ) {
+if ( false !== strpos( $post_content, 'vcex_post_content' ) ) {
 	return;
 }
 
@@ -59,7 +57,7 @@ if ( empty( $atts['blocks'] ) ) {
 }
 
 // Get shortcode attributes based on vc_lean_map => This makes sure no attributes are empty.
-$atts = vcex_shortcode_atts( $shortcode_tag, $atts, $this );
+$atts = vcex_shortcode_atts( 'vcex_post_content', $atts, $this );
 
 // Sanitize then turn blocks into array.
 $blocks = ! empty( $blocks ) ? $blocks : $atts['blocks'];
@@ -97,8 +95,17 @@ if ( ! empty( $atts['css'] ) ) {
 }
 
 // Get responsive data.
-if ( $responsive_data = vcex_get_module_responsive_data( $atts ) ) {
-	$wrap_attrs['data-wpex-rcss'] = $responsive_data;
+$unique_classname = vcex_element_unique_classname();
+
+$el_responsive_styles = array(
+	'font_size' => $atts['font_size'],
+);
+
+$responsive_css = vcex_element_responsive_css( $el_responsive_styles, $unique_classname );
+
+if ( $responsive_css ) {
+	$wrap_attrs['class'][] = $unique_classname;
+	echo '<style>' . $responsive_css . '</style>';
 }
 
 // Inline style.
@@ -173,10 +180,6 @@ if ( defined( 'TOTAL_THEME_ACTIVE' ) ) {
 						'line_height'    => $atts['line_height'],
 						'letter_spacing' => $atts['letter_spacing']
 					);
-
-					if ( ! empty( $atts['font_family'] ) ) {
-						vcex_enqueue_font( $atts['font_family'] );
-					}
 
 				?>
 

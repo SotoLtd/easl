@@ -4,23 +4,21 @@
  *
  * @package Total WordPress Theme
  * @subpackage Total Theme Core
- * @version 1.2.8
+ * @version 1.3.2
  */
 
 defined( 'ABSPATH' ) || exit;
 
-$shortcode_tag = 'vcex_image_swap';
-
-if ( ! vcex_maybe_display_shortcode( $shortcode_tag, $atts ) ) {
+if ( ! vcex_maybe_display_shortcode( 'vcex_image_swap', $atts ) ) {
 	return;
 }
 
 // Fallbacks (old atts).
-$link_title  = isset( $atts['link_title'] ) ? $atts['link_title'] : '';
-$link_target = isset( $atts['link_target'] ) ? $atts['link_target'] : '';
+$link_title  = $atts['link_title'] ?? '';
+$link_target = $atts['link_target'] ?? '';
 
 // Get and extract shortcode attributes
-$atts = vcex_shortcode_atts( $shortcode_tag, $atts, $this );
+$atts = vcex_shortcode_atts( 'vcex_image_swap', $atts, $this );
 extract( $atts );
 
 // Declare vars.
@@ -89,11 +87,11 @@ if ( $classes ) {
 	$shortcode_class[] = vcex_get_extra_class( $classes );
 }
 
-if ( $css_animation && 'none' != $css_animation && empty( $css ) ) {
-	$shortcode_class[] = vcex_get_css_animation( $css_animation );
+if ( empty( $css ) && $css_animation_class = vcex_get_css_animation( $css_animation ) ) {
+	$shortcode_class[] = $css_animation_class;
 }
 
-$shortcode_class = vcex_parse_shortcode_classes( implode( ' ', $shortcode_class ), $shortcode_tag, $atts );
+$shortcode_class = vcex_parse_shortcode_classes( implode( ' ', $shortcode_class ), 'vcex_image_swap', $atts );
 
 if ( $css ) {
 
@@ -105,8 +103,8 @@ if ( $css ) {
 		$css_wrap_class .= ' wpex-mb-' . absint( $bottom_margin );
 	}
 
-	if ( $css_animation && 'none' != $css_animation ) {
-		$css_wrap_class .= ' ' . trim( vcex_get_css_animation( $css_animation ) );
+	if ( $css_animation_class = vcex_get_css_animation( $css_animation ) ) {
+		$css_wrap_class .= ' ' . $css_animation_class;
 	}
 
 	$output .='<div class="' . esc_attr( $css_wrap_class )  . '"' . $wrapper_inline_style . '>';
@@ -134,8 +132,8 @@ $output .='<figure class="' . esc_attr( $shortcode_class ) . '"' . $wrapper_inli
 		// Link attributes.
 		$link_attrs['href']   = isset( $link_data['url'] ) ? esc_url( $link_data['url'] ) : $link;
 		$link_attrs['title']  = isset( $link_data['title'] ) ? esc_attr( $link_data['title'] ) : '';
-		$link_attrs['rel']    = isset( $link_data['rel'] ) ? $link_data['rel'] : '';
-		$link_attrs['target'] = isset( $link_data['target'] ) ? $link_data['target'] : '';
+		$link_attrs['rel']    = $link_data['rel'] ?? '';
+		$link_attrs['target'] = $link_data['target'] ?? '';
 
 		$output .='<a' . vcex_parse_html_attributes( $link_attrs ) . '>';
 

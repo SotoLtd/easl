@@ -214,6 +214,9 @@ if ( ! class_exists( 'VCEX_Image_Before_After_Shortcode' ) ) {
 		 */
 		public static function enqueue_scripts() {
 
+			wp_enqueue_script( 'jquery' );
+			wp_enqueue_script( 'imagesloaded' );
+
 			wp_enqueue_script(
 				'jquery-move',
 				vcex_asset_url( 'js/lib/jquery.event.move.min.js' ),

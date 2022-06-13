@@ -1,14 +1,14 @@
 <?php
-/**
- * WPBakery Param => Font Weight.
- *
- * @package TotalThemeCore
- * @version 1.2.8
- */
 namespace TotalThemeCore\WPBakery\Params;
 
 defined( 'ABSPATH' ) || exit;
 
+/**
+ * WPBakery Param => Font Weight.
+ *
+ * @package TotalThemeCore
+ * @version 1.3.1
+ */
 final class Font_Weight {
 
 	public static function output( $settings, $value ) {
@@ -35,7 +35,7 @@ final class Font_Weight {
 
 			$output = '<input type="text" class="wpb_vc_param_value '
 					. esc_attr( $settings['param_name'] ) . ' '
-					. esc_attr( $settings['type'] ) . '" name="' . esc_attr( $settings['param_name'] ) . '" value="' . esc_attr( $value ) . '"/>';
+					. esc_attr( $settings['type'] ) . '" name="' . esc_attr( $settings['param_name'] ) . '" value="' . esc_attr( $value ) . '">';
 		}
 
 		return $output;

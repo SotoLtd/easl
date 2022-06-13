@@ -3,7 +3,7 @@
  * Post Series Shortcode.
  *
  * @package TotalThemeCore
- * @version 1.2.8
+ * @version 1.3.1
  */
 
 defined( 'ABSPATH' ) || exit;
@@ -39,7 +39,26 @@ if ( ! class_exists( 'VCEX_Post_Series_Shortcode' ) ) {
 		 * Array of shortcode parameters.
 		 */
 		public static function get_params() {
-			return array();
+			$params = array(
+				array(
+					'type' => 'vcex_notice',
+					'param_name' => 'main_notice',
+					'text' => esc_html__( 'Go to Appearance > Customize > General Theme Options > Post Series to customize this global element.', 'total-theme-core' ),
+				),
+				array(
+					'type' => 'textfield',
+					'heading' => esc_html__( 'Max Width', 'total-theme-core' ),
+					'param_name' => 'max_width',
+					'description' => vcex_shortcode_param_description( 'width' ),
+				),
+				array(
+					'type' => 'vcex_text_alignments',
+					'heading' => esc_html__( 'Aligment', 'total-theme-core' ),
+					'param_name' => 'align',
+					'dependency' => array( 'element' => 'max_width', 'not_empty' => true ),
+				),
+			);
+			return apply_filters( 'vcex_shortcode_params', $params, 'vcex_post_series' );
 		}
 
 	}

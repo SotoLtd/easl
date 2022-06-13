@@ -6,33 +6,19 @@ defined( 'ABSPATH' ) || exit;
 final class Plugin {
 
 	/**
-	 * Our single Plugin instance.
+	 * Instance.
+	 *
+	 * @access private
+	 * @var object Class object.
 	 */
 	private static $instance;
-
-	/**
-	 * Disable instantiation.
-	 */
-	private function __construct() {}
-
-	/**
-	 * Disable the cloning of this class.
-	 *
-	 * @return void
-	 */
-	final public function __clone() {}
-
-	/**
-	 * Disable the wakeup of this class.
-	 */
-	final public function __wakeup() {}
 
 	/**
 	 * Create or retrieve the instance of Plugin.
 	 */
 	public static function instance() {
 		if ( is_null( static::$instance ) ) {
-			static::$instance = new Plugin;
+			static::$instance = new self();
 			static::$instance->register_autoloader();
 			static::$instance->global_components();
 			static::$instance->init_hooks();
@@ -111,7 +97,7 @@ final class Plugin {
 
 		// Widget Areas.
 		if ( get_theme_mod( 'widget_areas_enable', true ) ) {
-			new Widget_Areas();
+			require_once TTC_PLUGIN_DIR_PATH . 'inc/lib/wpex-widget-areas/class-wpex-widget-areas.php';
 		}
 
 		// Vcex Shortcodes.
@@ -155,9 +141,14 @@ final class Plugin {
 
 		}
 
+		// Term Colors.
+		if ( get_theme_mod( 'term_colors_enable', true ) ) {
+			Term_Colors::instance();
+		}
+
 		// Term Thumbnails.
 		if ( get_theme_mod( 'term_thumbnails_enable', true ) ) {
-			Meta\Term_Thumbnails::instance();
+			Term_Thumbnails::instance();
 		}
 
 		// Category settings.

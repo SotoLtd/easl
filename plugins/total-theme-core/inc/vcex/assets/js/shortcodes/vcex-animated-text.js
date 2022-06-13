@@ -1,36 +1,74 @@
-( function( $ ) {
-
-	'use strict';
+( function() {
 
 	if ( 'function' !== typeof window.vcexAnimatedText ) {
-		window.vcexAnimatedText = function( $context ) {
+		window.vcexAnimatedText = function( context ) {
 
-			if ( 'undefined' === typeof Typed || 'undefined' === typeof $.fn.appear ) {
+			if ( 'function' !== typeof Typed ) {
 				return;
 			}
 
-			$( '.vcex-typed-text', $context ).each( function() {
-				var $this = $( this );
-				var strings = $this.data( 'strings' );
-				var settings = $this.data( 'settings' );
+			if ( ! context || ! context.childNodes ) {
+				context = document;
+			}
 
-				settings.typeSpeed  = parseInt( settings.typeSpeed );
-				settings.backDelay  = parseInt( settings.backDelay );
-				settings.backSpeed  = parseInt( settings.backSpeed );
-				settings.startDelay = parseInt( settings.startDelay );
-				settings.strings    = strings;
+			var inView = function( element ) {
+				var elementRect = element.getBoundingClientRect();
+				if ( (elementRect.top >= 0) && (elementRect.bottom <= window.innerHeight) ) {
+					return true; // returns true when element is fully visible.
+				}
+			};
 
-				$this.appear( function() {
-					var typed = new Typed( this, settings );
-				} );
+			var texts = context.querySelectorAll( '.vcex-typed-text:not([data-vcex-typed-text-init="true"])' );
+
+			if ( ! texts.length ) {
+				window.removeEventListener( 'scroll', vcexAnimatedText );
+				window.removeEventListener( 'resize', vcexAnimatedText );
+			}
+
+			texts.forEach( function( element ) {
+				var strings = element.dataset.strings, settings, typed;
+				if ( ! element.dataset.strings ) {
+					return;
+				}
+
+				strings = JSON.parse( strings );
+				settings = JSON.parse( element.dataset.settings );
+
+				if ( settings.typeSpeed ) {
+					settings.typeSpeed  = parseInt( settings.typeSpeed );
+				}
+
+				if ( settings.backDelay ) {
+					settings.backDelay  = parseInt( settings.backDelay );
+				}
+
+				if ( settings.backSpeed ) {
+					settings.backSpeed  = parseInt( settings.backSpeed );
+				}
+
+				if ( settings.startDelay ) {
+					settings.startDelay = parseInt( settings.startDelay );
+				}
+
+				settings.strings = strings;
+
+				if ( inView( element ) ) {
+					typed = new Typed( element, settings );
+					element.setAttribute( 'data-vcex-typed-text-init', 'true' );
+				}
 
 			} );
-		};
 
+		};
 	}
 
-	$( document ).ready( function() {
-		window.vcexAnimatedText();
-	} );
+	if ( document.readyState === 'interactive' || document.readyState === 'complete' ) {
+		setTimeout( vcexAnimatedText, 0 );
+	} else {
+		document.addEventListener( 'DOMContentLoaded', vcexAnimatedText, false );
+	}
 
-} ) ( jQuery );
+	window.addEventListener( 'scroll', vcexAnimatedText, { passive: true } );
+	window.addEventListener( 'resize', vcexAnimatedText );
+
+})();

@@ -4,19 +4,17 @@
  *
  * @package Total WordPress Theme
  * @subpackage Total Theme Core
- * @version 1.2.8
+ * @version 1.3.2
  */
 
 defined( 'ABSPATH' ) || exit;
 
-$shortcode_tag = 'vcex_image_carousel';
-
-if ( ! vcex_maybe_display_shortcode( $shortcode_tag, $atts ) ) {
+if ( ! vcex_maybe_display_shortcode( 'vcex_image_carousel', $atts ) ) {
 	return;
 }
 
 // Get and extract shortcode attributes.
-$atts = vcex_shortcode_atts( $shortcode_tag, $atts, $this );
+$atts = vcex_shortcode_atts( 'vcex_image_carousel', $atts, $this );
 extract( $atts );
 
 // Output var.
@@ -165,7 +163,9 @@ if ( $vcex_query->have_posts() ) :
 	// Arrow classes
 	if ( 'true' == $arrows ) {
 
-		$arrows_style = $arrows_style ? $arrows_style : 'default';
+		if ( ! $arrows_style ) {
+			$arrows_style = 'default';
+		}
 
 		$wrap_classes[] = 'arrwstyle-' . sanitize_html_class( $arrows_style );
 
@@ -176,8 +176,8 @@ if ( $vcex_query->have_posts() ) :
 	}
 
 	// CSS animation class
-	if ( $css_animation && 'none' != $css_animation ) {
-		$wrap_classes[] = vcex_get_css_animation( $css_animation );
+	if ( $css_animation_class = vcex_get_css_animation( $css_animation ) ) {
+		$wrap_classes[] = $css_animation_class;
 	}
 
 	// Custom classes
@@ -263,7 +263,7 @@ if ( $vcex_query->have_posts() ) :
 	}
 
 	// Apply filters
-	$wrap_classes = vcex_parse_shortcode_classes( implode( ' ', $wrap_classes ), $shortcode_tag, $atts );
+	$wrap_classes = vcex_parse_shortcode_classes( implode( ' ', $wrap_classes ), 'vcex_image_carousel', $atts );
 
 	// Display header if enabled
 	if ( $header ) {
@@ -293,7 +293,7 @@ if ( $vcex_query->have_posts() ) :
 	/*--------------------------------*/
 	/* [ Begin Carousel Output ]
 	/*--------------------------------*/
-	$output .= '<div class="' . esc_attr( $wrap_classes ) . '" data-wpex-carousel="' . vcex_get_carousel_settings( $atts, $shortcode_tag ) . '"' . vcex_get_unique_id( $unique_id ) . $wrap_style . '>';
+	$output .= '<div class="' . esc_attr( $wrap_classes ) . '" data-wpex-carousel="' . vcex_get_carousel_settings( $atts, 'vcex_image_carousel' ) . '"' . vcex_get_unique_id( $unique_id ) . $wrap_style . '>';
 
 		// Start counter used for lightbox.
 		$count=0;
@@ -342,7 +342,7 @@ if ( $vcex_query->have_posts() ) :
 			}
 
 			// Check for custom meta links.
-			if ( 'custom_link' == $thumbnail_link ) {
+			if ( 'custom_link' === $thumbnail_link ) {
 				if ( $link_meta_key ) {
 					$meta_custom_link = get_post_meta( $atts['post_id'], trim( $link_meta_key ), true );
 					if ( ! empty( $meta_custom_link ) ) {
@@ -382,7 +382,7 @@ if ( $vcex_query->have_posts() ) :
 					'width'         => $img_width,
 					'height'        => $img_height,
 					'alt'           => $atts['post_alt'],
-					'class'         => implode( ' ', vcex_get_entry_thumbnail_class( null, $shortcode_tag, $atts ) ),
+					'class'         => implode( ' ', vcex_get_entry_thumbnail_class( null, 'vcex_image_carousel', $atts ) ),
 					'attributes'    => array( 'data-no-lazy' => 1 ),
 					'apply_filters' => 'vcex_image_carousel_thumbnail_args',
 					'filter_arg1'   => $atts,
@@ -397,7 +397,7 @@ if ( $vcex_query->have_posts() ) :
 			/*--------------------------------*/
 			$output .= '<div class="' . esc_attr( implode( ' ', $loop_entry_classes ) ) . '">';
 
-				$output .= '<figure class="' . esc_attr( implode( ' ', vcex_get_entry_media_class( array( 'wpex-carousel-entry-media' ), $shortcode_tag, $atts ) ) ) . '">';
+				$output .= '<figure class="' . esc_attr( implode( ' ', vcex_get_entry_media_class( array( 'wpex-carousel-entry-media' ), 'vcex_image_carousel', $atts ) ) ) . '">';
 
 					/*--------------------------------*/
 					/* [ Entry Media ]
@@ -414,12 +414,12 @@ if ( $vcex_query->have_posts() ) :
 					else {
 
 						// Add custom links to attributes for use with the overlay styles.
-						if ( 'custom_link' == $thumbnail_link && $atts['post_url'] ) {
+						if ( 'custom_link' === $thumbnail_link && $atts['post_url'] ) {
 							$atts['overlay_link'] = esc_url( $atts['post_url'] );
 						}
 
 						// Lightbox.
-						if ( 'lightbox' == $thumbnail_link ) {
+						if ( 'lightbox' === $thumbnail_link ) {
 
 							$atts['lightbox_data']  = array(); // must reset for each item
 							$lightbox_image_escaped = vcex_get_lightbox_image( $atts['post_id'] );
@@ -483,31 +483,67 @@ if ( $vcex_query->have_posts() ) :
 								$output .= $image_output;
 
 								// Inner link overlay HTML.
-								$output .= vcex_get_entry_image_overlay( 'inside_link', $shortcode_tag, $atts );
+								$output .= vcex_get_entry_image_overlay( 'inside_link', 'vcex_image_carousel', $atts );
 
 							$output .= '</a>';
 
 
 						}
 
+						// Parent page link.
+						elseif ( 'parent_page' === $thumbnail_link ) {
+
+							$post_parent = get_post_parent( $atts['post_id'] );
+
+							// Open link.
+							if ( $post_parent ) {
+								$link_attrs = array(
+									'href'   => esc_url( get_permalink( $post_parent ) ),
+									'class'  => 'wpex-carousel-entry-img',
+									'target' => $custom_links_target,
+								);
+
+								$output .= '<a' . vcex_parse_html_attributes( $link_attrs ) . '>';
+
+							}
+
+								// Display image.
+								$output .= $image_output;
+
+								// Inner link overlay HTML.
+								$output .= vcex_get_entry_image_overlay( 'inside_link', 'vcex_image_carousel', $atts );
+
+							// Close link.
+							if ( $post_parent ) {
+								$output .= '</a>';
+							}
+
+						}
+
 						// Attachment page.
-						elseif ( 'attachment_page' == $thumbnail_link || 'full_image' == $thumbnail_link ) {
+						elseif ( 'attachment_page' === $thumbnail_link || 'full_image' === $thumbnail_link ) {
 
 							// Get URL.
-							if ( 'attachment_page' == $thumbnail_link ) {
+							if ( 'attachment_page' === $thumbnail_link ) {
 								$url = get_permalink();
 							} else {
 								$url = wp_get_attachment_url( $atts['post_id'] );
 							}
 
 							// Open link tag.
-							$output .= '<a href="' . esc_url( $url ) . '" class="wpex-carousel-entry-img"' . vcex_html( 'target_attr', $custom_links_target ) . '>';
+							$link_attrs = array(
+								'href'   => $url,
+								'class'  => 'wpex-carousel-entry-img',
+								'target' => $custom_links_target,
+							);
+
+							$output .= '<a' . vcex_parse_html_attributes( $link_attrs ) . '>';
 
 								// Display Image.
 								$output .= $image_output;
 
 								// Inner link overlay HTML.
-								$output .= vcex_get_entry_image_overlay( 'inside_link', $shortcode_tag, $atts );
+								$output .= vcex_get_entry_image_overlay( 'inside_link', 'vcex_image_carousel', $atts );
 
 							$output .= '</a>';
 
@@ -516,13 +552,19 @@ if ( $vcex_query->have_posts() ) :
 						// Custom Link.
 						elseif ( 'custom_link' == $thumbnail_link && $atts['post_url'] ) {
 
-							$output .= '<a href="' . esc_url( $atts['post_url'] ) . '" class="wpex-carousel-entry-img"' . vcex_html( 'target_attr', $custom_links_target ) . '>';
+							$link_attrs = array(
+								'href'   => $atts['post_url'],
+								'class'  => 'wpex-carousel-entry-img',
+								'target' => $custom_links_target,
+							);
+
+							$output .= '<a' . vcex_parse_html_attributes( $link_attrs ) . '>';
 
 								// Display Image.
 								$output .= $image_output;
 
 								// Inner link overlay HTML.
-								$output .= vcex_get_entry_image_overlay( 'inside_link', $shortcode_tag, $atts );
+								$output .= vcex_get_entry_image_overlay( 'inside_link', 'vcex_image_carousel', $atts );
 
 							$output .= '</a>';
 
@@ -535,12 +577,12 @@ if ( $vcex_query->have_posts() ) :
 							$output .= $image_output;
 
 							// Inner link overlay HTML.
-							$output .= vcex_get_entry_image_overlay( 'inside_link', $shortcode_tag, $atts );
+							$output .= vcex_get_entry_image_overlay( 'inside_link', 'vcex_image_carousel', $atts );
 
 						}
 
 						// Outer link overlay HTML.
-						$output .= vcex_get_entry_image_overlay( 'outside_link', $shortcode_tag, $atts );
+						$output .= vcex_get_entry_image_overlay( 'outside_link', 'vcex_image_carousel', $atts );
 
 					} // end video/image check.
 
@@ -551,14 +593,14 @@ if ( $vcex_query->have_posts() ) :
 				/*--------------------------------*/
 				if ( ( 'yes' === $title && $attachment_title ) || (  'yes' === $caption && $atts['post_caption'] ) ) :
 
-					$output .= '<div class="' . esc_attr( implode( ' ', vcex_get_entry_details_class( array( 'wpex-carousel-entry-details' ), $shortcode_tag, $atts ) ) ) . '"' . $content_style . '>';
+					$output .= '<div class="' . esc_attr( implode( ' ', vcex_get_entry_details_class( array( 'wpex-carousel-entry-details' ), 'vcex_image_carousel', $atts ) ) ) . '"' . $content_style . '>';
 
 						/*--------------------------------*/
 						/* [ Title ]
 						/*--------------------------------*/
 						if ( 'yes' === $title && $attachment_title ) {
 
-							$output .= '<div class="' . esc_attr( implode( ' ', vcex_get_entry_title_class( array( 'wpex-carousel-entry-title' ), $shortcode_tag, $atts ) ) ) . '"' . $heading_style . '>';
+							$output .= '<div class="' . esc_attr( implode( ' ', vcex_get_entry_title_class( array( 'wpex-carousel-entry-title' ), 'vcex_image_carousel', $atts ) ) ) . '"' . $heading_style . '>';
 
 								$output .= wp_kses_post( $attachment_title );
 
@@ -571,7 +613,7 @@ if ( $vcex_query->have_posts() ) :
 						/*--------------------------------*/
 						if ( 'yes' === $caption && $atts['post_caption'] ) {
 
-							$output .= '<div class="' . esc_attr( implode( ' ', vcex_get_entry_excerpt_class( array( 'wpex-carousel-entry-excerpt' ), $shortcode_tag, $atts ) ) ) . '">';
+							$output .= '<div class="' . esc_attr( implode( ' ', vcex_get_entry_excerpt_class( array( 'wpex-carousel-entry-excerpt' ), 'vcex_image_carousel', $atts ) ) ) . '">';
 
 								$output .= do_shortcode( wp_kses_post( $atts['post_caption'] ) );
 

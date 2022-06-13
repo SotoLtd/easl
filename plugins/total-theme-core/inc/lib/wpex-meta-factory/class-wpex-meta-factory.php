@@ -2,8 +2,8 @@
 /**
  * Meta Factory.
  *
- * @version 1.3
- * @copyright WPExplorer.com 2020 - All Rights Reserved
+ * @version 1.3.2
+ * @copyright WPExplorer.com 2022 - All Rights Reserved
  */
 
 defined( 'ABSPATH' ) || exit;
@@ -63,19 +63,22 @@ if ( ! class_exists( 'WPEX_Meta_Factory', false ) ) {
 		 */
 		public function __construct( $metabox ) {
 
-			// Parse metabox args
+			// Parse metabox args.
 			$this->metabox = wp_parse_args( $metabox, $this->defaults );
 
-			// Fields are required
+			// Fields are required.
 			if ( empty( $this->metabox[ 'fields' ] ) ) {
 				return;
 			}
 
-			// Add metaboxes
+			// Add metaboxes.
 			add_action( 'add_meta_boxes', array( $this, 'add_meta_box' ) );
 
-			// Save meta
+			// Save meta.
 			add_action( 'save_post', array( $this, 'save_meta_data' ) );
+
+			// AJAX functions.
+			add_action( 'wp_ajax_' . $this->prefix . 'field_preview_ajax', array( $this, 'field_preview_ajax' ) );
 
 		}
 
@@ -132,11 +135,8 @@ if ( ! class_exists( 'WPEX_Meta_Factory', false ) ) {
 		 * @return void
 		 */
 		public function load_scripts() {
-
 			$this->enqueue_metabox_scripts();
-
 			$this->enqueue_metabox_styles();
-
 		}
 
 		/**
@@ -156,10 +156,10 @@ if ( ! class_exists( 'WPEX_Meta_Factory', false ) ) {
 				'wpex_meta_factory_nonce_' . $this->metabox[ 'id' ]
 			);
 
-			// Load metabox scripts
+			// Load metabox scripts.
 			$this->load_scripts();
 
-			// Get metabox fields
+			// Get metabox fields.
 			$fields = $this->metabox[ 'fields' ];
 
 			?>
@@ -169,10 +169,10 @@ if ( ! class_exists( 'WPEX_Meta_Factory', false ) ) {
 				<table class="form-table">
 
 					<?php
-					// Loop through sections and store meta output
+					// Loop through sections and store meta output.
 					foreach ( $fields as $key => $field ) {
 
-						// Defaults
+						// Defaults.
 						$defaults = array(
 							'name'    => '',
 							'id'      => '',
@@ -181,17 +181,17 @@ if ( ! class_exists( 'WPEX_Meta_Factory', false ) ) {
 							'default' => '',
 						);
 
-						// Parse and extract
+						// Parse and extract.
 						$field = wp_parse_args( $field, $defaults );
 
-						// Notice field
-						if ( isset( $field[ 'type' ] ) && 'notice' == $field[ 'type' ] ) { ?>
+						// Notice field.
+						if ( isset( $field[ 'type' ] ) && 'notice' === $field[ 'type' ] ) { ?>
 
 							<tr><?php echo wp_kses_post( $field[ 'content' ] ); ?></tr>
 
 						<?php }
 
-						// Render singular field
+						// Render singular field.
 						else {
 
 							$custom_field_keys = get_post_custom_keys();
@@ -199,7 +199,7 @@ if ( ! class_exists( 'WPEX_Meta_Factory', false ) ) {
 							if ( is_array( $custom_field_keys ) && in_array( $field[ 'id' ], $custom_field_keys ) ) {
 								$value = get_post_meta( $post->ID, $field[ 'id' ], true );
 							} else {
-								$value = isset( $field[ 'default' ] ) ? $field[ 'default' ] : '';
+								$value = $field[ 'default' ] ?? '';
 							}
 
 							$this->render_field( $field, $value );
@@ -330,7 +330,8 @@ if ( ! class_exists( 'WPEX_Meta_Factory', false ) ) {
 
 			<?php
 			// Get group button text
-			$group_button = isset( $field['group_button'] ) ? $field['group_button'] : esc_html__( 'Add New', 'total-theme-core' ); ;?>
+			$group_button = $field['group_button'] ?? esc_html__( 'Add New', 'total-theme-core' );
+			?>
 
 			<button type="button" class="wpex-mf-clone-group button-primary">&#65291; <?php esc_html_e( $group_button ); ?></button>
 
@@ -344,9 +345,8 @@ if ( ! class_exists( 'WPEX_Meta_Factory', false ) ) {
 		 * @since 1.0
 		 */
 		public function field_group_set( $field, $value, $index ) {
-
 			$index_escaped = absint( $index );
-			$group_title   = isset( $field['group_title'] ) ? $field['group_title'] : esc_html__( 'Entry', 'total-theme-core' );
+			$group_title   = $field['group_title'] ?? esc_html__( 'Entry', 'total-theme-core' );
 
 			?>
 
@@ -367,16 +367,16 @@ if ( ! class_exists( 'WPEX_Meta_Factory', false ) ) {
 							<?php
 							foreach( $field['fields'] as $field_k => $field_v ) {
 
-								// Get group single field value from index
-								$field_value = isset( $value[ $index ][ $field_v[ 'id' ] ] ) ? $value[ $index ][ $field_v[ 'id' ] ] : '';
+								// Get group single field value from index.
+								$field_value = $value[ $index ][ $field_v[ 'id' ] ] ?? '';
 
-								// Group fields need to be setup as arrays
+								// Group fields need to be setup as arrays.
 								$field_v[ 'id' ] = $field[ 'id' ] . '[' . $index_escaped . '][' . $field_v[ 'id' ] . ']';
 
 								// Important, it lets everyone know it's a group item.
 								$field_v[ 'index'] = $index_escaped;
 
-								// Render singular group item field
+								// Render singular group item field.
 								$this->render_field( $field_v, $field_value );
 
 							} ?>
@@ -397,8 +397,8 @@ if ( ! class_exists( 'WPEX_Meta_Factory', false ) ) {
 		public function field_text( $field, $value ) {
 
 			$required    = isset( $field[ 'required' ] ) ? ' required' : '';
-			$maxlength   = isset( $field[ 'maxlength' ] ) ? ' maxlength="' . floatval( $field[ 'maxlength' ] ) . '"' : '';
-			$placeholder = ! empty( $field[ 'placeholder' ] ) ? ' placeholder="' . esc_attr( $field[ 'placeholder' ] ) . '"' : '';
+			$maxlength   = isset( $field[ 'maxlength' ] ) ? ' maxlength="' . esc_attr( floatval( $field[ 'maxlength' ] ) ) . '"' : '';
+			$placeholder = ! empty( $field[ 'placeholder' ] ) ? ' placeholder="' . esc_attr( esc_attr( $field[ 'placeholder' ] ) ) . '"' : '';
 
 			?>
 
@@ -407,6 +407,30 @@ if ( ! class_exists( 'WPEX_Meta_Factory', false ) ) {
 			<?php
 
 		}
+
+		/**
+		 * Render a date field type.
+		 *
+		 * @since 1.0
+		 */
+		public function field_date( $field, $value ) {
+
+			$value = strtotime( $value );
+
+			if ( $value ) {
+				$value = date( 'Y-m-d', $value );
+			}
+
+			$required = isset( $field[ 'required' ] ) ? ' required' : '';
+			$min = isset( $field[ 'min' ] ) ? ' min="' . esc_attr( floatval( $field[ 'min' ] ) ) . '"' : '';
+			$max = isset( $field[ 'max' ] ) ? ' max="' . esc_attr( floatval( $field[ 'max' ] ) ) . '"' : '';
+			?>
+
+				<input id="<?php echo $this->sanitize_field_attr_id( $field[ 'id' ] ); ?>" name="<?php echo esc_attr( $this->add_prefix( $field[ 'id' ] ) ); ?>" type="date" value="<?php echo esc_attr( $value ); ?>" <?php echo $required . $min . $max; ?>>
+			<?php
+
+		}
+
 
 		/**
 		 * Render a URL field type.
@@ -433,17 +457,15 @@ if ( ! class_exists( 'WPEX_Meta_Factory', false ) ) {
 		 * @since 1.0
 		 */
 		public function field_number( $field, $value ) {
-
-			$step = isset( $field[ 'step' ] ) ? $field[ 'step' ] : 1;
-			$min  = isset( $field[ 'min' ] ) ? $field[ 'min' ] : 1;
-			$max  = isset( $field[ 'max' ] ) ? $field[ 'max' ] : 200;
+			$step = $field[ 'step' ] ?? 1;
+			$min  = $field[ 'min' ] ?? 1;
+			$max  = $field[ 'max' ] ?? 200;
 
 			?>
 
-				<input id="<?php echo $this->sanitize_field_attr_id( $field[ 'id' ] ); ?>" name="<?php echo esc_attr( $this->add_prefix( $field[ 'id' ] ) ); ?>" type="number" value="<?php echo esc_attr( $value ); ?>" step="<?php echo absint( $step ); ?>" min="<?php echo floatval( $min ); ?>" max="<?php echo floatval( $max ); ?>">';
+				<input id="<?php echo $this->sanitize_field_attr_id( $field[ 'id' ] ); ?>" name="<?php echo esc_attr( $this->add_prefix( $field[ 'id' ] ) ); ?>" type="number" value="<?php echo esc_attr( $value ); ?>" step="<?php echo absint( $step ); ?>" min="<?php echo floatval( $min ); ?>" max="<?php echo floatval( $max ); ?>">
 
 			<?php
-
 		}
 
 		/**
@@ -452,15 +474,13 @@ if ( ! class_exists( 'WPEX_Meta_Factory', false ) ) {
 		 * @since 1.0
 		 */
 		public function field_textarea( $field, $value ) {
-
-			$rows = isset( $field[ 'rows' ] ) ? $field[ 'rows' ] : 4;
+			$rows = $field[ 'rows' ] ?? 4;
 
 			?>
 
 			<textarea id="<?php echo $this->sanitize_field_attr_id( $field[ 'id' ] ); ?>" rows="<?php echo absint( $rows ); ?>" name="<?php echo esc_attr( $this->add_prefix( $field[ 'id' ] ) ); ?>"><?php echo wp_kses_post( $value ); ?></textarea>
 
 			<?php
-
 		}
 
 		/**
@@ -469,7 +489,6 @@ if ( ! class_exists( 'WPEX_Meta_Factory', false ) ) {
 		 * @since 1.0
 		 */
 		public function field_checkbox( $field, $value ) {
-
 			$value = $value ? true : false;
 
 			?>
@@ -477,7 +496,6 @@ if ( ! class_exists( 'WPEX_Meta_Factory', false ) ) {
 				<input id="<?php echo $this->sanitize_field_attr_id( $field[ 'id' ] ); ?>" name="<?php echo esc_attr( $this->add_prefix( $field[ 'id' ] ) ); ?>" type="checkbox" <?php checked( $value, true, true ); ?>>
 
 			<?php
-
 		}
 
 		/**
@@ -487,7 +505,7 @@ if ( ! class_exists( 'WPEX_Meta_Factory', false ) ) {
 		 */
 		public function field_select( $field, $value ) {
 
-			$choices = isset( $field[ 'choices' ] ) ? $field[ 'choices' ] : array();
+			$choices = $field[ 'choices' ] ?? array();
 			$autocomplete = ! empty( $field[ 'autocomplete' ] ) ? $field[ 'autocomplete' ] : array(); // @todo
 
 			if ( empty( $choices ) ) {
@@ -542,7 +560,7 @@ if ( ! class_exists( 'WPEX_Meta_Factory', false ) ) {
 		 */
 		public function field_icon_select( $field, $value ) {
 
-			$choices = isset( $field[ 'choices' ] ) ? $field[ 'choices' ] : array();
+			$choices = $field[ 'choices' ] ?? array();
 			$autocomplete = ! empty( $field[ 'autocomplete' ] ) ? $field[ 'autocomplete' ] : array(); // @todo
 
 			if ( empty( $choices ) ) {
@@ -586,9 +604,8 @@ if ( ! class_exists( 'WPEX_Meta_Factory', false ) ) {
 		 * @since 1.0
 		 */
 		public function field_multi_select( $field, $value ) {
-
-			$value   = is_array( $value ) ? $value : array();
-			$choices = isset( $field[ 'choices' ] ) ? $field[ 'choices' ] : array();
+			$value = is_array( $value ) ? $value : array();
+			$choices = $field[ 'choices' ] ?? array();
 
 			if ( empty( $choices ) ) {
 				return;
@@ -608,7 +625,7 @@ if ( ! class_exists( 'WPEX_Meta_Factory', false ) ) {
 
 						<label for="<?php echo $this->sanitize_field_attr_id( $field_id ); ?>"><?php echo esc_html( $name ); ?></label>
 
-						<br />
+						<br>
 
 					<?php } ?>
 
@@ -627,12 +644,12 @@ if ( ! class_exists( 'WPEX_Meta_Factory', false ) ) {
 
 			wp_enqueue_media();
 
-			$required    = isset( $field[ 'required' ] ) ? ' required' : '';
+			$required = isset( $field[ 'required' ] ) ? ' required' : '';
 			$placeholder = ! empty( $field[ 'placeholder' ] ) ? ' placeholder="' . esc_attr( $field[ 'placeholder' ] ) . '"' : '';
-			$return      = ! empty( $field['return'] ) ? $field['return'] : 'url';
+			$return = ! empty( $field['return'] ) ? $field['return'] : 'url';
 
-			// ID based upload (displays preview)
-			if ( 'id' == $return ) {
+			// ID based upload (displays preview).
+			if ( 'id' === $return ) {
 
 				?>
 
@@ -641,9 +658,8 @@ if ( ! class_exists( 'WPEX_Meta_Factory', false ) ) {
 				<button class="wpex-mf-upload button-secondary" type="button"><?php esc_html_e( 'Upload', 'total-theme-core' ); ?></button>
 
 				<div class="wpex-mf-upload-preview">
-					<?php if ( $value ) {
-						echo wp_get_attachment_image( $value, array( 50, 9999 ) );
-					} ?>
+					<div class="wpex-mf-upload-preview__content"><?php $this->upload_field_attachment_preview( $value ); ?></div>
+					<div class="wpex-mf-upload-preview__loader" style="display:none;"><svg viewBox="0 0 36 36" height="15" width="15" xmlns="http://www.w3.org/2000/svg"><circle cx="18" cy="18" r="18" fill="#a2a2a2" fill-opacity=".5"/><circle cx="18" cy="8" r="4" fill="#fff"><animateTransform attributeName="transform" dur="1100ms" from="0 18 18" repeatCount="indefinite" to="360 18 18" type="rotate"/></circle></svg></div>
 				</div>
 
 				<?php
@@ -694,7 +710,7 @@ if ( ! class_exists( 'WPEX_Meta_Factory', false ) ) {
 			}
 
 			// Check the user's permissions.
-			if ( isset( $_POST[ 'post_type' ] ) && 'page' == $_POST[ 'post_type' ] ) {
+			if ( isset( $_POST[ 'post_type' ] ) && 'page' === $_POST[ 'post_type' ] ) {
 
 				if ( ! current_user_can( 'edit_page', $post_id ) ) {
 					return;
@@ -721,14 +737,14 @@ if ( ! class_exists( 'WPEX_Meta_Factory', false ) ) {
 			// Loop through options and validate
 			foreach ( $fields as $field ) {
 
-				if ( isset( $field[ 'dont_save' ] ) || 'notice' == $field[ 'type' ] ) {
+				if ( isset( $field[ 'dont_save' ] ) || 'notice' === $field[ 'type' ] ) {
 					continue;
 				}
 
-				$value    = '';
+				$value = '';
 				$field_id = $field[ 'id' ];
 				$prefixed_field_id = $this->prefix . $field_id;
-				$new_value = isset( $_POST[$prefixed_field_id] ) ? $_POST[$prefixed_field_id] : '';
+				$new_value = $_POST[$prefixed_field_id] ?? '';
 
 				if ( $field['type'] === 'group' ) {
 
@@ -789,7 +805,7 @@ if ( ! class_exists( 'WPEX_Meta_Factory', false ) ) {
 
 					} else {
 
-						if ( 'checkbox' == $field[ 'type' ] && ! empty( $field[ 'default'] ) ) {
+						if ( 'checkbox' === $field[ 'type' ] && ! empty( $field[ 'default'] ) ) {
 							update_post_meta( $post_id, $field_id, 0 );
 						} else {
 							delete_post_meta( $post_id, $field_id );
@@ -822,13 +838,18 @@ if ( ! class_exists( 'WPEX_Meta_Factory', false ) ) {
 		 * @since 1.0
 		 */
 		public function sanitize_value_for_db( $input, $field ) {
-
 			$type = $field[ 'type' ];
 
 			switch ( $type ) {
 
 				case 'text':
 					return sanitize_text_field( $input );
+					break;
+				case 'date':
+					$timestamp = strtotime( $input );
+					if ( $timestamp ) {
+						return sanitize_text_field( date( 'Ymd', $timestamp ) ); // save date using same format as ACF.
+					}
 					break;
 				case 'url':
 					return esc_url_raw( $input );
@@ -849,7 +870,7 @@ if ( ! class_exists( 'WPEX_Meta_Factory', false ) ) {
 					break;
 				case 'multi_select':
 					if ( ! is_array( $input ) ) {
-						return isset( $field[ 'default' ] ) ? $field[ 'default' ] : array();
+						return $field[ 'default' ] ?? array();
 					}
 					$checks = true;
 					foreach( $input as $v ) {
@@ -879,7 +900,63 @@ if ( ! class_exists( 'WPEX_Meta_Factory', false ) ) {
 					break;
 
 			}
+		}
 
+		/**
+		 * Upload field preview.
+		 *
+		 * @since 1.0
+		 */
+		public function upload_field_attachment_preview( $attachment_id ) {
+			if ( ! $attachment_id ) {
+				return;
+			}
+
+			$meta = wp_get_attachment_metadata( $attachment_id );
+			$mime_type = get_post_mime_type( $attachment_id );
+
+			if ( 0 === strpos( $mime_type, 'image' . '/' ) ) {
+
+				// Display image html.
+				echo '<a href="' . esc_url( admin_url( 'post.php?post=' . absint( $attachment_id ) . '&action=edit' ) ) . '" target="_blank">' . wp_get_attachment_image( $attachment_id, array( 50, 9999 ) ) . '<br>' . esc_html__( 'Edit image', 'total-theme-core' ) . '</a>';
+
+			} elseif ( $mime_type ) {
+
+				$file = get_attached_file( $attachment_id );
+				$file_name = esc_html( wp_basename( $file ) );
+
+				// Display file name.
+				echo '<strong>' . esc_html__( 'File' ) . '</strong>: <a href="' . esc_url( admin_url( 'post.php?post=' . absint( $attachment_id ) . '&action=edit' ) ) . '" target="_blank">' . esc_html( $file_name ) . '</a>';
+
+				// Display file size.
+				$file_size = $meta['filesize'] ?? '';
+
+				if ( ! $file_size && file_exists( $file ) ) {
+					$file_size = filesize( $file );
+				}
+
+				if ( $file_size ) {
+					echo '<br><strong>' . esc_html__( 'Size' ) . '</strong>: ' . size_format( $file_size );
+				}
+
+			}
+		}
+
+		/**
+		 * Grabs attachment preview via AJAX.
+		 *
+		 * @since 1.0
+		 */
+		public function field_preview_ajax() {
+			check_ajax_referer( $this->prefix . 'ajax_nonce', 'nonce' ); // security check
+
+			$field_value = $_POST['field_value'] ?? '';
+
+			if ( $field_value ) {
+				echo $this->upload_field_attachment_preview( $field_value );
+			}
+
+			wp_die();
 		}
 
 		/**
@@ -888,7 +965,6 @@ if ( ! class_exists( 'WPEX_Meta_Factory', false ) ) {
 		 * @since 1.0
 		 */
 		public function enqueue_metabox_scripts() {
-
 			wp_enqueue_script(
 				'wpex-meta-factory',
 				plugin_dir_url( __FILE__ ) . 'assets/wpex-meta-factory.min.js',
@@ -902,6 +978,7 @@ if ( ! class_exists( 'WPEX_Meta_Factory', false ) ) {
 				'wpexMetaFactoryL10n',
 				array(
 					'delete_group_confirm' => esc_html__( 'Please click ok to confirm.', 'total-theme-core' ),
+					'ajax_nonce' => wp_create_nonce( $this->prefix . 'ajax_nonce' ),
 				)
 			);
 
@@ -914,7 +991,6 @@ if ( ! class_exists( 'WPEX_Meta_Factory', false ) ) {
 				}
 
 			}
-
 		}
 
 		/**
@@ -923,7 +999,6 @@ if ( ! class_exists( 'WPEX_Meta_Factory', false ) ) {
 		 * @since 1.0
 		 */
 		public function enqueue_metabox_styles() {
-
 			wp_enqueue_style(
 				'wpex-meta-factory',
 				plugin_dir_url( __FILE__ ) . 'assets/wpex-meta-factory.css',

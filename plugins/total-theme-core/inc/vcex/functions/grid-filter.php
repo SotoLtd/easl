@@ -3,7 +3,7 @@
  * Grid filter functions.
  *
  * @package TotalThemeCore
- * @version 1.2.8
+ * @version 1.3.2
  */
 
 defined( 'ABSPATH' ) || exit;
@@ -46,18 +46,17 @@ function vcex_grid_filter_get_active_item( $tax = '' ) {
  */
 function vcex_grid_filter_args( $atts = '', $query = '' ) {
 
-	// Return if no attributes found
 	if ( ! $atts ) {
 		return;
 	}
 
-	// Define args
+	// Define args.
 	$args = $include = array();
 
-	// Don't get empty
+	// Don't get empty.
 	$args['hide_empty'] = true;
 
-	// Taxonomy
+	// Taxonomy.
 	if ( ! empty( $atts['filter_taxonomy'] ) ) {
 		$taxonomy = $atts['filter_taxonomy'];
 	} elseif ( isset( $atts['taxonomy'] ) ) {
@@ -66,13 +65,13 @@ function vcex_grid_filter_args( $atts = '', $query = '' ) {
 		$taxonomy = null;
 	}
 
-	// Define post type and taxonomy
+	// Define post type and taxonomy.
 	$post_type = ! empty( $atts['post_type'] ) ? $atts['post_type'] : '';
 
-	// Define include/exclude category vars
+	// Define include/exclude category vars.
 	$include_cats = ! empty( $atts['include_categories'] ) ? vcex_string_to_array( $atts['include_categories'] ) : '';
 
-	// Check if only 1 category is included
+	// Check if only 1 category is included.
 	// If so check if it's a parent item so we can display children as the filter links
 	if ( $include_cats && '1' == count( $include_cats )
 		&& $children = get_term_children( $include_cats[0], $taxonomy )
@@ -80,10 +79,10 @@ function vcex_grid_filter_args( $atts = '', $query = '' ) {
 		$include = $children;
 	}
 
-	// Check for ajax pagination
+	// Check for ajax pagination.
 	$ajax_pagination = ( isset( $atts['pagination_loadmore'] ) && 'true' == $atts['pagination_loadmore'] ) ? true : false;
 
-	// Ajax pagination should include all categories or specified ones
+	// Ajax pagination should include all categories or specified ones.
 	if ( $ajax_pagination ) {
 
 		if ( $include_cats && is_array( $include_cats ) ) {
@@ -95,37 +94,37 @@ function vcex_grid_filter_args( $atts = '', $query = '' ) {
 
 	}
 
-	// Include only terms from current query
+	// Include only terms from current query.
 	elseif ( empty( $include ) && $query ) {
 
-		// Pluck ids from query
+		// Pluck ids from query.
 		$post_ids = wp_list_pluck( $query->posts, 'ID' );
 
-		// Loop through post ids
+		// Loop through post ids.
 		foreach ( $post_ids as $post_id ) {
 
-			// Get post terms
+			// Get post terms.
 			$terms = get_the_terms( $post_id, $taxonomy );
 
-			// Make sure there is no errors with terms and post has terms
+			// Make sure there is no errors with terms and post has terms.
 			if ( $terms && ! is_wp_error( $terms ) ) {
 
-				// Loop through terms
+				// Loop through terms.
 				foreach( $terms as $term ) {
 
-					// Store term id
+					// Store term id.
 					$term_id = $term->term_id;
 
-					// WPML Check
+					// WPML Check.
 					if ( class_exists( 'SitePress' ) ) {
 						global $sitepress;
 						$term_id = apply_filters( 'wpml_object_id', $term_id, $taxonomy, true, $sitepress->get_default_language() );
 					}
 
-					// Include terms if include_cats variable is empty
+					// Include terms if include_cats variable is empty.
 					if ( ! $include_cats ) {
 
-						// Include term
+						// Include term.
 						$include[$term_id] = $term_id;
 
 						/* Include parent
@@ -135,7 +134,7 @@ function vcex_grid_filter_args( $atts = '', $query = '' ) {
 
 					}
 
-					// Include terms if include_cats is enabled and term is in var
+					// Include terms if include_cats is enabled and term is in var.
 					elseif ( $include_cats && in_array( $term_id, $include_cats ) ) {
 						$include[$term_id] = $term_id;
 					}
@@ -146,12 +145,12 @@ function vcex_grid_filter_args( $atts = '', $query = '' ) {
 
 		}
 
-		// Add included terms to include param
+		// Add included terms to include param.
 		$args['include'] = $include;
 
 	}
 
-	// Add to args
+	// Add to args.
 	if ( ! empty( $include ) ) {
 		$args['include'] = $include;
 	}
@@ -164,7 +163,7 @@ function vcex_grid_filter_args( $atts = '', $query = '' ) {
 		$args = apply_filters( "vcex_{$post_type}_grid_filter_args", $args );
 	}
 
-	// Return args
+	// Return args.
 	return apply_filters( 'vcex_grid_filter_args', $args, $post_type );
 
 }

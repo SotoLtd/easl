@@ -3,7 +3,7 @@
  * Load More functions for Total VC grid modules.
  *
  * @package TotalThemeCore
- * @version 1.2.10
+ * @version 1.3.1
  */
 
 defined( 'ABSPATH' ) || exit;
@@ -23,27 +23,40 @@ function vcex_doing_loadmore() {
  */
 function vcex_loadmore_scripts() {
 
-	$dependencies = array( 'jquery' );
+	// jQuery needed (must load first if not already loaded)
+	wp_enqueue_script( 'jquery' );
+
+	// Images Loaded needed (must go after jquery!!!)
+	wp_enqueue_script( 'imagesloaded' );
+
+	// Load more script dependencies.
+	$dependencies = array( 'jquery', 'imagesloaded' );
 
 	if ( defined( 'WPEX_THEME_JS_HANDLE' ) ) {
 		$dependencies[] = WPEX_THEME_JS_HANDLE;
 	}
-
-	wp_enqueue_script( 'imagesloaded' );
-
-	$dependencies[] = 'imagesloaded';
 
 	if ( apply_filters( 'vcex_loadmore_enqueue_mediaelement', false ) ) {
 		wp_enqueue_style( 'wp-mediaelement' );
 		wp_enqueue_script( 'wp-mediaelement' );
 	}
 
+	// Enqueue load more script.
 	wp_enqueue_script(
 		'vcex-loadmore',
 		vcex_asset_url( 'js/vcex-loadmore.min.js' ),
 		$dependencies,
 		TTC_VERSION,
 		true
+	);
+
+	// Localize load more script.
+	wp_localize_script(
+		'vcex-loadmore',
+		'vcex_loadmore_params',
+		array(
+			'ajax_url' => set_url_scheme( admin_url( 'admin-ajax.php' ) ),
+		)
 	);
 }
 
@@ -53,7 +66,7 @@ function vcex_loadmore_scripts() {
 function vcex_get_loadmore_button( $shortcode_tag, $atts, $query ) {
 
 	// Get current page and max_num_pages.
-	$page      = get_query_var( 'paged' ) ? get_query_var( 'paged' ) : 1;
+	$page = get_query_var( 'paged' ) ?: 1;
 	$max_pages = $query->max_num_pages;
 
 	// No need for load more if we already reached the last page.
@@ -130,6 +143,7 @@ function vcex_get_loadmore_button( $shortcode_tag, $atts, $query ) {
 	$button = '<div class="' . esc_attr( implode( ' ', $loadmore_classes ) ) . '">';
 
 		$btn_attr = array(
+			'href'                  => '#',
 			'class'                 => esc_attr( $settings['class'] ),
 			'data-page'             => esc_attr( $page ),
 			'data-max-pages'        => esc_attr( $max_pages ),
@@ -162,7 +176,7 @@ function vcex_get_loadmore_button( $shortcode_tag, $atts, $query ) {
 		$button .= '</a>';
 
 		if ( ! empty( $settings['gif'] ) ) {
-			$button .= '<img src="' . esc_url( $settings['gif'] ) . '" class="vcex-spinner wpex-hidden wpex-opacity-40" alt="' . esc_attr( $settings['loading_text'] ) . '" />';
+			$button .= '<img src="' . esc_url( $settings['gif'] ) . '" class="vcex-spinner wpex-hidden wpex-opacity-40" alt="' . esc_attr( $settings['loading_text'] ) . '">';
 		} elseif ( ! empty( $settings['svg'] ) ) {
 			$button .= '<div class="vcex-spinner wpex-hidden">' . $settings['svg'] . '</div>';
 		}

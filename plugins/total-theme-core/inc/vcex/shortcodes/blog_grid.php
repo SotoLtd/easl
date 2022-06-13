@@ -3,7 +3,7 @@
  * Blog Grid Shortcode.
  *
  * @package TotalThemeCore
- * @version 1.2.8
+ * @version 1.3
  */
 
 defined( 'ABSPATH' ) || exit;
@@ -182,7 +182,7 @@ if ( ! class_exists( 'VCEX_Blog_Grid_Shortcode' ) ) {
 					'heading' => esc_html__( 'Offset', 'total-theme-core' ),
 					'param_name' => 'offset',
 					'group' => esc_html__( 'Query', 'total-theme-core' ),
-					'description' => esc_html__( 'Number of post to displace or pass over. Warning: Setting the offset parameter overrides/ignores the paged parameter and breaks pagination. The offset parameter is ignored when posts per page is set to -1.', 'total-theme-core' ),
+					'description' => esc_html__( 'Number of post to displace or pass over.', 'total-theme-core' ),
 					'dependency' => array( 'element' => 'custom_query', 'value' => array( 'false' ) ),
 				),
 				array(

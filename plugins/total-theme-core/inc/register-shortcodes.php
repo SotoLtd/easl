@@ -6,44 +6,36 @@ defined( 'ABSPATH' ) || exit;
 final class Register_Shortcodes {
 
 	/**
-	 * Our single Register_Shortcodes instance.
+	 * Instance.
+	 *
+	 * @access private
+	 * @var object Class object.
 	 */
 	private static $instance;
-
-	/**
-	 * Disable instantiation.
-	 */
-	private function __construct() {}
-
-	/**
-	 * Disable the cloning of this class.
-	 *
-	 * @return void
-	 */
-	final public function __clone() {}
-
-	/**
-	 * Disable the wakeup of this class.
-	 */
-	final public function __wakeup() {}
 
 	/**
 	 * Create or retrieve the instance of Register_Shortcodes.
 	 */
 	public static function instance() {
 		if ( is_null( static::$instance ) ) {
-			static::$instance = new Register_Shortcodes;
+			static::$instance = new self();
 			static::$instance->register();
 			static::$instance->add_filters();
 		}
-
 		return static::$instance;
 	}
 
+	/**
+	 * Register shortcodes.
+	 *
+	 * @since 2.1.8
+	 */
 	public function register() {
 
+		new Shortcodes\Shortcode_Topbar_Item;
 		new Shortcodes\Shortcode_Span;
 		new Shortcodes\Shortcode_Site_URL;
+		new Shortcodes\Shortcode_Home_URL;
 		new Shortcodes\Shortcode_Menu_Site_URL;
 		new Shortcodes\Shortcode_Highlight;
 		new Shortcodes\Shortcode_Line_Break;
@@ -71,8 +63,19 @@ final class Register_Shortcodes {
 		new Shortcodes\Shortcode_Enqueue_Imagesloaded;
 		new Shortcodes\Shortcode_Enqueue_Lightbox;
 
+		// WooCommerce specific shortcodes.
+		if ( class_exists( 'WooCommerce' ) ) {
+			new Shortcodes\Shortcode_Cart_Link;
+		}
+
 	}
 
+	/**
+	 * Apply filters to allow shortcodes in specific areas of WP and to clean up the_content
+	 * and remove p tags around shortcodes.
+	 *
+	 * @since 1.2.8
+	 */
 	public function add_filters() {
 
 		// Cleanup shortcodes.
@@ -92,18 +95,15 @@ final class Register_Shortcodes {
 	 * Filters the_content to make sure shortcodes aren't being wrapped in p tags or have br tags after them.
 	 *
 	 * @since 1.2.8
-	 * @access public
+	 * @param string $content
 	 */
 	public function cleanup( $content ) {
-
 		$content = strtr( $content, array(
 			'<p>['    => '[',
 			']</p>'   => ']',
 			']<br />' => ']',
 		) ) ;
-
 		return $content;
-
 	}
 
 }

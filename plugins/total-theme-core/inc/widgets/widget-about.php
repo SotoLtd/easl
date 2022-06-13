@@ -1,18 +1,16 @@
 <?php
+namespace TotalThemeCore\Widgets;
+use TotalThemeCore\WidgetBuilder as Widget_Builder;
+
+defined( 'ABSPATH' ) || exit;
+
 /**
  * About widget.
  *
  * @package Total Theme Core
  * @subpackage Widgets
- * @version 1.2.8
+ * @version 1.3.2
  */
-
-namespace TotalThemeCore\Widgets;
-
-use TotalThemeCore\WidgetBuilder as Widget_Builder;
-
-defined( 'ABSPATH' ) || exit;
-
 class Widget_About extends Widget_Builder {
 	private $args;
 
@@ -28,6 +26,7 @@ class Widget_About extends Widget_Builder {
 			'name' => $this->branding() . esc_html__( 'About', 'total-theme-core' ),
 			'options' => array(
 				'customize_selective_refresh' => true,
+				//'show_instance_in_rest' => true,
 			),
 			'fields'  => array(
 				array(
@@ -124,7 +123,7 @@ class Widget_About extends Widget_Builder {
 
 		// Sanitize image
 		if ( is_numeric( $image ) ) {
-			$img_size = $img_size ? $img_size : 'full';
+			$img_size = $img_size ?: 'full';
 			$image    = wp_get_attachment_image_url( $image, $img_size );
 		}
 
@@ -139,7 +138,7 @@ class Widget_About extends Widget_Builder {
 
 			$output .= '<div class="wpex-about-widget-image wpex-mb-20">';
 
-				$output .= '<img class="' . esc_attr( implode( ' ', $img_classes ) ) . '" src="' . esc_url( $image ) . '" alt="' . esc_attr( $title ) . '" />';
+				$output .= '<img class="' . esc_attr( implode( ' ', $img_classes ) ) . '" src="' . esc_url( $image ) . '" alt="' . esc_attr( $title ) . '">';
 
 			$output .= '</div>';
 

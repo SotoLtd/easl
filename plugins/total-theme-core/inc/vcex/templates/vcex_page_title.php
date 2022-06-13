@@ -4,18 +4,16 @@
  *
  * @package Total WordPress Theme
  * @subpackage Total Theme Core
- * @version 1.2.9
+ * @version 1.3.2
  */
 
 defined( 'ABSPATH' ) || exit;
 
-$shortcode_tag = 'vcex_page_title';
-
-if ( ! vcex_maybe_display_shortcode( $shortcode_tag, $atts ) ) {
+if ( ! vcex_maybe_display_shortcode( 'vcex_page_title', $atts ) ) {
 	return;
 }
 
-$atts = vcex_shortcode_atts( $shortcode_tag, $atts, $this );
+$atts = vcex_shortcode_atts( 'vcex_page_title', $atts, $this );
 
 $title = vcex_get_the_title();
 
@@ -47,24 +45,17 @@ if ( $atts['width'] ) {
 
 }
 
-
-$extra_classes = vcex_get_shortcode_extra_classes( $atts, $shortcode_tag );
+// Custom user classes.
+$extra_classes = vcex_get_shortcode_extra_classes( $atts, 'vcex_page_title' );
 
 if ( $extra_classes ) {
 	$shortcode_class = array_merge( $shortcode_class, $extra_classes );
 }
 
-$shortcode_class = vcex_parse_shortcode_classes( $shortcode_class, $shortcode_tag, $atts );
+// Filters shortcode classes.
+$shortcode_class = vcex_parse_shortcode_classes( $shortcode_class, 'vcex_page_title', $atts );
 
-if ( $atts['font_family'] ) {
-	vcex_enqueue_font( $atts['font_family'] );
-}
-
-$data = '';
-if ( $rfont_size = vcex_get_responsive_font_size_data( $atts['font_size'] ) ) {
-	$data = "data-wpex-rcss='" . htmlspecialchars( wp_json_encode( array( 'font-size' => $rfont_size ) ) ) . "'";
-}
-
+// Inline styles.
 $shortcode_style = vcex_inline_style( array(
 	'width'              => $atts['width'],
 	'animation_delay'    => $atts['animation_delay'],
@@ -74,8 +65,17 @@ $shortcode_style = vcex_inline_style( array(
 // Begin output.
 $output = '<div class="' . esc_attr( trim( $shortcode_class ) ) . '"' . $shortcode_style . '>';
 
+	// Inner heading classes.
+	$heading_classes = array(
+		'wpex-heading',
+		'vcex-page-title__heading',
+		'wpex-text-3xl',
+	);
+
+	// Sanitize custom html_tag.
 	$tag_escaped = tag_escape( $atts['html_tag'] );
 
+	// Inline heading style.
 	$heading_style = vcex_inline_style( array(
 		'color'       => $atts['color'],
 		'font_family' => $atts['font_family'],
@@ -84,14 +84,32 @@ $output = '<div class="' . esc_attr( trim( $shortcode_class ) ) . '"' . $shortco
 		'font_weight' => $atts['font_weight'],
 	), true );
 
-	$output .= '<' . $tag_escaped . ' class="wpex-heading vcex-page-title__heading wpex-text-3xl"' . $heading_style . $data . '>';
+	// Responsive heading styles.
+	$unique_classname = vcex_element_unique_classname();
 
+	$el_responsive_styles = array(
+		'font_size' => $atts['font_size'],
+	);
+
+	$responsive_css = vcex_element_responsive_css( $el_responsive_styles, $unique_classname );
+
+	if ( $responsive_css ) {
+		$heading_classes[] = $unique_classname;
+		$output .= '<style>' . $responsive_css . '</style>';
+	}
+
+	// Display the heading.
+	$output .= '<' . $tag_escaped . ' class="' . implode( ' ', $heading_classes ) . '"' . $heading_style . '>';
+
+		// Before text.
 		if ( $atts['before_text'] ) {
 			$output .= '<span class="vcex-page-title__before">' . do_shortcode( esc_html( $atts['before_text'] ) ) . '</span> ';
 		}
 
+		// The page title.
 		$output .= '<span class="vcex-page-title__text">' .  do_shortcode( wp_kses_post( $title ) ) . '</span>';
 
+		// After text.
 		if ( $atts['after_text'] ) {
 			$output .= ' <span class="vcex-page-title__after">' . do_shortcode( esc_html( $atts['after_text'] ) ) . '</span>';
 		}

@@ -8,7 +8,7 @@ final class Shortcode_Staff_Social {
 	public function __construct() {
 
 		if ( ! shortcode_exists( 'staff_social' ) ) {
-			add_shortcode( 'staff_social', array( __CLASS__, 'output' ) );
+			add_shortcode( 'staff_social', __CLASS__ . '::output' );
 		}
 
 	}

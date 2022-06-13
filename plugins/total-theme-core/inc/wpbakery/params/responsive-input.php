@@ -1,14 +1,14 @@
 <?php
-/**
- * WPBakery Param => Responsive Input.
- *
- * @package TotalThemeCore
- * @version 1.2.8
- */
 namespace TotalThemeCore\WPBakery\Params;
 
 defined( 'ABSPATH' ) || exit;
 
+/**
+ * WPBakery Param => Responsive Input.
+ *
+ * @package TotalThemeCore
+ * @version 1.3
+ */
 final class Responsive_Input {
 
 	public static function output( $settings, $value ) {
@@ -47,7 +47,23 @@ final class Responsive_Input {
 			$defaults[$key] = '';
 		}
 
-		$field_values = vcex_parse_multi_attribute( $value, $defaults );
+		if ( function_exists( 'vcex_parse_multi_attribute' ) ) {
+			$field_values = vcex_parse_multi_attribute( $value, $defaults );
+		} else {
+			$field_values = array();
+			$params_pairs = explode( '|', $value );
+			if ( ! empty( $params_pairs ) ) {
+				foreach ( $params_pairs as $pair ) {
+					$param = preg_split( '/\:/', $pair );
+					if ( ! empty( $param[0] ) && isset( $param[1] ) ) {
+						if ( 'http' == $param[1] && isset( $param[2] ) ) {
+							$param[1] = rawurlencode( 'http:' . $param[2] ); // fix for incorrect urls that are not encoded
+						}
+						$field_values[ $param[0] ] = rawurldecode( $param[1] );
+					}
+				}
+			}
+		}
 
 		$output = '<div class="vcex-rs-param vc_clearfix">';
 

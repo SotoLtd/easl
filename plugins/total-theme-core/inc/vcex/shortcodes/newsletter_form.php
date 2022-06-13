@@ -3,7 +3,7 @@
  * Newsletter Shortcode.
  *
  * @package TotalThemeCore
- * @version 1.2.8
+ * @version 1.3.2
  */
 
 defined( 'ABSPATH' ) || exit;
@@ -21,7 +21,6 @@ if ( ! class_exists( 'VCEX_Newsletter_Shortcode' ) ) {
 			if ( function_exists( 'vc_lean_map' ) ) {
 				TotalThemeCore\WPBakery\Map\Vcex_Newsletter_Form::instance();
 			}
-
 		}
 
 		/**
@@ -39,15 +38,14 @@ if ( ! class_exists( 'VCEX_Newsletter_Shortcode' ) ) {
 		 * Array of shortcode parameters.
 		 */
 		public static function get_params() {
-
 			$params = array(
 				// General
 				array(
 					'type'        => 'textfield',
 					'heading'     => esc_html__( 'Form Action URL', 'total-theme-core' ),
-					'param_name'  => 'form_action',
+					'param_name' => 'form_action',
 					'admin_label' => true,
-					'value'       => '//domain.us1.list-manage.com/subscribe/post?u=numbers_go_here',
+					'value'       => '',
 					'description' => esc_html__( 'Enter your newsletter service form action URL.', 'total-theme-core' ) . ' <a href="https://wpexplorer-themes.com/total/docs/mailchimp-form-action-url/" target="_blank" rel="noopener noreferrer">'. esc_html__( 'Learn More', 'total-theme-core' ) .' &rarr;</a>',
 				),
 				array(
@@ -72,9 +70,24 @@ if ( ! class_exists( 'VCEX_Newsletter_Shortcode' ) ) {
 				),
 				array(
 					'type' => 'vcex_ofswitch',
-					'std'        => 'false',
+					'std' => 'false',
+					'heading' => esc_html__( 'Stack Fields?', 'total-theme-core'),
+					'param_name' => 'stack_fields',
+					'std' => 'false',
+				),
+				array(
+					'type' => 'vcex_ofswitch',
+					'std' => 'false',
 					'heading' => esc_html__( 'Full-Width on Mobile', 'total-theme-core'),
 					'param_name' => 'fullwidth_mobile',
+					'dependency' => array( 'element' => 'stack_fields', 'value' => 'false' ),
+				),
+				array(
+					'type' => 'dropdown',
+					'heading' => esc_html__( 'Gap', 'total-theme-core' ),
+					'param_name' => 'gap',
+					'value' => vcex_margin_choices(),
+					'description' => esc_html__( 'Spacing between the input field and the button.', 'total-theme-core' ),
 				),
 				array(
 					'type' => 'vcex_visibility',
@@ -82,18 +95,18 @@ if ( ! class_exists( 'VCEX_Newsletter_Shortcode' ) ) {
 					'param_name' => 'visibility',
 				),
 				array(
-					'type'        => 'textfield',
+					'type' => 'textfield',
 					'admin_label' => true,
-					'heading'     => esc_html__( 'Element ID', 'total-theme-core' ),
-					'param_name'  => 'unique_id',
-					'description' => sprintf( esc_html__( 'Enter element ID (Note: make sure it is unique and valid according to %sw3c specification%s).', 'total-theme-core' ), '<a href="https://www.w3schools.com/tags/att_global_id.asp" target="_blank" rel="noopener noreferrer">', '</a>' ),
+					'heading' => esc_html__( 'Element ID', 'total-theme-core' ),
+					'param_name' => 'unique_id',
+					'description' => vcex_shortcode_param_description( 'unique_id' ),
 				),
 				array(
-					'type'        => 'textfield',
+					'type' => 'textfield',
 					'admin_label' => true,
-					'heading'     => esc_html__( 'Extra class name', 'total-theme-core' ),
+					'heading' => esc_html__( 'Extra class name', 'total-theme-core' ),
 					'description' => esc_html__( 'Style particular content element differently - add a class name and refer to it in custom CSS.', 'total-theme-core' ),
-					'param_name'  => 'classes',
+					'param_name' => 'classes',
 				),
 				vcex_vc_map_add_css_animation(),
 				array(
@@ -113,14 +126,14 @@ if ( ! class_exists( 'VCEX_Newsletter_Shortcode' ) ) {
 					'type' => 'textfield',
 					'heading' => esc_html__( 'Placeholder', 'total-theme-core' ),
 					'param_name' => 'placeholder_text',
-					'value'      => esc_html__( 'Enter your email address', 'total-theme-core' ),
+					'value' => esc_html__( 'Enter your email address', 'total-theme-core' ),
 					'group' => esc_html__( 'Input', 'total-theme-core' ),
 				),
 				array(
 					'type' => 'textfield',
 					'heading' => esc_html__( 'Name Attribute', 'total-theme-core' ),
 					'param_name' => 'input_name',
-					'value'      => 'EMAIL',
+					'value' => 'EMAIL',
 					'group' => esc_html__( 'Input', 'total-theme-core' ),
 				),
 				array(
@@ -269,6 +282,12 @@ if ( ! class_exists( 'VCEX_Newsletter_Shortcode' ) ) {
 					'param_name' => 'submit_weight',
 					'group' => esc_html__( 'Submit', 'total-theme-core' ),
 				),
+				array(
+					'type' => 'vcex_text_transforms',
+					'heading' => esc_html__( 'Text Transform', 'total-theme-core' ),
+					'param_name' => 'submit_text_transform',
+					'group' => esc_html__( 'Submit', 'total-theme-core' ),
+				),
 				// Hidden Fields
 				array(
 					'type' => 'exploded_textarea',
@@ -281,15 +300,20 @@ if ( ! class_exists( 'VCEX_Newsletter_Shortcode' ) ) {
 				array( 'type' => 'hidden', 'param_name' => 'mailchimp_form_action' ),
 			);
 
-			return apply_filters( 'vcex_shortcode_params', $params, 'vcex_newsletter_form' );
+			/**
+			 * Filters the vcex_newsletter_form shortcode params.
+			 *
+			 * @param array $params
+			 */
+			$params = (array) apply_filters( 'vcex_shortcode_params', $params, 'vcex_newsletter_form' );
 
+			return $params;
 		}
 
 		/**
 		 * Parses deprecated params.
 		 */
 		public static function parse_deprecated_attributes( $atts = '' ) {
-
 			if ( empty( $atts ) || ! is_array( $atts ) ) {
 				return $atts;
 			}
@@ -302,7 +326,6 @@ if ( ! class_exists( 'VCEX_Newsletter_Shortcode' ) ) {
 			}
 
 			return $atts;
-
 		}
 
 	}

@@ -1,18 +1,16 @@
 <?php
+namespace TotalThemeCore\Widgets;
+use TotalThemeCore\WidgetBuilder as Widget_Builder;
+
+defined( 'ABSPATH' ) || exit;
+
 /**
  * Google Map Widget.
  *
  * @package Total Theme Core
  * @subpackage Widgets
- * @version 1.2.8
+ * @version 1.3.2
  */
-
-namespace TotalThemeCore\Widgets;
-
-use TotalThemeCore\WidgetBuilder as Widget_Builder;
-
-defined( 'ABSPATH' ) || exit;
-
 class Widget_Google_Map extends Widget_Builder {
 	private $args;
 
@@ -117,8 +115,8 @@ class Widget_Google_Map extends Widget_Builder {
 
 				if ( $src ) {
 
-					$title_attr = $title_attr ? $title_attr : esc_attr__( 'Google Map', 'total-theme-core' );
-					$height     = ! empty( $height ) ? absint( $height ) : '';
+					$title_attr = $title_attr ?: esc_attr__( 'Google Map', 'total-theme-core' );
+					$height = ! empty( $height ) ? absint( $height ) : '';
 
 					$output .= '<div class="wpex-gmap-widget-embed wpex-clr">';
 

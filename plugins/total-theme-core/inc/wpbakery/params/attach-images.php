@@ -1,14 +1,14 @@
 <?php
-/**
- * WPBakery Param => Attach Images.
- *
- * @package TotalThemeCore
- * @version 1.2.8
- */
 namespace TotalThemeCore\WPBakery\Params;
 
 defined( 'ABSPATH' ) || exit;
 
+/**
+ * WPBakery Param => Attach Images.
+ *
+ * @package TotalThemeCore
+ * @version 1.3.2
+ */
 final class Attach_Images {
 
 	public static function output( $settings, $value ) {
@@ -17,7 +17,7 @@ final class Attach_Images {
 		$param_value = wpb_removeNotExistingImgIDs( $value );
 		$output .= '<input type="hidden" class="wpb_vc_param_value gallery_widget_attached_images_ids '
 		           . esc_attr( $settings['param_name'] ) . ' '
-		           . esc_attr( $settings['type'] ) . '" name="' . esc_attr( $settings['param_name'] ) . '" value="' . esc_attr( $value ) . '"/>';
+		           . esc_attr( $settings['type'] ) . '" name="' . esc_attr( $settings['param_name'] ) . '" value="' . esc_attr( $value ) . '">';
 		$output .= '<div class="gallery_widget_attached_images">';
 		$output .= '<ul class="gallery_widget_attached_images_list">';
 		if ( '' !== $param_value ) {
@@ -38,7 +38,7 @@ final class Attach_Images {
 							) );
 						} else {
 							$thumb_src = wp_get_attachment_image_src( $image, 'thumbnail' );
-							$thumb_src = isset( $thumb_src[0] ) ? $thumb_src[0] : '';
+							$thumb_src = $thumb_src[0] ?? '';
 						}
 					} else {
 						$thumb_src = $image;
@@ -46,7 +46,7 @@ final class Attach_Images {
 					if ( $thumb_src ) {
 						$output .= '
 						<li class="added">
-							<img rel="' . esc_attr( $image ) . '" src="' . esc_url( $thumb_src ) . '" />
+							<img rel="' . esc_attr( $image ) . '" src="' . esc_url( $thumb_src ) . '">
 							<a href="#" class="vc_icon-remove"><i class="vc-composer-icon vc-c-icon-close"></i></a>
 						</li>';
 					}

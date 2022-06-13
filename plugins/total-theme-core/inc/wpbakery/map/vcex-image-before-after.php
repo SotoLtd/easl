@@ -7,38 +7,24 @@ defined( 'ABSPATH' ) || exit;
  * Class registers the vcex_image_before_after shortcode with the WPBakery page builder.
  *
  * @package TotalThemeCore
- * @version 1.2.8
+ * @version 1.3
  */
 final class Vcex_Image_Before_After {
 
 	/**
-	 * Our single instance.
+	 * Instance.
+	 *
+	 * @access private
+	 * @var object Class object.
 	 */
 	private static $instance;
-
-	/**
-	 * Disable instantiation.
-	 */
-	private function __construct() {}
-
-	/**
-	 * Disable the cloning of this class.
-	 *
-	 * @return void
-	 */
-	final public function __clone() {}
-
-	/**
-	 * Disable the wakeup of this class.
-	 */
-	final public function __wakeup() {}
 
 	/**
 	 * Create or retrieve the class instance.
 	 */
 	public static function instance() {
 		if ( is_null( static::$instance ) ) {
-			static::$instance = new Vcex_Image_Before_After;
+			static::$instance = new self();
 			static::$instance->init_hooks();
 		}
 
@@ -67,7 +53,7 @@ final class Vcex_Image_Before_After {
 			'name'             => esc_html__( 'Image Before/After', 'total-theme-core' ),
 			'description'      => esc_html__( 'Visual difference between two images', 'total-theme-core' ),
 			'base'             => 'vcex_image_ba',
-			'icon'             => 'vcex-image-ba vcex-icon ticon ticon-picture-o',
+			'icon'             => 'vcex_element-icon vcex_element-icon--before-after',
 			'category'         => vcex_shortcodes_branding(),
 			'params'           => VCEX_Image_Before_After_Shortcode::get_params(),
 			'admin_enqueue_js' => vcex_wpbakery_asset_url( 'js/backend-editor/vcex-image-before-after-view.min.js' ),

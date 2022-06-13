@@ -3,7 +3,7 @@
  * Heading Shortcode.
  *
  * @package TotalThemeCore
- * @version 1.2.8
+ * @version 1.3.2
  */
 
 defined( 'ABSPATH' ) || exit;
@@ -103,7 +103,7 @@ if ( ! class_exists( 'VCEX_Heading_Shortcode' ) ) {
 					'param_name' => 'tag',
 					'type' => 'vcex_select_buttons',
 					'choices' => 'html_tag',
-					'description' => esc_html__( 'The heading module has its own styling no matter what HTML tag you\'ve selected. However, you can enable your customizer Typography heading styles to apply to the Heading module via a setting under Appearance > Customize > WPBakery Builder.', 'total-theme-core' ),
+					'description' => esc_html__( 'The heading module has its own styling no matter what HTML tag you\'ve selected. However, you can enable your customizer Typography heading styles to apply to the Heading module via a setting under Appearance > Customize > WPBakery Builder.', 'total-theme-core' ) . '<br>' .  esc_html__( 'You can also define your default HTML tag in the Customizer.', 'total-theme-core' ),
 				),
 				array(
 					'type' => 'vcex_visibility',

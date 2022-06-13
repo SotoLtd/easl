@@ -8,38 +8,24 @@ defined( 'ABSPATH' ) || exit;
  * Class registers the vcex_navbar shortcode with the WPBakery page builder.
  *
  * @package TotalThemeCore
- * @version 1.2.8
+ * @version 1.3
  */
 final class Vcex_Navbar {
 
 	/**
-	 * Our single instance.
+	 * Instance.
+	 *
+	 * @access private
+	 * @var object Class object.
 	 */
 	private static $instance;
-
-	/**
-	 * Disable instantiation.
-	 */
-	private function __construct() {}
-
-	/**
-	 * Disable the cloning of this class.
-	 *
-	 * @return void
-	 */
-	final public function __clone() {}
-
-	/**
-	 * Disable the wakeup of this class.
-	 */
-	final public function __wakeup() {}
 
 	/**
 	 * Create or retrieve the class instance.
 	 */
 	public static function instance() {
 		if ( is_null( static::$instance ) ) {
-			static::$instance = new Vcex_Navbar;
+			static::$instance = new self();
 			static::$instance->init_hooks();
 		}
 
@@ -81,7 +67,7 @@ final class Vcex_Navbar {
 			'name'        => esc_html__( 'Navigation Bar', 'total-theme-core' ),
 			'description' => esc_html__( 'Custom menu navigation bar', 'total-theme-core' ),
 			'base'        => 'vcex_navbar',
-			'icon'        => 'vcex-navbar vcex-icon ticon ticon-navicon',
+			'icon'        => 'vcex_element-icon vcex_element-icon--navbar',
 			'category'    => vcex_shortcodes_branding(),
 			'params'      => VCEX_Navbar_Shortcode::get_params(),
 		);

@@ -8,38 +8,24 @@ defined( 'ABSPATH' ) || exit;
  * Class registers the vcex_image_carousel shortcode with the WPBakery page builder.
  *
  * @package TotalThemeCore
- * @version 1.2.8
+ * @version 1.3
  */
 final class Vcex_Image_Carousel {
 
 	/**
-	 * Our single instance.
+	 * Instance.
+	 *
+	 * @access private
+	 * @var object Class object.
 	 */
 	private static $instance;
-
-	/**
-	 * Disable instantiation.
-	 */
-	private function __construct() {}
-
-	/**
-	 * Disable the cloning of this class.
-	 *
-	 * @return void
-	 */
-	final public function __clone() {}
-
-	/**
-	 * Disable the wakeup of this class.
-	 */
-	final public function __wakeup() {}
 
 	/**
 	 * Create or retrieve the class instance.
 	 */
 	public static function instance() {
 		if ( is_null( static::$instance ) ) {
-			static::$instance = new Vcex_Image_Carousel;
+			static::$instance = new self();
 			static::$instance->init_hooks();
 		}
 
@@ -84,7 +70,7 @@ final class Vcex_Image_Carousel {
 			'admin_enqueue_js' => vcex_wpbakery_asset_url( 'js/backend-editor/vcex-image-gallery-view.min.js' ),
 			'js_view'          => 'vcexBackendViewImageGallery',
 			'category'         => vcex_shortcodes_branding(),
-			'icon'             => 'vcex-image-carousel vcex-icon ticon ticon-picture-o',
+			'icon'             => 'vcex_element-icon vcex_element-icon--image-carousel',
 			'params'           => Shortcode::get_params(),
 		);
 	}

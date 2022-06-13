@@ -4,14 +4,12 @@
  *
  * @package Total WordPress Theme
  * @subpackage Total Theme Core
- * @version 1.2.8
+ * @version 1.3.2
  */
 
 defined( 'ABSPATH' ) || exit;
 
-$shortcode_tag = 'vcex_navbar';
-
-if ( ! vcex_maybe_display_shortcode( $shortcode_tag, $atts ) ) {
+if ( ! vcex_maybe_display_shortcode( 'vcex_navbar', $atts ) ) {
 	return;
 }
 
@@ -19,7 +17,7 @@ if ( ! vcex_maybe_display_shortcode( $shortcode_tag, $atts ) ) {
 $output = '';
 
 // Get shortcode attributes.
-$atts = vcex_shortcode_atts( $shortcode_tag, $atts, $this );
+$atts = vcex_shortcode_atts( 'vcex_navbar', $atts, $this );
 
 // Return if no menu defined.
 if ( empty( $atts['menu'] ) ) {
@@ -27,7 +25,7 @@ if ( empty( $atts['menu'] ) ) {
 }
 
 // Define vars.
-$preset_design = $atts['preset_design'] ? $atts['preset_design'] : 'none';
+$preset_design = $atts['preset_design'] ?: 'none';
 $has_mobile_select = vcex_validate_boolean( $atts['mobile_select'] );
 
 // Link margins.
@@ -57,11 +55,6 @@ $wrap_style = vcex_inline_style( array(
 	'animation_delay'    => $atts['animation_delay'],
 	'animation_duration' => $atts['animation_duration'],
 ), false );
-
-// Load custom fonts.
-if ( ! empty( $atts['font_family'] ) ) {
-	vcex_enqueue_font( $atts['font_family'] );
-}
 
 // Classes.
 $wrap_classes = array(
@@ -111,15 +104,15 @@ if ( $atts['classes'] ) {
 }
 
 if ( $atts['visibility'] ) {
-	$wrap_classes[] = sanitize_html_class( $atts['visibility'] );
+	$wrap_classes[] = vcex_parse_visibility_class( $atts['visibility'] );
 }
 
 if ( $atts['align'] ) {
 	$wrap_classes[] = 'align-' . sanitize_html_class( $atts['align'] );
 }
 
-if ( $atts['css_animation'] && 'none' != $atts['css_animation'] ) {
-	$wrap_classes[] = vcex_get_css_animation( $atts['css_animation'] );
+if ( $css_animation_class = vcex_get_css_animation( $atts['css_animation'] ) ) {
+	$wrap_classes[] = $css_animation_class;
 }
 
 if ( $atts['wrap_css'] ) {
@@ -127,12 +120,21 @@ if ( $atts['wrap_css'] ) {
 }
 
 // Responsive styles.
-if ( $responsive_data = vcex_get_module_responsive_data( $atts ) ) {
-	$wrap_data['data-wpex-rcss'] = $responsive_data;
+$unique_classname = vcex_element_unique_classname();
+
+$el_responsive_styles = array(
+	'font_size' => $atts['font_size'],
+);
+
+$responsive_css = vcex_element_responsive_css( $el_responsive_styles, $unique_classname );
+
+if ( $responsive_css ) {
+	$wrap_classes[] = $unique_classname;
+	$output .= '<style>' . $responsive_css . '</style>';
 }
 
 // Parse wrap attributes.
-$wrap_attrs['class'] = esc_attr( vcex_parse_shortcode_classes( implode( ' ', $wrap_classes ), $shortcode_tag, $atts ) );
+$wrap_attrs['class'] = esc_attr( vcex_parse_shortcode_classes( implode( ' ', $wrap_classes ), 'vcex_navbar', $atts ) );
 $wrap_attrs['style'] = $wrap_style;
 $wrap_attrs['data']  = $wrap_data;
 
@@ -156,6 +158,10 @@ $output .= '<nav' . vcex_parse_html_attributes( $wrap_attrs ) . '>';
 	}
 
 	if ( 'spaced_out' === $atts['button_layout'] ) {
+		$inner_classes .= ' wpex-last-mr-0';
+	}
+
+	if ( $link_margin_side ) {
 		$inner_classes .= ' wpex-last-mr-0';
 	}
 
@@ -386,7 +392,7 @@ $output .= '<nav' . vcex_parse_html_attributes( $wrap_attrs ) . '>';
 
 					// Add active filter class.
 					if ( $atts['filter_menu'] && $data_filter == '.' . $filter_active_category ) {
-						$link_attrs['class'] .= ' active';
+						$link_attrs['class'][] = 'active';
 						$mobile_select_selected = $href;
 					}
 

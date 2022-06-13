@@ -1,18 +1,16 @@
 <?php
+namespace TotalThemeCore\Widgets;
+use WP_Widget;
+
+defined( 'ABSPATH' ) || exit;
+
 /**
  * bbPress Topic Info Widget.
  *
  * @package Total Theme Core
  * @subpackage Widgets
- * @version 1.2.8
+ * @version 1.3.1
  */
-
-namespace TotalThemeCore\Widgets;
-
-use WP_Widget;
-
-defined( 'ABSPATH' ) || exit;
-
 class Widget_bbPress_Topic_Info extends WP_Widget {
 
 	/**
@@ -81,26 +79,26 @@ class Widget_bbPress_Topic_Info extends WP_Widget {
 			// Wrap classes
 			$output .= '<ul class="wpex-bbpress-forum-info wpex-clr">';
 
-				// Parent
+				// Parent.
 				if ( $forum = wp_get_post_parent_id( get_the_ID() ) ) {
 
 					$parent_name = get_the_title( $forum );
 
 					$output .= '<li class="forum-topic-count"><span class="ticon ticon-folder-open"></span>'. esc_html__( 'In', 'total-theme-core' ) .': ';
 
-						$output .= '<a href="'. get_permalink( $forum ) .'">'. esc_html( $parent_name ) .'</a>';
+						$output .= '<a href="' . esc_url( get_permalink( $forum ) ) . '">' . esc_html( $parent_name ) . '</a>';
 
 					$output .= '</li>';
 				}
 
-				// Replies
+				// Replies.
 				$count = bbp_show_lead_topic() ? bbp_get_topic_reply_count() : bbp_get_topic_post_count();
-				$output .= '<li class="forum-reply-count"><span class="ticon ticon-comments"></span>'. $count .' '. esc_html__( 'replies', 'total-theme-core' ) .'</li>';
+				$output .= '<li class="forum-reply-count"><span class="ticon ticon-comments"></span>' . absint( $count ) . ' ' . esc_html__( 'replies', 'total-theme-core' ) . '</li>';
 
-				// Participants
-				$output .= '<li class="forum-participants"><span class="ticon ticon-users"></span>'. esc_html__( 'Participants', 'total-theme-core' ) .': '. bbp_get_topic_voice_count() .'</li>';
+				// Participants.
+				$output .= '<li class="forum-participants"><span class="ticon ticon-users"></span>'. esc_html__( 'Participants', 'total-theme-core' ) .': ' . absint( bbp_get_topic_voice_count() ) . '</li>';
 
-				// Last Reply
+				// Last Reply.
 				$output .= '<li class="last-user"><span class="ticon ticon-user"></span>'. esc_html__( 'Last reply from', 'total-theme-core' ) .': ';
 
 					$last_post_id = bbp_get_topic_last_active_id();
@@ -108,12 +106,12 @@ class Widget_bbPress_Topic_Info extends WP_Widget {
 					$user         = get_user_by( 'id', $last_user_id );
 					$name         = $user->display_name;
 
-					$output .= '<a href="'. bbp_get_user_profile_url( $last_user_id ) .'">'. esc_html( $name ) .'</a>';
+					$output .= '<a href="' . esc_url( bbp_get_user_profile_url( $last_user_id ) ) . '">' . esc_html( $name ) . '</a>';
 
 				$output .= '</li>';
 
 				// Freshness
-				$output .= '<li class="forum-freshness-time"><span class="ticon ticon-clock-o"></span>'. esc_html__( 'Last activity', 'total-theme-core' ) .': '. bbp_get_topic_freshness_link() .'</li>';
+				$output .= '<li class="forum-freshness-time"><span class="ticon ticon-clock-o"></span>' . esc_html__( 'Last activity', 'total-theme-core' ) .': ' . bbp_get_topic_freshness_link() . '</li>';
 
 			// Close widget wrap
 			$output .= '</ul>';
@@ -159,7 +157,7 @@ class Widget_bbPress_Topic_Info extends WP_Widget {
 
 		<p>
 			<label for="<?php echo esc_attr( $this->get_field_id( 'title' ) ); ?>"><?php esc_html_e( 'Title', 'total-theme-core' ); ?>:</label>
-			<input class="widefat" id="<?php echo esc_attr( $this->get_field_id( 'title' ) ); ?>" name="<?php echo esc_attr( $this->get_field_name( 'title' ) ); ?>" type="text" value="<?php echo esc_attr( $title ); ?>" />
+			<input class="widefat" id="<?php echo esc_attr( $this->get_field_id( 'title' ) ); ?>" name="<?php echo esc_attr( $this->get_field_name( 'title' ) ); ?>" type="text" value="<?php echo esc_attr( $title ); ?>">
 		</p>
 
 		<?php

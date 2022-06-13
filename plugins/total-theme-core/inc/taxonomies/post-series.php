@@ -1,46 +1,25 @@
 <?php
-/**
- * Post Series Class.
- *
- * @package TotalThemeCore
- * @version 1.2.8
- *
- * @todo update admin column display so it will display in any post type where it's enabled.
- */
-
 namespace TotalThemeCore\Taxonomies;
 
 defined( 'ABSPATH' ) || exit;
 
+/**
+ * Post Series Class.
+ *
+ * @package TotalThemeCore
+ * @version 1.3.2
+ *
+ * @todo update admin column display so it will display in any post type where it's enabled.
+ */
 class Post_Series {
 
 	/**
-	 * Our single Post_Series instance.
+	 * Instance.
+	 *
+	 * @access private
+	 * @var object Class object.
 	 */
 	private static $instance;
-
-	/**
-	 * Disable instantiation.
-	 */
-	private function __construct() {
-		// Private to disabled instantiation.
-	}
-
-	/**
-	 * Disable the cloning of this class.
-	 *
-	 * @return void
-	 */
-	final public function __clone() {
-		throw new Exception( 'You\'re doing things wrong.' );
-	}
-
-	/**
-	 * Disable the wakeup of this class.
-	 */
-	final public function __wakeup() {
-		throw new Exception( 'You\'re doing things wrong.' );
-	}
 
 	/**
 	 * Create or retrieve the instance of Post_Series.
@@ -76,11 +55,10 @@ class Post_Series {
 	 * Registers the custom taxonomy
 	 */
 	public function register() {
-
 		$name = get_theme_mod( 'post_series_labels' );
-		$name = $name ? $name : esc_html__( 'Post Series', 'total-theme-core' );
+		$name = $name ?: esc_html__( 'Post Series', 'total-theme-core' );
 		$slug = get_theme_mod( 'post_series_slug' );
-		$slug = $slug ? $slug : 'post-series';
+		$slug = $slug ?: 'post-series';
 
 		$args = apply_filters( 'wpex_taxonomy_post_series_args', array(
 			'labels'             => array(
@@ -170,11 +148,11 @@ class Post_Series {
 			return;
 		}
 
-		$tax_slug         = 'post_series';
-		$current_tax_slug = isset( $_GET[$tax_slug] ) ? $_GET[$tax_slug] : false;
-		$tax_obj          = get_taxonomy( $tax_slug );
-		$tax_name         = $tax_obj->labels->name;
-		$terms            = get_terms( $tax_slug );
+		$tax_slug = 'post_series';
+		$current_tax_slug = $_GET[$tax_slug] ?? false;
+		$tax_obj = get_taxonomy( $tax_slug );
+		$tax_name = $tax_obj->labels->name;
+		$terms = get_terms( $tax_slug );
 
 		if ( count( $terms ) > 0 ) { ?>
 

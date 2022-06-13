@@ -3,7 +3,7 @@
  * Login Form Shortcode.
  *
  * @package TotalThemeCore
- * @version 1.2.8
+ * @version 1.3.2
  */
 
 defined( 'ABSPATH' ) || exit;
@@ -59,7 +59,8 @@ if ( ! class_exists( 'VCEX_Login_Form' ) ) {
 					'type' => 'textfield',
 					'heading' => esc_html__( 'Element ID', 'total-theme-core' ),
 					'param_name' => 'unique_id',
-					'description' => sprintf( esc_html__( 'Enter element ID (Note: make sure it is unique and valid according to %sw3c specification%s).', 'total-theme-core' ), '<a href="https://www.w3schools.com/tags/att_global_id.asp" target="_blank" rel="noopener noreferrer">', '</a>' ),
+					'admin_label' => true,
+					'description' => vcex_shortcode_param_description( 'unique_id' ),
 				),
 				array(
 					'type' => 'textfield',

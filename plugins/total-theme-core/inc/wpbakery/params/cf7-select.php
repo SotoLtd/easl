@@ -1,14 +1,14 @@
 <?php
+namespace TotalThemeCore\WPBakery\Params;
+
+defined( 'ABSPATH' ) || exit;
+
 /**
  * WPBakery Param => Contact Form 7 Select.
  *
  * @package TotalThemeCore
  * @version 1.2.8
  */
-namespace TotalThemeCore\WPBakery\Params;
-
-defined( 'ABSPATH' ) || exit;
-
 final class Cf7_Select {
 
 	public static function output( $settings, $value ) {

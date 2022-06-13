@@ -4,26 +4,24 @@
  *
  * @package Total WordPress Theme
  * @subpackage Total Theme Core
- * @version 1.2.8
+ * @version 1.3.2
  */
 
 defined( 'ABSPATH' ) || exit;
 
-$shortcode_tag = 'vcex_searchbar';
-
-if ( ! vcex_maybe_display_shortcode( $shortcode_tag, $atts ) ) {
+if ( ! vcex_maybe_display_shortcode( 'vcex_searchbar', $atts ) ) {
 	return;
 }
 
 // Get and extract shortcode attributes.
-$atts = vcex_shortcode_atts( $shortcode_tag, $atts, $this );
+$atts = vcex_shortcode_atts( 'vcex_searchbar', $atts, $this );
 
 // Define output var.
 $output = '';
 
 // Sanitize.
-$placeholder = ! empty( $atts['placeholder'] ) ? $atts['placeholder'] : esc_html__( 'Keywords...', 'total' );
-$button_text = ! empty( $atts['button_text'] ) ? $atts['button_text'] : esc_html__( 'Search', 'total' );
+$placeholder = $atts['placeholder'] ?: esc_html__( 'Keywords...', 'total' );
+$button_text = $atts['button_text'] ?: esc_html__( 'Search', 'total' );
 
 // Autofocus.
 $autofocus = ( 'true' == $atts['autofocus'] ) ? 'autofocus' : '';
@@ -47,7 +45,7 @@ if ( $bottom_margin_class = vcex_sanitize_margin_class( $atts['bottom_margin'], 
 }
 
 if ( $atts['visibility'] ) {
-	$wrap_classes[] = sanitize_html_class( $atts['visibility'] );
+	$wrap_classes[] = vcex_parse_visibility_class( $atts['visibility'] );
 }
 
 if ( ! empty( $atts['wrap_width'] ) && $atts['wrap_float'] ) {
@@ -86,7 +84,7 @@ $form_style = vcex_inline_style( array(
 ) );
 
 // Parse classes.
-$wrap_classes = vcex_parse_shortcode_classes( $wrap_classes, $shortcode_tag, $atts );
+$wrap_classes = vcex_parse_shortcode_classes( $wrap_classes, 'vcex_searchbar', $atts );
 
 // Begin output.
 $output .= '<div class="' . esc_attr( $wrap_classes ) . '"' . vcex_get_unique_id( $atts['unique_id'] ) . $wrap_style . '>';
@@ -98,13 +96,14 @@ $output .= '<div class="' . esc_attr( $wrap_classes ) . '"' . vcex_get_unique_id
 			$output .= '<span class="screen-reader-text">' . esc_html( $placeholder ) . '</span>';
 
 			$input_style = vcex_inline_style( array(
-				'width'        => $atts['input_width'],
-				'border_color' => $atts['input_border_color'],
-				'border_width' => $atts['input_border_width'],
-				'padding'      => $atts['input_padding'],
+				'width'         => $atts['input_width'],
+				'border_color'  => $atts['input_border_color'],
+				'border_width'  => $atts['input_border_width'],
+				'border_radius' => $atts['input_border_radius'],
+				'padding'       => $atts['input_padding'],
 			) );
 
-			$output .= '<input type="search" class="' . esc_attr( $input_classes ) . '" name="s" placeholder="' . esc_attr( $placeholder ) . '"' . $input_style . $autofocus . ' />';
+			$output .= '<input type="search" class="' . esc_attr( $input_classes ) . '" name="s" placeholder="' . esc_attr( $placeholder ) . '"' . $input_style . $autofocus . '>';
 
 		$output .= '</label>';
 
@@ -115,12 +114,32 @@ $output .= '<div class="' . esc_attr( $wrap_classes ) . '"' . vcex_get_unique_id
 			$advanced_query = html_entity_decode( $advanced_query );
 
 			// Convert to array.
-			$advanced_query = parse_str( $advanced_query, $advanced_query_array );
+			parse_str( $advanced_query, $advanced_query_array );
 
 			// If array is valid loop through params.
 			if ( $advanced_query_array ) :
 
 				foreach( $advanced_query_array as $key => $val ) :
+
+					switch ( $val ) {
+						case 'current_term':
+							if ( is_tax() ) {
+								$tax_obj = get_queried_object();
+								if ( is_object( $tax_obj ) && ! empty( $tax_obj->taxonomy ) ) {
+									$val = $tax_obj->slug;
+								}
+							}
+							break;
+						case 'current_author':
+							if ( is_author() ) {
+								$val = get_the_author_meta( 'ID' );
+							}
+							break;
+					}
+
+					if ( 'current_term' === $val || 'current_author' === $val ) {
+						continue;
+					}
 
 					$output .= '<input type="hidden" name="' . esc_attr( $key ) . '" value="' . esc_attr( $val ) . '">';
 

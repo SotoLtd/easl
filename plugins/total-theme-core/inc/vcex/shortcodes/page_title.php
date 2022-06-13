@@ -75,7 +75,7 @@ if ( ! class_exists( 'VCEX_Page_Title_Shortcode' ) ) {
 				),
 				array(
 					'type' => 'textfield',
-					'heading' => esc_html__( 'Width', 'total-theme-core' ),
+					'heading' => esc_html__( 'Max Width', 'total-theme-core' ),
 					'param_name' => 'width',
 					'description' => vcex_shortcode_param_description( 'width' ),
 				),

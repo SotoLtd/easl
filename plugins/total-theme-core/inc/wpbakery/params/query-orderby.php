@@ -1,14 +1,14 @@
 <?php
-/**
- * WPBakery Param => Query Orderby.
- *
- * @package TotalThemeCore
- * @version 1.2.8
- */
 namespace TotalThemeCore\WPBakery\Params;
 
 defined( 'ABSPATH' ) || exit;
 
+/**
+ * WPBakery Param => Query Orderby.
+ *
+ * @package TotalThemeCore
+ * @version 1.3.2
+ */
 final class Query_Orderby {
 
 	public static function output( $settings, $value ) {
@@ -19,7 +19,7 @@ final class Query_Orderby {
 				. esc_attr( $settings['param_name'] )
 				. ' ' . esc_attr( $settings['type'] ) .'">';
 
-		$post_type = isset( $settings['post_type'] ) ? $settings['post_type'] : 'post';
+		$post_type = $settings['post_type'] ?? 'post';
 
 		$options = vcex_orderby_array( $post_type );
 

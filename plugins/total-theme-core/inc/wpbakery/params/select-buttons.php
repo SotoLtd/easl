@@ -1,25 +1,24 @@
 <?php
-/**
- * WPBakery Param => Select Buttons.
- *
- * @package TotalThemeCore
- * @version 1.2.8
- */
 namespace TotalThemeCore\WPBakery\Params;
 
 defined( 'ABSPATH' ) || exit;
 
+/**
+ * WPBakery Param => Select Buttons.
+ *
+ * @package TotalThemeCore
+ * @version 1.3.2
+ */
 final class Select_Buttons {
 
 	public static function output( $settings, $value ) {
-
 		$wrap_classes = array(
 			'vcex-select-buttons-param',
 			'vcex-custom-select',
 			'vcex-noselect',
 		);
 
-		$choices = $settings['choices'] ? $settings['choices'] : array();
+		$choices = $settings['choices'] ?: array();
 
 		switch ( $choices ) {
 			case 'alert' :
@@ -104,7 +103,7 @@ final class Select_Buttons {
 		if ( ! $choices ) {
 			$output .= '<input type="text" class="wpb_vc_param_value '
 					. esc_attr( $settings['param_name'] ) . ' '
-					. esc_attr( $settings['type'] ) . '" name="' . esc_attr( $settings['param_name'] ) . '" value="' . esc_attr( $value ) . '"/>';
+					. esc_attr( $settings['type'] ) . '" name="' . esc_attr( $settings['param_name'] ) . '" value="' . esc_attr( $value ) . '">';
 		}
 
 		$output = '<div class="' . esc_attr( implode( ' ', $wrap_classes ) ) . '">';
@@ -138,7 +137,7 @@ final class Select_Buttons {
 
 		}
 
-		$output .= '<input name="' . esc_attr( $settings['param_name'] ) . '" class="vcex-hidden-input wpb-input wpb_vc_param_value  ' . esc_attr( $settings['param_name'] ) . ' ' . esc_attr( $settings['type'] ) . '_field" type="hidden" value="' . esc_attr( $value ) . '" />';
+		$output .= '<input name="' . esc_attr( $settings['param_name'] ) . '" class="vcex-hidden-input wpb-input wpb_vc_param_value  ' . esc_attr( $settings['param_name'] ) . ' ' . esc_attr( $settings['type'] ) . '_field" type="hidden" value="' . esc_attr( $value ) . '">';
 
 		$output .= '</div>';
 

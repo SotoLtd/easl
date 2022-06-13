@@ -20,10 +20,10 @@ defined( 'ABSPATH' ) || exit;
 			<div class="wpex-demo-import-filter__categories">
 				<select>
 					<?php
-					// Loop through categories
-					echo '<option value="all">'. esc_html__( 'Filter by Category', 'total-theme-core' ) .'</option>';
+					// Loop through categories.
+					echo '<option value="all">' . esc_html__( 'Filter by Category', 'total-theme-core' ) . '</option>';
 
-					// Add the 'other' category at the end of the array
+					// Add the 'other' category at the end of the array.
 					if ( isset( $this->categories[ 'other' ] ) ) {
 						$value = $this->categories[ 'other' ];
 						unset( $this->categories[ 'other' ] );
@@ -32,7 +32,7 @@ defined( 'ABSPATH' ) || exit;
 
 					// Loop through categories and display them at the top
 					foreach ( $this->categories as $category_key => $category_value ) {
-						echo '<option value="'. esc_attr( $category_key ) . '">' . esc_html( $category_value ) . '</option>';
+						echo '<option value="' . esc_attr( $category_key ) . '">' . esc_html( $category_value ) . '</option>';
 					} ?>
 				</select>
 			</div>
@@ -58,7 +58,7 @@ defined( 'ABSPATH' ) || exit;
 				<div class="wpex-demo-import-grid__item theme" data-demo="<?php echo esc_attr( $demo_data['demo_slug'] ); ?>" data-categories="<?php echo esc_attr( $categories ); ?>">
 
 					<div class="theme-screenshot">
-						<img class="wpex-lazyload" data-original="<?php echo esc_url( $demo_data['screenshot'] ); ?>" alt="<?php _e( 'Screenshot', 'total-theme-core' ); ?>" />
+						<img src="<?php echo esc_url( $demo_data['screenshot'] ); ?>" alt="<?php _e( 'Screenshot', 'total-theme-core' ); ?>" loading="lazy">
 						<span class="spinner wpex-demo-spinner"></span>
 					</div>
 

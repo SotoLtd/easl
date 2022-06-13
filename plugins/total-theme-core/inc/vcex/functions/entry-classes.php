@@ -3,7 +3,7 @@
  * Returns classes for entry parts in various vcex shortcodes.
  *
  * @package TotalThemeCore
- * @version 1.2.8
+ * @version 1.3.2
  */
 
 defined( 'ABSPATH' ) || exit;
@@ -14,7 +14,6 @@ defined( 'ABSPATH' ) || exit;
  * @since 1.2
  */
 function vcex_get_entry_inner_class( $class = '', $shortcode_tag = '', $atts = '' ) {
-
 	$classes = array();
 
 	if ( $class ) {
@@ -39,10 +38,14 @@ function vcex_get_entry_inner_class( $class = '', $shortcode_tag = '', $atts = '
 		$classes[] = vcex_vc_shortcode_custom_css_class( $atts['entry_css'] );
 	}
 
+	/**
+	 * Filters the entry-inner element classes.
+	 *
+	 * @param array $classes
+	 */
 	$classes = (array) apply_filters( 'vcex_entry_inner_class', $classes, $class, $shortcode_tag, $atts );
 
 	return array_unique( array_filter( $classes ) );
-
 }
 
 /**
@@ -51,7 +54,6 @@ function vcex_get_entry_inner_class( $class = '', $shortcode_tag = '', $atts = '
  * @since 1.2
  */
 function vcex_get_entry_media_class( $class = '', $shortcode_tag = '', $atts = '' ) {
-
 	$classes = array();
 
 	if ( $class ) {
@@ -114,10 +116,14 @@ function vcex_get_entry_media_class( $class = '', $shortcode_tag = '', $atts = '
 		$classes[] = 'wpex-mb-20';
 	}
 
+	/**
+	 * Filters the entry-media element classes.
+	 *
+	 * @param array $classes
+	 */
 	$classes = (array) apply_filters( 'vcex_entry_media_class', $classes, $class, $shortcode_tag, $atts );
 
 	return array_unique( $classes );
-
 }
 
 /**
@@ -126,7 +132,6 @@ function vcex_get_entry_media_class( $class = '', $shortcode_tag = '', $atts = '
  * @since 1.2
  */
 function vcex_get_entry_thumbnail_class( $class = '', $shortcode_tag = '', $atts = '' ) {
-
 	$classes = array();
 
 	if ( $class ) {
@@ -151,10 +156,14 @@ function vcex_get_entry_thumbnail_class( $class = '', $shortcode_tag = '', $atts
 		$classes[] = 'wpex-' . sanitize_html_class( $atts['img_border_radius'] );
 	}
 
+	/**
+	 * Filters the entry thumbnail element classes.
+	 *
+	 * @param array $classes
+	 */
 	$classes = (array) apply_filters( 'vcex_entry_thumbnail_class', $classes, $class, $shortcode_tag, $atts );
 
 	return array_unique( $classes );
-
 }
 
 /**
@@ -163,7 +172,6 @@ function vcex_get_entry_thumbnail_class( $class = '', $shortcode_tag = '', $atts
  * @since 1.2
  */
 function vcex_get_entry_details_class( $class = '', $shortcode_tag = '', $atts = '' ) {
-
 	$classes = array();
 
 	if ( $class ) {
@@ -201,10 +209,14 @@ function vcex_get_entry_details_class( $class = '', $shortcode_tag = '', $atts =
 		$classes[] = vcex_vc_shortcode_custom_css_class( $atts['content_css'] );
 	}
 
+	/**
+	 * Filters the entry-details element classes.
+	 *
+	 * @param array $classes
+	 */
 	$classes = (array) apply_filters( 'vcex_entry_details_class', $classes, $class, $shortcode_tag, $atts );
 
 	return array_unique( array_filter( $classes ) );
-
 }
 
 /**
@@ -213,7 +225,6 @@ function vcex_get_entry_details_class( $class = '', $shortcode_tag = '', $atts =
  * @since 1.2
  */
 function vcex_get_entry_title_class( $class = '', $shortcode_tag = '', $atts = '' ) {
-
 	$classes = array();
 
 	if ( $class ) {
@@ -237,10 +248,14 @@ function vcex_get_entry_title_class( $class = '', $shortcode_tag = '', $atts = '
 		$classes[] = 'wpex-child-inherit-color';
 	}
 
+	/**
+	 * Filters the entry-title element classes.
+	 *
+	 * @param array $classes
+	 */
 	$classes = (array) apply_filters( 'vcex_entry_title_class', $classes, $class, $shortcode_tag, $atts );
 
 	return array_unique( $classes );
-
 }
 
 /**
@@ -249,7 +264,6 @@ function vcex_get_entry_title_class( $class = '', $shortcode_tag = '', $atts = '
  * @since 1.2
  */
 function vcex_get_entry_date_class( $class = '', $shortcode_tag = '', $atts = '' ) {
-
 	$classes = array();
 
 	if ( $class ) {
@@ -266,10 +280,14 @@ function vcex_get_entry_date_class( $class = '', $shortcode_tag = '', $atts = ''
 	$classes[] = 'wpex-text-gray-600';
 	$classes[] = 'wpex-mb-5';
 
+	/**
+	 * Filters the entry-date element classes.
+	 *
+	 * @param array $classes
+	 */
 	$classes = (array) apply_filters( 'vcex_entry_date_class', $classes, $class, $shortcode_tag, $atts );
 
 	return array_unique( $classes );
-
 }
 
 /**
@@ -278,7 +296,6 @@ function vcex_get_entry_date_class( $class = '', $shortcode_tag = '', $atts = ''
  * @since 1.2
  */
 function vcex_get_entry_categories_class( $class = '', $shortcode_tag = '', $atts = '' ) {
-
 	$classes = array();
 
 	if ( $class ) {
@@ -297,10 +314,14 @@ function vcex_get_entry_categories_class( $class = '', $shortcode_tag = '', $att
 	$classes[] = 'wpex-child-inherit-color';
 	$classes[] = 'wpex-mb-5';
 
+	/**
+	 * Filters the entry-categories element classes.
+	 *
+	 * @param array $classes
+	 */
 	$classes = (array) apply_filters( 'vcex_entry_categories_class', $classes, $class, $shortcode_tag, $atts );
 
 	return array_unique( $classes );
-
 }
 
 /**
@@ -309,7 +330,6 @@ function vcex_get_entry_categories_class( $class = '', $shortcode_tag = '', $att
  * @since 1.2
  */
 function vcex_get_entry_staff_position_class( $class = '', $shortcode_tag = '', $atts = '' ) {
-
 	$classes = array();
 
 	if ( $class ) {
@@ -330,10 +350,14 @@ function vcex_get_entry_staff_position_class( $class = '', $shortcode_tag = '', 
 		'wpex-mb-5', // can't use 15 because there could be comments below it.
 	);
 
+	/**
+	 * Filters the staff-entry-position element classes.
+	 *
+	 * @param array $classes
+	 */
 	$classes = (array) apply_filters( 'vcex_entry_staff_position_class', $classes, $class, $shortcode_tag, $atts );
 
 	return array_unique( $classes );
-
 }
 
 /**
@@ -342,7 +366,6 @@ function vcex_get_entry_staff_position_class( $class = '', $shortcode_tag = '', 
  * @since 1.2
  */
 function vcex_get_entry_excerpt_class( $class = '', $shortcode_tag = '', $atts = '' ) {
-
 	$classes = array();
 
 	if ( $class ) {
@@ -359,10 +382,14 @@ function vcex_get_entry_excerpt_class( $class = '', $shortcode_tag = '', $atts =
 	$classes[] = 'wpex-last-mb-0';
 	$classes[] = 'wpex-clr';
 
+	/**
+	 * Filters the entry-excerpt element classes.
+	 *
+	 * @param array $classes
+	 */
 	$classes = (array) apply_filters( 'vcex_entry_excerpt_class', $classes, $class, $shortcode_tag, $atts );
 
 	return array_unique( $classes );
-
 }
 
 /**
@@ -371,7 +398,6 @@ function vcex_get_entry_excerpt_class( $class = '', $shortcode_tag = '', $atts =
  * @since 1.2
  */
 function vcex_get_entry_button_wrap_class( $class = '', $shortcode_tag = '', $atts = '' ) {
-
 	$classes = array();
 
 	if ( $class ) {
@@ -387,8 +413,12 @@ function vcex_get_entry_button_wrap_class( $class = '', $shortcode_tag = '', $at
 	$classes[] = 'wpex-my-15';
 	$classes[] = 'wpex-clr';
 
+	/**
+	 * Filters the entry-readmore-wrap element classes.
+	 *
+	 * @param array $classes
+	 */
 	$classes = (array) apply_filters( 'vcex_entry_button_wrap_class', $classes, $class, $shortcode_tag, $atts );
 
 	return array_unique( $classes );
-
 }

@@ -3,7 +3,7 @@
  * Column Side Border Shortcode.
  *
  * @package TotalThemeCore
- * @version 1.2.8
+ * @version 1.3
  */
 
 defined( 'ABSPATH' ) || exit;
@@ -53,6 +53,7 @@ if ( ! class_exists( 'VCEX_Column_Side_Border_Shortcode' ) ) {
 						'left' => esc_html__( 'Left', 'total-theme-core' ),
 						'right' => esc_html__( 'Right', 'total-theme-core' ) ,
 					),
+					'admin_label' => true,
 				),
 				array(
 					'type' => 'vcex_colorpicker',

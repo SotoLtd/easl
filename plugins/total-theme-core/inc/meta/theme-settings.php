@@ -1,17 +1,15 @@
 <?php
-/**
- * Theme Settings Metabox.
- *
- * @package TotalThemeCore
- * @version 1.2.8
- */
-
 namespace TotalThemeCore\Meta;
-
 use \WP_Query;
 
 defined( 'ABSPATH' ) || exit;
 
+/**
+ * Theme Settings Metabox.
+ *
+ * @package TotalThemeCore
+ * @version 1.3.2
+ */
 final class Theme_Settings {
 
 	/*
@@ -34,38 +32,19 @@ final class Theme_Settings {
 	private static $instance;
 
 	/**
-	 * Disable instantiation.
-	 */
-	private function __construct() {}
-
-	/**
-	 * Disable the cloning of this class.
-	 *
-	 * @return void
-	 */
-	final public function __clone() {}
-
-	/**
-	 * Disable the wakeup of this class.
-	 */
-	final public function __wakeup() {}
-
-	/**
 	 * Create or retrieve the instance of Theme_Settings.
 	 */
 	public static function instance() {
 		if ( is_null( static::$instance ) ) {
-			static::$instance = new Theme_Settings;
-			static::$instance->init_hooks();
+			static::$instance = new self();
 		}
-
 		return static::$instance;
 	}
 
 	/**
-	 * Hook into actions and filters.
+	 * Constructor.
 	 */
-	public function init_hooks() {
+	public function __construct() {
 		add_action( 'admin_init', array( $this, 'admin_init' ) );
 	}
 
@@ -210,7 +189,6 @@ final class Theme_Settings {
 
 		// No active tabs.
 		if ( empty( $active_tabs ) ) {
-			echo $empty_notice;
 			return;
 		}
 
@@ -234,7 +212,7 @@ final class Theme_Settings {
 
 					$count++;
 
-					$tab_title = isset( $tab['title'] ) ? $tab['title'] : esc_html__( 'Other', 'total-theme-core' );
+					$tab_title = $tab['title'] ?? esc_html__( 'Other', 'total-theme-core' );
 					$tab_post_type = $this->get_tab_post_type( $tab );
 					$is_open_tab   = $has_active_tab = false;
 
@@ -320,12 +298,12 @@ final class Theme_Settings {
 
 						$meta_id     = $setting['id'];
 						$title       = $setting['title'];
-						$hidden      = isset( $setting['hidden'] ) ? $setting['hidden'] : false;
-						$type        = isset( $setting['type'] ) ? $setting['type'] : 'text';
-						$default     = isset( $setting['default'] ) ? $setting['default'] : '';
-						$description = isset( $setting['description'] ) ? $setting['description'] : '';
+						$hidden      = $setting['hidden'] ?? false;
+						$type        = $setting['type'] ?? 'text';
+						$default     = $setting['default'] ?? '';
+						$description = $setting['description'] ?? '';
 						$meta_value  = get_post_meta( $post_id, $meta_id, true );
-						$meta_value  = $meta_value ? $meta_value : $default;
+						$meta_value  = $meta_value ?: $default;
 
 						?>
 
@@ -354,7 +332,7 @@ final class Theme_Settings {
 								// Button Group.
 								case 'button_group':
 
-									$options = isset ( $setting['options'] ) ? $setting['options'] : '';
+									$options = $setting['options'] ?? '';
 
 									if ( is_array( $options ) ) { ?>
 
@@ -387,7 +365,7 @@ final class Theme_Settings {
 								// Enable Disable button group.
 								case 'button_group_ed':
 
-									$options = isset ( $setting['options'] ) ? $setting['options'] : '';
+									$options = $setting['options'] ?? '';
 
 									if ( is_array( $options ) ) { ?>
 
@@ -426,7 +404,7 @@ final class Theme_Settings {
 								// Date Field.
 								case 'date':
 
-									$meta_value = $meta_value ? date( 'Y-m-d', $meta_value ) : '';
+									$meta_value = $meta_value ? date( get_option( 'date_format' ), $meta_value ) : '';
 
 									wp_enqueue_script( 'jquery-ui' );
 
@@ -449,9 +427,11 @@ final class Theme_Settings {
 								// Number Field.
 								case 'number':
 
-									$step = isset( $setting['step'] ) ? $setting['step'] : '1';
-									$min  = isset( $setting['min'] ) ? $setting['min'] : '1';
-									$max  = isset( $setting['max'] ) ? $setting['max'] : '10'; ?>
+									$step = $setting['step'] ?? '1';
+									$min  = $setting['min'] ?? '1';
+									$max  = $setting['max'] ?? '10';
+
+									?>
 
 									<td>
 										<input class="wpex-input" name="<?php echo esc_attr( $meta_id ); ?>" type="number" value="<?php echo esc_attr( $meta_value ); ?>" step="<?php echo floatval( $step ); ?>" min="<?php echo floatval( $min ); ?>" max="<?php echo floatval( $max ); ?>">
@@ -539,7 +519,7 @@ final class Theme_Settings {
 										$setting['options'] = call_user_func( $setting['options_callback'] );
 									}
 
-									$options = isset( $setting['options'] ) ? $setting['options'] : '';
+									$options = $setting['options'] ?? '';
 
 									if ( ! empty( $options ) && is_array( $options ) ) { ?>
 
@@ -595,7 +575,7 @@ final class Theme_Settings {
 												if ( is_numeric( $meta_value ) && wp_attachment_is_image( $meta_value ) ) {
 													echo wp_get_attachment_image( $meta_value, 'thumbnail' );
 												} else {
-													echo '<img src="'. $meta_value . '" />';
+													echo '<img src="' . esc_url( $meta_value ) . '">';
 												}
 											} ?>
 										</div>
@@ -621,7 +601,7 @@ final class Theme_Settings {
 									<td>
 										<div class="uploader">
 										<input class="wpex-input" type="text" name="<?php echo esc_attr( $meta_id ); ?>" value="<?php echo esc_attr( $meta_value ); ?>">
-										<input class="wpex-mb-uploader button-secondary" name="<?php echo esc_attr( $meta_id ); ?>" type="button" value="<?php esc_html_e( 'Upload', 'total-theme-core' ); ?>" />
+										<input class="wpex-mb-uploader button-secondary" name="<?php echo esc_attr( $meta_id ); ?>" type="button" value="<?php esc_html_e( 'Upload', 'total-theme-core' ); ?>">
 										</div>
 									</td>
 
@@ -631,9 +611,11 @@ final class Theme_Settings {
 								// Editor.
 								case 'editor':
 
-									$teeny= isset( $setting['teeny'] ) ? $setting['teeny'] : false;
-									$rows = isset( $setting['rows'] ) ? $setting['rows'] : '10';
-									$media_buttons= isset( $setting['media_buttons'] ) ? $setting['media_buttons'] : true; ?>
+									$teeny = $setting['teeny'] ?? false;
+									$rows = $setting['rows'] ?? '10';
+									$media_buttons = $setting['media_buttons'] ?? true;
+									?>
+
 									<td><?php wp_editor( $meta_value, $meta_id, array(
 										'textarea_name' => $meta_id,
 										'teeny'         => $teeny,
@@ -708,7 +690,7 @@ final class Theme_Settings {
 		/* OK, it's safe for us to save the data now. Now we can loop through fields */
 
 		// Check reset field.
-		$reset = isset( $_POST['wpex_metabox_reset'] ) ? $_POST['wpex_metabox_reset'] : '';
+		$reset = $_POST['wpex_metabox_reset'] ?? '';
 
 		// Get array of settings to save.
 		$tabs = $this->meta_array( get_post( $post_id ) );
@@ -754,8 +736,8 @@ final class Theme_Settings {
 			}
 
 			// Vars.
-			$value = isset( $_POST[ $id ] ) ? $_POST[ $id ] : '';
-			$type  = isset( $setting['type'] ) ? $setting['type'] : 'text';
+			$value = $_POST[ $id ] ?? '';
+			$type  = $setting['type'] ?? 'text';
 
 			switch ( $type ) {
 
@@ -1156,14 +1138,6 @@ final class Theme_Settings {
 					'type' => 'image',
 					'description' => esc_html__( 'Retina version for the overlay header custom logo.', 'total-theme-core' ),
 				),
-				'overlay_header_retina_logo_height' => array(
-					'title' => esc_html__( 'Overlay Header Retina Logo Height', 'total-theme-core'),
-					'id' => $prefix . 'overlay_header_logo_retina_height',
-					'description' => esc_html__( 'Enter a size in px.', 'total-theme-core' ),
-					'type' => 'number',
-					'max' => '999',
-					'min' => '1',
-				),
 			),
 		);
 
@@ -1488,13 +1462,13 @@ final class Theme_Settings {
 				),
 				'post_oembed' => array(
 					'title' => esc_html__( 'oEmbed URL', 'total-theme-core' ),
-					'description' => esc_html__( 'Enter a URL that is compatible with WP\'s built-in oEmbed feature. This setting is used for your video and audio post formats.', 'total-theme-core' ) .'<br /><a href="http://codex.wordpress.org/Embeds" target="_blank">'. esc_html__( 'Learn More', 'total-theme-core' ) .' &rarr;</a>',
+					'description' => esc_html__( 'Enter a URL that is compatible with WP\'s built-in oEmbed feature. This setting is used for your video and audio post formats.', 'total-theme-core' ) . '<br><a href="http://codex.wordpress.org/Embeds" target="_blank">'. esc_html__( 'Learn More', 'total-theme-core' ) . ' &rarr;</a>',
 					'id' => $prefix . 'post_oembed',
 					'type' => 'text',
 				),
 				'post_self_hosted_shortcode_redux' => array(
 					'title' => esc_html__( 'Self Hosted', 'total-theme-core' ),
-					'description' => esc_html__( 'Insert your self hosted video or audio URL here.', 'total-theme-core' ) .'<br /><a href="http://make.wordpress.org/core/2013/04/08/audio-video-support-in-core/" target="_blank">'. esc_html__( 'Learn More', 'total-theme-core' ) .' &rarr;</a>',
+					'description' => esc_html__( 'Insert your self hosted video or audio URL here.', 'total-theme-core' ) . '<br><a href="http://make.wordpress.org/core/2013/04/08/audio-video-support-in-core/" target="_blank">' . esc_html__( 'Learn More', 'total-theme-core' ) . ' &rarr;</a>',
 					'id' => $prefix . 'post_self_hosted_media',
 					'type' => 'media',
 				),
@@ -1539,7 +1513,7 @@ final class Theme_Settings {
 				'settings' => array(
 					'featured_video' => array(
 						'title' => esc_html__( 'oEmbed URL', 'total-theme-core' ),
-						'description' => esc_html__( 'Enter a URL that is compatible with WP\'s built-in oEmbed feature. This setting is used for your video and audio post formats.', 'total-theme-core' ) . '<br /><a href="http://codex.wordpress.org/Embeds" target="_blank">' . esc_html__( 'Learn More', 'total-theme-core' ) . ' &rarr;</a>',
+						'description' => esc_html__( 'Enter a URL that is compatible with WP\'s built-in oEmbed feature. This setting is used for your video and audio post formats.', 'total-theme-core' ) . '<br><a href="http://codex.wordpress.org/Embeds" target="_blank">' . esc_html__( 'Learn More', 'total-theme-core' ) . ' &rarr;</a>',
 						'id' => $prefix . 'post_video',
 						'type' => 'text',
 					),
@@ -1582,7 +1556,7 @@ final class Theme_Settings {
 	 * Get tab screen (post_type).
 	 */
 	public function get_tab_post_type( $tab ) {
-		$type = isset( $tab['post_type'] ) ? $tab['post_type'] : array();
+		$type = $tab['post_type'] ?? array();
 		if ( is_string( $type ) ) {
 			return str_split( $type );
 		}

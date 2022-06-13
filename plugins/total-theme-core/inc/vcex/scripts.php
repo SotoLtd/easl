@@ -1,58 +1,40 @@
 <?php
+namespace TotalThemeCore\Vcex;
+
+defined( 'ABSPATH' ) || exit;
+
 /**
  * Register scripts for use with vcex elements and enqueues global js.
  *
  * @package Total WordPress Theme
  * @subpackage Framework
- * @version 1.2.9
+ * @version 1.3.1
  */
-
-namespace TotalThemeCore\Vcex;
-
-defined( 'ABSPATH' ) || exit;
-
 final class Scripts {
 
 	/**
-	 * Our single Scripts instance.
+	 * Instance.
+	 *
+	 * @access private
+	 * @var object Class object.
 	 */
 	private static $instance;
-
-	/**
-	 * Disable instantiation.
-	 */
-	private function __construct() {}
-
-	/**
-	 * Disable the cloning of this class.
-	 *
-	 * @return void
-	 */
-	final public function __clone() {}
-
-	/**
-	 * Disable the wakeup of this class.
-	 */
-	final public function __wakeup() {}
 
 	/**
 	 * Create or retrieve the instance of Scripts.
 	 */
 	public static function instance() {
 		if ( is_null( static::$instance ) ) {
-			static::$instance = new Scripts;
-			static::$instance->init_hooks();
+			static::$instance = new self();
 		}
-
 		return static::$instance;
 	}
 
 	/**
 	 * Class Constructor.
 	 */
-	public function init_hooks() {
+	public function __construct() {
 		add_action( 'wp_enqueue_scripts', array( $this, 'register_scripts' ) );
-		add_action( 'wp_enqueue_scripts', array( $this, 'enqueue_global_script' ), PHP_INT_MAX );
 	}
 
 	/**
@@ -60,11 +42,16 @@ final class Scripts {
 	 */
 	public function register_scripts() {
 
-		/* Justified Grid */
+		$js_extension = '.js';
 
+		if ( defined( 'WPEX_MINIFY_JS' ) && WPEX_MINIFY_JS ) {
+			$js_extension = '.min.js';
+		}
+
+		/* Justified Grid */
 		wp_register_script(
 			'justifiedGallery',
-			vcex_asset_url( 'js/lib/jquery.justifiedGallery.min.js' ),
+			vcex_asset_url( 'js/lib/jquery.justifiedGallery' . $js_extension ),
 			array( 'jquery' ),
 			'3.8.1',
 			true
@@ -72,7 +59,7 @@ final class Scripts {
 
 		wp_register_script(
 			'vcex-justified-gallery',
-			vcex_asset_url( 'js/vcex-justified-gallery.min.js' ),
+			vcex_asset_url( 'js/vcex-justified-gallery' . $js_extension ),
 			array( 'jquery', 'justifiedGallery' ),
 			TTC_VERSION,
 			true
@@ -85,28 +72,43 @@ final class Scripts {
 			TTC_VERSION
 		);
 
-		/* Carousel Scripts */
+		/* Isotope Scripts */
+		wp_register_script(
+			'vcex-isotope-grids',
+			vcex_asset_url( 'js/vcex-isotope-grids' . $js_extension ),
+			array( 'jquery' ),
+			TTC_VERSION,
+			true
+		);
 
+		/* Carousel Scripts */
 		wp_register_style(
 			'wpex-owl-carousel',
-			vcex_asset_url( 'css/wpex-owl-carousel.min.css' ),
+			vcex_asset_url( 'css/wpex-owl-carousel.css' ),
 			array(),
 			'2.3.4'
 		);
 
 		wp_register_script(
 			'wpex-owl-carousel',
-			vcex_asset_url( 'js/lib/wpex-owl-carousel.min.js' ),
+			vcex_asset_url( 'js/lib/wpex-owl-carousel' . $js_extension ),
 			array( 'jquery' ),
 			TTC_VERSION,
 			true
 		);
 
+		wp_register_script(
+			'vcex-carousels',
+			vcex_asset_url( 'js/vcex-carousels' . $js_extension ),
+			array( 'jquery', 'wpex-owl-carousel', 'imagesloaded' ),
+			TTC_VERSION,
+			true
+		);
+
 		wp_localize_script(
-			'wpex-owl-carousel',
-			'wpexCarouselSettings',
+			'vcex-carousels',
+			'vcex_carousels_params',
 			array(
-				'rtl'  => is_rtl(),
 				'i18n' => array(
 					'NEXT' => esc_html__( 'next slide', 'total-theme-core' ),
 					'PREV' => esc_html__( 'previous slide', 'total-theme-core' ),
@@ -114,35 +116,24 @@ final class Scripts {
 			)
 		);
 
+		/* Responsive Text */
 		wp_register_script(
-			'vcex-carousels',
-			vcex_asset_url( 'js/vcex-carousels.min.js' ),
-			array( 'jquery', 'wpex-owl-carousel', 'imagesloaded' ),
+			'vcex-responsive-text',
+			vcex_asset_url( 'js/vcex-responsive-text' . $js_extension ),
+			array(),
 			TTC_VERSION,
 			true
 		);
 
-	}
-
-	/**
-	 * Load global scripts.
-	 */
-	public function enqueue_global_script() {
-
-		if ( ! apply_filters( 'vcex_enqueue_frontend_js', true ) ) {
-			return;
-		}
-
-		$deps = array( 'jquery' );
-
-		if ( defined( 'WPEX_THEME_JS_HANDLE' ) ) {
-			$deps[] = WPEX_THEME_JS_HANDLE;
-		}
-
-		wp_enqueue_script(
-			'vcex-shortcodes',
-			vcex_asset_url( 'js/vcex-shortcodes.min.js' ),
-			$deps,
+		/**
+		 * Responsive CSS.
+		 *
+		 * @deprecated Soft deprecated in v1.3 in exchange for inline style tags, kept as fallback.
+		 */
+		wp_register_script(
+			'vcex-responsive-css',
+			vcex_asset_url( 'js/vcex-responsive-css' . $js_extension ),
+			array( 'jquery' ),
 			TTC_VERSION,
 			true
 		);

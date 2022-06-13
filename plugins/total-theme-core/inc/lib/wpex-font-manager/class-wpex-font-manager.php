@@ -28,39 +28,19 @@ if ( ! class_exists( 'WPEX_Font_Manager' ) ) {
 		public static $registered_fonts = array();
 
 		/**
-		 * Our single WPEX_Font_Manager instance.
+		 * Instance.
+		 *
+		 * @access private
+		 * @var object Class object.
 		 */
 		private static $instance;
-
-		/**
-		 * Disable instantiation.
-		 */
-		private function __construct() {
-			// Private to disabled instantiation.
-		}
-
-		/**
-		 * Disable the cloning of this class.
-		 *
-		 * @return void
-		 */
-		final public function __clone() {
-			throw new Exception( 'You\'re doing things wrong.' );
-		}
-
-		/**
-		 * Disable the wakeup of this class.
-		 */
-		final public function __wakeup() {
-			throw new Exception( 'You\'re doing things wrong.' );
-		}
 
 		/**
 		 * Create or retrieve the instance of WPEX_Font_Manager.
 		 */
 		public static function instance() {
 			if ( is_null( static::$instance ) ) {
-				static::$instance = new WPEX_Font_Manager;
+				static::$instance = new self();
 				static::$instance->init_hooks();
 			}
 
@@ -743,15 +723,12 @@ if ( ! class_exists( 'WPEX_Font_Manager' ) ) {
 		 * Sanitize Font Name.
 		 */
 		public static function sanitize_font_name( $font_name, $type = '' ) {
-
 			switch ( $type ) {
 				case 'adobe':
 					$font_name = strtolower( str_replace( ' ', '-', $font_name ) );
 					break;
 			}
-
 			return wp_strip_all_tags( $font_name );
-
 		}
 
 		/**

@@ -3,7 +3,7 @@
  * Portfolio Grid Shortcode.
  *
  * @package TotalThemeCore
- * @version 1.2.8
+ * @version 1.3.2
  */
 
 defined( 'ABSPATH' ) || exit;
@@ -121,7 +121,7 @@ if ( ! class_exists( 'VCEX_Portfolio_Grid_Shortcode' ) ) {
 					'heading' => esc_html__( 'Element ID', 'total-theme-core' ),
 					'param_name' => 'unique_id',
 					'admin_label' => true,
-					'description' => sprintf( esc_html__( 'Enter element ID (Note: make sure it is unique and valid according to %sw3c specification%s).', 'total-theme-core' ), '<a href="https://www.w3schools.com/tags/att_global_id.asp" target="_blank" rel="noopener noreferrer">', '</a>' ),
+					'description' => vcex_shortcode_param_description( 'unique_id' ),
 				),
 				array(
 					'type' => 'textfield',
@@ -182,7 +182,7 @@ if ( ! class_exists( 'VCEX_Portfolio_Grid_Shortcode' ) ) {
 					'heading' => esc_html__( 'Offset', 'total-theme-core' ),
 					'param_name' => 'offset',
 					'group' => esc_html__( 'Query', 'total-theme-core' ),
-					'description' => esc_html__( 'Number of post to displace or pass over. Warning: Setting the offset parameter overrides/ignores the paged parameter and breaks pagination. The offset parameter is ignored when posts per page is set to -1.', 'total-theme-core' ),
+					'description' => esc_html__( 'Number of post to displace or pass over.', 'total-theme-core' ),
 					'dependency' => array( 'element' => 'custom_query', 'value' => array( 'false' ) ),
 				),
 				array(

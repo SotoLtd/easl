@@ -1,16 +1,15 @@
 <?php
+namespace TotalThemeCore\Vcex;
+
+defined( 'ABSPATH' ) || exit;
+
 /**
  * Returns source value from vcex field.
  *
  * @package Total WordPress Theme
  * @subpackage Framework
- * @version 1.2.8
+ * @version 1.3
  */
-
-namespace TotalThemeCore\Vcex;
-
-defined( 'ABSPATH' ) || exit;
-
 class Source_Value {
 	public $value = '';
 	private $atts = '';

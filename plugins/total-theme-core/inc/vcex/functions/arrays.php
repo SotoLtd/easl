@@ -3,7 +3,7 @@
  * Vcex shortcode arrays.
  *
  * @package TotalThemeCore
- * @version 1.2.8
+ * @version 1.3
  */
 
 defined( 'ABSPATH' ) || exit;
@@ -31,7 +31,7 @@ function vcex_get_post_types() {
 		) );
 		if ( $post_types ) {
 			foreach ( $post_types as $post_type ) {
-				if ( 'revision' != $post_type && 'nav_menu_item' != $post_type && 'attachment' != $post_type ) {
+				if ( 'revision' !== $post_type && 'nav_menu_item' !== $post_type && 'attachment' !== $post_type ) {
 					$post_types_list[$post_type] = $post_type;
 				}
 			}
@@ -90,6 +90,7 @@ function vcex_icon_box_styles() {
 		'one'   => esc_html__( 'Left Icon', 'total-theme-core' ),
 		'seven' => esc_html__( 'Right Icon', 'total-theme-core' ),
 		'two'   => esc_html__( 'Top Icon', 'total-theme-core' ),
+		'eight' => esc_html__( 'Bottom Icon', 'total-theme-core' ),
 		'four'  => esc_html__( 'Top Icon with Outline', 'total-theme-core' ),
 		'five'  => esc_html__( 'Top Icon with Gray Background', 'total-theme-core' ),
 		'six'   => esc_html__( 'Top Icon with Black Background', 'total-theme-core' ),
@@ -122,6 +123,7 @@ function vcex_orderby_array( $type = 'post' ) {
 		esc_html__( 'Parent', 'total-theme-core' )             => 'parent',
 		esc_html__( 'Type', 'total-theme-core' )               => 'type',
 		esc_html__( 'ID', 'total-theme-core' )                 => 'ID',
+		esc_html__( 'Relevance', 'total-theme-core' )          => 'relevance',
 		esc_html__( 'Comment Count', 'total-theme-core' )      => 'comment_count',
 		esc_html__( 'Menu Order', 'total-theme-core' )         => 'menu_order',
 		esc_html__( 'Meta Key Value', 'total-theme-core' )     => 'meta_value',
@@ -560,4 +562,32 @@ function vcex_opacity_choices() {
 		return array_flip( wpex_utl_opacities() );
 	}
 	return array( 'Exclusive Total theme setting' => '' );
+}
+
+/**
+ * Align Items choices.
+ */
+function vcex_align_items_choices() {
+	return array(
+		esc_html__( 'Default', 'total-theme-core' )   => '',
+		esc_html__( 'Stretch', 'total-theme-core' ) => 'strech',
+		esc_html__( 'Center', 'total-theme-core' )  => 'center',
+		esc_html__( 'Start', 'total-theme-core' )   => 'start',
+		esc_html__( 'End', 'total-theme-core' )     => 'end',
+	);
+}
+
+/**
+ * Justify Content choices.
+ */
+function vcex_justify_content_choices() {
+	return array(
+		esc_html__( 'Default', 'total-theme-core' )       => '',
+		esc_html__( 'Start', 'total-theme-core' )         => 'start',
+		esc_html__( 'Center', 'total-theme-core' )        => 'center',
+		esc_html__( 'End', 'total-theme-core' )           => 'end',
+		esc_html__( 'Space Between', 'total-theme-core' ) => 'space-between',
+		esc_html__( 'Space Around', 'total-theme-core' )  => 'space-around',
+		esc_html__( 'Space Evenly', 'total-theme-core' )  => 'space-evenly',
+	);
 }

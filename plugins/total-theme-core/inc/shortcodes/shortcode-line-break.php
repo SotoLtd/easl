@@ -8,13 +8,13 @@ final class Shortcode_Line_Break {
 	public function __construct() {
 
 		if ( ! shortcode_exists( 'br' ) ) {
-			add_shortcode( 'br', array( __CLASS__, 'output' ) );
+			add_shortcode( 'br', __CLASS__ . '::output' );
 		}
 
 	}
 
 	public static function output( $atts, $content = '' ) {
-		return '<br />';
+		return '<br>';
 	}
 
 }

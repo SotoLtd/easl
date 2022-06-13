@@ -4,22 +4,20 @@
  *
  * @package Total WordPress Theme
  * @subpackage Total Theme Core
- * @version 1.2.5
+ * @version 1.3.2
  */
 
 defined( 'ABSPATH' ) || exit;
 
-$shortcode_tag = 'vcex_pricing';
-
-if ( ! vcex_maybe_display_shortcode( $shortcode_tag, $atts ) ) {
+if ( ! vcex_maybe_display_shortcode( 'vcex_pricing', $atts ) ) {
 	return;
 }
 
 // Get and extract shortcode attributes
-$atts = vcex_shortcode_atts( $shortcode_tag, $atts, $this );
+$atts = vcex_shortcode_atts( 'vcex_pricing', $atts, $this );
 extract( $atts );
 
-$style = $style ? $style : 'default';
+$style = $style ?: 'default';
 $is_featured = vcex_validate_boolean( $featured );
 
 // Define output var
@@ -95,7 +93,7 @@ if ( $el_class ) {
 }
 
 if ( $visibility ) {
-	$class[] = sanitize_html_class( $visibility );
+	$class[] = vcex_parse_visibility_class( $visibility );
 }
 
 if ( $hover_animation ) {
@@ -107,7 +105,7 @@ if ( $css ) {
 	$class[] = vcex_vc_shortcode_custom_css_class( $css );
 }
 
-$class = vcex_parse_shortcode_classes( implode( ' ', $class ), $shortcode_tag, $atts );
+$class = vcex_parse_shortcode_classes( implode( ' ', $class ), 'vcex_pricing', $atts );
 
 $wrap_attrs = array(
 	'id'    => vcex_get_unique_id( $unique_id ),
@@ -127,7 +125,7 @@ if ( $css_animation && 'none' !== $css_animation ) {
 	$animation_classes = array( trim( vcex_get_css_animation( $css_animation ) ) );
 
 	if ( $visibility ) {
-		$animation_classes[] = sanitize_html_class( $visibility );
+		$animation_classes[] = vcex_parse_visibility_class( $visibility );
 	}
 
 	$output .= '<div class="' . esc_attr( implode( ' ', $animation_classes ) ) . '"' . $css_animation_style . '>';
@@ -183,8 +181,24 @@ $output .= '<div' . vcex_parse_html_attributes( $wrap_attrs ) . '>';
 				break;
 		}
 
+		// Responsive plan styles.
+		$unique_classname = vcex_element_unique_classname();
+
+		$el_responsive_styles = array(
+			'font_size' => $atts['plan_size'],
+		);
+
+		$responsive_css = vcex_element_responsive_css( $el_responsive_styles, $unique_classname );
+
+		if ( $responsive_css ) {
+			$plan_class[] = $unique_classname;
+			$output .= '<style>' . $responsive_css . '</style>';
+		}
+
+		// Filter plan classes.
 		$plan_class = apply_filters( 'vcex_pricing_plan_class', $plan_class, $atts );
 
+		// Inline plan styles.
 		$plan_style = vcex_inline_style( array(
 			'margin'         => $plan_margin,
 			'padding'        => $plan_padding,
@@ -198,17 +212,13 @@ $output .= '<div' . vcex_parse_html_attributes( $wrap_attrs ) . '>';
 			'font_family'    => $plan_font_family,
 		), false );
 
-		vcex_enqueue_font( $plan_font_family );
-
+		// Define plan attributes.
 		$plan_attrs = array(
 			'class' => $plan_class,
 			'style' => $plan_style,
 		);
 
-		if ( $responsive_data = vcex_get_module_responsive_data( $plan_size, 'font_size' ) ) {
-			$plan_attrs['data-wpex-rcss'] = $responsive_data;
-		}
-
+		// Display pricing plan.
 		$output .= '<div' . vcex_parse_html_attributes( $plan_attrs ) . '>';
 
 			$output .= wp_kses_post( do_shortcode( $plan ) );
@@ -222,10 +232,12 @@ $output .= '<div' . vcex_parse_html_attributes( $wrap_attrs ) . '>';
 	/*-----------------------------------------------------*/
 	if ( $cost ) {
 
+		// Set default cost classes.
 		$cost_class = array(
 			'vcex-pricing-cost',
 		);
 
+		// Custom priing style utility classes.
 		switch ( $style ) {
 			case 'alt-1':
 				$cost_class[] = 'wpex-text-accent';
@@ -262,8 +274,15 @@ $output .= '<div' . vcex_parse_html_attributes( $wrap_attrs ) . '>';
 				break;
 		}
 
+		/**
+		 * Filters the pricing table cost classes.
+		 *
+		 * @param array $cost_class
+		 * @param $array $shortcode_atts
+		 */
 		$cost_class = apply_filters( 'vcex_pricing_cost_class', $cost_class, $atts );
 
+		// Inline cost styles.
 		$cost_style = vcex_inline_style( array(
 			'background'  => $cost_background,
 			'padding'     => $cost_padding,
@@ -271,21 +290,21 @@ $output .= '<div' . vcex_parse_html_attributes( $wrap_attrs ) . '>';
 			'font_family' => $cost_font_family,
 		) );
 
-		vcex_enqueue_font( $cost_font_family );
-
+		// Define cost element html attributes.
 		$cost_attrs = array(
 			'class' => $cost_class,
 			'style' => $cost_style,
 		);
 
+		// Display cost element.
 		$output .= '<div' . vcex_parse_html_attributes( $cost_attrs ) . '>';
 
 			/*-----------------------------------------------------*/
 			/* [ Amount ]
 			/*-----------------------------------------------------*/
 			$amount_class = array(
-				'vcex-pricing-ammount',
-			); //@todo fix typo
+				'vcex-pricing-ammount', // I know there is a typo, too late now :(
+			);
 
 			switch ( $style ) {
 				case 'default':
@@ -295,23 +314,42 @@ $output .= '<div' . vcex_parse_html_attributes( $wrap_attrs ) . '>';
 					break;
 			}
 
+			// Responsive cost amount styles.
+			$unique_classname = vcex_element_unique_classname();
+
+			$el_responsive_styles = array(
+				'font_size' => $atts['cost_size'],
+			);
+
+			$responsive_css = vcex_element_responsive_css( $el_responsive_styles, $unique_classname );
+
+			if ( $responsive_css ) {
+				$amount_class[] = $unique_classname;
+				$output .= '<style>' . $responsive_css . '</style>';
+			}
+
+			/**
+			 * Filters the pricing table cost amount classes.
+			 *
+			 * @param array $class
+			 * @param array $shortcode_atts
+			 */
 			$amount_class = apply_filters( 'vcex_pricing_amount_class', $amount_class, $atts );
 
+			// Inline styles for the cost amount element.
 			$amount_style = vcex_inline_style( array(
 				'color'       => $cost_color,
 				'font_size'   => $cost_size,
 				'font_weight' => $cost_weight,
 			), false );
 
+			// Define cost amount html attributes.
 			$amount_attrs = array(
 				'class' => $amount_class,
 				'style' => $amount_style,
 			);
 
-			if ( $responsive_data = vcex_get_module_responsive_data( $cost_size, 'font_size' ) ) {
-				$amount_attrs['data-wpex-rcss'] = $responsive_data;
-			}
-
+			// Display cost amount element.
 			$output .= '<span' . vcex_parse_html_attributes( $amount_attrs ) . '>';
 
 				$output .= do_shortcode( wp_kses_post( $cost ) );
@@ -346,6 +384,26 @@ $output .= '<div' . vcex_parse_html_attributes( $wrap_attrs ) . '>';
 				$per_class[] = 'wpex-mt-10';
 			}
 
+			// Responsive styles for the per element.
+			$unique_classname = vcex_element_unique_classname();
+
+			$el_responsive_styles = array(
+				'font_size' => $atts['per_size'],
+			);
+
+			$responsive_css = vcex_element_responsive_css( $el_responsive_styles, $unique_classname );
+
+			if ( $responsive_css ) {
+				$per_class[] = $unique_classname;
+				$output .= '<style>' . $responsive_css . '</style>';
+			}
+
+			/**
+			 * Filters the pricing table "per" classes.
+			 *
+			 * @param array $class
+			 * @param array $shortcode_atts
+			 */
 			$per_class = apply_filters( 'vcex_pricing_per_class', $per_class, $atts );
 
 			if ( $per ) {
@@ -359,16 +417,10 @@ $output .= '<div' . vcex_parse_html_attributes( $wrap_attrs ) . '>';
 					'font_family'    => $per_font_family
 				), false );
 
-				vcex_enqueue_font( $per_font_family );
-
 				$per_attrs = array(
 					'class' => $per_class,
 					'style' => $per_style,
 				);
-
-				if ( $responsive_data = vcex_get_module_responsive_data( $per_size, 'font_size' ) ) {
-					$per_attrs['data-wpex-rcss'] = $responsive_data;
-				}
 
 				$output .= '<span' . vcex_parse_html_attributes( $per_attrs ) . '>';
 
@@ -410,6 +462,26 @@ $output .= '<div' . vcex_parse_html_attributes( $wrap_attrs ) . '>';
 				break;
 		}
 
+		// Responsive styles for the per element.
+		$unique_classname = vcex_element_unique_classname();
+
+		$el_responsive_styles = array(
+			'font_size' => $atts['font_size'],
+		);
+
+		$responsive_css = vcex_element_responsive_css( $el_responsive_styles, $unique_classname );
+
+		if ( $responsive_css ) {
+			$content_class[] = $unique_classname;
+			$output .= '<style>' . $responsive_css . '</style>';
+		}
+
+		/**
+		 * Filters the pricing table content element classes.
+		 *
+		 * @param array $content_class
+		 * @param array $shortcode_atts
+		 */
 		$content_class = apply_filters( 'vcex_pricing_content_class', $content_class, $atts );
 
 		$content_style = vcex_inline_style( array(
@@ -422,17 +494,12 @@ $output .= '<div' . vcex_parse_html_attributes( $wrap_attrs ) . '>';
 			'line_height' => $line_height,
 		), false );
 
-		vcex_enqueue_font( $font_family );
-
 		$content_attrs = array(
 			'class' => $content_class,
 			'style' => $content_style,
 		);
 
-		if ( $responsive_data = vcex_get_module_responsive_data( $font_size, 'font_size' ) ) {
-			$content_attrs['data-wpex-rcss'] = $responsive_data;
-		}
-
+		// Display the pricing content element.
 		$output .= '<div' . vcex_parse_html_attributes( $content_attrs ) . '>';
 
 			$output .= do_shortcode( wp_kses_post( $content ) );
@@ -468,6 +535,12 @@ $output .= '<div' . vcex_parse_html_attributes( $wrap_attrs ) . '>';
 				break;
 		}
 
+		/**
+		 * Filters the pricing table button wrap element classes.
+		 *
+		 * @param array $class
+		 * @param array $shortcode_atts
+		 */
 		$button_wrap_class = apply_filters( 'vcex_pricing_button_class', $button_wrap_class, $atts );
 
 		// Button Wrap Style
@@ -478,26 +551,35 @@ $output .= '<div' . vcex_parse_html_attributes( $wrap_attrs ) . '>';
 			'font_family' => $button_font_family,
 		) );
 
-		vcex_enqueue_font( $button_font_family );
-
 		$button_wrap_args = array(
 			'class' => $button_wrap_class,
 			'style' => $button_wrap_style,
 		);
 
-		// Extra checks needed due to button_url sanitization
-		// @todo this can be done better...
-		$button_url = $custom_button ? false : $button_url; // Set button url to false if custom_button isn't empty
+		/**
+		 * Extra checks needed due to button_url sanitization.
+		 *
+		 * @todo can this be done better?
+		 */
+		$button_url = $custom_button ? false : $button_url; // Set button url to false if custom_button isn't empty.
 
 		if ( $button_url || $custom_button ) {
 
 			$output .= '<div' . vcex_parse_html_attributes( $button_wrap_args ) . '>';
 
+				/**
+				 * Custom button.
+				 */
 				if ( $custom_button = vcex_parse_textarea_html( $custom_button ) ) {
 
 					$output .= do_shortcode( $custom_button );
 
-				} elseif ( $button_url ) {
+				}
+
+				/**
+				 * Theme button.
+				 */
+				elseif ( $button_url ) {
 
 					if ( ! $button_style_color && 'alt-3' === $style && $is_featured ) {
 						$button_style_color = 'white';
@@ -523,7 +605,30 @@ $output .= '<div' . vcex_parse_html_attributes( $wrap_attrs ) . '>';
 							break;
 					}
 
-					// Define button attributes
+					// Custom Button Classes.
+					if ( 'true' == $button_local_scroll ) {
+						$button_class[] = 'local-scroll-link';
+					}
+
+					if ( $button_transform ) {
+						$button_class[] = 'text-transform-' . esc_attr( $button_transform );
+					}
+
+					// Button responsive styles.
+					$unique_classname = vcex_element_unique_classname();
+
+					$el_responsive_styles = array(
+						'font_size' => $atts['button_size'],
+					);
+
+					$responsive_css = vcex_element_responsive_css( $el_responsive_styles, $unique_classname );
+
+					if ( $responsive_css ) {
+						$button_class[] = $unique_classname;
+						$output .= '<style>' . $responsive_css . '</style>';
+					}
+
+					// Define button attributes.
 					$button_attrs = array(
 						'href'   => esc_url( do_shortcode( $button_url ) ),
 						'title'  => esc_attr( do_shortcode( $button_title ) ),
@@ -532,15 +637,7 @@ $output .= '<div' . vcex_parse_html_attributes( $wrap_attrs ) . '>';
 						'class'  => $button_class
 					);
 
-					// Custom Button Classes
-					if ( 'true' == $button_local_scroll ) {
-						$button_attrs['class'][] = 'local-scroll-link';
-					}
-					if ( $button_transform ) {
-						$button_attrs['class'][] = 'text-transform-' . esc_attr( $button_transform );
-					}
-
-					// Button Data attributes
+					// Button Data attributes.
 					$hover_data = array();
 
 					if ( $button_hover_bg_color ) {
@@ -555,13 +652,9 @@ $output .= '<div' . vcex_parse_html_attributes( $wrap_attrs ) . '>';
 						$button_attrs['data-wpex-hover'] = htmlspecialchars( wp_json_encode( $hover_data ) );
 					}
 
-					if ( $button_size && $responsive_data = vcex_get_module_responsive_data( $button_size, 'font_size' ) ) {
-						$button_attrs['data-wpex-rcss'] = $responsive_data;
-					}
-
-					// Button Style
-					$border_color = ( 'outline' == $button_style ) ? $button_color : '';
-					$button_style = vcex_inline_style( array(
+					// Button Style.
+					$button_border_color = ( 'outline' === $button_style ) ? $button_color : '';
+					$button_css = vcex_inline_style( array(
 						'background'     => $button_bg_color,
 						'color'          => $button_color,
 						'letter_spacing' => $button_letter_spacing,
@@ -569,16 +662,17 @@ $output .= '<div' . vcex_parse_html_attributes( $wrap_attrs ) . '>';
 						'padding'        => $button_padding,
 						'border_radius'  => $button_border_radius,
 						'font_weight'    => $button_weight,
-						'border_color'   => $border_color,
+						'border_color'   => $button_border_color,
+						'border_width'   => $button_border_width,
 						'text_transform' => $button_transform,
 					), false );
 
-					// Add parsed button attributes to array
-					$button_attrs['style']  = $button_style;
+					// Add parsed button attributes to array.
+					$button_attrs['style']  = $button_css;
 
 					$output .= '<a' . vcex_parse_html_attributes( $button_attrs ) . '>';
 
-						// Get correct icon classes
+						// Get correct icon classes.
 						$button_icon_left  = vcex_get_icon_class( $atts, 'button_icon_left' );
 						$button_icon_right = vcex_get_icon_class( $atts, 'button_icon_right' );
 
@@ -587,9 +681,7 @@ $output .= '<div' . vcex_parse_html_attributes( $wrap_attrs ) . '>';
 							vcex_enqueue_icon_font( $icon_type, $button_icon_right );
 						}
 
-						/*
-						 * Button Icon Left
-						 */
+						// Button Icon Left.
 						if ( $button_icon_left ) {
 
 							$attrs = array(
@@ -620,9 +712,7 @@ $output .= '<div' . vcex_parse_html_attributes( $wrap_attrs ) . '>';
 
 						$output .= do_shortcode( $button_text );
 
-						/*
-						 * Button Icon Right
-						 */
+						// Button Icon Right.
 						if ( $button_icon_right ) {
 
 							$attrs = array(
@@ -656,7 +746,7 @@ $output .= '<div' . vcex_parse_html_attributes( $wrap_attrs ) . '>';
 
 		}
 
-	} // End button checks
+	} // End button checks.
 
 $output .= '</div>';
 

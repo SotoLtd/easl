@@ -3,9 +3,7 @@
  * Vcex shortcodes functions.
  *
  * @package TotalThemeCore
- * @version 1.2.8
- *
- * @todo Add table of contents.
+ * @version 1.3.2
  */
 
 defined( 'ABSPATH' ) || exit;
@@ -31,7 +29,6 @@ function vcex_total_exclusive_notice() {
  * Locate shortcode template.
  */
 function vcex_get_shortcode_template( $shortcode_tag ) {
-
 	$user_template_path = locate_template( 'vcex_templates/' . $shortcode_tag . '.php' );
 
 	if ( $user_template_path ) {
@@ -39,21 +36,26 @@ function vcex_get_shortcode_template( $shortcode_tag ) {
 	}
 
 	return TTC_PLUGIN_DIR_PATH . 'inc/vcex/templates/' . $shortcode_tag . '.php';
-
 }
 
 /**
  * Check if a given shortcode should display.
  */
 function vcex_maybe_display_shortcode( $shortcode_tag, $atts ) {
-
 	$check = true;
 
 	if ( is_admin() && ! wp_doing_ajax() ) {
 		$check = false; // shortcodes are for front-end only. Prevents issues with Gutenberg. !!! important !!!
 	}
 
-	return (bool) apply_filters( 'vcex_maybe_display_shortcode', $check, $shortcode_tag, $atts );
+	/**
+	 * Filters whether a vcex shortcode should display on the front-end or not.
+	 *
+	 * @param bool $check
+	 */
+	$check = (bool) apply_filters( 'vcex_maybe_display_shortcode', $check, $shortcode_tag, $atts );
+
+	return $check;
 }
 
 /**
@@ -70,14 +72,14 @@ function vcex_do_shortcode_function( $tag, $atts = array(), $content = null ) {
 }
 
 /**
- * Return correct asset path.
+ * Return asset path.
  */
 function vcex_asset_url( $part = '' ) {
 	return TTC_PLUGIN_DIR_URL . 'inc/vcex/assets/' . $part;
 }
 
 /**
- * Return correct asset dir path.
+ * Return asset dir path.
  */
 function vcex_asset_dir_path( $part = '' ) {
 	return TTC_PLUGIN_DIR_PATH . 'inc/vcex/assets/' . $part;
@@ -97,7 +99,6 @@ function vcex_vc_is_inline() {
  * Get post type cat tax.
  */
 function vcex_get_post_type_cat_tax( $post_type = '' ) {
-
 	if ( function_exists( 'wpex_get_post_type_cat_tax' ) ) {
 		return wpex_get_post_type_cat_tax( $post_type );
 	}
@@ -123,7 +124,14 @@ function vcex_get_post_type_cat_tax( $post_type = '' ) {
 			$tax = '';
 	}
 
-	return apply_filters( 'wpex_get_post_type_cat_tax', $tax, $post_type );
+	/**
+	 * Filters the post type category taxonomy name.
+	 *
+	 * @param string $tax
+	 */
+	$tax = (string) apply_filters( 'wpex_get_post_type_cat_tax', $tax, $post_type );
+
+	return $tax;
 }
 
 /**
@@ -133,8 +141,10 @@ function vcex_intval( $val = null, $fallback = null ) {
 	if ( 0 === $val ) {
 		return 0; // Some settings may need empty values.
 	}
-	$val = intval( $val );
-	return $val ? $val : intval( $fallback );
+
+	$val = intval( $val ); // sanitize $val first incase it returns 0
+
+	return $val ?: $fallback;
 }
 
 /**
@@ -150,6 +160,8 @@ function vcex_vc_param_group_parse_atts( $atts_string ) {
 
 /**
  * Validate Font Size.
+ *
+ * @todo rename to vcex_sanitize_font_size()
  */
 function vcex_validate_font_size( $input ) {
 	if ( strpos( $input, 'px' )
@@ -226,7 +238,15 @@ function vcex_get_body_font_size() {
 	if ( function_exists( 'wpex_get_body_font_size' ) ) {
 		return wpex_get_body_font_size();
 	}
-	return apply_filters( 'vcex_get_body_font_size', '13px' );
+
+	/**
+	 * Filters the site body font size.
+	 *
+	 * @param string|int $font_size
+	 */
+	$font_size = apply_filters( 'vcex_get_body_font_size', '13px' );
+
+	return $font_size;
 }
 
 /**
@@ -293,7 +313,6 @@ function vcex_string_to_array( $value = array() ) {
  * Combines multiple top/right/bottom/left fields.
  */
 function vcex_combine_trbl_fields( $top = '', $right = '', $bottom = '', $left = '' ) {
-
 	$margins = array();
 
 	if ( $top ) {
@@ -315,14 +334,12 @@ function vcex_combine_trbl_fields( $top = '', $right = '', $bottom = '', $left =
 	if ( $margins ) {
 		return implode( '|', $margins );
 	}
-
 }
 
 /**
  * Migrate font_container field to individual params.
  */
 function vcex_migrate_font_container_param( $font_container_field = '', $target = '', $atts = array() ) {
-
 	if ( empty( $atts[ $font_container_field ] ) ) {
 		return $atts;
 	}
@@ -381,7 +398,7 @@ function vcex_vc_shortcode_custom_css_class( $css = '' ) {
 }
 
 /**
- * Adds inline style for elements.
+ * Returns inline style tag based on css properties.
  */
 function vcex_inline_style( $atts = array(), $add_style = true ) {
 	$atts = array_filter( $atts ); // remove empty items.
@@ -450,27 +467,45 @@ function vcex_get_post_class( $class = '', $post_id = null ) {
  */
 function vcex_get_module_header( $args = array() ) {
 	if ( function_exists( 'wpex_get_heading' ) ) {
-		$output = wpex_get_heading( $args );
+		$header = wpex_get_heading( $args );
 	} else {
-		$output = '<h2 class="vcex-module-heading">' . do_shortcode( wp_kses_post( $header ) ) . '</h2>';
+		$header = '<h2 class="vcex-module-heading">' . do_shortcode( wp_kses_post( $args['content'] ) ) . '</h2>';
 	}
-	return apply_filters( 'vcex_get_module_header', $output, $args );
+
+	/**
+	 * Filters the vcex shortcode header html.
+	 *
+	 * @param string $header_html
+	 * @param array $header_args
+	 */
+	$header = apply_filters( 'vcex_get_module_header', $header, $args );
+
+	return $header;
 }
 
 /**
  * Returns entry image overlay output.
  */
 function vcex_get_entry_image_overlay( $position = '', $shortcode_tag = '', $atts = '' ) {
-
 	if ( empty( $atts['overlay_style'] ) || 'none' === $atts['overlay_style'] ) {
 		return '';
 	}
 
 	ob_start();
-	vcex_image_overlay( $position, $atts['overlay_style'], $atts );
+		vcex_image_overlay( $position, $atts['overlay_style'], $atts );
 	$overlay = ob_get_clean();
-	return apply_filters( 'vcex_entry_image_overlay', $overlay, $position, $shortcode_tag, $atts );
 
+	/**
+	 * Filters the entry image overlay html.
+	 *
+	 * @param string $overlay_html
+	 * @param string $overlay_position
+	 * @param string $shortcode_tag
+	 * @param array $shortcode_attributes
+	 */
+	$overlay = apply_filters( 'vcex_entry_image_overlay', $overlay, $position, $shortcode_tag, $atts );
+
+	return $overlay;
 }
 
 /**
@@ -596,7 +631,7 @@ function vcex_get_excerpt( $args = '' ) {
 	if ( function_exists( 'wpex_get_excerpt' ) ) {
 		return wpex_get_excerpt( $args );
 	} else {
-		$excerpt_length = isset( $args['length'] ) ? $args['length'] : 40;
+		$excerpt_length = $args['length'] ?? 40;
 		return wp_trim_words( get_the_excerpt(), $excerpt_length, null );
 	}
 }
@@ -608,8 +643,8 @@ function vcex_get_post_thumbnail( $args = '' ) {
 	if ( function_exists( 'wpex_get_post_thumbnail' ) ) {
 		return wpex_get_post_thumbnail( $args );
 	}
-	if ( isset( $args[ 'attachment' ] ) ) {
-		$size = isset( $args[ 'size' ] ) ? $args[ 'size' ] : 'full';
+	if ( isset( $args['attachment'] ) ) {
+		$size = $args['size'] ?? 'full';
 		return wp_get_attachment_image( $args[ 'attachment' ], $size );
 	}
 }
@@ -618,10 +653,12 @@ function vcex_get_post_thumbnail( $args = '' ) {
  * Return WooCommerce price
  */
 function vcex_get_woo_product_price( $post_id = '' ) {
-	$post_id = $post_id ? $post_id : get_the_ID();
+	if ( ! $post_id ) {
+		$post_id = get_the_ID();
+	}
 	if ( 'product' == get_post_type( $post_id ) ) {
 		$product = wc_get_product( $post_id );
-		$price   = $product->get_price_html();
+		$price = $product->get_price_html();
 		if ( $price ) {
 			return $price;
 		}
@@ -630,6 +667,8 @@ function vcex_get_woo_product_price( $post_id = '' ) {
 
 /**
  * Return button arrow.
+ *
+ * @todo deprecate.
  */
 function vcex_readmore_button_arrow() {
 	if ( is_rtl() ) {
@@ -637,18 +676,26 @@ function vcex_readmore_button_arrow() {
 	} else {
 		$arrow = '&rarr;';
 	}
-	return apply_filters( 'wpex_readmore_button_arrow', $arrow );
+
+	/**
+	 * Filters the readmore button arrow
+	 *
+	 * @param string $arrow
+	 */
+	$arrow = apply_filters( 'wpex_readmore_button_arrow', $arrow );
+
+	return $arrow;
 }
 
 /**
- * Return correct font weight class
+ * Return font weight class
  */
 function vcex_font_weight_class( $font_weight = '' ) {
 	if ( ! $font_weight ) {
 		return;
 	}
-	$font_weights = array(
 
+	$font_weights = array(
 		'hairline'  => 'wpex-font-hairline',
 		'100'       => 'wpex-font-hairline',
 
@@ -670,8 +717,8 @@ function vcex_font_weight_class( $font_weight = '' ) {
 
 		'black'     => 'wpex-font-black',
 		'900'       => 'wpex-font-black',
-
 	);
+
 	if ( isset( $font_weights[$font_weight] ) ) {
 		return $font_weights[$font_weight];
 	}
@@ -690,8 +737,8 @@ function vcex_get_term_data() {
  * Get term thumbnail.
  */
 function vcex_get_term_thumbnail_id( $term_id = '' ) {
-	if ( function_exists( 'wpex_get_term_thumbnail_id' ) ) {
-		return wpex_get_term_thumbnail_id( $term_id );
+	if ( is_callable( array( 'TotalThemeCore\Term_Thumbnails', 'get_term_thumbnail_id' ) ) ) {
+		return TotalThemeCore\Term_Thumbnails::get_term_thumbnail_id( $term_id );
 	}
 }
 
@@ -753,18 +800,18 @@ function vcex_hover_animation_class( $animation = '' ) {
 /**
  * Get first post term.
  */
-function vcex_get_first_term( $post_id = '', $taxonomy = 'category', $terms = '' ) {
+function vcex_get_first_term( $post = '', $taxonomy = 'category', $terms = '' ) {
 	if ( function_exists( 'wpex_get_first_term' ) ) {
-		return wpex_get_first_term( $post_id, $taxonomy, $terms );
+		return wpex_get_first_term( $post, $taxonomy, $terms );
 	}
 }
 
 /**
  * Get post first term link.
  */
-function vcex_get_first_term_link( $post_id = '', $taxonomy = 'category', $terms = '' ) {
+function vcex_get_first_term_link( $post = '', $taxonomy = 'category', $terms = '' ) {
 	if ( function_exists( 'wpex_get_first_term_link' ) ) {
-		return wpex_get_first_term_link( $post_id, $taxonomy, $terms );
+		return wpex_get_first_term_link( $post, $taxonomy, $terms );
 	}
 }
 
@@ -815,23 +862,23 @@ function vcex_filter_grid_blocks_array( $blocks ) {
  * Does NOT use post_class to prevent conflicts.
  */
 function vcex_grid_get_post_class( $classes = array(), $post_id = '', $media_check = true ) {
+	if ( ! $post_id ) {
+		$post_id = get_the_ID();
+	}
 
-	// Get post ID
-	$post_id = $post_id ? $post_id : get_the_ID();
-
-	// Get post type
+	// Get post type.
 	$post_type = get_post_type( $post_id );
 
-	// Add post ID class
+	// Add post ID class.
 	$classes[] = 'post-' . sanitize_html_class( $post_id );
 
-	// Add entry class
+	// Add entry class.
 	$classes[] = 'entry';
 
-	// Add type class
+	// Add type class.
 	$classes[] = 'type-' . sanitize_html_class( $post_type );
 
-	// Add has media class
+	// Add has media class.
 	if ( $media_check && function_exists( 'wpex_post_has_media' ) ) {
 		if ( wpex_post_has_media( $post_id, true ) ) {
 			$classes[] = 'has-media';
@@ -840,25 +887,27 @@ function vcex_grid_get_post_class( $classes = array(), $post_id = '', $media_che
 		}
 	}
 
-	// Add terms
+	// Add terms.
 	if ( $terms = vcex_get_post_term_classes( $post_id, $post_type ) ) {
 		$classes[] = $terms;
 	}
 
-	// Custom link class
+	// Custom link class.
 	if ( function_exists( 'wpex_get_post_redirect_link' ) && wpex_get_post_redirect_link() ) {
 		$classes[] = 'has-redirect';
 	}
 
-	// Apply filters
-	$classes = apply_filters( 'vcex_grid_get_post_class', $classes );
+	/**
+	 * Filters the grid post classes.
+	 *
+	 * @param array $classes
+	 */
+	$classes = (array) apply_filters( 'vcex_grid_get_post_class', $classes );
 
 	// Sanitize classes
 	$classes = array_map( 'esc_attr', $classes );
 
-	// Return class
 	return 'class="' . esc_attr( implode( ' ', $classes ) ) . '"';
-
 }
 
 /**
@@ -866,13 +915,17 @@ function vcex_grid_get_post_class( $classes = array(), $post_id = '', $media_che
  *
  */
 function vcex_get_post_term_classes( $post_id = '', $post_type = '' ) {
-
 	if ( ! defined( 'TOTAL_THEME_ACTIVE' ) ) {
 		return array();
 	}
 
-	$post_id = $post_id ? $post_id : get_the_ID();
-	$post_type = $post_type ? $post_type : get_post_type( $post_id );
+	if ( ! $post_id ) {
+		$post_id = get_the_ID();
+	}
+
+	if ( ! $post_type ) {
+		$post_type = get_post_type( $post_id );
+	}
 
 	// Define vars.
 	$classes = array();
@@ -933,9 +986,9 @@ function vcex_get_post_term_classes( $post_id = '', $post_type = '' ) {
 	// Sanitize classes.
 	$classes_escaped = array_map( 'esc_attr', $classes );
 
-	// Return classes.
-	return $classes_escaped ? implode( ' ', $classes_escaped ) : '';
-
+	if ( $classes_escaped ) {
+		return implode( ' ', $classes_escaped );
+	}
 }
 
 /**
@@ -973,7 +1026,6 @@ function vcex_get_button_custom_color_css( $style = '', $color ='' ) {
  * Get carousel settings.
  */
 function vcex_get_carousel_settings( $atts, $shortcode ) {
-
 	$settings = array(
 		'nav'                  => ! empty( $atts['arrows'] ) ? $atts['arrows'] : 'true',
 		'dots'                 => ! empty( $atts['dots'] ) ? $atts['dots'] : 'false',
@@ -1045,14 +1097,12 @@ function vcex_enqueue_icon_font( $family = '', $icon = '' ) {
 	if ( function_exists( 'vc_icon_element_fonts_enqueue' ) ) {
 		vc_icon_element_fonts_enqueue( $family );
 	}
-
 }
 
 /**
  * Returns animation class and loads animation js.
  */
 function vcex_get_css_animation( $css_animation = '' ) {
-
 	if ( ! $css_animation || 'none' === $css_animation ) {
 		return;
 	}
@@ -1060,13 +1110,13 @@ function vcex_get_css_animation( $css_animation = '' ) {
 	wp_enqueue_script( 'vc_waypoints' );
 	wp_enqueue_style( 'vc_animate-css' );
 
-	$css_animation = sanitize_html_class( $css_animation );
-
 	return ' wpb_animate_when_almost_visible wpb_' . sanitize_html_class( $css_animation ) . ' ' . esc_attr( $css_animation );
 }
 
 /**
  * Return unique ID for responsive class.
+ *
+ * @todo deprecate | no longer used.
  */
 function vcex_get_reponsive_unique_id( $unique_id = '' ) {
 	return $unique_id ? '.wpex-' . $unique_id : uniqid( 'wpex-' );
@@ -1074,10 +1124,10 @@ function vcex_get_reponsive_unique_id( $unique_id = '' ) {
 
 /**
  * Return responsive font-size data.
+ *
+ * @deprecated Since 5.2 in exchange for inline style tags.
  */
 function vcex_get_responsive_font_size_data( $value ) {
-
-	// Font size is needed.
 	if ( ! $value ) {
 		return;
 	}
@@ -1094,6 +1144,8 @@ function vcex_get_responsive_font_size_data( $value ) {
 		return;
 	}
 
+	wp_enqueue_script( 'vcex-responsive-css' );
+
 	$sanitized_data = array();
 
 	// Sanitize.
@@ -1102,21 +1154,23 @@ function vcex_get_responsive_font_size_data( $value ) {
 	}
 
 	return $sanitized_data;
-
 }
 
 /**
  * Return responsive font-size data.
+ *
+ * @deprecated Since 5.2 in exchange for inline style tags.
  */
 function vcex_get_module_responsive_data( $atts, $type = '' ) {
-
 	if ( ! $atts ) {
 		return; // No need to do anything if atts is empty
 	}
 
-	$return      = array();
+	wp_enqueue_script( 'vcex-responsive-css' );
+
+	$return = array();
 	$parsed_data = array();
-	$settings    = array( 'font_size' );
+	$settings = array( 'font_size' );
 
 	if ( $type && ! is_array( $atts ) ) {
 		$settings = array( $type );
@@ -1127,7 +1181,7 @@ function vcex_get_module_responsive_data( $atts, $type = '' ) {
 
 		if ( 'font_size' === $setting ) {
 
-			$value = isset( $atts['font_size'] ) ? $atts['font_size'] : '';
+			$value = $atts['font_size'] ?? '';
 
 			if ( ! $value ) {
 				break;
@@ -1146,7 +1200,157 @@ function vcex_get_module_responsive_data( $atts, $type = '' ) {
 	if ( $parsed_data ) {
 		return "data-wpex-rcss='" . htmlspecialchars( wp_json_encode( $parsed_data ) ) . "'";
 	}
+}
 
+/**
+ * Get unique element classname.
+ */
+function vcex_element_unique_classname( $prefix = 'vcex' ) {
+	return sanitize_html_class( uniqid( $prefix . '_' ) );
+}
+
+/**
+ * Get responsive CSS for given element.
+ */
+function vcex_element_responsive_css( $atts = array(), $target = '' ) {
+	if ( ! $atts || ! $target ) {
+		return;
+	}
+
+	$css = '';
+	$css_list = array();
+
+	// Sanitize target (should always be a unique classname).
+	$target = '.' . trim( sanitize_html_class( $target ) );
+
+	// Get font size.
+	if ( ! empty( $atts['font_size'] ) && false !== strpos( $atts['font_size'], '|' ) ) {
+
+		$font_size = $atts['font_size'];
+
+		// Parse data to return array.
+		$font_size_opts = vcex_parse_multi_attribute( $font_size );
+
+		if ( is_array( $font_size_opts ) ) {
+			foreach( $font_size_opts as $font_size_device => $font_size_v ) {
+				$safe_font_size = vcex_validate_font_size( $font_size_v );
+				if ( $safe_font_size ) {
+					$css_list[$font_size_device]['font-size'] = $safe_font_size;
+				}
+			}
+		}
+
+	}
+
+	if ( $css_list ) {
+
+		foreach ( $css_list as $device => $device_properties ) {
+
+			$media_rule = vcex_get_css_media_rule( $device );
+
+			if ( $media_rule ) {
+				$css .= $media_rule . '{';
+			}
+
+			$css .= $target . '{';
+
+				foreach( $device_properties as $property_k => $property_v ) {
+					$css .= $property_k . ':' . esc_attr( $property_v ) . '!important;';
+				}
+
+			$css .= '}';
+
+			if ( $media_rule ) {
+				$css .= '}';
+			}
+
+		}
+
+	}
+
+	return $css;
+}
+
+/**
+ * Get responsive CSS from an element attribute.
+ */
+function vcex_responsive_attribute_css( $attribute = '', $target_element = '', $target_property = '' ) {
+	$values = vcex_parse_multi_attribute( $attribute );
+
+	if ( ! is_array( $values ) || empty( $values ) ) {
+		return;
+	}
+
+	$css = '';
+	$safe_target = '.' . sanitize_html_class( $target_element );
+	$safe_property = wp_strip_all_tags( trim( $target_property ) );
+
+	foreach( $values as $device_abrev => $value ) {
+
+		// Get CSS from value, pass through vcex_inline_style for sanitization.
+		$bk_css = vcex_inline_style( array(
+			$target_property => $value,
+		), false );
+
+		if ( ! $bk_css ) {
+			continue;
+		}
+
+		$media_rule = vcex_get_css_media_rule( $device_abrev );
+
+		if ( $media_rule ) {
+
+			$css .= $media_rule . '{';
+				$css .= $safe_target . '{';
+					$css .= esc_attr( $bk_css );
+				$css .= '}';
+			$css .= '}';
+
+		} else {
+			$css .= $safe_target . '{';
+				$css .= esc_attr( $bk_css );
+			$css .= '}';
+		}
+
+	}
+
+	return $css;
+}
+
+/**
+ * Return breakpoint widths.
+ */
+function vcex_get_css_breakpoints() {
+	$breakpoints = array(
+		'tl' => '1024px',
+		'tp' => '959px',
+		'pl' => '767px',
+		'pp' => '479px',
+	);
+
+	/**
+	 * Filters the css breakpoints used for responsive vcex inputs.
+	 *
+	 * @param array $breakpoints
+	 */
+	$breakpoints = (array) apply_filters( 'vcex_css_breakpoints', $breakpoints );
+
+	return $breakpoints;
+}
+
+/**
+ * Return the @media rule for a specific breakpoint.
+ */
+function vcex_get_css_media_rule( $breakpoint = '' ) {
+	if ( ! $breakpoint || 'd' === $breakpoint ) {
+		return;
+	}
+
+	$breakpoints = vcex_get_css_breakpoints();
+
+	if ( ! empty( $breakpoints[$breakpoint] ) ) {
+		return '@media (max-width:' . esc_attr( $breakpoints[$breakpoint] ) . ')';
+	}
 }
 
 /**
@@ -1165,8 +1369,6 @@ function vcex_get_extra_class( $classes = '' ) {
  * @todo deprecate
  */
 function vcex_html( $type, $value, $trim = false ) {
-
-	// Return nothing by default.
 	$return = '';
 
 	// Return if value is empty.
@@ -1204,29 +1406,44 @@ function vcex_html( $type, $value, $trim = false ) {
 		}
 	}
 
-	// Return HTMl.
 	if ( $trim ) {
 		return trim( $return );
 	} else {
 		return $return;
 	}
-
 }
 
 /**
  * Notice when no posts are found.
  */
-function vcex_no_posts_found_message( $atts ) {
+function vcex_no_posts_found_message( $atts = array() ) {
+	if ( ! empty( $atts['no_posts_found_message'] ) ) {
+		return '<div class="vcex-no-posts-found">' . esc_html( $atts['no_posts_found_message'] ) . '</div>';
+	}
+
+	// Default message.
 	$message = null;
 	$check = false;
+
 	if ( vcex_vc_is_inline() || ( isset( $atts['auto_query'] ) && 'true' == $atts['auto_query'] ) ) {
 		$check = true;
 	}
+
 	$check = (bool) apply_filters( 'vcex_has_no_posts_found_message', $check, $atts );
+
 	if ( $check ) {
 		$message = '<div class="vcex-no-posts-found">' . esc_html__( 'No posts found for your query.', 'total-theme-core' ) . '</div>';
 	}
-	return apply_filters( 'vcex_no_posts_found_message', $message, $atts );
+
+	/**
+	 * Apply filters to the no posts found message.
+	 *
+	 * @param string $message
+	 * @param array $shortcode_atts
+	 */
+	$message = apply_filters( 'vcex_no_posts_found_message', $message, $atts );
+
+	return $message;
 }
 
 /**
@@ -1256,11 +1473,24 @@ function vcex_get_lightbox_image( $thumbnail_id = '' ) {
 	}
 }
 
+
+/**
+ * Returns term color.
+ */
+function vcex_get_term_color( $term ) {
+	$term = get_term( $term );
+	if ( ! $term ) {
+		return;
+	}
+	if ( is_callable( 'TotalThemeCore\Term_Colors::get_term_color' ) ) {
+		return TotalThemeCore\Term_Colors::get_term_color( $term );
+	}
+}
+
 /**
  * Returns attachment data
  */
 function vcex_get_attachment_data( $attachment = '', $return = 'array' ) {
-
 	if ( function_exists( 'wpex_get_attachment_data' ) ) {
 		return wpex_get_attachment_data( $attachment, $return );
 	}
@@ -1304,31 +1534,47 @@ function vcex_get_attachment_data( $attachment = '', $return = 'array' ) {
 			);
 			break;
 	}
-
 }
 
 /**
  * Returns post gallery ID's
  */
 function vcex_get_post_gallery_ids( $post_id = '' ) {
+
+	/**
+	 * Filters the post gallery image ids before trying to fetch them.
+	 *
+	 * @param array $ids
+	 */
 	$filter_val = apply_filters( 'vcex_pre_get_post_gallery_ids', null );
+
 	if ( $filter_val ) {
 		return $filter_val;
 	}
+
 	if ( function_exists( 'wpex_get_gallery_ids' ) ) {
 		return wpex_get_gallery_ids( $post_id );
 	}
+
 	$attachment_ids = '';
-	$post_id = $post_id ? $post_id : vcex_get_the_ID();
+
+	if ( ! $post_id ) {
+		$post_id = vcex_get_the_ID();
+	}
+
 	if ( class_exists( 'WC_product' ) && 'product' == get_post_type( $post_id ) ) {
 		$product = new WC_product( $post_id );
 		if ( $product && method_exists( $product, 'get_gallery_image_ids' ) ) {
 			$attachment_ids = $product->get_gallery_image_ids();
 		}
 	}
-	$attachment_ids = $attachment_ids ? $attachment_ids : get_post_meta( $post_id, '_easy_image_gallery', true );
+
+	$attachment_ids = $attachment_ids ?: get_post_meta( $post_id, '_easy_image_gallery', true );
+
 	if ( $attachment_ids ) {
-		$attachment_ids = is_array( $attachment_ids ) ? $attachment_ids : explode( ',', $attachment_ids );
+		if ( is_string( $attachment_ids ) ) {
+			$attachment_ids = explode( ',', $attachment_ids );
+		}
 		$attachment_ids = array_values( array_filter( $attachment_ids, 'wpex_sanitize_gallery_id' ) );
 		return apply_filters( 'wpex_get_post_gallery_ids', $attachment_ids );
 	}
@@ -1340,28 +1586,21 @@ function vcex_get_post_gallery_ids( $post_id = '' ) {
  * @todo deprecate.
  */
 function vcex_enque_style( $type = '', $value = '' ) {
-
 	if ( 'ilightbox' === $type || 'lightbox' === $type ) {
 		if ( function_exists( 'wpex_enqueue_lightbox_scripts' ) ) {
 			wpex_enqueue_lightbox_scripts();
 		} elseif ( function_exists( 'wpex_enqueue_ilightbox_skin' ) ) {
 			wpex_enqueue_ilightbox_skin( $value );
 		}
-	}
-
-	// Hover animation.
-	elseif ( 'hover-animations' === $type ) {
+	} elseif ( 'hover-animations' === $type ) {
 		wp_enqueue_style( 'wpex-hover-animations' );
 	}
-
 }
 
 /**
  * Helper function for building links using link param.
  */
 function vcex_build_link( $link, $fallback = '' ) {
-
-	// If empty return fallback.
 	if ( empty( $link ) ) {
 		return $fallback;
 	}
@@ -1383,16 +1622,13 @@ function vcex_build_link( $link, $fallback = '' ) {
 	// Sanitize.
 	$link = is_array( $link ) ? array_map( 'trim', $link ) : '';
 
-	// Return link.
 	return $link;
-
 }
 
 /**
  * Returns link data (used for fallback link settings).
  */
 function vcex_get_link_data( $return, $link, $fallback = '' ) {
-
 	$link = vcex_build_link( $link, $fallback );
 
 	if ( 'url' === $return ) {
@@ -1426,7 +1662,6 @@ function vcex_get_link_data( $return, $link, $fallback = '' ) {
 			return $fallback;
 		}
 	}
-
 }
 
 /**
@@ -1456,7 +1691,6 @@ function vcex_wpb_shortcodes_custom_css( $post_id = '' ) {
  * Get shortcode style classes based on global params.
  */
 function vcex_get_shortcode_extra_classes( $atts = array(), $shortcode_tag = '' ) {
-
 	if ( empty( $atts ) ) {
 		return array();
 	}
@@ -1496,7 +1730,7 @@ function vcex_get_shortcode_extra_classes( $atts = array(), $shortcode_tag = '' 
 	}
 
 	if ( ! empty( $atts['visibility'] ) ) {
-		$extra_classes[] = sanitize_html_class( $atts['visibility'] );
+		$extra_classes[] = vcex_parse_visibility_class( $atts['visibility'] );
 	}
 
 	if ( isset( $atts['shadow'] ) ) {
@@ -1508,7 +1742,7 @@ function vcex_get_shortcode_extra_classes( $atts = array(), $shortcode_tag = '' 
 	}
 
 	if ( isset( $atts['css_animation'] ) ) {
-		$extra_classes[] = vcex_get_css_animation( $atts['css_animation'] );
+		$extra_classes[] = trim( vcex_get_css_animation( $atts['css_animation'] ) );
 	}
 
 	if ( ! empty( $atts['el_class'] ) ) {
@@ -1522,7 +1756,6 @@ function vcex_get_shortcode_extra_classes( $atts = array(), $shortcode_tag = '' 
 	}
 
 	return array_filter( $extra_classes ); // return extra classes and remove empty vars.
-
 }
 
 /**
@@ -1565,6 +1798,7 @@ function vcex_vc_map_carousel_settings( $dependency = array(), $group = '' ) {
 			'heading' => esc_html__( 'Auto Play', 'total-theme-core' ),
 			'param_name' => 'auto_play',
 			'std' => 'false',
+			'admin_label' => true,
 		),
 		array(
 			'type' => 'textfield',
@@ -1677,12 +1911,12 @@ function vcex_vc_map_add_css_animation( $args = array() ) {
 	if ( ! function_exists( 'vc_map_add_css_animation' ) ) {
 
 		$animations = apply_filters( 'wpex_css_animations', array(
-			''              => esc_html__( 'None', 'total') ,
+			'' => esc_html__( 'None', 'total') ,
 			'top-to-bottom' => esc_html__( 'Top to bottom', 'total' ),
 			'bottom-to-top' => esc_html__( 'Bottom to top', 'total' ),
 			'left-to-right' => esc_html__( 'Left to right', 'total' ),
 			'right-to-left' => esc_html__( 'Right to left', 'total' ),
-			'appear'        => esc_html__( 'Appear from center', 'total' ),
+			'appear' => esc_html__( 'Appear from center', 'total' ),
 		) );
 
 		return array(
@@ -1708,10 +1942,10 @@ function vcex_vc_map_add_css_animation( $args = array() ) {
 				array(
 					'label' => esc_html__( 'Default', 'total-theme-core' ),
 					'values' => array(
-						esc_html__( 'Top to bottom', 'total-theme-core' )      => 'top-to-bottom',
-						esc_html__( 'Bottom to top', 'total-theme-core' )      => 'bottom-to-top',
-						esc_html__( 'Left to right', 'total-theme-core' )      => 'left-to-right',
-						esc_html__( 'Right to left', 'total-theme-core' )      => 'right-to-left',
+						esc_html__( 'Top to bottom', 'total-theme-core' ) => 'top-to-bottom',
+						esc_html__( 'Bottom to top', 'total-theme-core' ) => 'bottom-to-top',
+						esc_html__( 'Left to right', 'total-theme-core' ) => 'left-to-right',
+						esc_html__( 'Right to left', 'total-theme-core' ) => 'right-to-left',
 						esc_html__( 'Appear from center', 'total-theme-core' ) => 'appear',
 					),
 				),
@@ -1719,6 +1953,23 @@ function vcex_vc_map_add_css_animation( $args = array() ) {
 		),
 		'description' => esc_html__( 'Select a CSS animation for when the element "enters" the browser\'s viewport. Note: Animations will not work with grid filters as it creates a conflict with re-arranging items.', 'total-theme-core' ) ,
 	);
+
 	$args = wp_parse_args( $args, $defaults );
-	return apply_filters( 'vc_map_add_css_animation', $args );
+
+	/**
+	 * Filters the vc map CSS animation parameter args.
+	 *
+	 * @parray array $args
+	 */
+	$args = apply_filters( 'vc_map_add_css_animation', $args );
+
+	return $args;
+}
+
+
+/**
+ * Return block editor script src.
+ */
+function vcex_get_block_editor_script_src( $block = '' ) {
+	return TTC_PLUGIN_DIR_URL . 'inc/vcex/blocks/' . $block . '/vcex-' . $block . '-block.js';
 }

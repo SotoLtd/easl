@@ -6,34 +6,19 @@ defined( 'ABSPATH' ) || exit;
 final class Mce_Buttons {
 
 	/**
-	 * Our single Mce_Buttons instance.
+	 * Instance.
+	 *
+	 * @access private
+	 * @var object Class object.
 	 */
 	private static $instance;
-
-	/**
-	 * Disable instantiation.
-	 */
-	private function __construct() {}
-
-	/**
-	 * Disable the cloning of this class.
-	 *
-	 * @return void
-	 */
-	final public function __clone() {}
-
-	/**
-	 * Disable the wakeup of this class.
-	 */
-	final public function __wakeup() {}
 
 	/**
 	 * Create or retrieve the instance of Mce_Buttons.
 	 */
 	public static function instance() {
 		if ( is_null( static::$instance ) ) {
-			static::$instance = new Mce_Buttons;
-			static::$instance->init_hooks();
+			static::$instance = new self();
 		}
 
 		return static::$instance;
@@ -42,7 +27,7 @@ final class Mce_Buttons {
 	/**
 	 * Get things started.
 	 */
-	public function init_hooks() {
+	public function __construct() {
 		add_action( 'admin_head', array( $this, 'filter_buttons' ) );
 		add_action( 'admin_footer', array( $this, 'json' ) );
 	}
@@ -84,8 +69,8 @@ final class Mce_Buttons {
 	 */
 	public function json() {
 
-		// TinyMCE data array
 		$data = array();
+
 		$data['btnLabel']   = esc_html__( 'Shortcodes', 'total-theme-core' );
 		$data['shortcodes'] = array(
 			'br' => array(
@@ -108,7 +93,14 @@ final class Mce_Buttons {
 
 		$add_vc_shortcodes = get_theme_mod( 'extend_visual_composer', true );
 
-		if ( apply_filters( 'vcex_wpex_shortcodes_tinymce', $add_vc_shortcodes ) ) {
+		/**
+		 * Filters whether the theme should add shortcodes to the tinymce.
+		 *
+		 * @param bool $add_vc_shortcodes
+		 */
+		$check = apply_filters( 'vcex_wpex_shortcodes_tinymce', $add_vc_shortcodes );
+
+		if ( $check ) {
 
 			$data['shortcodes']['vcex_button'] = array(
 				'text' => esc_html__( 'Button', 'total-theme-core' ),
@@ -132,7 +124,11 @@ final class Mce_Buttons {
 
 		}
 
-		// Apply filters for child theming
+		/**
+		 * Filters the custom shortcodes tinymce array.
+		 *
+		 * @param array $data
+		 */
 		$data = apply_filters( 'wpex_shortcodes_tinymce_json', $data );
 
 		?>

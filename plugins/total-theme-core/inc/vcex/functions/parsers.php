@@ -3,7 +3,7 @@
  * Parsing functions.
  *
  * @package TotalThemeCore
- * @version 1.2.9
+ * @version 1.3.2
  */
 
 defined( 'ABSPATH' ) || exit;
@@ -26,13 +26,10 @@ defined( 'ABSPATH' ) || exit;
  * Parses a color to return correct value.
  */
 function vcex_parse_color( $color = '' ) {
-
 	if ( function_exists( 'wpex_parse_color' ) ) {
 		$color = wpex_parse_color( $color );
 	}
-
 	return $color;
-
 }
 
 /**
@@ -117,21 +114,33 @@ function vcex_parse_typography_param( $value ) {
 
 /**
  * Takes array of html attributes and converts into a string.
+ *
+ * @param array $attrs Array of attributes
  */
-function vcex_parse_html_attributes( $attrs ) {
-	if ( ! $attrs || ! is_array( $attrs ) ) {
-		return $attrs;
+function vcex_parse_html_attributes( $attrs = array() ) {
+	if ( function_exists( 'wpex_parse_attrs' ) ) {
+		$html = wpex_parse_attrs( $attrs );
+		return ' ' . trim( $html ); // always include space at the front.
 	}
 
-	// Define output.
-	$output = '';
+	if ( empty( $attrs ) || ! is_array( $attrs ) ) {
+		return $attrs; // return $attrs incase it's a string already.
+	}
 
 	// Add noopener noreferrer automatically to nofollow links if rel attr isn't set.
 	if ( isset( $attrs['href'] )
 		&& isset( $attrs['target'] )
 		&& in_array( $attrs['target'], array( '_blank', 'blank' ) )
 	) {
+
+		/**
+		 * Filters targeted link rel value.
+		 *
+		 * @param string $value
+		 * @param string href
+		 */
 		$rel = apply_filters( 'wpex_targeted_link_rel', 'noopener noreferrer', $attrs['href'] );
+
 		if ( ! empty( $rel ) ) {
 			if ( ! empty( $attrs['rel'] ) ) {
 				$attrs['rel'] .= ' ' . $rel;
@@ -141,59 +150,71 @@ function vcex_parse_html_attributes( $attrs ) {
 		}
 	}
 
+	// Define output var.
+	$output = '';
+
 	// Loop through attributes.
 	foreach ( $attrs as $key => $val ) {
 
-		// Skip.
+		// Attributes used for other things, we can skip these.
 		if ( 'content' === $key ) {
 			continue;
 		}
 
 		// If the attribute is an array convert to string.
 		if ( is_array( $val ) ) {
-			$val = array_filter( $val, 'trim' ); // Remove extra space
+			$val = array_map( 'trim', $val );
 			$val = implode( ' ', $val );
 		}
 
-		// Sanitize fields.
+		// Sanitize specific attributes.
 		switch ( $key ) {
-			case 'rel':
-				$val = wp_strip_all_tags( $val );
+			case 'href':
+				$val = esc_url( $val );
 				break;
 			case 'id':
-				$val = trim ( str_replace( '#', '', $val ) );
+				$val = trim( str_replace( '#', '', $val ) );
 				$val = str_replace( ' ', '', $val );
 				break;
-			case 'class':
-				$val = esc_attr( trim( $val ) );
-				break;
 			case 'target':
-				if ( 'blank' == $val ) {
-					$val = '_blank';
-				}
 				if ( ! in_array( $val, array( '_blank', 'blank', '_self', '_parent', '_top' ) ) ) {
 					$val = '';
+				} elseif ( 'blank' === $val ) {
+					$val = '_blank';
 				}
 				break;
-
 		}
 
-		// Add attribute to output.
-		if ( $val ) {
+		// Add attribute to output if value exists or is a string equal to 0.
+		if ( $val || '0' === $val ) {
 
-			// Add download attribute (doesn't have values).
-			if ( in_array( $key, array( 'download' ) ) ) {
-				$output .= ' ' . trim( $val ); // Used for example on total button download attribute
-			}
+			switch ( $key ) {
 
-			// Add attribute | value.
-			else {
-				$needle = ( 'data' == $key ) ? 'data-' : $key . '=';
-				if ( $val && strpos( $val, $needle ) !== false ) {
-					$output .= ' ' . trim( $val ); // Already has tag added
-				} else {
-					$output .= ' ' . $key . '="' . $val . '"';
-				}
+				// Attributes that don't have values.
+				case 'download':
+
+					$safe_attr = preg_replace( '/[^a-z0-9_\-]/', '', $val );
+					$output .= ' ' . trim( $safe_attr ); // Used for example on total button download attribute.
+
+					break;
+
+				// Attributes with values.
+				default:
+
+					$needle = ( 'data' === $key ) ? 'data-' : esc_attr( $key ) . '=';
+
+					// Tag is already included in the value.
+					if ( strpos( $val, $needle ) !== false ) {
+						$output .= ' ' . trim( wp_strip_all_tags( $val ) );
+					}
+
+					// Tag not included in the value.
+					else {
+						$safe_attr = preg_replace( '/[^a-z0-9_\-]/', '', $key );
+						$output .= ' ' . trim( $safe_attr ) . '="' . esc_attr( trim( $val ) ) . '"';
+					}
+
+					break;
 			}
 
 		}
@@ -202,21 +223,24 @@ function vcex_parse_html_attributes( $attrs ) {
 		else {
 
 			// Empty alts are allowed.
-			if ( 'alt' == $key ) {
-				$output .= " alt='" . esc_attr( $val ) . "'";
+			if ( 'alt' === $key ) {
+				$output .= ' alt=""';
 			}
 
-			// Data attributes.
+			// Empty data attributes.
 			elseif ( strpos( $key, 'data-' ) !== false ) {
-				$output .= ' ' . $key;
+				$safe_attr = preg_replace( '/[^a-z0-9_\-]/', '', $key );
+				$output .= ' ' . trim( $safe_attr );
 			}
 
 		}
 
-	}
+	} // end loop.
 
 	// Return output.
-	return ' ' . trim( $output ); // Must always have empty space infront
+	return trim( $output );
+
+
 }
 
 /*-------------------------------------------------------------------------------*/
@@ -277,21 +301,42 @@ function vcex_parse_lightbox_dims( $dims = '', $return = '' ) {
 /**
  * Parses the wpbakery custom css filter tag.
  */
-function vcex_parse_shortcode_classes( $classes = '', $shortcode_base = '', $atts = '' ) {
-	if ( is_array( $classes ) ) {
-		$classes = array_filter( $classes );
-		$classes = trim( implode( ' ', $classes ) );
+function vcex_parse_shortcode_classes( $class = '', $shortcode_base = '', $shortcode_attributes = '' ) {
+	if ( is_array( $class ) ) {
+		$class = array_filter( $class );
+		$class = trim( implode( ' ', $class ) );
 	}
+
 	if ( defined( 'VC_SHORTCODE_CUSTOM_CSS_FILTER_TAG' ) ) {
-		$classes = apply_filters( VC_SHORTCODE_CUSTOM_CSS_FILTER_TAG, $classes, $shortcode_base, $atts );
+		/**
+		 * Filters the shortcode class when WPBakery is active.
+		 *
+		 * @param string $class
+		 * @param string $shortcode_base
+		 * @param array $shortcode_attributes
+		 */
+		$class = apply_filters( VC_SHORTCODE_CUSTOM_CSS_FILTER_TAG, $class, $shortcode_base, $shortcode_attributes );
 	}
-	return apply_filters( 'vcex_shortcodes_css_class', $classes, $shortcode_base, $atts );
+
+	/**
+	 * Filters the shortcode class.
+	 *
+	 * @param string $class
+	 * @param string $shortcode_base
+	 * @param array $shortcode_attributes
+	 */
+	$class = apply_filters( 'vcex_shortcodes_css_class', $class, $shortcode_base, $shortcode_attributes );
+
+	return $class;
 }
 
 /**
  * Parses text_align class.
  */
 function vcex_parse_text_align_class( $align = '' ) {
+	if ( ! $align ) {
+		return;
+	}
 	switch ( $align ) {
 		case 'left':
 			return 'wpex-text-left';
@@ -306,12 +351,116 @@ function vcex_parse_text_align_class( $align = '' ) {
 }
 
 /**
+ * Parses justify_content class.
+ */
+function vcex_parse_justify_content_class( $position = '', $prefix = '' ) {
+
+	if ( ! $position ) {
+		return;
+	}
+
+	$justify_class = '';
+
+	switch ( $position ) {
+		case 'left':
+		case 'start':
+			$justify_class = 'justify-start';
+			break;
+		case 'center':
+			$justify_class = 'justify-center';
+			break;
+		case 'right':
+		case 'end':
+			$justify_class = 'justify-end';
+			break;
+		case 'between':
+		case 'space-between':
+			$justify_class = 'justify-between';
+			break;
+		case 'around':
+		case 'space-around':
+			$justify_class = 'justify-around';
+			break;
+		case 'evenly':
+		case 'space-evenly':
+			$justify_class = 'justify-evenly';
+			break;
+	}
+
+	if ( ! $justify_class ) {
+		return;
+	}
+
+	if ( $prefix ) {
+		return 'wpex-' . sanitize_html_class( $prefix ) . '-' . sanitize_html_class( $justify_class );
+	} else {
+		return 'wpex-' . sanitize_html_class( $justify_class );
+	}
+
+}
+
+/**
+ * Parses align items class.
+ */
+function vcex_parse_align_items_class( $align = '', $prefix = '' ) {
+	if ( ! $align ) {
+		return;
+	}
+
+	$align_class = '';
+
+	switch ( $align ) {
+		case 'left':
+		case 'start':
+		case 'flex-start':
+			$align_class = 'items-start';
+			break;
+		case 'middle':
+		case 'center':
+			$align_class = 'items-center';
+			break;
+		case 'right':
+		case 'end':
+		case 'flex-end':
+			$align_class = 'items-end';
+			break;
+		case 'stretch':
+			$align_class = 'items-stretch';
+			break;
+		case 'baseline':
+			$align_class = 'items-baseline';
+			break;
+	}
+
+	if ( ! $align_class ) {
+		return;
+	}
+
+	if ( $prefix ) {
+		return 'wpex-' . sanitize_html_class( $prefix ) . '-' . sanitize_html_class( $align_class );
+	} else {
+		return 'wpex-' . sanitize_html_class( $align_class );
+	}
+
+}
+
+/**
  * Parses font_size class.
  */
 function vcex_parse_font_size_class( $size = '' ) {
 	if ( $size && function_exists( 'wpex_sanitize_utl_font_size' ) ) {
 		return wpex_sanitize_utl_font_size( $size );
 	}
+}
+
+/**
+ * Parses visibility class.
+ */
+function vcex_parse_visibility_class( $class = '' ) {
+	if ( function_exists( 'wpex_visibility_class' ) ) {
+		return wpex_visibility_class( $class );
+	}
+	return sanitize_html_class( $class );
 }
 
 /**
@@ -441,6 +590,12 @@ function vcex_parse_margin_class( $margin = '', $sides = 'all' ) {
 				break;
 			case 'right':
 				$prefix = 'wpex-mr-';
+				break;
+			case 'x':
+				$prefix = 'wpex-mx-';
+				break;
+			case 'y':
+				$prefix = 'wpex-my-';
 				break;
 			case 'all':
 			default:

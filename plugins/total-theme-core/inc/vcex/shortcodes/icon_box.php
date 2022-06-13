@@ -3,7 +3,7 @@
  * Icon Box Shortcode.
  *
  * @package TotalThemeCore
- * @version 1.2.9
+ * @version 1.3.2
  */
 
 defined( 'ABSPATH' ) || exit;
@@ -39,7 +39,6 @@ if ( ! class_exists( 'VCEX_Icon_Box_Shortcode' ) ) {
 		 * Array of shortcode parameters.
 		 */
 		public static function get_params() {
-
 			$params = array(
 				// Main
 				array(
@@ -78,6 +77,7 @@ if ( ! class_exists( 'VCEX_Icon_Box_Shortcode' ) ) {
 					'type' => 'textfield',
 					'heading' => esc_html__( 'Element ID', 'total-theme-core' ),
 					'param_name' => 'unique_id',
+					'admin_label' => true,
 					'description' => vcex_shortcode_param_description( 'unique_id' ),
 				),
 				array(
@@ -117,6 +117,14 @@ if ( ! class_exists( 'VCEX_Icon_Box_Shortcode' ) ) {
 					'group' => esc_html__( 'Style', 'total-theme-core' ),
 				),
 				array(
+					'type' => 'dropdown',
+					'heading' => esc_html__( 'Stack at Breakpoint', 'total' ),
+					'param_name' => 'stack_bk',
+					'value' => vcex_breakpoint_choices(),
+					'group' => esc_html__( 'Style', 'total' ),
+					'dependency' => array( 'element' => 'style', 'value' => array( 'one', 'seven' ) ),
+				),
+				array(
 					'type' => 'textfield',
 					'heading' => esc_html__( 'Width', 'total-theme-core' ),
 					'param_name' => 'width',
@@ -153,7 +161,7 @@ if ( ! class_exists( 'VCEX_Icon_Box_Shortcode' ) ) {
 					'param_name' => 'alignment',
 					'std' => 'center',
 					'exclude_choices' => array( '', 'default' ),
-					'dependency' => array( 'element' => 'style', 'value' => array( 'two' ) ),
+					'dependency' => array( 'element' => 'style', 'value' => array( 'two', 'eight' ) ),
 					'group' => esc_html__( 'Style', 'total-theme-core' ),
 				),
 				array(
@@ -195,6 +203,12 @@ if ( ! class_exists( 'VCEX_Icon_Box_Shortcode' ) ) {
 					'heading' => esc_html__( 'Padding', 'total-theme-core' ),
 					'param_name' => 'wpex_padding',
 					'value' => vcex_padding_choices(),
+					'group' => esc_html__( 'Style', 'total-theme-core' ),
+				),
+				array(
+					'type' => 'textfield',
+					'heading' => esc_html__( 'Custom Border Radius', 'total-theme-core' ),
+					'param_name' => 'border_radius',
 					'group' => esc_html__( 'Style', 'total-theme-core' ),
 				),
 				array(
@@ -425,19 +439,26 @@ if ( ! class_exists( 'VCEX_Icon_Box_Shortcode' ) ) {
 					'group' => esc_html__( 'Icon', 'total-theme-core' ),
 				),
 				array(
-					'type' => 'textfield',
-					'heading' => esc_html__( 'Border Radius', 'total-theme-core' ),
-					'param_name' => 'icon_border_radius',
-					'description' => vcex_shortcode_param_description( 'border_radius' ),
-					'group' => esc_html__( 'Icon', 'total-theme-core' ),
-				),
-				array(
 					'type' => 'dropdown',
 					'heading' => esc_html__( 'Shadow', 'total' ),
 					'param_name' => 'icon_shadow',
 					'value' => vcex_shadow_choices(),
 					'group' => esc_html__( 'Icon', 'total-theme-core' ),
 					'description' => esc_html__( 'For optimal display add a white background to your icon or give the icon a custom width/height.', 'total-theme-core' ),
+				),
+				array(
+					'type' => 'dropdown',
+					'heading' => esc_html__( 'Border Width', 'total' ),
+					'param_name' => 'icon_border_width',
+					'value' => vcex_border_width_choices(),
+					'group' => esc_html__( 'Icon', 'total-theme-core' ),
+				),
+				array(
+					'type' => 'textfield',
+					'heading' => esc_html__( 'Border Radius', 'total-theme-core' ),
+					'param_name' => 'icon_border_radius',
+					'description' => vcex_shortcode_param_description( 'border_radius' ),
+					'group' => esc_html__( 'Icon', 'total-theme-core' ),
 				),
 				array(
 					'type' => 'textfield',
@@ -463,9 +484,28 @@ if ( ! class_exists( 'VCEX_Icon_Box_Shortcode' ) ) {
 				),
 				// Image
 				array(
+					'type' => 'dropdown',
+					'heading' => esc_html__( 'Source', 'total-theme-core' ),
+					'param_name' => 'image_source',
+					'std' => 'media_library',
+					'value' => array(
+						esc_html__( 'Media Library', 'total-theme-core' ) => 'media_library',
+						esc_html__( 'External', 'total-theme-core' ) => 'external',
+					),
+					'group' => esc_html__( 'Image', 'total-theme-core' ),
+				),
+				array(
 					'type' => 'attach_image',
-					'heading' => esc_html__( 'Icon Image Alternative', 'total-theme-core' ),
+					'heading' => esc_html__( 'Image', 'total-theme-core' ),
 					'param_name' => 'image',
+					'dependency' => array( 'element' => 'image_source', 'value' => 'media_library' ),
+					'group' => esc_html__( 'Image', 'total-theme-core' ),
+				),
+				array(
+					'type' => 'textfield',
+					'heading' => esc_html__( 'External Image URL', 'total-theme-core' ),
+					'param_name' => 'external_image',
+					'dependency' => array( 'element' => 'image_source', 'value' => 'external' ),
 					'group' => esc_html__( 'Image', 'total-theme-core' ),
 				),
 				array(
@@ -477,11 +517,17 @@ if ( ! class_exists( 'VCEX_Icon_Box_Shortcode' ) ) {
 					'description' => esc_html__( 'Default', 'total-theme-core' ) . ': 20px',
 				),
 				array(
+					'type' => 'dropdown',
+					'heading' => esc_html__( 'Border Radius', 'total-theme-core' ),
+					'param_name' => 'image_border_radius',
+					'value' => vcex_border_radius_choices(),
+					'group' => esc_html__( 'Image', 'total-theme-core' ),
+				),
+				array(
 					'type' => 'textfield',
 					'heading' => esc_html__( 'Width', 'total-theme-core' ),
 					'param_name' => 'image_width',
 					'group' => esc_html__( 'Image', 'total-theme-core' ),
-					'description' => esc_html__( 'If you are using the "Left Icon" style, be sure to also alter the "Container Left Padding" setting under the general tab to allow space for your custom icon size.', 'total-theme-core' )
 				),
 				array(
 					'type' => 'textfield',
@@ -495,7 +541,8 @@ if ( ! class_exists( 'VCEX_Icon_Box_Shortcode' ) ) {
 					'heading' => esc_html__( 'Resize Image', 'total-theme-core' ),
 					'param_name' => 'resize_image',
 					'group' => esc_html__( 'Image', 'total-theme-core' ),
-					'description' => esc_html__( 'Enable to run the image through the resizing script, disable to simply resize via CSS.', 'total-theme-core' )
+					'description' => esc_html__( 'Enable to run the image through the resizing script, disable to simply resize via CSS.', 'total-theme-core' ),
+					'dependency' => array( 'element' => 'image_source', 'value' => 'media_library' ),
 				),
 				// Link
 				array(
@@ -504,7 +551,7 @@ if ( ! class_exists( 'VCEX_Icon_Box_Shortcode' ) ) {
 					'param_name' => 'url_wrap',
 					'std' => 'false',
 					'group' => esc_html__( 'Link', 'total-theme-core' ),
-					'dependency' => array( 'element' => 'style', 'value' => array( 'one', 'two', 'three', 'seven' ) ),
+					'dependency' => array( 'element' => 'style', 'value' => array( 'one', 'two', 'three', 'seven', 'eight' ) ),
 				),
 				array(
 					'type' => 'dropdown',
@@ -515,6 +562,7 @@ if ( ! class_exists( 'VCEX_Icon_Box_Shortcode' ) ) {
 						esc_html__( 'Go to custom link', 'total-theme-core' ) => 'custom_link',
 						esc_html__( 'Go to internal page', 'total-theme-core' ) => 'internal_link',
 						esc_html__( 'Scroll to section', 'total-theme-core' ) => 'local_scroll',
+						esc_html__( 'Toggle Element', 'total-theme-core' ) => 'toggle_element',
 						esc_html__( 'Go to custom field value', 'total-theme-core' ) => 'custom_field',
 						esc_html__( 'Go to callback function value', 'total-theme-core' ) => 'callback_function',
 						esc_html__( 'Open inline content or iframe popup', 'total-theme-core' ) => 'popup',
@@ -528,13 +576,21 @@ if ( ! class_exists( 'VCEX_Icon_Box_Shortcode' ) ) {
 				),
 				array(
 					'type' => 'textfield',
-					'heading' => esc_html__( 'URL', 'total-theme-core' ),
+					'heading' => esc_html__( 'Link', 'total-theme-core' ),
 					'param_name' => 'onclick_url',
 					'description' => vcex_shortcode_param_description( 'text' ),
 					'dependency' => array(
 						'element' => 'onclick',
-						'value' => array( 'custom_link', 'local_scroll', 'popup', 'lightbox_image', 'lightbox_video' ),
+						'value' => array(
+							'custom_link',
+							'local_scroll',
+							'popup',
+							'lightbox_image',
+							'lightbox_video',
+							'toggle_element'
+						),
 					),
+					'description' => esc_html__( 'Enter your custom link url, lightbox url or local/toggle element ID (including a # at the front).', 'total-theme-core' ),
 					'group' => esc_html__( 'Link', 'total-theme-core' ),
 				),
 				array(
@@ -662,12 +718,6 @@ if ( ! class_exists( 'VCEX_Icon_Box_Shortcode' ) ) {
 					'param_name' => 'css',
 					'group' => esc_html__( 'CSS', 'total-theme-core' ),
 				),
-				array(
-					'type' => 'textfield',
-					'heading' => esc_html__( 'Custom Border Radius', 'total-theme-core' ),
-					'param_name' => 'border_radius',
-					'group' => esc_html__( 'CSS', 'total-theme-core' ),
-				),
 				// Deprecated fields.
 				array( 'type' => 'hidden', 'param_name' => 'url' ), // @since v5.1
 				array( 'type' => 'hidden', 'param_name' => 'url_target' ), // @since v5.1
@@ -676,15 +726,20 @@ if ( ! class_exists( 'VCEX_Icon_Box_Shortcode' ) ) {
 				array( 'type' => 'hidden', 'param_name' => 'icon_background_accent' ), // @since v5.1
 			);
 
-			return apply_filters( 'vcex_shortcode_params', $params, 'vcex_icon_box' );
+			/**
+			 * Filters the vcex_icon box shortcode params.
+			 *
+			 * @param array $params
+			 */
+			$params = (array) apply_filters( 'vcex_shortcode_params', $params, 'vcex_icon_box' );
 
+			return $params;
 		}
 
 		/**
 		 * Parses deprecated params.
 		 */
 		public static function parse_deprecated_attributes( $atts = '' ) {
-
 			if ( empty( $atts ) || ! is_array( $atts ) ) {
 				return $atts;
 			}
@@ -719,7 +774,7 @@ if ( ! class_exists( 'VCEX_Icon_Box_Shortcode' ) ) {
 
 			}
 
-			// Deprecate old use accent color settings
+			// Deprecate old use accent color settings.
 			if ( isset( $atts['icon_color_accent'] ) && 'true' === $atts['icon_color_accent'] ) {
 				if ( empty( $atts['icon_color'] ) ) {
 					$atts['icon_color'] = 'accent';
@@ -738,7 +793,6 @@ if ( ! class_exists( 'VCEX_Icon_Box_Shortcode' ) ) {
 			}
 
 			return $atts;
-
 		}
 
 	}

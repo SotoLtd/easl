@@ -1,29 +1,31 @@
-( function( $ ) {
+( function() {
 
-	if ( typeof vc === 'undefined' || typeof vc.shortcode_view === 'undefined' ) {
+	'use strict';
+
+	if ( 'object' !== typeof vc || 'function' !== typeof vc.shortcode_view ) {
 		return false;
 	}
 
 	window.vcexHeadingView = vc.shortcode_view.extend( {
-		changeShortcodeParams: function ( model ) {
+		changeShortcodeParams: function( model ) {
 			window.vcexHeadingView.__super__.changeShortcodeParams.call( this, model );
-			var inverted_value;
-			var text = model.getParam( 'text' );
-			var source = model.getParam( 'source' );
-			var target  = this.$el.find( '.vcex-heading-text > span' );
+			var text, source, target, inverted_value;
+			text = model.getParam( 'text' );
+			source = model.getParam( 'source' );
+			target = this.$el[0].querySelector( '.vcex-heading-text > span' );
 			if ( text && _.isString( text ) && ! text.match(/^#E\-8_/) ) {
 				switch( source ) {
 					case 'custom':
-						target.html( ': ' + text );
+						target.textContent = ': ' + text;
 						break;
 					default:
 						inverted_value = _.invert( this.params.source.value );
-						target.html( ': ' + inverted_value[ source ] );
+						target.textContent = ': ' + inverted_value[source];
 				}
 			} else {
-				target.html( '' );
+				target.textContent = '';
 			}
 		}
 	} );
 
-} ) ( jQuery );
+})();

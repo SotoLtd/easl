@@ -1,14 +1,14 @@
 <?php
-/**
- * WPBakery Param => Image Overlay.
- *
- * @package TotalThemeCore
- * @version 1.2.8
- */
 namespace TotalThemeCore\WPBakery\Params;
 
 defined( 'ABSPATH' ) || exit;
 
+/**
+ * WPBakery Param => Image Overlay.
+ *
+ * @package TotalThemeCore
+ * @version 1.3.2
+ */
 final class Image_Overlay {
 
 	public static function output( $settings, $value ) {
@@ -23,7 +23,7 @@ final class Image_Overlay {
 
 			$options = wpex_overlay_styles_array();
 
-			$excluded = isset( $settings['exclude_choices'] ) ? $settings['exclude_choices'] : array();
+			$excluded = $settings['exclude_choices'] ?? array();
 
 			foreach ( $options as $key => $name ) {
 
@@ -41,7 +41,7 @@ final class Image_Overlay {
 			$output = vcex_total_exclusive_notice();
 			$output .= '<input type="hidden" class="wpb_vc_param_value '
 					. esc_attr( $settings['param_name'] ) . ' '
-					. esc_attr( $settings['type'] ) . '" name="' . esc_attr( $settings['param_name'] ) . '" value="' . esc_attr( $value ) . '"/>';
+					. esc_attr( $settings['type'] ) . '" name="' . esc_attr( $settings['param_name'] ) . '" value="' . esc_attr( $value ) . '">';
 		}
 
 		return $output;

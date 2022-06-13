@@ -8,16 +8,11 @@
 		position: absolute;
 		display: inline-block;
 		overflow: hidden;
-		/* background: #888888; To have gray placeholders while the gallery is loading with waitThumbnailsLoad = false */
-		opacity: 0;
 		margin: 0;
 		padding: 0;
-	}
-
-	// Display items once justified gallery is created.
-	.vcex-image-grid-entry.jg-entry-visible {
-		opacity: 1;
-		background: none;
+		&:not(.jg-entry-visible) {
+			opacity: 0;
+		}
 	}
 
 	// Force remove bottom margin on images.

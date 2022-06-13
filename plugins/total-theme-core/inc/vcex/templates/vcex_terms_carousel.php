@@ -4,23 +4,21 @@
  *
  * @package Total WordPress Theme
  * @subpackage Total Theme Core
- * @version 1.2.8
+ * @version 1.3.2
  */
 
 defined( 'ABSPATH' ) || exit;
 
-$shortcode_tag = 'vcex_terms_carousel';
-
-if ( ! vcex_maybe_display_shortcode( $shortcode_tag, $atts ) ) {
+if ( ! vcex_maybe_display_shortcode( 'vcex_terms_carousel', $atts ) ) {
 	return;
 }
 
 // Get and extract shortcode attributes.
-$atts = vcex_shortcode_atts( $shortcode_tag, $atts, $this );
+$atts = vcex_shortcode_atts( 'vcex_terms_carousel', $atts, $this );
 extract( $atts );
 
 // Get current taxonomy.
-if ( 'tax_children' == $query_type && is_tax() ) {
+if ( ( 'tax_children' === $query_type || 'tax_parent' === $query_type ) && is_tax() ) {
 	$taxonomy = get_query_var( 'taxonomy' );
 }
 
@@ -39,7 +37,7 @@ $query_args = array(
 	'hide_empty' => vcex_validate_boolean( $hide_empty ),
 );
 
-if ( vcex_validate_boolean ( $parent_terms ) ) {
+if ( vcex_validate_boolean( $parent_terms ) ) {
 	$query_args['parent'] = 0;
 }
 
@@ -51,15 +49,23 @@ if ( $child_of ) {
 }
 
 // Add arguments based on query_type.
-switch ( $query_type ) {
-	case 'post_terms':
-		$query_args['object_ids'] = vcex_get_the_ID();
-		break;
-	case 'tax_children':
-		if ( is_tax() ) {
-			$query_args['child_of'] = get_queried_object_id();
-		}
-		break;
+if ( $query_type ) {
+	switch ( $query_type ) {
+		case 'post_terms':
+			$query_args['object_ids'] = vcex_get_the_ID();
+			break;
+		case 'tax_children':
+			if ( is_tax() ) {
+				$query_args['child_of'] = get_queried_object_id();
+				unset( $query_args['parent'] ); // prevent issues.
+			}
+			break;
+		case 'tax_parent':
+			if ( is_tax() ) {
+				$query_args['parent'] = get_queried_object_id();
+			}
+			break;
+	}
 }
 
 // Get terms.
@@ -96,15 +102,6 @@ $term_count       = vcex_validate_boolean( $term_count );
 $term_count_block = vcex_validate_boolean( $term_count_block );
 $button           = vcex_validate_boolean( $button );
 
-// Load Google Fonts if needed.
-if ( $title_font_family ) {
-	vcex_enqueue_font( $title_font_family );
-}
-
-if ( $description_font_family ) {
-	vcex_enqueue_font( $description_font_family );
-}
-
 // Define post type based on the taxonomy.
 $taxonomy  = get_taxonomy( $taxonomy );
 $post_type = $taxonomy->object_type[0];
@@ -134,7 +131,7 @@ if ( $bottom_margin ) {
 
 // Visiblity.
 if ( $visibility ) {
-	$wrap_classes[] = sanitize_html_class( $visibility );
+	$wrap_classes[] = vcex_parse_visibility_class( $visibility );
 }
 
 // CSS animations.
@@ -183,7 +180,7 @@ $description_style = array(
 $description_style = vcex_inline_style( $description_style );
 
 // VC filter.
-$wrap_classes = vcex_parse_shortcode_classes( $wrap_classes, $shortcode_tag, $atts );
+$wrap_classes = vcex_parse_shortcode_classes( $wrap_classes, 'vcex_terms_carousel', $atts );
 
 // Display header if enabled.
 if ( $atts['header_style'] ) {
@@ -202,7 +199,7 @@ $wrap_style = vcex_inline_style( array(
 ) );
 
 // Begin output.
-$output .= '<div class="' . esc_attr( $wrap_classes ) . '" data-wpex-carousel="' . vcex_get_carousel_settings( $atts, $shortcode_tag ) . '"' . vcex_get_unique_id( $atts[ 'unique_id' ] ) . $wrap_style . '>';
+$output .= '<div class="' . esc_attr( $wrap_classes ) . '" data-wpex-carousel="' . vcex_get_carousel_settings( $atts, 'vcex_terms_carousel' ) . '"' . vcex_get_unique_id( $atts[ 'unique_id' ] ) . $wrap_style . '>';
 
 	// Loop through terms.
 	$first_run = true;
@@ -382,12 +379,12 @@ $output .= '<div class="' . esc_attr( $wrap_classes ) . '" data-wpex-carousel="'
 							$atts['overlay_excerpt' ] = $term->description;
 
 							// Inner Overlay.
-							$output .= vcex_get_entry_image_overlay( 'inside_link', $shortcode_tag, $atts );
+							$output .= vcex_get_entry_image_overlay( 'inside_link', 'vcex_terms_carousel', $atts );
 
 						$output .= '</a>';
 
 						// Outside Overlay.
-						$output .= vcex_get_entry_image_overlay( 'outside_link', $shortcode_tag, $atts );
+						$output .= vcex_get_entry_image_overlay( 'outside_link', 'vcex_terms_carousel', $atts );
 
 					$output .= '</div>';
 

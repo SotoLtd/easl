@@ -4,19 +4,17 @@
  *
  * @package Total WordPress Theme
  * @subpackage Total Theme Core
- * @version 1.2.9
+ * @version 1.3.2
  */
 
 defined( 'ABSPATH' ) || exit;
 
-$shortcode_tag = 'vcex_multi_buttons';
-
-if ( ! vcex_maybe_display_shortcode( $shortcode_tag, $atts ) ) {
+if ( ! vcex_maybe_display_shortcode( 'vcex_multi_buttons', $atts ) ) {
 	return;
 }
 
 // Get shortcode attributes.
-$atts = vcex_shortcode_atts( $shortcode_tag, $atts, $this );
+$atts = vcex_shortcode_atts( 'vcex_multi_buttons', $atts, $this );
 
 // Get buttons.
 $buttons = (array) vcex_vc_param_group_parse_atts( $atts['buttons'] );
@@ -26,21 +24,33 @@ if ( ! $buttons ) {
 	return;
 }
 
+// Define output var.
+$output = '';
+
 // Inline styles.
 $wrap_inline_style = array(
 	'font_size'      => $atts['font_size'],
 	'letter_spacing' => $atts['letter_spacing'],
 	'font_family'    => $atts['font_family'],
 	'font_weight'    => $atts['font_weight'],
-	'text_align'     => $atts['align'],
 	'border_radius'  => $atts['border_radius'],
+	'gap'            => $atts['spacing'],
+	'text_transform' => $atts['text_transform'],
 );
 
-// Load custom Google font if needed.
-vcex_enqueue_font( $atts['font_family'] );
-
 // Define wrap attributes.
-$wrap_classes = array( 'vcex-multi-buttons' );
+$wrap_classes = array(
+	'vcex-multi-buttons',
+	'wpex-flex',
+	'wpex-flex-wrap',
+	'wpex-items-center',
+	'wpex-gap-10',
+);
+
+// Alignment.
+if ( $justify = vcex_parse_justify_content_class( $atts['align'] ) ) {
+	$wrap_classes[] = $justify;
+}
 
 // Bottom margin.
 if ( $atts['bottom_margin'] ) {
@@ -49,7 +59,7 @@ if ( $atts['bottom_margin'] ) {
 
 // Visibility.
 if ( $atts['visibility'] ) {
-	$wrap_classes[] = sanitize_html_class( $atts['visibility'] );
+	$wrap_classes[] = vcex_parse_visibility_class( $atts['visibility'] );
 }
 
 // Extra classname.
@@ -62,22 +72,28 @@ if ( 'true' == $atts['small_screen_full_width'] ) {
 	$wrap_classes[] = 'vcex-small-screen-full-width';
 }
 
-// Add clearfix.
-$wrap_classes[] = 'vcex-clr';
+// Responsive CSS.
+$unique_classname = vcex_element_unique_classname();
 
-// Wrap classes.
+$el_responsive_styles = array(
+	'font_size' => $atts['font_size'],
+);
+
+$responsive_css = vcex_element_responsive_css( $el_responsive_styles, $unique_classname );
+
+if ( $responsive_css ) {
+	$wrap_classes[] = $unique_classname;
+	$output .= '<style>' . $responsive_css . '</style>';
+}
+
+// Wrap attributes.
 $wrap_attrs = array(
 	'class' => $wrap_classes,
 	'style' => vcex_inline_style( $wrap_inline_style, false ),
 );
 
-// Add responsive data.
-if ( $responsive_data = vcex_get_module_responsive_data( $atts ) ) {
-	$wrap_attrs['data-wpex-rcss'] = $responsive_data;
-}
-
 // Define output.
-$output = '<div' . vcex_parse_html_attributes( $wrap_attrs ) . '>';
+$output .= '<div' . vcex_parse_html_attributes( $wrap_attrs ) . '>';
 
 	// Count number of buttons.
 	$buttons_count = count( $buttons );
@@ -101,11 +117,11 @@ $output = '<div' . vcex_parse_html_attributes( $wrap_attrs ) . '>';
 		}
 
 		// Sanitize text.
-		$text = isset( $button['text'] ) ? $button['text'] : esc_html__( 'Button', 'total' );
+		$text = $button['text'] ?? esc_html__( 'Button', 'total' );
 
 		// Get button style.
-		$style        = isset( $button['style'] ) ? $button['style'] : '';
-		$color        = isset( $button['color'] ) ? $button['color'] : '';
+		$style        = $button['style'] ?? '';
+		$color        = $button['color'] ?? '';
 		$custom_color = isset( $button['custom_color'] ) ? vcex_parse_color( $button['custom_color'] ) : '';
 		$hover_color  = isset( $button['custom_color_hover'] ) ? vcex_parse_color( $button['custom_color_hover'] ) : '';
 
@@ -125,13 +141,10 @@ $output = '<div' . vcex_parse_html_attributes( $wrap_attrs ) . '>';
 			'border_width'       => $atts['border_width'] ? absint( $atts['border_width'] ) . 'px' : '',
 			'line_height'        => $atts['line_height'] ? absint( $atts['line_height']  ) . 'px' : '',
 			'width'              => $atts['width'] ? absint( $atts['width'] ) . 'px' : '', // Must use width because min-width ignores max width.
-			'animation_delay'    => isset( $button['animation_delay'] ) ? $button['animation_delay'] : '',
-			'animation_duration' => isset( $button['animation_duration'] ) ? $button['animation_duration'] : '',
+			'animation_delay'    => $button['animation_delay'] ?? '',
+			'animation_duration' => $button['animation_duration'] ?? '',
 		), false );
-		if ( $atts['spacing'] ) {
-			$margin = absint( $atts['spacing'] ) / 2 . 'px';
-			$button_css .= 'margin:0 ' . $margin . ' ' . $margin . ';';
-		}
+
 		// Custom color.
 		if ( $custom_color && $custom_color_css = vcex_get_button_custom_color_css( $style, $custom_color ) ) {
 			$button_css .= ' ' . $custom_color_css;
@@ -156,8 +169,8 @@ $output = '<div' . vcex_parse_html_attributes( $wrap_attrs ) . '>';
 			'href'   => esc_url( do_shortcode( $link_data['url'] ) ),
 			'title'  => isset( $link_data['title'] ) ? do_shortcode( $link_data['title'] ) : '',
 			'class'  => $button_classes,
-			'target' => isset( $link_data['target'] ) ? $link_data['target'] : '',
-			'rel'    => isset( $link_data['rel'] ) ? esc_attr( $link_data['rel'] ) : '',
+			'target' => $link_data['target'] ?? '',
+			'rel'    => $link_data['rel'] ?? '',
 			'style'  => $button_css,
 		);
 

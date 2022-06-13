@@ -3,7 +3,7 @@
  * Helper functions for getting shortcode attributes.
  *
  * @package TotalThemeCore
- * @version 1.2.8
+ * @version 1.3.2
  */
 
 defined( 'ABSPATH' ) || exit;
@@ -44,10 +44,14 @@ function vcex_shortcode_atts( $shortcode = '', $atts = '', $class = '' ) {
 		$atts = apply_filters( 'vc_map_get_attributes', $atts, $shortcode ); // deprecated in 1.2.8
 	}
 
-	// Apply filters.
-	$atts = apply_filters( 'vcex_shortcode_atts', $atts, $shortcode );
+	/**
+	 * Filters the vcex shortcode attributes.
+	 *
+	 * @param array $attributes
+	 * @param string $shortcode_tag
+	 */
+	$atts = (array) apply_filters( 'vcex_shortcode_atts', $atts, $shortcode );
 
-	// Return shortcode attributes.
 	return $atts;
 }
 
@@ -84,5 +88,5 @@ function vcex_shortcode_class_attrs( $class ) {
  * Helper function returns a shortcode attribute with a fallback.
  */
 function vcex_shortcode_att( $atts, $att, $default = '' ) {
-	return isset( $atts[$att] ) ? $atts[$att] : $default;
+	return $atts[$att] ?? $default;
 }

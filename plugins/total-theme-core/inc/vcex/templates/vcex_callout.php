@@ -4,19 +4,17 @@
  *
  * @package Total WordPress Theme
  * @subpackage Total Theme Core
- * @version 1.2.8
+ * @version 1.3.2
  */
 
 defined( 'ABSPATH' ) || exit;
 
-$shortcode_tag = 'vcex_callout';
-
-if ( ! vcex_maybe_display_shortcode( $shortcode_tag, $atts ) ) {
+if ( ! vcex_maybe_display_shortcode( 'vcex_callout', $atts ) ) {
 	return;
 }
 
 // Get shortcode attributes.
-$atts = vcex_shortcode_atts( $shortcode_tag, $atts, $this );
+$atts = vcex_shortcode_atts( 'vcex_callout', $atts, $this );
 
 // Checks & sanitization.
 $is_full    = '100-100' === $atts['layout'] ? true : false;
@@ -63,13 +61,13 @@ if ( $has_button ) {
 	}
 }
 
-$extra_classes = vcex_get_shortcode_extra_classes( $atts, $shortcode_tag );
+$extra_classes = vcex_get_shortcode_extra_classes( $atts, 'vcex_callout' );
 
 if ( $extra_classes ) {
 	$shortcode_class = array_merge( $shortcode_class, $extra_classes );
 }
 
-$shortcode_class = vcex_parse_shortcode_classes( implode( ' ', $shortcode_class ), $shortcode_tag, $atts );
+$shortcode_class = vcex_parse_shortcode_classes( implode( ' ', $shortcode_class ), 'vcex_callout', $atts );
 
 $shortcode_style = vcex_inline_style( array(
 	'background'         => $atts['background'],
@@ -112,10 +110,6 @@ $output .= '<div class="' . esc_attr( $shortcode_class ) . '"' . vcex_get_unique
 			'font_family'    => $atts['content_font_family'],
 		) );
 
-		if ( $atts['content_font_family'] ) {
-			vcex_enqueue_font( $atts['content_font_family'] );
-		}
-
 		$output .= '<div class="' . esc_attr( implode( ' ', $content_classes ) ) . '"' . $content_inline_style . '>';
 
 			$output .= vcex_the_content( $content );
@@ -132,10 +126,10 @@ $output .= '<div class="' . esc_attr( $shortcode_class ) . '"' . vcex_get_unique
 		);
 
 		if ( $is_full ) {
-			$button_align = $atts['button_align'] ? $atts['button_align'] : 'center';
+			$button_align = $atts['button_align'] ?: 'center';
 			$button_wrap_classes[] = 'wpex-text-' . sanitize_html_class( $button_align );
 		} else {
-			$button_align = $atts['button_align'] ? $atts['button_align'] : 'right';
+			$button_align = $atts['button_align'] ?: 'right';
 			$button_wrap_classes[] = 'wpex-' . sanitize_html_class( $breakpoint ) . '-w-' . sanitize_html_class( $button_width );
 			$button_wrap_classes[] = 'wpex-' . sanitize_html_class( $breakpoint ) . '-text-' . sanitize_html_class( $button_align );
 		}
@@ -152,10 +146,6 @@ $output .= '<div class="' . esc_attr( $shortcode_class ) . '"' . vcex_get_unique
 				'font_family'    => $atts['button_font_family'],
 				'font_weight'    => $atts['button_font_weight'],
 			), false );
-
-			if ( $atts['button_font_family'] ) {
-				vcex_enqueue_font( $atts['button_font_family'] );
-			}
 
 			$button_attrs = array(
 				'href'   => esc_url( do_shortcode( $atts['button_url'] ) ),

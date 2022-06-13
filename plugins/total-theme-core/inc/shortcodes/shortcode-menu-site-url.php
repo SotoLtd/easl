@@ -8,7 +8,7 @@ final class Shortcode_Menu_Site_Url {
 	public function __construct() {
 
 		if ( ! shortcode_exists( 'menu_site_url' ) ) {
-			add_shortcode( 'menu_site_url', array( __CLASS__, 'output' ) );
+			add_shortcode( 'menu_site_url', __CLASS__ . '::output' );
 		}
 
 	}

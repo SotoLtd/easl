@@ -8,7 +8,7 @@ final class Shortcode_Post_Date_Modified {
 	public function __construct() {
 
 		if ( ! shortcode_exists( 'post_modified_date' ) ) {
-			add_shortcode( 'post_modified_date', array( __CLASS__, 'output' ) );
+			add_shortcode( 'post_modified_date', __CLASS__ . '::output' );
 		}
 
 	}

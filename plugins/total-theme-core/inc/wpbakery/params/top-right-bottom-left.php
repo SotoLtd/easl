@@ -1,14 +1,14 @@
 <?php
-/**
- * WPBakery Param => Top_Right_Bottom_Left.
- *
- * @package TotalThemeCore
- * @version 1.2.8
- */
 namespace TotalThemeCore\WPBakery\Params;
 
 defined( 'ABSPATH' ) || exit;
 
+/**
+ * WPBakery Param => Top_Right_Bottom_Left.
+ *
+ * @package TotalThemeCore
+ * @version 1.3.2
+ */
 final class Top_Right_Bottom_Left {
 
 	public static function output( $settings, $value ) {
@@ -37,17 +37,17 @@ final class Top_Right_Bottom_Left {
 					);
 				} elseif ( 2 == $count ) {
 					$field_values = array(
-						'top'    => isset( $array[0] ) ? $array[0] : '',
-						'right'  => isset( $array[1] ) ? $array[1] : '',
-						'bottom' => isset( $array[0] ) ? $array[0] : '',
-						'left'   => isset( $array[1] ) ? $array[1] : '',
+						'top'    => $array[0] ?? '',
+						'right'  => $array[1] ?? '',
+						'bottom' => $array[0] ?? '',
+						'left'   => $array[1] ?? '',
 					);
 				} else {
 					$field_values = array(
-						'top'    => isset( $array[0] ) ? $array[0] : '',
-						'right'  => isset( $array[1] ) ? $array[1] : '',
-						'bottom' => isset( $array[2] ) ? $array[2] : '',
-						'left'   => isset( $array[3] ) ? $array[3] : '',
+						'top'    => $array[0] ?? '',
+						'right'  => $array[1] ?? '',
+						'bottom' => $array[2] ?? '',
+						'left'   => $array[3] ?? '',
 					);
 				}
 
@@ -64,17 +64,21 @@ final class Top_Right_Bottom_Left {
 			foreach( $field_values as $k => $v ) {
 
 				$icon = $k;
-				if ( 'top' == $icon ) {
-					$icon = 'up';
-				} elseif ( 'bottom' == $icon ) {
-					$icon = 'down';
+
+				switch ( $icon ) {
+					case 'top':
+						$icon = 'up';
+						break;
+					case 'bottom':
+						$icon = 'down';
+						break;
 				}
 
 				$output .= '<span class="vcex-item"><span class="vcex-icon"><span class="dashicons dashicons-arrow-' . esc_attr( $icon ) . '-alt"></span></span><input class="vcex-input" name="' . esc_attr( $k ) . '" value="' . esc_attr( $v ) . '" type="text" placeholder="-"></span>';
 
 			}
 
-			$output .= '<input name="' . esc_attr( $settings['param_name'] ) . '" class="vcex-hidden-input wpb-input wpb_vc_param_value  ' . esc_attr( $settings['param_name'] ) . ' ' . esc_attr( $settings['type'] ) . '_field" type="hidden" value="' . esc_attr( $value ) . '" />';
+			$output .= '<input name="' . esc_attr( $settings['param_name'] ) . '" class="vcex-hidden-input wpb-input wpb_vc_param_value  ' . esc_attr( $settings['param_name'] ) . ' ' . esc_attr( $settings['type'] ) . '_field" type="hidden" value="' . esc_attr( $value ) . '">';
 
 		$output .= '</div>';
 

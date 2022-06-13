@@ -4,14 +4,12 @@
  *
  * @package Total WordPress Theme
  * @subpackage Total Theme Core
- * @version 1.2.8
+ * @version 1.3.2
  */
 
 defined( 'ABSPATH' ) || exit;
 
-$shortcode_tag = 'vcex_image_grid';
-
-if ( ! vcex_maybe_display_shortcode( $shortcode_tag, $atts ) ) {
+if ( ! vcex_maybe_display_shortcode( 'vcex_image_grid', $atts ) ) {
 	return;
 }
 
@@ -28,7 +26,7 @@ $og_atts = $atts;
 $entry_count = ! empty( $og_atts['entry_count'] ) ? $og_atts['entry_count'] : 0;
 
 // Get and extract shortcode attributes.
-$atts = vcex_shortcode_atts( $shortcode_tag, $atts, $this );
+$atts = vcex_shortcode_atts( 'vcex_image_grid', $atts, $this );
 extract( $atts );
 
 // Sanitize atts.
@@ -131,7 +129,7 @@ if ( ! empty ( $attachment_ids ) ) :
 	$images_links_array = array_combine( $attachment_ids, $custom_links );
 
 	// Pagination variables.
-	$posts_per_page = $posts_per_page ? $posts_per_page : '-1';
+	$posts_per_page = $posts_per_page ?: '-1';
 	$paged          = NULL;
 	$no_found_rows  = true;
 	if ( '-1' != $posts_per_page ) {
@@ -215,7 +213,7 @@ if ( ! empty ( $attachment_ids ) ) :
 		}
 
 		if ( $visibility ) {
-			$wrap_classes[] = $visibility;
+			$wrap_classes[] = vcex_parse_visibility_class( $visibility );
 		}
 
 		// Wrap data attributes
@@ -249,7 +247,7 @@ if ( ! empty ( $attachment_ids ) ) :
 					$lightbox_data[] = 'data-thumbnails="false"';
 				}
 			}
-			if ( ! $lightbox_title ) {
+			if ( ! $lightbox_title || 'false' === $lightbox_title ) {
 				$lightbox_data[] = 'data-show_title="false"';
 			}
 			vcex_enqueue_lightbox_scripts();
@@ -331,7 +329,7 @@ if ( ! empty ( $attachment_ids ) ) :
 		// Title style & title related vars
 		if ( 'yes' === $title ) {
 			$title_tag_escaped = $title_tag ? tag_escape( $title_tag ) : 'h2';
-			$title_type  = $title_type ? $title_type : 'title';
+			$title_type  = $title_type ?: 'title';
 			$title_style = vcex_inline_style( array(
 				'font_size'      => $title_size,
 				'color'          => $title_color,
@@ -341,9 +339,6 @@ if ( ! empty ( $attachment_ids ) ) :
 				'font_weight'    => $title_weight,
 				'font_family'    => $title_font_family,
 			) );
-			if ( $title_font_family ) {
-				vcex_enqueue_font( $title_font_family );
-			}
 		}
 
 		// Content style & title related vars
@@ -357,9 +352,6 @@ if ( ! empty ( $attachment_ids ) ) :
 				'font_weight'    => $excerpt_weight,
 				'font_family'    => $excerpt_font_family,
 			) );
-			if ( $excerpt_font_family ) {
-				vcex_enqueue_font( $excerpt_font_family );
-			}
 		}
 
 		// Link attributes
@@ -380,7 +372,7 @@ if ( ! empty ( $attachment_ids ) ) :
 		$wrap_classes = implode( ' ', $wrap_classes );
 
 		// Apply filters
-		$wrap_classes = vcex_parse_shortcode_classes( $wrap_classes, $shortcode_tag, $atts );
+		$wrap_classes = vcex_parse_shortcode_classes( $wrap_classes, 'vcex_image_grid', $atts );
 
 		// Wrap attributes
 		$wrap_attrs = array(
@@ -487,7 +479,7 @@ if ( ! empty ( $attachment_ids ) ) :
 					'width'         => $img_width,
 					'height'        => $img_height,
 					'crop'          => $img_crop,
-					'class'         => implode( ' ', vcex_get_entry_thumbnail_class( null, $shortcode_tag, $atts ) ),
+					'class'         => implode( ' ', vcex_get_entry_thumbnail_class( null, 'vcex_image_grid', $atts ) ),
 					'apply_filters' => 'vcex_image_grid_thumbnail_args',
 					'filter_arg1'   => $atts,
 				);
@@ -517,7 +509,7 @@ if ( ! empty ( $attachment_ids ) ) :
 						$atts['media_type'] = 'thumbnail';
 
 						// Image wrap.
-						$output .= '<div class="' . esc_attr( implode( ' ', vcex_get_entry_media_class( array( 'vcex-image-grid-entry-img' ), $shortcode_tag, $atts ) ) ) . '">';
+						$output .= '<div class="' . esc_attr( implode( ' ', vcex_get_entry_media_class( array( 'vcex-image-grid-entry-img' ), 'vcex_image_grid', $atts ) ) ) . '">';
 
 							switch ( $thumbnail_link ) :
 
@@ -552,7 +544,7 @@ if ( ! empty ( $attachment_ids ) ) :
 									// Video data.
 									if ( $video_url ) {
 										$video_embed_url = vcex_get_video_embed_url( $video_url );
-										$lightbox_url    = $video_embed_url ? $video_embed_url : $video_url;
+										$lightbox_url    = $video_embed_url ?: $video_url;
 										$atts['lightbox_data']['data-thumb'] = 'data-thumb="'. $lightbox_image .'"';
 									}
 
@@ -582,7 +574,7 @@ if ( ! empty ( $attachment_ids ) ) :
 										}
 
 										// Inner link overlay HTML.
-										$output .= vcex_get_entry_image_overlay( 'inside_link', $shortcode_tag, $atts );
+										$output .= vcex_get_entry_image_overlay( 'inside_link', 'vcex_image_grid', $atts );
 
 									$output .= '</a>';
 
@@ -614,7 +606,7 @@ if ( ! empty ( $attachment_ids ) ) :
 										$output .= $post_thumbnail;
 
 										// Inner link overlay HTML.
-										$output .= vcex_get_entry_image_overlay( 'inside_link', $shortcode_tag, $atts );
+										$output .= vcex_get_entry_image_overlay( 'inside_link', 'vcex_image_grid', $atts );
 
 									$output .= '</a>';
 
@@ -638,9 +630,33 @@ if ( ! empty ( $attachment_ids ) ) :
 										$output .= $post_thumbnail;
 
 										// Inner link overlay HTML.
-										$output .= vcex_get_entry_image_overlay( 'inside_link', $shortcode_tag, $atts );
+										$output .= vcex_get_entry_image_overlay( 'inside_link', 'vcex_image_grid', $atts );
 
 									$output .= '</a>';
+
+									break;
+
+								// Parent page (Uploaded to link)
+								case 'parent_page':
+
+									$post_parent = get_post_parent( $post_id );
+
+									// Open link.
+									if ( $post_parent ) {
+										$output .= '<a href="' . esc_url( get_permalink( $post_parent ) ) . '" class="vcex-image-grid-entry-img"' . $link_attributes . '>';
+
+									}
+
+										// Display image.
+										$output .= $post_thumbnail;
+
+										// Inner link overlay HTML.
+										$output .= vcex_get_entry_image_overlay( 'inside_link', 'vcex_image_grid', $atts );
+
+									// Close link.
+									if ( $post_parent ) {
+										$output .= '</a>';
+									}
 
 									break;
 
@@ -651,7 +667,7 @@ if ( ! empty ( $attachment_ids ) ) :
 								$output .= $post_thumbnail;
 
 								// Inner link overlay HTML.
-								$output .= vcex_get_entry_image_overlay( 'inside_link', $shortcode_tag, $atts );
+								$output .= vcex_get_entry_image_overlay( 'inside_link', 'vcex_image_grid', $atts );
 
 							endswitch;
 
@@ -665,7 +681,7 @@ if ( ! empty ( $attachment_ids ) ) :
 								}
 
 								// Outer link overlay HTML.
-								$output .= vcex_get_entry_image_overlay( 'outside_link', $shortcode_tag, $atts );
+								$output .= vcex_get_entry_image_overlay( 'outside_link', 'vcex_image_grid', $atts );
 
 							}
 
@@ -685,7 +701,7 @@ if ( ! empty ( $attachment_ids ) ) :
 									$post_title_display = $post_alt_escaped;
 									break;
 								case 'caption':
-									$post_title_display = get_the_excerpt();
+									$post_title_display = wp_get_attachment_caption();
 									break;
 								case 'description':
 									$post_title_display = get_the_content();
@@ -717,7 +733,7 @@ if ( ! empty ( $attachment_ids ) ) :
 
 							switch ( $excerpt_type ) {
 								case 'caption':
-									$excerpt_display = get_the_excerpt();
+									$excerpt_display = wp_get_attachment_caption();
 									break;
 								case 'description':
 									$excerpt_display = get_the_content();
@@ -769,7 +785,7 @@ if ( ! empty ( $attachment_ids ) ) :
 		if ( 'true' === $atts['pagination_loadmore'] && ! empty( $vcex_query->max_num_pages ) ) {
 			vcex_loadmore_scripts();
 			$og_atts['entry_count'] = $entry_count; // Update counter
-			$output .= vcex_get_loadmore_button( $shortcode_tag, $og_atts, $vcex_query );
+			$output .= vcex_get_loadmore_button( 'vcex_image_grid', $og_atts, $vcex_query );
 		}
 
 	$output .= '</div>'; // end wrap.

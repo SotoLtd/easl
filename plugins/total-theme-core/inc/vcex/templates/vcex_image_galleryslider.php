@@ -4,14 +4,12 @@
  *
  * @package Total WordPress Theme
  * @subpackage Total Theme Core
- * @version 1.2.10
+ * @version 1.3.2
  */
 
 defined( 'ABSPATH' ) || exit;
 
-$shortcode_tag = 'vcex_image_galleryslider';
-
-if ( ! vcex_maybe_display_shortcode( $shortcode_tag, $atts ) ) {
+if ( ! vcex_maybe_display_shortcode( 'vcex_image_galleryslider', $atts ) ) {
 	return;
 }
 
@@ -19,7 +17,7 @@ if ( ! vcex_maybe_display_shortcode( $shortcode_tag, $atts ) ) {
 $output = '';
 
 // Get and extract shortcode attributes
-$atts = vcex_shortcode_atts( $shortcode_tag, $atts, $this );
+$atts = vcex_shortcode_atts( 'vcex_image_galleryslider', $atts, $this );
 extract( $atts );
 
 // Get images from custom field
@@ -130,8 +128,8 @@ if ( $attachments ) :
 	$wrap_attributes    = array();
 	$caption_attributes = array();
 	$slideshow          = vcex_vc_is_inline() ? 'false' : $slideshow;
-	$thumbnails_columns = $thumbnails_columns ? $thumbnails_columns : '5';
-	$lazy_load          = 'true' == $lazy_load ? true : false;
+	$thumbnails_columns = $thumbnails_columns ?: '5';
+	$lazy_load          = ( 'true' == $lazy_load ) ? true : false;
 
 	// Slider attributes.
 	$wrap_attributes[] = 'data-thumbnails="true"';
@@ -168,7 +166,7 @@ if ( $attachments ) :
 		$height_animation = 0 == $height_animation ? '0.0' : $height_animation;
 		$wrap_attributes[] = 'data-height-animation-duration="' . esc_attr( $height_animation ) . '"';
 	}
-	if ( $custom_links && apply_filters( 'vcex_sliders_disable_desktop_swipe', true, $shortcode_tag ) ) {
+	if ( $custom_links && apply_filters( 'vcex_sliders_disable_desktop_swipe', true, 'vcex_image_galleryslider' ) ) {
 		$wrap_attributes[] = 'data-touch-swipe-desktop="false"';
 	}
 
@@ -177,25 +175,25 @@ if ( $attachments ) :
 
 		// Caption attributes.
 		if ( $caption_position ) {
-			$caption_attributes[] = ' data-position="' . $caption_position . '"';
+			$caption_attributes[] = ' data-position="' . esc_attr( $caption_position ) . '"';
 		}
 		if ( $caption_show_transition ) {
-			$caption_attributes[] = ' data-show-transition="' . $caption_show_transition . '"';
+			$caption_attributes[] = ' data-show-transition="' . esc_attr( $caption_show_transition ) . '"';
 		}
 		if ( $caption_hide_transition ) {
-			$caption_attributes[] = ' data-hide-transition="' . $caption_hide_transition . '"';
+			$caption_attributes[] = ' data-hide-transition="' . esc_attr( $caption_hide_transition ) . '"';
 		}
 		if ( $caption_width ) {
-			$caption_attributes[] = ' data-width="' . vcex_validate_px_pct( $caption_width, 'px-pct' ) . '"';
+			$caption_attributes[] = ' data-width="' . esc_attr( vcex_validate_px_pct( $caption_width, 'px-pct' ) ) . '"';
 		}
 		if ( $caption_horizontal ) {
-			$caption_attributes[] = ' data-horizontal="' . intval( $caption_horizontal ) . '"';
+			$caption_attributes[] = ' data-horizontal="' . esc_attr( intval( $caption_horizontal ) ) . '"';
 		}
 		if ( $caption_vertical ) {
-			$caption_attributes[] = ' data-vertical="' . intval( $caption_vertical ) . '"';
+			$caption_attributes[] = ' data-vertical="' . esc_attr( intval( $caption_vertical ) ) . '"';
 		}
 		if ( $caption_delay ) {
-			$caption_attributes[] = ' data-show-delay="' . intval( $caption_delay ) . '"';
+			$caption_attributes[] = ' data-show-delay="' . esc_attr( intval( $caption_delay ) ) . '"';
 		}
 		if ( empty( $caption_show_transition ) && empty( $caption_hide_transition ) ) {
 			$caption_attributes[] = ' data-sp-static="false"';
@@ -203,16 +201,25 @@ if ( $attachments ) :
 		$caption_attributes = implode( ' ', $caption_attributes );
 
 		// Caption classes
-		$caption_classes = array( 'wpex-slider-caption', 'sp-layer', 'sp-padding', 'clr' );
+		$caption_classes = array(
+			'wpex-slider-caption',
+			'sp-layer',
+			'sp-padding',
+			'wpex-clr'
+		);
+
 		if ( $caption_visibility ) {
 			$caption_classes[] = $caption_visibility;
 		}
+
 		if ( $caption_style ) {
 			$caption_classes[] = 'sp-' . $caption_style;
 		}
+
 		if ( 'true' == $caption_rounded ) {
 			$caption_classes[] = 'sp-rounded';
 		}
+
 		$caption_classes = implode( ' ', $caption_classes );
 
 		// Caption style
@@ -242,7 +249,7 @@ if ( $attachments ) :
 	}
 
 	if ( $visibility ) {
-		$wrap_classes[] = $visibility;
+		$wrap_classes[] = vcex_parse_visibility_class( $visibility );
 	}
 
 	if ( 'lightbox' == $thumbnail_link ) {
@@ -261,7 +268,7 @@ if ( $attachments ) :
 	$wrap_attributes = ' ' . implode( ' ', $wrap_attributes );
 
 	// Apply filters
-	$wrap_classes = vcex_parse_shortcode_classes( $wrap_classes, $shortcode_tag, $atts );
+	$wrap_classes = vcex_parse_shortcode_classes( $wrap_classes, 'vcex_image_galleryslider', $atts );
 
 	// Open animation wrapper
 	if ( $css_animation && 'none' !== $css_animation ) {
@@ -282,7 +289,7 @@ if ( $attachments ) :
 	// Preloader image
 	if ( 'true' != $randomize ) {
 
-		$output .= '<div class="wpex-slider-preloaderimg ' . $visibility . '">';
+		$output .= '<div class="wpex-slider-preloaderimg ' . vcex_parse_visibility_class( $visibility ) . '">';
 
 			$first_attachment = reset( $attachments );
 
@@ -314,7 +321,7 @@ if ( $attachments ) :
 				$custom_link      = ( '#' != $custom_link ) ? $custom_link : '';
 				$attachment_link  = get_post_meta( $attachment, '_wp_attachment_url', true );
 				$attachment_data  = vcex_get_attachment_data( $attachment );
-				$caption_type     = $caption_type ? $caption_type : 'caption';
+				$caption_type     = $caption_type ?: 'caption';
 				$caption_output   = $attachment_data[$caption_type];
 				$attachment_video = $attachment_data['video'];
 

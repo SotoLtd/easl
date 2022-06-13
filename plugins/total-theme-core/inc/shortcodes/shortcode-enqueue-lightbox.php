@@ -8,7 +8,7 @@ final class Shortcode_Enqueue_Lightbox {
 	public function __construct() {
 
 		if ( ! shortcode_exists( 'wpex_lightbox_scripts' ) ) {
-			add_shortcode( 'wpex_lightbox_scripts', array( __CLASS__, 'output' ) );
+			add_shortcode( 'wpex_lightbox_scripts', __CLASS__ . '::output' );
 		}
 
 	}

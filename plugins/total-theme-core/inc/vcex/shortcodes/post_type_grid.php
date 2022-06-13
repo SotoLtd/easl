@@ -3,7 +3,7 @@
  * Post Type Grid Shortcode.
  *
  * @package TotalThemeCore
- * @version 1.2.8
+ * @version 1.3.2
  */
 
 defined( 'ABSPATH' ) || exit;
@@ -115,7 +115,8 @@ if ( ! class_exists( 'VCEX_Post_Type_Grid_Shortcode' ) ) {
 					'type' => 'textfield',
 					'heading' => esc_html__( 'Element ID', 'total-theme-core' ),
 					'param_name' => 'unique_id',
-					'description' => sprintf( esc_html__( 'Optional element ID (Note: make sure it is unique and valid according to %sw3c specification%s).', 'total-theme-core' ), '<a href="https://www.w3schools.com/tags/att_global_id.asp" target="_blank" rel="noopener noreferrer">', '</a>' ),
+					'admin_label' => true,
+					'description' => vcex_shortcode_param_description( 'unique_id' ),
 				),
 				array(
 					'type' => 'textfield',
@@ -203,7 +204,7 @@ if ( ! class_exists( 'VCEX_Post_Type_Grid_Shortcode' ) ) {
 					'heading' => esc_html__( 'Offset', 'total-theme-core' ),
 					'param_name' => 'offset',
 					'group' => esc_html__( 'Query', 'total-theme-core' ),
-					'description' => esc_html__( 'Number of post to displace or pass over. Warning: Setting the offset parameter overrides/ignores the paged parameter and breaks pagination. The offset parameter is ignored when posts per page is set to -1.', 'total-theme-core' ),
+					'description' => esc_html__( 'Number of post to displace or pass over.', 'total-theme-core' ),
 					'dependency' => array( 'element' => 'custom_query', 'value' => 'false' ),
 				),
 				array(
@@ -679,6 +680,43 @@ if ( ! class_exists( 'VCEX_Post_Type_Grid_Shortcode' ) ) {
 					'group' => esc_html__( 'Title', 'total-theme-core' ),
 					'dependency' => array( 'element' => 'title', 'value' => 'true' ),
 				),
+				// Meta
+				array(
+					'type' => 'vcex_ofswitch',
+					'std' => 'false',
+					'heading' => esc_html__( 'Enable', 'total-theme-core' ),
+					'param_name' => 'meta',
+					'group' => esc_html__( 'Meta', 'total-theme-core' ),
+				),
+				array(
+					'type' => 'vcex_sorter',
+					'heading' => esc_html__( 'Blocks', 'total-theme-core' ),
+					'param_name' => 'meta_blocks',
+					'std' => 'date,author,categories,comments',
+					'choices' => apply_filters( 'vcex_post_content_blocks', array(
+						'date' => esc_html__( 'Date', 'total-theme-core' ),
+						'author' => esc_html__( 'Author', 'total-theme-core' ),
+						'categories' => esc_html__( 'Categories', 'total-theme-core' ),
+						'first_category' => esc_html__( 'First Category', 'total-theme-core' ),
+						'comments' => esc_html__( 'Comments', 'total-theme-core' ),
+					) ),
+					'description' => esc_html__( 'Click and drag to sort items.', 'total-theme-core' ),
+					'group' => esc_html__( 'Meta', 'total-theme-core' ),
+				),
+				array(
+					'type' => 'vcex_colorpicker',
+					'heading' => esc_html__( 'Color', 'total-theme-core' ),
+					'param_name' => 'meta_color',
+					'group' => esc_html__( 'Meta', 'total-theme-core' ),
+					'dependency' => array( 'element' => 'meta', 'value' => 'true' ),
+				),
+				array(
+					'type' => 'textfield',
+					'heading' => esc_html__( 'Font Size', 'total-theme-core' ),
+					'param_name' => 'meta_font_size',
+					'group' => esc_html__( 'Meta', 'total-theme-core' ),
+					'dependency' => array( 'element' => 'meta', 'value' => 'true' ),
+				),
 				// Date
 				array(
 					'type' => 'vcex_ofswitch',
@@ -686,6 +724,7 @@ if ( ! class_exists( 'VCEX_Post_Type_Grid_Shortcode' ) ) {
 					'heading' => esc_html__( 'Enable', 'total-theme-core' ),
 					'param_name' => 'date',
 					'group' => esc_html__( 'Date', 'total-theme-core' ),
+					'dependency' => array( 'element' => 'meta', 'value' => 'false' ),
 				),
 				array(
 					'type' => 'vcex_colorpicker',
@@ -708,6 +747,7 @@ if ( ! class_exists( 'VCEX_Post_Type_Grid_Shortcode' ) ) {
 					'heading' => esc_html__( 'Enable', 'total-theme-core' ),
 					'param_name' => 'show_categories',
 					'group' => esc_html__( 'Categories', 'total-theme-core' ),
+					'dependency' => array( 'element' => 'meta', 'value' => 'false' ),
 				),
 				array(
 					'type' => 'autocomplete',

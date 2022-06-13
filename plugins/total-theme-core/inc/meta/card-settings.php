@@ -1,15 +1,14 @@
 <?php
-/**
- * Register meta options for theme cards.
- *
- * @package TotalThemeCore
- * @version 1.2.8
- */
-
 namespace TotalThemeCore\Meta;
 
 defined( 'ABSPATH' ) || exit;
 
+/**
+ * Register meta options for theme cards.
+ *
+ * @package TotalThemeCore
+ * @version 1.3
+ */
 class Card_Settings {
 
 	/**
@@ -18,28 +17,11 @@ class Card_Settings {
 	private static $instance;
 
 	/**
-	 * Disable instantiation.
-	 */
-	private function __construct() {}
-
-	/**
-	 * Disable the cloning of this class.
-	 *
-	 * @return void
-	 */
-	final public function __clone() {}
-
-	/**
-	 * Disable the wakeup of this class.
-	 */
-	final public function __wakeup() {}
-
-	/**
 	 * Create or retrieve the instance of Card_Settings.
 	 */
 	public static function instance() {
 		if ( is_null( static::$instance ) ) {
-			static::$instance = new Card_Settings;
+			static::$instance = new self();
 			static::$instance->init_hooks();
 		}
 

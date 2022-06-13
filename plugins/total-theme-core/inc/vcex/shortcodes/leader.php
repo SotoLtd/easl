@@ -96,6 +96,7 @@ if ( ! class_exists( 'VCEX_Leader_Shortcode' ) ) {
 						'minimal' => esc_html__( 'Empty Space', 'total-theme-core' ),
 					),
 					'group' => esc_html__( 'Design', 'total-theme-core' ),
+					'admin_label' => true,
 				),
 				array(
 					'type' => 'vcex_ofswitch',

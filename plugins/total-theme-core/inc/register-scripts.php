@@ -6,33 +6,19 @@ defined( 'ABSPATH' ) || exit;
 final class Register_Scripts {
 
 	/**
-	 * Our single Register_Scripts instance.
+	 * Instance.
+	 *
+	 * @access private
+	 * @var object Class object.
 	 */
 	private static $instance;
-
-	/**
-	 * Disable instantiation.
-	 */
-	private function __construct() {}
-
-	/**
-	 * Disable the cloning of this class.
-	 *
-	 * @return void
-	 */
-	final public function __clone() {}
-
-	/**
-	 * Disable the wakeup of this class.
-	 */
-	final public function __wakeup() {}
 
 	/**
 	 * Create or retrieve the instance of Register_Scripts.
 	 */
 	public static function instance() {
 		if ( is_null( static::$instance ) ) {
-			static::$instance = new Register_Scripts;
+			static::$instance = new self();
 			static::$instance->init_hooks();
 		}
 

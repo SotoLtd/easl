@@ -8,38 +8,24 @@ defined( 'ABSPATH' ) || exit;
  * Class registers the vcex_social_links shortcode with the WPBakery page builder.
  *
  * @package TotalThemeCore
- * @version 1.2.8
+ * @version 1.3
  */
 final class Vcex_Social_Links {
 
 	/**
-	 * Our single instance.
+	 * Instance.
+	 *
+	 * @access private
+	 * @var object Class object.
 	 */
 	private static $instance;
-
-	/**
-	 * Disable instantiation.
-	 */
-	private function __construct() {}
-
-	/**
-	 * Disable the cloning of this class.
-	 *
-	 * @return void
-	 */
-	final public function __clone() {}
-
-	/**
-	 * Disable the wakeup of this class.
-	 */
-	final public function __wakeup() {}
 
 	/**
 	 * Create or retrieve the class instance.
 	 */
 	public static function instance() {
 		if ( is_null( static::$instance ) ) {
-			static::$instance = new Vcex_Social_Links;
+			static::$instance = new self();
 			static::$instance->init_hooks();
 		}
 
@@ -105,7 +91,7 @@ final class Vcex_Social_Links {
 			'description' => esc_html__( 'Display social links using icon fonts', 'total-theme-core' ),
 			'base'        => 'vcex_social_links',
 			'category'    => vcex_shortcodes_branding(),
-			'icon'        => 'vcex-social-links vcex-icon ticon ticon-user-plus',
+			'icon'        => 'vcex_element-icon vcex_element-icon--social-links',
 			'params'      => VCEX_Social_Links_Shortcode::get_params(),
 		);
 	}

@@ -4,14 +4,12 @@
  *
  * @package Total WordPress Theme
  * @subpackage Total Theme Core
- * @version 1.2
+ * @version 1.3.2
  */
 
 defined( 'ABSPATH' ) || exit;
 
-$shortcode_tag = 'vcex_portfolio_carousel';
-
-if ( ! vcex_maybe_display_shortcode( $shortcode_tag, $atts ) ) {
+if ( ! vcex_maybe_display_shortcode( 'vcex_portfolio_carousel', $atts ) ) {
 	return;
 }
 
@@ -24,7 +22,7 @@ if ( ! empty( $atts['term_slug'] ) && empty( $atts['include_categories']) ) {
 $output = '';
 
 // Get and extract shortcode attributes
-$atts = vcex_shortcode_atts( $shortcode_tag, $atts, $this );
+$atts = vcex_shortcode_atts( 'vcex_portfolio_carousel', $atts, $this );
 
 // Define attributes
 $atts['post_type'] = 'portfolio';
@@ -75,7 +73,7 @@ if ( $vcex_query->have_posts() ) :
 	}
 
 	// Arrow style
-	$arrows_style = $arrows_style ? $arrows_style : 'default';
+	$arrows_style = $arrows_style ?: 'default';
 	$wrap_classes[] = 'arrwstyle-' . $arrows_style;
 
 	// Arrow position
@@ -90,12 +88,12 @@ if ( $vcex_query->have_posts() ) :
 
 	// Visiblity
 	if ( $visibility ) {
-		$wrap_classes[] = $visibility;
+		$wrap_classes[] = vcex_parse_visibility_class( $visibility );
 	}
 
 	// CSS animations
-	if ( $css_animation && 'none' !== $css_animation ) {
-		$wrap_classes[] = vcex_get_css_animation( $css_animation );
+	if ( $css_animation_class = vcex_get_css_animation( $atts['css_animation'] ) ) {
+		$wrap_classes[] = $css_animation_class;
 	}
 
 	// Lightbox classes & scripts
@@ -120,7 +118,7 @@ if ( $vcex_query->have_posts() ) :
 	$wrap_classes = implode( ' ', $wrap_classes );
 
 	// Apply filters
-	$wrap_classes = vcex_parse_shortcode_classes( $wrap_classes, $shortcode_tag, $atts );
+	$wrap_classes = vcex_parse_shortcode_classes( $wrap_classes, 'vcex_portfolio_carousel', $atts );
 
 	// Display header if enabled
 	if ( $header ) {
@@ -142,7 +140,7 @@ if ( $vcex_query->have_posts() ) :
 	/*--------------------------------*/
 	/* [ Begin Carousel Output ]
 	/*--------------------------------*/
-	$output .= '<div class="' . esc_attr( $wrap_classes ) . '" data-wpex-carousel="' . vcex_get_carousel_settings( $atts, $shortcode_tag ) . '"' . vcex_get_unique_id( $unique_id ) . $wrap_style . '>';
+	$output .= '<div class="' . esc_attr( $wrap_classes ) . '" data-wpex-carousel="' . vcex_get_carousel_settings( $atts, 'vcex_portfolio_carousel' ) . '"' . vcex_get_unique_id( $unique_id ) . $wrap_style . '>';
 
 		// Start loop
 		$lcount = 0;
@@ -178,7 +176,7 @@ if ( $vcex_query->have_posts() ) :
 
 						$thumbnail_class = implode( ' ' , vcex_get_entry_thumbnail_class(
 							array( 'wpex-carousel-entry-img' ),
-							$shortcode_tag,
+							'vcex_portfolio_carousel',
 							$atts
 						) );
 
@@ -194,7 +192,7 @@ if ( $vcex_query->have_posts() ) :
 							'filter_arg1'   => $atts,
 						) );
 
-						$media_output .= '<div class="' . esc_attr( implode( ' ', vcex_get_entry_media_class( array( 'wpex-carousel-entry-media' ), $shortcode_tag, $atts ) ) ) . '">';
+						$media_output .= '<div class="' . esc_attr( implode( ' ', vcex_get_entry_media_class( array( 'wpex-carousel-entry-media' ), 'vcex_portfolio_carousel', $atts ) ) ) . '">';
 
 							switch ( $thumbnail_link ) {
 
@@ -202,7 +200,7 @@ if ( $vcex_query->have_posts() ) :
 								case 'none':
 
 									$media_output .= $img_html;
-									$media_output .= vcex_get_entry_media_after( $shortcode_tag );
+									$media_output .= vcex_get_entry_media_after( 'vcex_portfolio_carousel' );
 
 									break;
 
@@ -264,10 +262,10 @@ if ( $vcex_query->have_posts() ) :
 							} // end switch
 
 							// Inner Overlay
-							$media_output .= vcex_get_entry_image_overlay( 'inside_link', $shortcode_tag, $atts );
+							$media_output .= vcex_get_entry_image_overlay( 'inside_link', 'vcex_portfolio_carousel', $atts );
 
 							// Entry after media hook
-							$media_output .= vcex_get_entry_media_after( $shortcode_tag );
+							$media_output .= vcex_get_entry_media_after( 'vcex_portfolio_carousel' );
 
 							// Close link
 							if ( 'none' !== $thumbnail_link ) {
@@ -275,7 +273,7 @@ if ( $vcex_query->have_posts() ) :
 							}
 
 							// Outside Overlay
-							$media_output .= vcex_get_entry_image_overlay( 'outside_link', $shortcode_tag, $atts );
+							$media_output .= vcex_get_entry_image_overlay( 'outside_link', 'vcex_portfolio_carousel', $atts );
 
 						$media_output .= '</div>';
 
@@ -322,7 +320,7 @@ if ( $vcex_query->have_posts() ) :
 
 					}
 
-					$output .= '<div class="' . esc_attr( implode( ' ', vcex_get_entry_details_class( array( 'wpex-carousel-entry-details' ), $shortcode_tag, $atts ) ) ) . '"' . $content_style . '>';
+					$output .= '<div class="' . esc_attr( implode( ' ', vcex_get_entry_details_class( array( 'wpex-carousel-entry-details' ), 'vcex_portfolio_carousel', $atts ) ) ) . '"' . $content_style . '>';
 
 						/*--------------------------------*/
 						/* [ Entry Title ]
@@ -349,7 +347,7 @@ if ( $vcex_query->have_posts() ) :
 
 							}
 
-							$title_output .= '<div class="' . esc_attr( implode( ' ', vcex_get_entry_title_class( array( 'wpex-carousel-entry-title' ), $shortcode_tag, $atts ) ) ) . '"' . $heading_style . '>';
+							$title_output .= '<div class="' . esc_attr( implode( ' ', vcex_get_entry_title_class( array( 'wpex-carousel-entry-title' ), 'vcex_portfolio_carousel', $atts ) ) ) . '"' . $heading_style . '>';
 
 								$title_output .= '<a href="' . esc_url( $atts['post_permalink'] ) . '"' . $content_heading_color . '>';
 
@@ -380,12 +378,12 @@ if ( $vcex_query->have_posts() ) :
 							// Generate excerpt
 							$atts['post_excerpt'] = vcex_get_excerpt( array(
 								'length'  => $excerpt_length,
-								'context' => $shortcode_tag,
+								'context' => 'vcex_portfolio_carousel',
 							) );
 
 							if ( $atts['post_excerpt'] ) {
 
-								$excerpt_output .= '<div class="' . esc_attr( implode( ' ', vcex_get_entry_excerpt_class( array( 'wpex-carousel-entry-excerpt' ), $shortcode_tag, $atts ) ) ) . '"' . $excerpt_styling . '>';
+								$excerpt_output .= '<div class="' . esc_attr( implode( ' ', vcex_get_entry_excerpt_class( array( 'wpex-carousel-entry-excerpt' ), 'vcex_portfolio_carousel', $atts ) ) ) . '"' . $excerpt_styling . '>';
 
 									$excerpt_output .= $atts['post_excerpt']; // Escaped via wp_trim_words
 
@@ -436,7 +434,7 @@ if ( $vcex_query->have_posts() ) :
 
 							}
 
-							$readmore_output .= '<div class="' . esc_attr( implode( ' ', vcex_get_entry_button_wrap_class( array( 'wpex-carousel-entry-button' ), $shortcode_tag, $atts ) ) ) . '">';
+							$readmore_output .= '<div class="' . esc_attr( implode( ' ', vcex_get_entry_button_wrap_class( array( 'wpex-carousel-entry-button' ), 'vcex_portfolio_carousel', $atts ) ) ) . '">';
 
 								$attrs = array(
 									'href'  => esc_url( $atts['post_permalink'] ),
@@ -453,13 +451,11 @@ if ( $vcex_query->have_posts() ) :
 									if ( $read_more_text ) {
 										$readmore_output .= $read_more_text;
 									} else {
-										$readmore_output .= esc_html__( 'read more', 'total' );
+										$readmore_output .= esc_html__( 'Read more', 'total' );
 									}
 
 									if ( 'true' == $readmore_rarr ) {
-
 										$readmore_output .= ' <span class="vcex-readmore-rarr">' . vcex_readmore_button_arrow() . '</span>';
-
 									}
 
 								$readmore_output .= '</a>';

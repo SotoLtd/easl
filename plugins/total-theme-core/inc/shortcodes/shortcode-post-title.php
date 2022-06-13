@@ -8,7 +8,7 @@ final class Shortcode_Post_Title {
 	public function __construct() {
 
 		if ( ! shortcode_exists( 'post_title' ) ) {
-			add_shortcode( 'post_title', array( __CLASS__, 'output' ) );
+			add_shortcode( 'post_title', __CLASS__ . '::output' );
 		}
 
 	}

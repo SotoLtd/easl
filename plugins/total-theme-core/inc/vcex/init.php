@@ -1,50 +1,36 @@
 <?php
-/**
- * VCEX Shortcodes.
- *
- * The Original "Visual Composer Extension" Plugin by WPExplorer.com reimagined.
- *
- * @package TotalThemeCore
- * @version 1.2.8
- */
-
 namespace TotalThemeCore\Vcex;
 
 defined( 'ABSPATH' ) || exit;
 
+/**
+ * VCEX Shortcodes.
+ *
+ * The original Visual Composer Extension Plugin by WPExplorer rebuilt for Total.
+ *
+ * @package TotalThemeCore
+ * @version 1.3.2
+ */
 final class Init {
 
 	/**
-	 * Our single Init instance.
+	 * Instance.
+	 *
+	 * @access private
+	 * @var object Class object.
 	 */
 	private static $instance;
-
-	/**
-	 * Disable instantiation.
-	 */
-	private function __construct() {}
-
-	/**
-	 * Disable the cloning of this class.
-	 *
-	 * @return void
-	 */
-	final public function __clone() {}
-
-	/**
-	 * Disable the wakeup of this class.
-	 */
-	final public function __wakeup() {}
 
 	/**
 	 * Create or retrieve the instance of Init.
 	 */
 	public static function instance() {
 		if ( is_null( static::$instance ) ) {
-			static::$instance = new Init;
+			static::$instance = new self();
 			static::$instance->global_classes();
 			static::$instance->include_functions();
 			static::$instance->register_shortcodes();
+		//	static::$instance->gutenberg_support(); // @WIP - move to it's own Gutenberg folder.
 		}
 
 		return static::$instance;
@@ -81,7 +67,6 @@ final class Init {
 	 * Register shortcodes.
 	 */
 	public function register_shortcodes() {
-
 		$modules = vcex_shortcodes_list();
 		$path = TTC_PLUGIN_DIR_PATH . 'inc/vcex/shortcodes/';
 
@@ -93,7 +78,7 @@ final class Init {
 
 				if ( is_array( $val ) ) {
 
-					$condition = isset( $val['condition'] ) ? $val['condition'] : true;
+					$condition = $val['condition'] ?? true;
 
 					if ( $condition ) {
 
@@ -118,7 +103,41 @@ final class Init {
 			}
 
 		}
+	}
 
+	/**
+	 * Gutenberg support for vcex elements.
+	 */
+	public function gutenberg_support() {
+
+		// Add new Gutenberg category.
+		add_filter( 'block_categories', array( $this, 'add_block_category' ) );
+
+		// Register blocks.
+		Blocks\Alert\Block::instance();
+
+	}
+
+	/**
+	 * Gutenberg support for vcex elements.
+	 */
+	public function add_block_category( $categories ) {
+		$category_slugs = wp_list_pluck( $categories, 'slug' );
+
+		if ( ! in_array( 'total', $category_slugs, true ) ) {
+		    $categories = array_merge(
+		        $categories,
+		        array(
+		            array(
+		                'title' => esc_html__( 'Total', 'total-theme-core' ),
+		                'slug'  => 'total',
+		                'icon'  => '<svg viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg"><g clip-rule="evenodd" fill="currentColor" fill-rule="evenodd"><path d="m68.3 21.5 33.7-19.5 42.5 24.5 42.4 24.5v39z"/><path d="m17.2 120.7v-20.7-49l60.3 34.9z"/><path d="m186.9 149-42.4 24.5-42.5 24.5-42.4-24.5-15.8-9.2 84.8-49z"/></g></svg>',
+		            ),
+		        )
+		    );
+		}
+
+		return $categories;
 	}
 
 }

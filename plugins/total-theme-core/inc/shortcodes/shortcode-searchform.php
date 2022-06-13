@@ -8,7 +8,7 @@ final class Shortcode_Searchform {
 	public function __construct() {
 
 		if ( ! shortcode_exists( 'searchform' ) ) {
-			add_shortcode( 'searchform', array( __CLASS__, 'output' ) );
+			add_shortcode( 'searchform', __CLASS__ . '::output' );
 		}
 
 	}

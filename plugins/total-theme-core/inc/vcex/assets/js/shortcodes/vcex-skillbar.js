@@ -1,39 +1,67 @@
-( function( $ ) {
+if ( 'function' !== typeof window.vcexSkillbar ) {
+	window.vcexSkillbar = function( context, event ) {
 
-	'use strict';
+		if ( ! context || ! context.childNodes ) {
+			context = document;
+		}
 
-	if ( 'function' !== typeof window.vcexSkillbar ) {
-		window.vcexSkillbar = function ( $context ) {
-			if ( 'undefined' === typeof $.fn.appear ) {
+		var isScrolling = false;
+
+		if ( event && ( 'scroll' === event.type || 'resize' === event.type ) ) {
+			isScrolling = true;
+		}
+
+		var inView = function( element ) {
+			var elementRect = element.getBoundingClientRect();
+			if ( elementRect.top < window.innerHeight && elementRect.bottom >= 0 ) {
+				return true; // returns true when element is partially visible.
+			}
+		};
+
+		context.querySelectorAll( '.vcex-skillbar[data-percent]' ).forEach( function( element ) {
+			var initialized = element.dataset.vcexSkillbarInit;
+			var animateOnScroll = element.dataset.animateOnScroll;
+			if ( ! animateOnScroll && isScrolling && 'true' === initialized ) {
 				return;
 			}
 
-			$( '.vcex-skillbar', $context ).each( function() {
+			var bar = element.querySelector( '.vcex-skillbar-bar' );
 
-				var $this = $( this );
-				var $bar = $this.find( '.vcex-skillbar-bar' );
-				var animateOnScroll = $this.data( 'animate-on-scroll' );
-
-				$this.appear( function() {
-					if ( animateOnScroll ) {
-						$bar.width(0);
+			// Hide/Show on scroll.
+			if ( animateOnScroll && initialized && isScrolling ) {
+				if ( inView( element ) ) {
+					if ( ! bar.style.width ) {
+						bar.style.width = element.dataset.percent;
 					}
-					$bar.animate( {
-						width: $this.data( 'percent' )
-					}, 800 );
-				}, {
-					one: animateOnScroll ? false : true,
-					accX: 0,
-					accY: 0
-				} );
+				} else {
+					if ( bar.style.width ) {
+						bar.style.removeProperty( 'width' );
+					}
+				}
+				return;
+			}
 
-			} );
+			// Show for the first time.
+			if ( ! initialized && inView( element ) ) {
+				bar.style.width = element.dataset.percent;
+				element.setAttribute( 'data-vcex-skillbar-init', 'true' );
+			}
 
-		};
-	}
+		} );
 
-	$( document ).ready( function() {
-		window.vcexSkillbar();
-	} );
+	};
+}
 
-} ) ( jQuery );
+if ( document.readyState === 'interactive' || document.readyState === 'complete' ) {
+	setTimeout( vcexSkillbar, 0 );
+} else {
+	document.addEventListener( 'DOMContentLoaded', vcexSkillbar, false );
+}
+
+window.addEventListener( 'scroll', function( event ) {
+	vcexSkillbar( document, event );
+}, { passive: true } );
+
+window.addEventListener( 'resize', function( event ) {
+	vcexSkillbar( document, event );
+} );

@@ -1,51 +1,30 @@
 <?php
-/**
- * Portfolio Post Type.
- *
- * @package TotalThemeCore
- * @version 1.2.9
- */
-
 namespace TotalThemeCore\Cpt;
 
 defined( 'ABSPATH' ) || exit;
 
+/**
+ * Portfolio Post Type.
+ *
+ * @package TotalThemeCore
+ * @version 1.3.2
+ */
 final class Portfolio {
 
 	/**
-	 * Our single Portfolio instance.
+	 * Instance.
+	 *
+	 * @access private
+	 * @var object Class object.
 	 */
 	private static $instance;
-
-	/**
-	 * Disable instantiation.
-	 */
-	private function __construct() {
-		// Private to disabled instantiation.
-	}
-
-	/**
-	 * Disable the cloning of this class.
-	 *
-	 * @return void
-	 */
-	final public function __clone() {
-		throw new Exception( 'You\'re doing things wrong.' );
-	}
-
-	/**
-	 * Disable the wakeup of this class.
-	 */
-	final public function __wakeup() {
-		throw new Exception( 'You\'re doing things wrong.' );
-	}
 
 	/**
 	 * Create or retrieve the instance of Portfolio.
 	 */
 	public static function instance() {
 		if ( is_null( static::$instance ) ) {
-			static::$instance = new Portfolio;
+			static::$instance = new self();
 			static::$instance->init_hooks();
 		}
 
@@ -167,7 +146,7 @@ final class Portfolio {
 		$singular_name = $this->portfolio_singular_name();
 		$has_archive   = wp_validate_boolean( get_theme_mod( 'portfolio_has_archive', false ) );
 		$default_slug  = $has_archive ? 'portfolio' : 'portfolio-item';
-		$slug          = ( $slug = get_theme_mod( 'portfolio_slug' ) ) ? $slug : $default_slug;
+		$slug          = ( $slug = get_theme_mod( 'portfolio_slug' ) ) ?: $default_slug;
 
 		$labels = array(
 			'name'               => $name,
@@ -221,8 +200,8 @@ final class Portfolio {
 	public function register_tags() {
 
 		// Define and sanitize options.
-		$name = ( $name = get_theme_mod( 'portfolio_tag_labels' ) ) ? $name : esc_html__( 'Portfolio Tags', 'total-theme-core' );
-		$slug = ( $slug = get_theme_mod( 'portfolio_tag_slug' ) ) ? $slug : 'portfolio-tag';
+		$name = ( $name = get_theme_mod( 'portfolio_tag_labels' ) ) ?: esc_html__( 'Portfolio Tags', 'total-theme-core' );
+		$slug = ( $slug = get_theme_mod( 'portfolio_tag_slug' ) ) ?: 'portfolio-tag';
 
 		// Define labels.
 		$labels = array(
@@ -380,12 +359,13 @@ final class Portfolio {
 					continue;
 				}
 
-				$current_tax_slug = isset( $_GET[$tax_slug] ) ? $_GET[$tax_slug] : false;
-				$tax_obj          = get_taxonomy( $tax_slug );
-				$tax_name         = $tax_obj->labels->name;
-				$terms            = get_terms( $tax_slug );
+				$current_tax_slug = $_GET[$tax_slug] ?? false;
+				$tax_obj = get_taxonomy( $tax_slug );
+				$tax_name = $tax_obj->labels->name;
+				$terms = get_terms( $tax_slug );
 
-				if ( ! empty( $terms ) && ! is_wp_error( $terms ) ) { ?>
+				if ( ! empty( $terms ) && ! is_wp_error( $terms ) ) {
+					?>
 
 					<select name="<?php echo esc_attr( $tax_slug ); ?>" id="<?php echo esc_attr( $tax_slug ); ?>" class="postform">
 

@@ -3,7 +3,7 @@
  * Custom Field Shortcode.
  *
  * @package TotalThemeCore
- * @version 1.2.8
+ * @version 1.3.1
  */
 
 defined( 'ABSPATH' ) || exit;
@@ -57,6 +57,12 @@ if ( ! class_exists( 'VCEX_Custom_Field_Shortcode' ) ) {
 					'heading' => esc_html__( 'Fallback Value', 'total-theme-core' ),
 					'param_name' => 'fallback',
 					'description' => esc_html__( 'If the custom field value is empty you can add a fallback text to display on the site (optional).', 'total-theme-core' ),
+				),
+				array(
+					'type' => 'textfield',
+					'heading' => esc_html__( 'Parse Callback Function Name', 'total-theme-core' ),
+					'param_name' => 'parse_callback',
+					'description' => esc_html__( 'Enter a callback function name to pass your custom field output through. This is useful for added sanitization or if you want to render your data in a specific way. A basic example would be if your custom field returns an image attachment ID you could enter "wp_get_attachment_image" in this field to return an image. For most cases you\'ll most likely be writing your own callback functions.', 'total-theme-core' ),
 				),
 				array(
 					'type' => 'textfield',

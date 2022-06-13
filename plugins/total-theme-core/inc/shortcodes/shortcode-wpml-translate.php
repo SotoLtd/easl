@@ -8,7 +8,7 @@ final class Shortcode_Wpml_Translate {
 	public function __construct() {
 
 		if ( ! shortcode_exists( 'wpml_translate' ) ) {
-			add_shortcode( 'wpml_translate', array( __CLASS__, 'output' ) );
+			add_shortcode( 'wpml_translate', __CLASS__ . '::output' );
 		}
 
 	}

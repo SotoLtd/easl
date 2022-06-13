@@ -4,14 +4,12 @@
  *
  * @package Total WordPress Theme
  * @subpackage Total Theme Core
- * @version 1.3
+ * @version 1.3.2
  */
 
 defined( 'ABSPATH' ) || exit;
 
-$shortcode_tag = 'vcex_recent_news';
-
-if ( ! vcex_maybe_display_shortcode( $shortcode_tag, $atts ) ) {
+if ( ! vcex_maybe_display_shortcode( 'vcex_recent_news', $atts ) ) {
 	return;
 }
 
@@ -19,7 +17,7 @@ if ( ! vcex_maybe_display_shortcode( $shortcode_tag, $atts ) ) {
 $output = '';
 
 // Deprecated Attributes.
-$term_slug = isset( $atts['term_slug'] ) ? $atts['term_slug'] : '';
+$term_slug = $atts['term_slug'] ?? '';
 if ( empty( $atts['divider_color'] ) && ! empty( $atts['entry_bottom_border_color'] ) ) {
 	$atts['divider_color'] = $atts['entry_bottom_border_color'];
 }
@@ -31,7 +29,7 @@ $og_atts = $atts;
 $entry_count = ! empty( $og_atts['entry_count'] ) ? $og_atts['entry_count'] : 0;
 
 // Get shortcode attributes.
-$atts = vcex_shortcode_atts( $shortcode_tag, $atts, $this );
+$atts = vcex_shortcode_atts( 'vcex_recent_news', $atts, $this );
 
 // Add paged attribute for load more button (used for WP_Query).
 if ( ! empty( $og_atts['paged'] ) ) {
@@ -97,7 +95,7 @@ if ( $vcex_query->have_posts() ) :
 	}
 
 	if ( $visibility ) {
-		$wrap_classes[] = $visibility;
+		$wrap_classes[] = vcex_parse_visibility_class( $visibility );
 	}
 
 	if ( $css ) {
@@ -135,7 +133,7 @@ if ( $vcex_query->have_posts() ) :
 	}
 
 	// Add WPBakery filter for classes.
-	$wrap_classes = vcex_parse_shortcode_classes( implode( ' ', $wrap_classes ), $shortcode_tag, $atts );
+	$wrap_classes = vcex_parse_shortcode_classes( implode( ' ', $wrap_classes ), 'vcex_recent_news', $atts );
 
 	/*-------------------------------------------*/
 	/* [ Begin Output ]
@@ -224,8 +222,8 @@ if ( $vcex_query->have_posts() ) :
 					$entry_classes[] = 'no-left-padding';
 				}
 
-				if ( $css_animation && 'none' !== $css_animation ) {
-					$entry_classes[] = vcex_get_css_animation( $css_animation );
+				if ( $css_animation_class = vcex_get_css_animation( $css_animation ) ) {
+					$entry_classes[] = $css_animation_class;
 				}
 
 			}
@@ -336,7 +334,7 @@ if ( $vcex_query->have_posts() ) :
 				/*-------------------------------------------*/
 				/* [ Details ]
 				/*-------------------------------------------*/
-				$output .= '<div class="' . esc_attr( implode( ' ', vcex_get_entry_details_class( array( 'vcex-news-entry-details wpex-flex-grow' ), $shortcode_tag, $atts ) ) ) . '">';
+				$output .= '<div class="' . esc_attr( implode( ' ', vcex_get_entry_details_class( array( 'vcex-news-entry-details wpex-flex-grow' ), 'vcex_recent_news', $atts ) ) ) . '">';
 
 					/*-------------------------------------------*/
 					/* [ Media ]
@@ -351,7 +349,7 @@ if ( $vcex_query->have_posts() ) :
 
 							$atts['media_type'] = 'video';
 
-							$media_output .= '<div class="' . esc_attr( implode( ' ', vcex_get_entry_media_class( array( 'vcex-news-entry-video' ), $shortcode_tag, $atts ) ) ) . '">' . $post->video_embed_escaped . '</div>';
+							$media_output .= '<div class="' . esc_attr( implode( ' ', vcex_get_entry_media_class( array( 'vcex-news-entry-video' ), 'vcex_recent_news', $atts ) ) ) . '">' . $post->video_embed_escaped . '</div>';
 
 						}
 
@@ -362,14 +360,14 @@ if ( $vcex_query->have_posts() ) :
 
 							$atts['media_type'] = 'thumbnail';
 
-							$media_output .= '<div class="' . esc_attr( implode( ' ', vcex_get_entry_media_class( array( 'vcex-news-entry-thumbnail' ), $shortcode_tag, $atts ) ) ) . '">';
+							$media_output .= '<div class="' . esc_attr( implode( ' ', vcex_get_entry_media_class( array( 'vcex-news-entry-thumbnail' ), 'vcex_recent_news', $atts ) ) ) . '">';
 
 								$media_output .= '<a href="' . esc_url( $post->permalink ) . '" title="' . vcex_esc_title() . '">';
 
 									// Thumbnail args
 									$thumbnail_class = implode( ' ' , vcex_get_entry_thumbnail_class(
 										null,
-										$shortcode_tag,
+										'vcex_recent_news',
 										$atts
 									) );
 
@@ -384,15 +382,15 @@ if ( $vcex_query->have_posts() ) :
 										'filter_arg1'   => $atts,
 									) );
 
-									$media_output .= vcex_get_entry_media_after( $shortcode_tag );
+									$media_output .= vcex_get_entry_media_after( 'vcex_recent_news' );
 
 									// Inner overlay.
-									$media_output .= vcex_get_entry_image_overlay( 'inside_link', $shortcode_tag, $atts );
+									$media_output .= vcex_get_entry_image_overlay( 'inside_link', 'vcex_recent_news', $atts );
 
 								$media_output .= '</a>';
 
 								// Outer link overlay HTML.
-								$media_output .= vcex_get_entry_image_overlay( 'outside_link', $shortcode_tag, $atts );
+								$media_output .= vcex_get_entry_image_overlay( 'outside_link', 'vcex_recent_news', $atts );
 
 							$media_output .= '</div>';
 
@@ -499,7 +497,7 @@ if ( $vcex_query->have_posts() ) :
 
 						$title_output .= '<header class="vcex-recent-news-entry-title">';
 
-							$title_output .= '<' . $title_tag_escaped . ' class="' . esc_attr( implode( ' ', vcex_get_entry_title_class( $title_class, $shortcode_tag, $atts ) ) ) . '"' . $heading_style . '"' . $heading_style . '>';
+							$title_output .= '<' . $title_tag_escaped . ' class="' . esc_attr( implode( ' ', vcex_get_entry_title_class( $title_class, 'vcex_recent_news', $atts ) ) ) . '"' . $heading_style . '"' . $heading_style . '>';
 
 								$title_output .= '<a href="' . esc_url( $post->permalink ) . '">' . wp_kses_post( $post->the_title ) . '</a>';
 
@@ -530,12 +528,12 @@ if ( $vcex_query->have_posts() ) :
 									) );
 								}
 
-								$excerpt_output .= '<div class="' . esc_attr( implode( ' ', vcex_get_entry_excerpt_class( array( 'vcex-recent-news-entry-excerpt' ), $shortcode_tag, $atts ) ) ) . '"' . $excerpt_style . '>';
+								$excerpt_output .= '<div class="' . esc_attr( implode( ' ', vcex_get_entry_excerpt_class( array( 'vcex-recent-news-entry-excerpt' ), 'vcex_recent_news', $atts ) ) ) . '"' . $excerpt_style . '>';
 
 									// Output excerpt
 									$excerpt_output .= vcex_get_excerpt( array(
 										'length'  => $excerpt_length,
-										'context' => $shortcode_tag,
+										'context' => 'vcex_recent_news',
 									) );
 
 								$excerpt_output .= '</div>';
@@ -554,7 +552,7 @@ if ( $vcex_query->have_posts() ) :
 								if ( $first_run ) {
 
 									// Readmore text.
-									$read_more_text = $read_more_text ? $read_more_text : esc_html__( 'read more', 'total' );
+									$read_more_text = $read_more_text ?: esc_html__( 'Read more', 'total' );
 
 									// Readmore classes.
 									$readmore_classes = vcex_get_button_classes( $readmore_style, $readmore_style_color );
@@ -689,7 +687,7 @@ if ( $vcex_query->have_posts() ) :
 
 		vcex_loadmore_scripts();
 		$og_atts['entry_count'] = $entry_count; // Update counter.
-		$output .= vcex_get_loadmore_button( $shortcode_tag, $og_atts, $vcex_query );
+		$output .= vcex_get_loadmore_button( 'vcex_recent_news', $og_atts, $vcex_query );
 
 	}
 

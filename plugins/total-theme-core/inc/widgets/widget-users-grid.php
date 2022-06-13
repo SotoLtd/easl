@@ -1,18 +1,16 @@
 <?php
+namespace TotalThemeCore\Widgets;
+use TotalThemeCore\WidgetBuilder as Widget_Builder;
+
+defined( 'ABSPATH' ) || exit;
+
 /**
  * Users Grid widget.
  *
  * @package Total Theme Core
  * @subpackage Widgets
- * @version 1.2.8
+ * @version 1.3.2
  */
-
-namespace TotalThemeCore\Widgets;
-
-use TotalThemeCore\WidgetBuilder as Widget_Builder;
-
-defined( 'ABSPATH' ) || exit;
-
 class Widget_Users_Grid extends Widget_Builder {
 	private $args;
 
@@ -197,23 +195,20 @@ class Widget_Users_Grid extends Widget_Builder {
 
 		if ( $get_users ) {
 
-			$columns_gap = function_exists( 'wpex_gap_class' ) ? ' ' . wpex_gap_class( $columns_gap ) : '';
+			$grid_class = array(
+				'wpex-users-widget',
+				'wpex-inline-grid',
+				'wpex-grid-cols-' . absint( $columns ?: 4 ),
+				'wpex-gap-' . absint( $columns_gap ?: 10 ),
+			);
 
-			$output .= '<ul class="wpex-users-widget wpex-row wpex-clr' . esc_attr( $columns_gap ) . '">';
+			$grid_class = array_map( 'esc_attr', $grid_class );
 
-				$count=0;
+			$output .= '<div class="' . esc_attr( implode( ' ', $grid_class ) ) . '">';
 
 				foreach ( $get_users as $user ) :
 
-					$count++;
-					$classes = array();
-					if ( function_exists( 'wpex_grid_class' ) ) {
-						$classes[] = 'nr-col wpex-text-center wpex-clr';
-						$classes[] = wpex_grid_class( $columns );
-						$classes[] = 'col-' . sanitize_html_class( $count );
-					}
-
-					$output .= '<li class="' . esc_attr( implode( ' ', $classes ) ) . '">';
+					$output .= '<div class="wpex-users-widget__item wpex-text-center">';
 
 						// Open link tag
 						if ( $link_to_posts ) {
@@ -259,18 +254,13 @@ class Widget_Users_Grid extends Widget_Builder {
 							$output .= '</a>';
 						}
 
-					$output .= '</li>';
+					$output .= '</div>';
 
-				// Clear columns
-				if ( $columns == $count ) {
-					$count = 0;
-				}
-
-				// End loop
+				// End loop.
 				endforeach;
 
-			// Close ul wrap
-			$output .= '</ul>';
+			// Close ul wrap.
+			$output .= '</div>';
 
 		}
 

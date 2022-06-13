@@ -1,4 +1,8 @@
 <?php
+namespace TotalThemeCore\Meta;
+
+defined( 'ABSPATH' ) || exit;
+
 /**
  * Adds custom settings for post categories
  *
@@ -8,11 +12,6 @@
  * @todo Update to use term_meta instead of get_option and apply fallbacks.
  * @todo Make use of Term_Meta class by filtering into 'wpex_term_meta_options'.
  */
-
-namespace TotalThemeCore\Meta;
-
-defined( 'ABSPATH' ) || exit;
-
 final class Category_Settings {
 
 	/**
@@ -21,28 +20,11 @@ final class Category_Settings {
 	private static $instance;
 
 	/**
-	 * Disable instantiation.
-	 */
-	private function __construct() {}
-
-	/**
-	 * Disable the cloning of this class.
-	 *
-	 * @return void
-	 */
-	final public function __clone() {}
-
-	/**
-	 * Disable the wakeup of this class.
-	 */
-	final public function __wakeup() {}
-
-	/**
 	 * Create or retrieve the instance of Category_Settings.
 	 */
 	public static function instance() {
 		if ( is_null( static::$instance ) ) {
-			static::$instance = new Category_Settings;
+			static::$instance = new self();
 			static::$instance->init_hooks();
 		}
 

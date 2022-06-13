@@ -4,19 +4,17 @@
  *
  * @package Total WordPress Theme
  * @subpackage Total Theme Core
- * @version 1.2.8
+ * @version 1.3.2
  */
 
 defined( 'ABSPATH' ) || exit;
 
-$shortcode_tag = 'vcex_image_banner';
-
-if ( ! vcex_maybe_display_shortcode( $shortcode_tag, $atts ) ) {
+if ( ! vcex_maybe_display_shortcode( 'vcex_image_banner', $atts ) ) {
 	return;
 }
 
 // Get and extract shortcode attributes.
-$atts = vcex_shortcode_atts( $shortcode_tag, $atts, $this );
+$atts = vcex_shortcode_atts( 'vcex_image_banner', $atts, $this );
 extract( $atts );
 
 // Checks.
@@ -34,11 +32,15 @@ $text_align    = vcex_parse_direction( $text_align );
 $link       = vcex_build_link( $link );
 $has_link   = isset( $link['url'] ) ? true : false;
 $has_button = ( 'true' == $button && $button_text ) ? true : false;
+$justify_content = $justify_content ?: 'center';
 
 // Wrap classes.
 $wrap_classes = array(
 	'vcex-module',
 	'vcex-image-banner',
+	'wpex-flex',
+	'wpex-flex-col',
+	'wpex-justify-' . sanitize_html_class( $justify_content ),
 	'wpex-relative',
 	'wpex-overflow-hidden',
 	'wpex-max-w-100',
@@ -52,12 +54,14 @@ if ( $bottom_margin ) {
 }
 
 // Alignment.
-$align = $align ? $align : 'center';
-$wrap_classes[] = 'wpex-float-' . sanitize_html_class( $align );
+if ( ! empty( $width ) ) {
+	$align = $align ?: 'center';
+	$wrap_classes[] = 'wpex-float-' . sanitize_html_class( $align );
+}
 
 // CSS animation.
-if ( $css_animation && 'none' != $css_animation ) {
-	$wrap_classes[] = trim( vcex_get_css_animation( $css_animation ) );
+if ( $css_animation_class = vcex_get_css_animation( $css_animation ) ) {
+	$wrap_classes[] = $css_animation_class;
 }
 
 // Text alignment.
@@ -72,9 +76,13 @@ if ( ! $content_align && ! $text_align ) {
 }
 
 // Custom border radius.
-if ( $border_radius ) {
-	$border_radius = 'wpex-' . vcex_sanitize_border_radius( $border_radius );
-	$wrap_classes[] = $border_radius;
+if ( $border_radius && $border_radius_class = vcex_parse_border_radius_class( $border_radius ) ) {
+	$wrap_classes[] = $border_radius_class;
+}
+
+// Shadow.
+if ( $shadow && $shadow_class = vcex_parse_shadow_class( $shadow ) ) {
+	$wrap_classes[] = $shadow_class;
 }
 
 // Hover classes.
@@ -99,13 +107,14 @@ if ( $has_button ) {
 }
 
 // Custom Class.
-if ( $el_class ) {
-	$wrap_classes[] = vcex_get_extra_class( $el_class );
+if ( $extra_class = vcex_get_extra_class( $atts['el_class'] ) ) {
+	$wrap_classes[] = $extra_class;
 }
 
 // Wrap inline CSS.
 $wrap_style = vcex_inline_style( array(
-	'width'              => $width,
+	'width'              => $atts['width'],
+	'min_height'         => $atts['min_height'],
 	'animation_delay'    => $atts['animation_delay'],
 	'animation_duration' => $atts['animation_duration'],
 ) );
@@ -145,8 +154,8 @@ $output = '<div class="' . esc_attr( implode( ' ' , $wrap_classes ) ) . '" ' . $
 			'href'   => do_shortcode( $link['url'] ),
 			'class'  => $link_classes,
 			'title'  => isset( $link['title'] ) ? do_shortcode( $link['title'] ) : '',
-			'rel'    => isset( $link['rel'] ) ? $link['rel'] : '',
-			'target' => isset( $link['target'] ) ? $link['target'] : '',
+			'rel'    => $link['rel'] ?? '',
+			'target' => $link['target'] ?? '',
 		);
 
 		$output .= '<a' . vcex_parse_html_attributes( $link_attrs ) . '>';
@@ -158,6 +167,8 @@ $output = '<div class="' . esc_attr( implode( ' ' , $wrap_classes ) ) . '" ' . $
 	/*-------------------------------------------------------------------------------*/
 	if ( 'featured' === $image_source ) {
 		$image = get_post_thumbnail_id( vcex_get_the_ID() );
+	} elseif ( 'external' === $image_source ) {
+		$image = $external_image;
 	} elseif ( 'custom_field' === $image_source ) {
 		if ( $image_custom_field ) {
 			$custom_field_val = get_post_meta( vcex_get_the_ID(), $image_custom_field, true );
@@ -166,17 +177,20 @@ $output = '<div class="' . esc_attr( implode( ' ' , $wrap_classes ) ) . '" ' . $
 	}
 
 	// Generate image URL.
+	$image_url = '';
 	if ( $image ) {
-		$image_url = vcex_get_post_thumbnail( array(
-			'attachment' => $image,
-			'size'       => $img_size,
-			'crop'       => $img_crop,
-			'width'      => $img_width,
-			'height'     => $img_height,
-			'return'     => 'url',
-		) );
-	} else {
-		$image_url = '';
+		if ( is_numeric( $image ) ) {
+			$image_url = vcex_get_post_thumbnail( array(
+				'attachment' => $image,
+				'size'       => $img_size,
+				'crop'       => $img_crop,
+				'width'      => $img_width,
+				'height'     => $img_height,
+				'return'     => 'url',
+			) );
+		} elseif ( is_string( $image ) ) {
+			$image_url = esc_url( $image );
+		}
 	}
 
 	if ( $image_url ) {
@@ -199,7 +213,7 @@ $output = '<div class="' . esc_attr( implode( ' ' , $wrap_classes ) ) . '" ' . $
 				'transition_speed' => ( $image_zoom_speed && '0.4' != $image_zoom_speed ) ? $image_zoom_speed : '',
 			) );
 
-			$output .= '<img src="' . esc_url( $image_url ) . '" class="' . esc_attr( implode( ' ', $img_classes ) ) . '"' . $style . ' />';
+			$output .= '<img src="' . esc_url( $image_url ) . '" class="' . esc_attr( implode( ' ', $img_classes ) ) . '"' . $style . '>';
 
 		} else {
 
@@ -260,7 +274,7 @@ $output = '<div class="' . esc_attr( implode( ' ' , $wrap_classes ) ) . '" ' . $
 	if ( 'true' == $inner_border ) {
 
 		$inner_border_margin = $inner_border_margin ? absint( $inner_border_margin ) : '15';
-		$inner_border_style  = $inner_border_style ? $inner_border_style : 'solid';
+		$inner_border_style  = $inner_border_style ?: 'solid';
 
 		$inner_border_class = array(
 			'vcex-ib-border',
@@ -307,7 +321,7 @@ $output = '<div class="' . esc_attr( implode( ' ' , $wrap_classes ) ) . '" ' . $
 		$content_classes[] = 'wpex-absolute';
 		$content_classes[] = 'wpex-inset-0';
 		$content_classes[] = 'wpex-flex';
-		$flex_align = $flex_align ? $flex_align : 'center';
+		$flex_align = $flex_align ?: 'center';
 		$content_classes[] = 'wpex-items-' . sanitize_html_class( $flex_align );
 	} else {
 		$content_classes[] = 'wpex-relative';
@@ -376,12 +390,10 @@ $output = '<div class="' . esc_attr( implode( ' ' , $wrap_classes ) ) . '" ' . $
 			/*-------------------------------------------------------------------------------*/
 			if ( $heading ) {
 
+				// Sanitize custom heading tag.
 				$heading_tag_escaped = $heading_tag ? tag_escape( $heading_tag ) : 'div';
 
-				if ( $heading_font_family ) {
-					vcex_enqueue_font( $heading_font_family );
-				}
-
+				// Heading classes.
 				$heading_classes = array(
 					'vcex-ib-title',
 				//	'wpex-font-semibold', // these need to be added with css to prevent conflicts
@@ -393,8 +405,29 @@ $output = '<div class="' . esc_attr( implode( ' ' , $wrap_classes ) ) . '" ' . $
 					$heading_classes[] = 'wpex-inherit-color-important';
 				}
 
+				// Responsive heading styles.
+				$unique_classname = vcex_element_unique_classname();
+
+				$el_responsive_styles = array(
+					'font_size' => $atts['heading_font_size'],
+				);
+
+				$responsive_css = vcex_element_responsive_css( $el_responsive_styles, $unique_classname );
+
+				if ( $responsive_css ) {
+					$heading_classes[] = $unique_classname;
+					$output .= '<style>' . $responsive_css . '</style>';
+				}
+
+				/**
+				 * Filters the Image Banner heading classes.
+				 *
+				 * @param array $heading_classes
+				 * @param array $shortcode_atts
+				 */
 				$heading_classes = apply_filters( 'vcex_image_banner_heading_class', $heading_classes, $atts );
 
+				// Heading attributes.
 				$attrs = array(
 					'class' => $heading_classes,
 					'style' => vcex_inline_style( array(
@@ -409,10 +442,7 @@ $output = '<div class="' . esc_attr( implode( ' ' , $wrap_classes ) ) . '" ' . $
 					), false )
 				);
 
-				if ( $rfont_size = vcex_get_responsive_font_size_data( $heading_font_size ) ) {
-					$attrs['data-wpex-rcss'] = "data-wpex-rcss='" . htmlspecialchars( wp_json_encode( array( 'font-size' => $rfont_size ) ) ) . "'";
-				}
-
+				// Display heading.
 				$output .= '<' . $heading_tag_escaped . vcex_parse_html_attributes( $attrs ) . '>';
 
 					$output .= wp_kses_post( do_shortcode( $heading ) );
@@ -425,10 +455,6 @@ $output = '<div class="' . esc_attr( implode( ' ' , $wrap_classes ) ) . '" ' . $
 			/*-------------------------------------------------------------------------------*/
 			if ( $caption ) {
 
-				if ( $caption_font_family ) {
-					vcex_enqueue_font( $caption_font_family );
-				}
-
 				$caption_classes = array(
 					'vcex-ib-caption',
 					'wpex-text-lg',
@@ -439,6 +465,26 @@ $output = '<div class="' . esc_attr( implode( ' ' , $wrap_classes ) ) . '" ' . $
 					$caption_classes[] = 'wpex-pb-10';
 				}
 
+				// Responsive heading styles.
+				$unique_classname = vcex_element_unique_classname();
+
+				$el_responsive_styles = array(
+					'font_size' => $atts['caption_font_size'],
+				);
+
+				$responsive_css = vcex_element_responsive_css( $el_responsive_styles, $unique_classname );
+
+				if ( $responsive_css ) {
+					$caption_classes[] = $unique_classname;
+					$output .= '<style>' . $responsive_css . '</style>';
+				}
+
+				/**
+				 * Filters the Image Banner caption classes.
+				 *
+				 * @param array $caption_class
+				 * @param array $shortcode_atts
+				 */
 				$caption_classes = apply_filters( 'vcex_image_banner_caption_class', $caption_classes, $atts );
 
 				$attrs = array(
@@ -455,10 +501,6 @@ $output = '<div class="' . esc_attr( implode( ' ' , $wrap_classes ) ) . '" ' . $
 					), false )
 				);
 
-				if ( $rfont_size = vcex_get_responsive_font_size_data( $caption_font_size ) ) {
-					$attrs['data-wpex-rcss'] = "data-wpex-rcss='" . htmlspecialchars( wp_json_encode( array( 'font-size' => $rfont_size ) ) ) . "'";
-				}
-
 				$output .= '<div' . vcex_parse_html_attributes( $attrs ) . '>' . wp_kses_post( do_shortcode( $caption ) ) . '</div>';
 
 			}
@@ -468,30 +510,45 @@ $output = '<div class="' . esc_attr( implode( ' ' , $wrap_classes ) ) . '" ' . $
 			/*-------------------------------------------------------------------------------*/
 			if ( $has_button ) {
 
-				if ( $button_font_family ) {
-					vcex_enqueue_font( $button_font_family );
-				}
-
-				$attrs = array(
-					'class' => vcex_get_button_classes( $button_style, $button_color ),
-					'style' => vcex_inline_style( array(
-						'font_family'    => $button_font_family,
-						'font_weight'    => $button_font_weight,
-						'font_size'      => $button_font_size,
-						'letter_spacing' => $button_letter_spacing,
-						'italic'         => $button_italic,
-						'color'          => $button_custom_color,
-						'background'     => $button_custom_background,
-						'width'          => $button_width,
-						'padding'        => $button_padding,
-						'border_radius'  => $button_border_radius,
-					), false )
+				$button_classes = array(
+					vcex_get_button_classes( $button_style, $button_color ),
 				);
 
-				if ( $rfont_size = vcex_get_responsive_font_size_data( $button_font_size ) ) {
-					$attrs['data-wpex-rcss'] = "data-wpex-rcss='" . htmlspecialchars( wp_json_encode( array( 'font-size' => $rfont_size ) ) ) . "'";
+				// Responsive button styles.
+				$unique_classname = vcex_element_unique_classname();
+
+				$el_responsive_styles = array(
+					'font_size' => $button_font_size,
+				);
+
+				$responsive_css = vcex_element_responsive_css( $el_responsive_styles, $unique_classname );
+
+				if ( $responsive_css ) {
+					$button_classes[] = $unique_classname;
+					$output .= '<style>' . $responsive_css . '</style>';
 				}
 
+				// Button inline style.
+				$button_inline_style = vcex_inline_style( array(
+					'font_family'    => $button_font_family,
+					'font_weight'    => $button_font_weight,
+					'font_size'      => $button_font_size,
+					'letter_spacing' => $button_letter_spacing,
+					'italic'         => $button_italic,
+					'color'          => $button_custom_color,
+					'background'     => $button_custom_background,
+					'width'          => $button_width,
+					'padding'        => $button_padding,
+					'border_radius'  => $button_border_radius,
+				), false );
+
+				// Button attributes
+				$button_attributes = array(
+					'class' => $button_classes,
+					'style' => $button_inline_style,
+				);
+
+				// Button data.
 				$hover_data = array();
 
 				if ( $button_custom_hover_color ) {
@@ -503,10 +560,11 @@ $output = '<div class="' . esc_attr( implode( ' ' , $wrap_classes ) ) . '" ' . $
 				}
 
 				if ( $hover_data ) {
-					$attrs['data-wpex-hover'] = htmlspecialchars( wp_json_encode( $hover_data ) );
+					$button_attributes['data-wpex-hover'] = htmlspecialchars( wp_json_encode( $hover_data ) );
 				}
 
-				$output .= '<div class="vcex-ib-button"><span' . vcex_parse_html_attributes( $attrs ) . '>' . do_shortcode( wp_kses_post( $button_text ) ) . '</span></div>';
+				// Display button.
+				$output .= '<div class="vcex-ib-button"><span' . vcex_parse_html_attributes( $button_attributes ) . '>' . do_shortcode( wp_kses_post( $button_text ) ) . '</span></div>';
 
 			}
 

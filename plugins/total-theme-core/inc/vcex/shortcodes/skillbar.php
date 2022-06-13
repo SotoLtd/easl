@@ -1,13 +1,12 @@
 <?php
+defined( 'ABSPATH' ) || exit;
+
 /**
  * Skillbar Shortcode.
  *
  * @package TotalThemeCore
- * @version 1.2.8
+ * @version 1.3.2
  */
-
-defined( 'ABSPATH' ) || exit;
-
 if ( ! class_exists( 'VCEX_Skillbar_Shortcode' ) ) {
 
 	class VCEX_Skillbar_Shortcode {
@@ -16,6 +15,7 @@ if ( ! class_exists( 'VCEX_Skillbar_Shortcode' ) ) {
 		 * Main constructor.
 		 */
 		public function __construct() {
+			add_action( 'wp_enqueue_scripts', __CLASS__ . '::register_scripts' );
 			add_shortcode( 'vcex_skillbar', array( $this, 'output' ) );
 
 			if ( function_exists( 'vc_lean_map' ) ) {
@@ -25,26 +25,31 @@ if ( ! class_exists( 'VCEX_Skillbar_Shortcode' ) ) {
 		}
 
 		/**
-		 * Shortcode scripts.
+		 * Register scripts.
 		 */
-		public function enqueue_scripts() {
+		public static function register_scripts() {
 
-			wp_enqueue_script(
-				'appear',
-				vcex_asset_url( 'js/lib/jquery.appear.min.js' ),
-				array( 'jquery' ),
-				'1.0',
-				true
-			);
+			$js_extension = '.js';
 
-			wp_enqueue_script(
+			if ( defined( 'WPEX_MINIFY_JS' ) && WPEX_MINIFY_JS ) {
+				$js_extension = '.min.js';
+			}
+
+			wp_register_script(
 				'vcex-skillbar',
-				vcex_asset_url( 'js/shortcodes/vcex-skillbar.min.js' ),
-				array( 'jquery' ),
+				vcex_asset_url( 'js/shortcodes/vcex-skillbar' . $js_extension ),
+				array(),
 				TTC_VERSION,
 				true
 			);
 
+		}
+
+		/**
+		 * Shortcode scripts.
+		 */
+		public function enqueue_scripts() {
+			wp_enqueue_script( 'vcex-skillbar' );
 		}
 
 		/**
@@ -129,7 +134,8 @@ if ( ! class_exists( 'VCEX_Skillbar_Shortcode' ) ) {
 					'type' => 'textfield',
 					'heading' => esc_html__( 'Element ID', 'total-theme-core' ),
 					'param_name' => 'unique_id',
-					'description' => sprintf( esc_html__( 'Enter element ID (Note: make sure it is unique and valid according to %sw3c specification%s).', 'total-theme-core' ), '<a href="https://www.w3schools.com/tags/att_global_id.asp" target="_blank" rel="noopener noreferrer">', '</a>' ),
+					'admin_label' => true,
+					'description' => vcex_shortcode_param_description( 'unique_id' ),
 				),
 				array(
 					'type' => 'textfield',
@@ -168,6 +174,13 @@ if ( ! class_exists( 'VCEX_Skillbar_Shortcode' ) ) {
 					'value' => vcex_margin_choices(),
 					'admin_label' => true,
 					'group' => esc_html__( 'Style', 'total-theme-core' ),
+				),
+				array(
+					'type' => 'dropdown',
+					'heading' => esc_html__( 'Border Radius', 'total' ),
+					'param_name' => 'border_radius',
+					'value' => vcex_border_radius_choices(),
+					'group' => esc_html__( 'Style', 'total' ),
 				),
 				array(
 					'type' => 'vcex_colorpicker',

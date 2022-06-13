@@ -3,12 +3,19 @@ namespace TotalThemeCore\Shortcodes;
 
 defined( 'ABSPATH' ) || exit;
 
+/**
+ * WP Login Link Shortcode.
+ *
+ * @package TotalThemeCore
+ * @version 1.3
+ */
+
 final class Shortcode_WP_Login_Link {
 
 	public function __construct() {
 
 		if ( ! shortcode_exists( 'wp_login_url' ) ) {
-			add_shortcode( 'wp_login_url', array( __CLASS__, 'output' ) );
+			add_shortcode( 'wp_login_url', __CLASS__ . '::output' );
 		}
 
 	}
@@ -29,14 +36,14 @@ final class Shortcode_WP_Login_Link {
 			'icon'            => '',
 		), $atts, 'wp_login_url' ) );
 
-		// Target
-		if ( 'blank' == $target ) {
-			$target = 'target="_blank"';
+		// Target.
+		if ( 'blank' === $target || '_blank' === $target ) {
+			$target = ' target="_blank" rel="noopener"';
 		} else {
 			$target = '';
 		}
 
-		// Define login url
+		// Define login url.
 		if ( $url ) {
 			$login_url = $url;
 		} elseif ( $login_url ) {
@@ -45,7 +52,7 @@ final class Shortcode_WP_Login_Link {
 			$login_url = wp_login_url();
 		}
 
-		// Logout redirect
+		// Logout redirect.
 		if ( ! $logout_redirect ) {
 			$permalink = get_permalink();
 			if ( $permalink ) {
@@ -55,27 +62,29 @@ final class Shortcode_WP_Login_Link {
 			}
 		}
 
-		// Logged in link
+		// Logged in link.
 		if ( is_user_logged_in() ) {
 			$href    = wp_logout_url( $logout_redirect );
 			$class   = 'wpex_logout';
 			$content = wp_strip_all_tags( $logout_text );
 		}
 
-		// Non-logged in link
+		// Non-logged in link.
 		else {
 			$href    = esc_url( $login_url );
 			$class   = 'login';
 			$content = wp_strip_all_tags( $text );
 		}
 
-		$attrs['target'] = $target;
-
 		$output = '';
 
-		$output .= '<a href="' . esc_url( $href ) . '" class="' . esc_attr( $class ) . '">';
+		$output .= '<a href="' . esc_url( $href ) . '" class="' . esc_attr( $class ) . '"' . $target . '>';
 
 			if ( $icon ) {
+
+				if ( 0 !== strpos( 'ticon', $icon ) && in_array( $icon, wpex_ticons_list() ) ) {
+					$icon = 'ticon ticon-' . $icon;
+				}
 
 				$output .= '<span class="' . esc_attr( $icon ) . '" aria-hidden="true"></span>';
 

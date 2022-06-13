@@ -1,14 +1,13 @@
 <?php
+defined( 'ABSPATH' ) || exit;
+
 /**
  * Custom Demo Importer exclusive for the Total theme.
  *
  * @package Total Theme Core
  * @subpackage demo-importer
- * @version 1.2.8
+ * @version 1.2
  */
-
-defined( 'ABSPATH' ) || exit;
-
 if ( ! class_exists( 'WPEX_Demo_Importer' ) ) {
 
 	class WPEX_Demo_Importer {
@@ -195,7 +194,7 @@ if ( ! class_exists( 'WPEX_Demo_Importer' ) ) {
 				include_once( 'views/not-supported.php' );
 			}
 
-			// Clear xml file on demos page load.
+			// Clear xml file on demos page load as extra precaution.
 			$temp_xml = WPEX_DEMO_IMPORTER_DIR . '/temp.xml';
 			file_put_contents( $temp_xml, '' );
 
@@ -240,13 +239,6 @@ if ( ! class_exists( 'WPEX_Demo_Importer' ) ) {
 			}
 
 			wp_enqueue_script( 'jquery' );
-
-			wp_enqueue_script(
-				'lazyload', WPEX_DEMO_IMPORTER_URI . '/assets/js/jquery.lazyload.min.js',
-				array( 'jquery' ),
-				false,
-				true
-			);
 
 			wp_enqueue_script(
 				'isotope', WPEX_DEMO_IMPORTER_URI . '/assets/js/isotope.pkgd.min.js',
@@ -435,33 +427,31 @@ if ( ! class_exists( 'WPEX_Demo_Importer' ) ) {
 
 			echo json_encode(
 				array(
-					'xml_data' => array(
-						'input_name' => 'wpex_import_xml',
-						'action' => 'wpex_post_import_xml_data',
-						'method' => 'ajax_post_import_xml_data',
-						'preloader' => esc_html__( 'Importing XML Data', 'total-theme-core' )
-					),
-
 					'mods' => array(
 						'input_name' => 'wpex_import_mods',
 						'action' => 'wpex_post_import_mods',
 						'method' => 'ajax_post_import_mods',
 						'preloader' => esc_html__( 'Importing Customizer Settings', 'total-theme-core' )
 					),
-
 					'widgets' => array(
 						'input_name' => 'wpex_import_widgets',
 						'action' => 'wpex_post_import_widgets',
 						'method' => 'ajax_post_import_widgets',
 						'preloader' => esc_html__( 'Importing Widgets', 'total-theme-core' )
 					),
-
 					'sliders' => array(
 						'input_name' => 'wpex_import_sliders',
 						'action' => 'wpex_post_import_sliders',
 						'method' => 'ajax_post_import_sliders',
 						'preloader' => esc_html__( 'Importing Sliders', 'total-theme-core' )
-					)
+					),
+					// Process xml data last.
+					'xml_data' => array(
+						'input_name' => 'wpex_import_xml',
+						'action' => 'wpex_post_import_xml_data',
+						'method' => 'ajax_post_import_xml_data',
+						'preloader' => esc_html__( 'Importing XML Data', 'total-theme-core' )
+					),
 				)
 			);
 
@@ -554,7 +544,7 @@ if ( ! class_exists( 'WPEX_Demo_Importer' ) ) {
 			} else {
 				$plugin_source = $this->plugin_installer->get_download_link( $plugin );
 
-				echo sprintf( __( 'The plugin failed to install. Please check the permissions for the "plugins" directory or <a href="%s" target="_blank">download</a> the plugin and install it manually.', 'total-theme-core' ), $plugin_source );
+				echo wp_kses_post( sprintf( __( 'The plugin failed to install. Please check the permissions for the "plugins" directory or <a href="%s" target="_blank">download</a> the plugin and install it manually.', 'total-theme-core' ), $plugin_source ) );
 			}
 
 			die();
@@ -570,6 +560,8 @@ if ( ! class_exists( 'WPEX_Demo_Importer' ) ) {
 				die( 'This action was stopped for security purposes.' );
 			}
 
+			@set_time_limit(0);
+
 			$this->init_demos_data();
 
 			$this->content_importer = new WPEX_Content_Importer();
@@ -581,7 +573,7 @@ if ( ! class_exists( 'WPEX_Demo_Importer' ) ) {
 			// indicates if the images will be imported.
 			$import_images = ( isset( $_POST[ 'wpex_import_xml_attachments' ] ) && $_POST[ 'wpex_import_xml_attachments' ] === 'true' ) ? true : false;
 
-			// delete the default post and page.
+			// delete the default post and pages.
 			$sample_page = get_page_by_path( 'sample-page', OBJECT, 'page' );
 
 			if ( ! is_null( $sample_page ) ) {

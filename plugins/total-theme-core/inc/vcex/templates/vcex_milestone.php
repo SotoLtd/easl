@@ -4,19 +4,17 @@
  *
  * @package Total WordPress Theme
  * @subpackage Total Theme Core
- * @version 1.2.8
+ * @version 1.3.2
  */
 
 defined( 'ABSPATH' ) || exit;
 
-$shortcode_tag = 'vcex_milestone';
-
-if ( ! vcex_maybe_display_shortcode( $shortcode_tag, $atts ) ) {
+if ( ! vcex_maybe_display_shortcode( 'vcex_milestone', $atts ) ) {
 	return;
 }
 
 // Get and extract shortcode attributes
-$atts = vcex_shortcode_atts( $shortcode_tag, $atts, $this );
+$atts = vcex_shortcode_atts( 'vcex_milestone', $atts, $this );
 extract( $atts );
 
 // Define vars & define defaults.
@@ -75,7 +73,7 @@ $wrap_style = vcex_inline_style( array(
 // Generate Icon if enabled.
 if ( 'true' == $enable_icon ) {
 
-	$icon_position = $icon_position ? $icon_position : 'inline'; // default placement
+	$icon_position = $icon_position ?: 'inline'; // default placement
 
 	$wrap_class[] = 'vcex-ip-' . sanitize_html_class( $icon_position ); // add placement classname
 
@@ -162,7 +160,7 @@ if ( $url ) {
 		$url_classes[] = 'wpex-no-underline';
 
 		if ( $visibility ) {
-			$url_classes[] = sanitize_html_class( $visibility );
+			$url_classes[] = vcex_parse_visibility_class( $visibility );
 		}
 
 	}
@@ -182,7 +180,7 @@ if ( 'true' == $animated || 'yes' === $animated ) {
 }
 
 // Get extra classes.
-$extra_classes = vcex_get_shortcode_extra_classes( $atts, $shortcode_tag );
+$extra_classes = vcex_get_shortcode_extra_classes( $atts, 'vcex_milestone' );
 
 if ( $extra_classes ) {
 	$wrap_class = array_merge( $wrap_class, $extra_classes );
@@ -190,7 +188,7 @@ if ( $extra_classes ) {
 
 // Parse wrap classes.
 $wrap_class[] = 'wpex-clr';
-$wrap_class = vcex_parse_shortcode_classes( $wrap_class, $shortcode_tag, $atts );
+$wrap_class = vcex_parse_shortcode_classes( $wrap_class, 'vcex_milestone', $atts );
 
 /*--------------------------------*/
 /* [ Begin Output ]
@@ -202,7 +200,7 @@ if ( $atts['css_animation'] && 'none' !== $atts['css_animation'] ) {
 	$animation_classes = array( trim( vcex_get_css_animation( $atts['css_animation'] ) ) );
 
 	if ( $visibility ) {
-		$animation_classes[] = sanitize_html_class( $visibility );
+		$animation_classes[] = vcex_parse_visibility_class( $visibility );
 	}
 
 	$animation_style = vcex_inline_style( array(
@@ -224,7 +222,7 @@ if ( $atts['width'] ) {
 	) );
 
 	if ( $visibility ) {
-		$width_class .= ' ' . sanitize_html_class( $visibility );
+		$width_class .= ' ' . vcex_parse_visibility_class( $visibility );
 	}
 
 	switch ( $atts['float'] ) {
@@ -304,9 +302,6 @@ $output .= '>';
 
 			$number_classes = (array) apply_filters( 'vcex_milestone_number_class', $number_classes );
 
-			// Load custom font
-			vcex_enqueue_font( $number_font_family );
-
 			// Number Style
 			$number_style = vcex_inline_style( array(
 				'color'         => $number_color,
@@ -335,12 +330,12 @@ $output .= '>';
 
 				// Get milestone js options.
 				$startval = floatval( do_shortcode( $startval ) );
-				$startval = $startval ?  $startval : 0;
+				$startval = $startval ?: 0;
 
 				$settings = array(
 					'startVal'        => $startval,
 					'endVal'          => floatval( do_shortcode( $number ) ),
-					'duration'        => $speed ? $speed : 2.5,
+					'duration'        => $speed ?: 2.5,
 					'decimals'        => intval( $decimals ),
 					'separator'       => wp_strip_all_tags( $separator ),
 					'decimal'         => wp_strip_all_tags( $decimal ),

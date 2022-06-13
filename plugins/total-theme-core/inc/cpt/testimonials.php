@@ -1,51 +1,30 @@
 <?php
-/**
- * Testimonials Post Type.
- *
- * @package TotalThemeCore
- * @version 1.2.9
- */
-
 namespace TotalThemeCore\Cpt;
 
 defined( 'ABSPATH' ) || exit;
 
+/**
+ * Testimonials Post Type.
+ *
+ * @package TotalThemeCore
+ * @version 1.3.2
+ */
 final class Testimonials {
 
 	/**
-	 * Our single Testimonials instance.
+	 * Instance.
+	 *
+	 * @access private
+	 * @var object Class object.
 	 */
 	private static $instance;
-
-	/**
-	 * Disable instantiation.
-	 */
-	private function __construct() {
-		// Private to disabled instantiation.
-	}
-
-	/**
-	 * Disable the cloning of this class.
-	 *
-	 * @return void
-	 */
-	final public function __clone() {
-		throw new Exception( 'You\'re doing things wrong.' );
-	}
-
-	/**
-	 * Disable the wakeup of this class.
-	 */
-	final public function __wakeup() {
-		throw new Exception( 'You\'re doing things wrong.' );
-	}
 
 	/**
 	 * Create or retrieve the instance of Testimonials.
 	 */
 	public static function instance() {
 		if ( is_null( static::$instance ) ) {
-			static::$instance = new Testimonials;
+			static::$instance = new self();
 			static::$instance->init_hooks();
 		}
 
@@ -166,7 +145,7 @@ final class Testimonials {
 		$menu_position = get_theme_mod( 'testimonials_admin_menu_position', 20 );
 		$has_archive   = wp_validate_boolean( get_theme_mod( 'testimonials_has_archive', false ) );
 		$default_slug  = $has_archive ? 'testimonials' : 'testimonial';
-		$slug          = ( $slug = get_theme_mod( 'testimonials_slug' ) ) ? $slug : $default_slug;
+		$slug          = ( $slug = get_theme_mod( 'testimonials_slug' ) ) ?: $default_slug;
 		$menu_icon     = $this->testimonials_menu_icon();
 
 		$labels = array(
@@ -327,11 +306,11 @@ final class Testimonials {
 
 		if ( 'testimonials' === $post_type && taxonomy_exists( 'testimonials_category' ) ) {
 
-			$tax_slug         = 'testimonials_category';
-			$current_tax_slug = isset( $_GET[$tax_slug] ) ? $_GET[$tax_slug] : false;
-			$tax_obj          = get_taxonomy( $tax_slug );
-			$tax_name         = $tax_obj->labels->name;
-			$terms            = get_terms( $tax_slug );
+			$tax_slug = 'testimonials_category';
+			$current_tax_slug = $_GET[$tax_slug] ?? false;
+			$tax_obj = get_taxonomy( $tax_slug );
+			$tax_name = $tax_obj->labels->name;
+			$terms = get_terms( $tax_slug );
 
 			if ( ! empty( $terms ) && ! is_wp_error( $terms ) ) { ?>
 

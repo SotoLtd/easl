@@ -1,114 +1,157 @@
-( function( $ ) {
+if ( 'function' !== typeof window.vcexNavbarFilterLinks ) {
+	window.vcexNavbarFilterLinks = function() {
 
-	'use strict';
+		if ( 'function' !== typeof Isotope ) {
+			return;
+		}
 
-	if ( 'function' !== typeof window.vcexNavbarFilterLinks ) {
-		window.vcexNavbarFilterLinks = function ( $context ) {
+		var renderGrid = function( grid, settings ) {
+			if ( ! grid.classList.contains( 'vcex-navbar-filter-grid' ) ) {
+				grid.classList.add( 'vcex-navbar-filter-grid' );
+				isotopeInit( grid, settings );
+			}
+			// Add isotope only, the filter grid already exists - @todo is this needed?
+			else {
+				isotopeInit( grid, {} );
+			}
+		};
 
-			if ( 'undefined' === typeof $.fn.imagesLoaded || 'undefined' === typeof $.fn.isotope ) {
+		var initialize = function( grid, settings ) {
+			if ( 'function' === typeof imagesLoaded ) {
+				imagesLoaded( grid, function( instance ) {
+					renderGrid( grid, settings );
+				} );
+			} else {
+				renderGrid( grid, settings );
+			}
+		};
+
+		var filterGrid = function( grid, filter ) {
+			var iso = Isotope.data( grid );
+			iso.arrange( {
+				filter: filter
+			} );
+		};
+
+		function isotopeInit( grid, settings ) {
+			if ( 'undefined' === typeof jQuery ) {
+				var iso = new Isotope( grid, settings );
+			} else {
+				jQuery( grid ).isotope( settings );
+			}
+		}
+
+		// Loops through filter navs to initialize masonry and set default active items.
+		document.querySelectorAll( '.vcex-filter-nav' ).forEach( function( nav ) {
+			var settings,
+				grid = document.querySelector( '#' + nav.dataset.filterGrid );
+
+			if ( ! grid ) {
 				return;
 			}
 
-			var isRTL = false;
-
-			if ( 'object' === typeof wpexLocalize ) {
-				isRTL = wpexLocalize.isRTL;
+			if ( ! grid.classList.contains( 'wpex-row' ) ) {
+				grid = grid.querySelector( '.wpex-row' );
 			}
 
-			// Filter Navs
-			$( '.vcex-filter-nav', $context ).each( function() {
+			if ( ! grid ) {
+				return;
+			}
 
-				var $grid, settings;
-				var $nav           = $( this );
-				var $filterLinks   = $nav.find( 'a' );
-				var $filterGrid    = $( '#' + $nav.data( 'filter-grid' ) );
-				var activeItems    = $nav.data( 'filter' );
-				var customDuration = $nav.data( 'transitionDuration' );
-				var customLayout   = $nav.data( 'layoutMode' );
+			// Remove isotope class since we are adding our own masonry.
+			grid.classList.remove( 'vcex-isotope-grid' );
 
-				if ( ! $filterGrid.hasClass( 'wpex-row' ) ) {
-					$filterGrid = $filterGrid.find( '.wpex-row' );
-				}
+			// Get settings from data attributes.
+			var activeItems = nav.dataset.filter;
+			var customDuration = nav.dataset.transitionDuration;
+			var customLayout = nav.dataset.layoutMode;
 
-				// Define masonry settings.
-				if ( 'object' === typeof wpexMasonrySettings ) {
-					settings = $.extend( true, {}, wpexMasonrySettings );
-				} else {
-					settings = {
-						transformsEnabled  : true,
-						isOriginLeft       : isRTL ? false : true,
-						transitionDuration : '0.4s',
-						layoutMode         : 'masonry',
-					};
-				}
+			// Define masonry settings.
+			if ( 'object' === typeof wpex_isotope_params ) {
+				settings = Object.assign( {}, wpex_isotope_params ); // create new object to keep wpex_isotope_params intact.
+			} else {
+				settings = {
+					transformsEnabled: true,
+					transitionDuration: '0.4s',
+					layoutMode: 'masonry',
+				};
+			}
 
-				if ( 'undefined' !== typeof customDuration ) {
-					settings.transitionDuration = parseFloat( customDuration ) + 's';
-				}
+			if ( document.body.classList.contains( 'rtl' ) ) {
+				settings.isOriginLeft = false;
+			}
 
-				if ( 'undefined' !== typeof customLayout ) {
-					settings.layoutMode = customLayout;
-				}
+			if ( 'undefined' !== typeof customDuration ) {
+				settings.transitionDuration = parseFloat( customDuration ) + 's';
+			}
 
-				settings.itemSelector = '.col'; // because the vcex-isotope-entry maynot be added.
+			if ( 'undefined' !== typeof customLayout ) {
+				settings.layoutMode = customLayout;
+			}
 
-				if ( $filterGrid.length ) {
+			if ( activeItems && nav.querySelector( '[data-filter="' + activeItems + '"]' ) ) {
+				settings.filter = activeItems;
+			}
 
-					// Remove isotope class.
-					$filterGrid.removeClass( 'vcex-isotope-grid' );
+			settings.itemSelector = '.col'; // because the vcex-isotope-entry can't be added.
 
-					// Run functions after images are loaded for grid.
-					$filterGrid.imagesLoaded( function() {
+			if ( grid.closest( '[data-vc-stretch-content]' ) ) {
+				setTimeout( function() {
+					initialize( grid, settings );
+				}, 10 );
+			} else {
+				initialize( grid, settings );
+			}
 
-						// Create Isotope.
-						if ( ! $filterGrid.hasClass( 'vcex-navbar-filter-grid' ) ) {
+		} );
 
-							$filterGrid.addClass( 'vcex-navbar-filter-grid' );
+		// Filters grid when clicking on filter links.
+		document.addEventListener( 'click', function( event ) {
+			var filterLink = event.target.closest( '.vcex-navbar-link' );
+			if ( ! filterLink ) {
+				return;
+			}
 
-							if ( activeItems && ! $nav.find( '[data-filter="' + activeItems + '"]' ).length ) {
-								activeItems = '';
-							}
+			var nav = filterLink.closest( '.vcex-filter-nav' );
 
-							if ( activeItems ) {
-								settings.filter = activeItems;
-							}
+			if ( ! nav ) {
+				return;
+			}
 
-							$grid = $filterGrid.isotope( settings );
+			var grid = document.querySelector( '#' + nav.dataset.filterGrid );
 
-						}
+			if ( ! grid ) {
+				return;
+			}
 
-						// Add isotope only, the filter grid already exists @todo revise usage.
-						else {
-							$grid = $filterGrid.isotope();
-						}
+			if ( ! grid.classList.contains( 'wpex-row' ) ) {
+				grid = grid.querySelector( '.wpex-row' );
+			}
 
-						// Add filtering event.
-						$filterLinks.click( function() {
-							var $link = $( this );
-							$grid.isotope( {
-								filter : $( this ).attr( 'data-filter' )
-							} );
-							$filterLinks.removeClass( 'active' );
-							$link.addClass( 'active' );
-							return false;
-						} );
+			if ( ! grid ) {
+				return;
+			}
 
-					} );
+			var filter = filterLink.dataset.filter || '*';
 
-				}
-
+			nav.querySelectorAll( '.vcex-navbar-link' ).forEach( function( element ) {
+				element.classList.remove( 'active' );
 			} );
 
-		};
+			filterLink.classList.add( 'active' );
 
-	}
+			filterGrid( grid, filter );
 
-	$( document ).ready( function() {
-		window.vcexNavbarFilterLinks();
-	} );
+			event.preventDefault();
+			event.stopPropagation();
+		} );
 
-	$( window ).on( 'orientationchange', function() {
-		window.vcexNavbarFilterLinks();
-	} );
+	};
 
-} ) ( jQuery );
+}
+
+if ( document.readyState === 'interactive' || document.readyState === 'complete' ) {
+	setTimeout( vcexNavbarFilterLinks, 0 );
+} else {
+	document.addEventListener( 'DOMContentLoaded', vcexNavbarFilterLinks, false );
+}

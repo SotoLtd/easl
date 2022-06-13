@@ -3,7 +3,7 @@
  * Visual Composer Grid Item Post Terms
  *
  * @package TotalThemeCore
- * @version 1.2
+ * @version 1.3.1
  */
 
 defined( 'ABSPATH' ) || exit;
@@ -104,7 +104,7 @@ if ( ! class_exists( 'VCEX_Post_Terms_Grid_Item_Shortcode' ) ) {
 			$shortcodes['vcex_gitem_post_terms'] = array(
 				'name'        => esc_html__( 'Post Terms', 'total-theme-core' ),
 				'base'        => 'vcex_gitem_post_terms',
-				'icon'        => 'vcex-gitem-post-terms vcex-icon fa fa-folder',
+				'icon'        => 'vcex_element-icon vcex_element-icon--post-terms',
 				'category'    => vcex_shortcodes_branding(),
 				'description' => esc_html__( 'Display your post terms.', 'total-theme-core' ),
 				'post_type'   => Vc_Grid_Item_Editor::postType(),

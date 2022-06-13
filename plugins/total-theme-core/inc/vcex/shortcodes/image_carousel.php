@@ -3,7 +3,7 @@
  * Image Carousel Shortcode.
  *
  * @package TotalThemeCore
- * @version 1.2.8
+ * @version 1.3.2
  */
 
 defined( 'ABSPATH' ) || exit;
@@ -111,6 +111,7 @@ if ( ! class_exists( 'VCEX_Image_Carousel' ) ) {
 					'type' => 'textfield',
 					'heading'  => esc_html__( 'Element ID', 'total-theme-core' ),
 					'param_name' => 'unique_id',
+					'admin_label' => true,
 					'description' => vcex_shortcode_param_description( 'unique_id' ),
 				),
 				array(
@@ -280,6 +281,7 @@ if ( ! class_exists( 'VCEX_Image_Carousel' ) ) {
 						'lightbox' => esc_html__( 'Lightbox', 'total-theme-core' ),
 						'full_image' => esc_html__( 'Full Image', 'total-theme-core' ),
 						'attachment_page' => esc_html__( 'Attachment Page', 'total-theme-core' ),
+						'parent_page' => esc_html__( 'Uploaded To Page', 'total-theme-core' ),
 						'custom_link' => esc_html__( 'Custom Links', 'total-theme-core' ),
 					),
 					'group' => esc_html__( 'Links', 'total-theme-core' ),

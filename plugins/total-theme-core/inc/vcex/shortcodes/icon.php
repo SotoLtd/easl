@@ -3,7 +3,7 @@
  * Icon Shortcode.
  *
  * @package TotalThemeCore
- * @version 1.2.8
+ * @version 1.3.2
  */
 
 defined( 'ABSPATH' ) || exit;
@@ -142,6 +142,7 @@ if ( ! class_exists( 'VCEX_Icon_Shortcode' ) ) {
 					'type' => 'textfield',
 					'heading' => esc_html__( 'Element ID', 'total-theme-core' ),
 					'param_name' => 'unique_id',
+					'admin_label' => true,
 					'description' => vcex_shortcode_param_description( 'unique_id' ),
 				),
 				array(

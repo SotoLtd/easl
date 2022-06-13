@@ -1,41 +1,45 @@
 <?php
-/**
- * Contains a list of all vcex_ shortcodes.
- *
- * @package TotalThemeCore
- * @version 1.2.8
- */
-
 defined( 'ABSPATH' ) || exit;
 
 /**
- * Return array of vcex modules.
+ * Return array of vcex shortcodes to be registered.
+ *
+ * @package TotalThemeCore
+ * @version 1.3.1
  */
 function vcex_shortcodes_list() {
 
 	$shortcodes = array(
 
 		// Standard shortcodes.
+		'flex_container',
+		'grid_container',
+		'spacing',
+		'divider',
 		'heading',
 		'button',
-		'divider',
-		'wpex_post_cards',
+		'multi_buttons',
+		'toggle_group',
+		'toggle',
 		'alert',
 		'animated_text',
-		'author_bio',
-		'blog_carousel',
+		'wpex_post_cards',
 		'blog_grid',
+		'blog_carousel',
 		'breadcrumbs',
 		'bullets',
+		'list_item',
+		'contact_form',
 		'callout',
 		'countdown',
 		'column_side_border',
 		'custom_field',
 		'divider_dots',
 		'divider_multicolor',
-		'feature_box',
 		'form_shortcode',
 		'icon_box',
+		'feature_box',
+		'teaser',
 		'icon',
 		'image',
 		'image_banner',
@@ -46,29 +50,25 @@ function vcex_shortcodes_list() {
 		'image_grid',
 		'image_swap',
 		'leader',
-		'list_item',
 		'login_form',
 		'milestone',
-		'multi_buttons',
 		'navbar',
 		'newsletter_form',
 		'portfolio_carousel',
 		'portfolio_grid',
-		'post_type_archive',
-		'post_type_carousel',
 		'post_type_grid',
+		'post_type_carousel',
 		'post_type_slider',
+		'post_type_archive',
 		'pricing',
 		'recent_news',
 		'searchbar',
 		'shortcode',
 		'skillbar',
 		'social_links',
-		'spacing',
 		'staff_carousel',
 		'staff_grid',
 		'staff_social',
-		'teaser',
 		'terms_carousel',
 		'terms_grid',
 		'testimonials_carousel',
@@ -85,6 +85,7 @@ function vcex_shortcodes_list() {
 		'post_next_prev',
 		'post_series',
 		'post_terms',
+		'author_bio',
 		'social_share',
 
 		// Dynamic archive modules.
@@ -99,11 +100,18 @@ function vcex_shortcodes_list() {
 	);
 
 	if ( class_exists( 'WooCommerce' ) ) {
+		$shortcodes[] = 'cart_link';
 		$shortcodes[] = 'woocommerce_carousel';
 		$shortcodes[] = 'woocommerce_loop_carousel';
 	}
 
 	$shortcodes = (array) apply_filters( 'vcex_builder_modules', $shortcodes ); // @deprecated 1.2.8
+
+	/**
+	 * Filters the vcex shortcodes list.
+	 *
+	 * @param array $list
+	 */
 	$shortcodes = (array) apply_filters( 'vcex_shortcodes_list', $shortcodes );
 
 	return $shortcodes;

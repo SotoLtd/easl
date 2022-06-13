@@ -1,14 +1,14 @@
 <?php
-/**
- * WPBakery Param => Select Social Button Style.
- *
- * @package TotalThemeCore
- * @version 1.2.8
- */
 namespace TotalThemeCore\WPBakery\Params;
 
 defined( 'ABSPATH' ) || exit;
 
+/**
+ * WPBakery Param => Select Social Button Style.
+ *
+ * @package TotalThemeCore
+ * @version 1.3.1
+ */
 final class Select_Social_Button_Style {
 
 	public static function output( $settings, $value ) {
@@ -35,7 +35,7 @@ final class Select_Social_Button_Style {
 			$output = vcex_total_exclusive_notice();
 			$output .= '<input type="hidden" class="wpb_vc_param_value '
 				. esc_attr( $settings['param_name'] ) . ' '
-				. esc_attr( $settings['type'] ) . '" name="' . esc_attr( $settings['param_name'] ) . '" value="' . esc_attr( $value ) . '"/>';
+				. esc_attr( $settings['type'] ) . '" name="' . esc_attr( $settings['param_name'] ) . '" value="' . esc_attr( $value ) . '">';
 		}
 
 		return $output;

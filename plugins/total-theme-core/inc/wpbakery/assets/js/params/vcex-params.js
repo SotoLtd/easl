@@ -21,10 +21,9 @@
 	 * Alignment select.
 	 */
 	$( '.vc_edit_form_elements' ).on( 'click', '.vcex-alignments-param .vcex-alignment-opt', function(e) {
-		var $this        = $( this ),
-			$parent      = $this.parent( '.vcex-alignments-param' ),
+		var $this = $( this ),
+			$parent = $this.parent( '.vcex-alignments-param' ),
 			$hiddenInput = $parent.find( '.vcex-hidden-input' );
-
 		$parent.find( '.vcex-alignment-opt' ).removeClass( 'vcex-active' );
 		$this.addClass( 'vcex-active' );
 		$hiddenInput.val( $this.data( 'value' ) ).trigger( 'change' );
@@ -50,8 +49,8 @@
 	 * Custom button options.
 	 */
 	$( '.vc_edit_form_elements' ).on( 'click', '.vcex-custom-select .vcex-opt', function(e) {
-		var $this        = $( this ),
-			$parent      = $this.parent( '.vcex-custom-select' ),
+		var $this = $( this ),
+			$parent = $this.parent( '.vcex-custom-select' ),
 			$hiddenInput = $parent.find( '.vcex-hidden-input' );
 		$parent.find( '.vcex-opt' ).removeClass( 'vcex-active' );
 		$this.addClass( 'vcex-active' );
@@ -62,8 +61,8 @@
 	 * On/Off switch.
 	 */
 	$( '.vc_edit_form_elements' ).on( 'click', '.vcex-ofswitch .vcex-btn', function(e) {
-		var $this        = $( this ),
-			$parent      = $this.parent( '.vcex-ofswitch' ),
+		var $this = $( this ),
+			$parent = $this.parent( '.vcex-ofswitch' ),
 			$hiddenInput = $parent.find( '.vcex-hidden-input' );
 		$parent.find( '.vcex-btn' ).removeClass( 'vcex-active' );
 		$this.addClass( 'vcex-active' );
@@ -189,10 +188,21 @@
 			$hiddenInput = $parent.find( 'input.vcex-hidden-input' ),
 			valArray     = [];
 
+		var firstValue = null;
+		var allSame = true; // assume all fields are the same by default.
+
 		$allSettings.each( function( index, el ) {
 
 			var $this = $( this ),
 				val = $this.val();
+
+			if ( null === firstValue ) {
+				firstValue = val;
+			}
+
+			if ( firstValue !== val ) {
+				allSame = false; // as soon as a field value doesn't equal the first value they are no longer the same.
+			}
 
 			if ( val ) {
 
@@ -214,7 +224,11 @@
 
 		} );
 
-		$hiddenInput.val( valArray.join( '|' ) );
+		if ( allSame ) {
+			$hiddenInput.val( firstValue );
+		} else {
+			$hiddenInput.val( valArray.join( '|' ) );
+		}
 
 	} );
 
@@ -284,12 +298,12 @@
 	 */
 	vc.atts.vcex_colorpicker = {
 
-		parse: function ( param ) {
+		parse: function( param ) {
 
 			var $field, $block, $select_field, $color_field;
 
-			$field        = this.content().find( '.wpb_vc_param_value[name=' + param.param_name + ']' );
-			$block        = $field.parent();
+			$field = this.content().find( '.wpb_vc_param_value[name=' + param.param_name + ']' );
+			$block = $field.parent();
 			$select_field = $block.find( '.vcex-color-param__select' );
 			$color_field  = $block.find( '.vcex-color-param__picker' );
 
@@ -304,7 +318,7 @@
 			return '';
 		},
 
-		init: function ( param, $field ) {
+		init: function( param, $field ) {
 
 			vc.atts.colorpicker.init.call( this, param, $field ); // must go first.
 

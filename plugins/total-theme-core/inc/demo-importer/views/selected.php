@@ -5,7 +5,7 @@ defined( 'ABSPATH' ) || exit;
 
 <?php if ( ! empty( $demo_data['screenshot'] ) ) { ?>
 	<div class="wpex-demo-import-selected__screenshot">
-		<img src="<?php echo esc_html( $demo_data['screenshot'] ); ?>" />
+		<img src="<?php echo esc_url( $demo_data['screenshot'] ); ?>">
 	</div>
 <?php } ?>
 
@@ -19,9 +19,9 @@ defined( 'ABSPATH' ) || exit;
 		if ( is_plugin_active( 'wordpress-database-reset/wp-reset.php' ) ) {
 			$plugin_link = admin_url( 'tools.php?page=database-reset' );
 		} else {
-			$plugin_link = 'http://www.wpexplorer.com/reset-wordpress-website/';
+			$plugin_link = 'https://www.wpexplorer.com/reset-wordpress-website/';
 		}
-		echo sprintf( __( '<strong style="color:red;">Important:</strong> For your site to look exactly like this demo you should install the sample data on a clean (blank) installation of WordPress to prevent conflicts with any current content. You can use this plugin to reset your site if needed: <a href="%s" target="_blank">Wordpress Database Reset</a>. Otherwise, select only the options you require on the next screen.', 'total-theme-core' ), $plugin_link ); ?>
+		echo wp_kses_post( sprintf( __( '<strong style="color:red;">Important:</strong> For your site to look exactly like this demo you should install the sample data on a clean (blank) installation of WordPress to prevent conflicts with any current content. You can use this plugin to reset your site if needed: <a href="%s" target="_blank">Wordpress Database Reset</a>. Otherwise, select only the options you require on the next screen.', 'total-theme-core' ), $plugin_link ) ); ?>
 	</div>
 
 	<?php
@@ -82,7 +82,7 @@ defined( 'ABSPATH' ) || exit;
 
 <form method="post" class="wpex-demo-import-form">
 
-	<input id="wpex_import_demo" type="hidden" name="wpex_import_demo" value="<?php echo esc_attr( $demo ); ?>" />
+	<input id="wpex_import_demo" type="hidden" name="wpex_import_demo" value="<?php echo esc_attr( $demo ); ?>">
 
 	<div class="wpex-demo-import-form__types">
 
@@ -91,28 +91,28 @@ defined( 'ABSPATH' ) || exit;
 		<ul>
 			<li>
 				<label for="wpex_import_xml">
-					<input id="wpex_import_xml" type="checkbox" name="wpex_import_xml" checked="checked" />
+					<input id="wpex_import_xml" type="checkbox" name="wpex_import_xml" checked="checked">
 					<strong><?php esc_html_e( 'Import XML Data', 'total-theme-core' ); ?></strong> (<?php esc_html_e( 'pages, posts, meta data, terms, menus, etc', 'total-theme-core' ); ?>)
 				</label>
 			</li>
 
 			<li>
 				<label for="wpex_import_xml_attachments">
-					<input id="wpex_import_xml_attachments" type="checkbox" name="wpex_import_xml_attachments" checked="checked" />
+					<input id="wpex_import_xml_attachments" type="checkbox" name="wpex_import_xml_attachments" checked="checked">
 					<strong><?php esc_html_e( 'Import Images', 'total-theme-core' ); ?></strong>
 				</label>
 			</li>
 
 			<li>
 				<label for="wpex_import_mods">
-					<input id="wpex_import_mods" type="checkbox" name="wpex_import_mods" checked="checked" />
+					<input id="wpex_import_mods" type="checkbox" name="wpex_import_mods" checked="checked">
 					<strong><?php esc_html_e( 'Import Customizer Settings', 'total-theme-core' ); ?></strong> (<?php esc_html_e( 'Will reset your current settings', 'total-theme-core' ); ?>)
 				</label>
 			</li>
 
 			<li>
 				<label for="wpex_import_widgets">
-					<input id="wpex_import_widgets" type="checkbox" name="wpex_import_widgets" checked="checked" />
+					<input id="wpex_import_widgets" type="checkbox" name="wpex_import_widgets" checked="checked">
 					<strong><?php esc_html_e( 'Import Widgets', 'total-theme-core' ); ?></strong> (<?php esc_html_e( 'Imports new widgets, will not reset current widgets', 'total-theme-core' ); ?>)
 				</label>
 			</li>
@@ -127,7 +127,7 @@ defined( 'ABSPATH' ) || exit;
 
 				<li>
 					<label for="wpex_import_sliders">
-						<input id="wpex_import_sliders" type="checkbox" name="wpex_import_sliders" <?php checked( $allows_zip_uploads, true ); ?> <?php if ( ! $allows_zip_uploads ) echo ' disabled="disabled"'; ?> />
+						<input id="wpex_import_sliders" type="checkbox" name="wpex_import_sliders" <?php checked( $allows_zip_uploads, true ); ?> <?php if ( ! $allows_zip_uploads ) echo ' disabled="disabled"'; ?>>
 						<strong><?php esc_html_e( 'Import Sliders', 'total-theme-core' ); ?></strong><?php if ( ! $allows_zip_uploads ) { echo ' - <span class="wpex-warning">' . esc_html__( 'You must first enable zip uploads for your WordPress install', 'total-theme-core' ) . '</span>'; } ?>
 					</label>
 				</li>
@@ -140,7 +140,7 @@ defined( 'ABSPATH' ) || exit;
 
 	<div class="wpex-demo-import-buttons">
 		<?php wp_nonce_field( 'wpex_import_demo_nonce', 'wpex_import_demo_nonce' ); ?>
-		<input type="submit" name="submit" class="button button-primary wpex-submit-form" value="<?php esc_html_e( 'Confirm Import', 'total-theme-core' ); ?>"  />
+		<input type="submit" name="submit" class="button button-primary wpex-submit-form" value="<?php esc_html_e( 'Confirm Import', 'total-theme-core' ); ?>">
 	</div>
 
 </form>
@@ -149,7 +149,7 @@ defined( 'ABSPATH' ) || exit;
 	<div class="wpex-demo-import-selected__heading"><?php esc_html_e( 'The import process could take some time, so please be patient.', 'total-theme-core' ); ?></div>
 	<div class="wpex-demo-import-status"></div>
 	<div class="wpex-demo-import-buttons wpex-hidden">
-		<a href="#" class="button-secondary wpex-popup-selected-close"><?php esc_html_e( 'Close', 'total-theme-core' ); ?></a>
+		<?php /*<a href="#" class="button button-primary wpex-popup-selected-close"><?php esc_html_e( 'Close', 'total-theme-core' ); ?></a> */ ?>
 	</div>
 </div>
 

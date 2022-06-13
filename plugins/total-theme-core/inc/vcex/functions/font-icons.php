@@ -41,40 +41,40 @@ function vcex_get_icon_class( $atts, $icon_location = 'icon' ) {
 	$icon = '';
 	$icon_type = ! empty( $atts['icon_type'] ) ? $atts['icon_type'] : '';
 
-	// Custom icon set for specific library
+	// Custom icon set for specific library.
 	if ( $icon_type && ! empty( $atts[$icon_location . '_' . $icon_type] ) ) {
 		$icon = $atts[$icon_location . '_' . $icon_type];
 	}
 
-	// Parse the default icon parameter which could be anything really
+	// Parse the default icon parameter which could be anything really.
 	elseif ( ! empty( $atts[ $icon_location ] ) ) {
 
 		// Get icon value
 		$icon = $atts[$icon_location];
 
-		// Get icon type if not set
+		// Get icon type if not set.
 		if ( ! $icon_type ) {
 			$icon_type = vcex_get_icon_type_from_class( $icon );
 		}
 
-		// converts old 4.7 fontawesome icons to ticons
-		if ( 'ticons' == $icon_type ) {
+		// converts old 4.7 fontawesome icons to ticons.
+		if ( 'ticons' === $icon_type ) {
 			$icon = str_replace( 'fa fa-', 'ticon ticon-', $icon );
 		}
 
-		// Icon type is unknown so lets add prefixes
+		// Icon type is unknown so lets add prefixes.
 		if ( ! $icon_type ) {
 			$icon = vcex_add_default_icon_prefix( $icon );
 		}
 
 	}
 
-	// Extra checks
+	// Extra checks.
 	if ( ! $icon || in_array( $icon, array( 'icon', 'none' ) ) ) {
 		return '';
 	}
 
-	// Return icon class
+	// Return icon class.
 	return $icon;
 
 }

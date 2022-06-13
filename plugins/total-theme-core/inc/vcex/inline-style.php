@@ -1,16 +1,15 @@
 <?php
+namespace TotalThemeCore\Vcex;
+
+defined( 'ABSPATH' ) || exit;
+
 /**
  * Parses inline styles.
  *
  * @package Total WordPress Theme
  * @subpackage Framework
- * @version 1.3
+ * @version 1.3.1
  */
-
-namespace TotalThemeCore\Vcex;
-
-defined( 'ABSPATH' ) || exit;
-
 final class Inline_Style {
 	private $style;
 	private $add_style;
@@ -40,6 +39,23 @@ final class Inline_Style {
 	 */
 	private function parse_display( $value ) {
 		$this->style[] = 'display:' . esc_attr( $value ) . ';';
+	}
+
+	/**
+	 * Gap.
+	 */
+	private function parse_gap( $value ) {
+		if ( is_numeric( $value ) ) {
+			$value = $value . 'px';
+		}
+		$this->style[] = 'gap:' . esc_attr( $value ) . ';';
+	}
+
+	/**
+	 * Flex Basis.
+	 */
+	private function parse_flex_basis( $value ) {
+		$this->style[] = 'flex-basis:' . esc_attr( $value ) . ';';
 	}
 
 	/**
@@ -304,6 +320,11 @@ final class Inline_Style {
 	 * Font Family (exclusive to Total theme)
 	 */
 	private function parse_font_family( $value ) {
+
+		// Make sure font is loaded before parsing - important!!
+		vcex_enqueue_font( $value );
+
+		// Sanitize font family
 		if ( function_exists( 'wpex_sanitize_font_family' ) ) {
 			$value = wpex_sanitize_font_family( $value );
 			if ( ! empty( $value ) ) {
@@ -311,6 +332,7 @@ final class Inline_Style {
 				$this->style[] = 'font-family:' . esc_attr( $value ) . ';';
 			}
 		}
+
 	}
 
 	/**
@@ -394,7 +416,7 @@ final class Inline_Style {
 
 		$unit = $this->get_unit( $value );
 
-		$allowed_units = array( 'px', 'em', 'rem', 'vmin', 'vmax' );
+		$allowed_units = array( 'px', 'em', 'rem', 'vmin', 'vmax', 'vh', 'vw' );
 
 		if ( ! in_array( $unit, $allowed_units ) ) {
 			$value = floatval( $value ) . 'px';
@@ -543,14 +565,14 @@ final class Inline_Style {
 				&& count( $values ) == 4
 				&& count( array_unique( $values ) ) <= 1
 			) {
-				$value          = $values['top'];
-				$value          = ( 'none' === $value ) ? '0' : $value;
-				$value          = is_numeric( $value ) ? $value  . 'px' : $value;
-				$this->style[]  = esc_attr( trim( $property ) ) . ':' . esc_attr( $value ) . ';';
+				$value = $values['top'];
+				$value = ( 'none' === $value ) ? '0' : $value;
+				$value = is_numeric( $value ) ? $value  . 'px' : $value;
+				$this->style[] = esc_attr( trim( $property ) ) . ':' . esc_attr( $value ) . ';';
 				return true;
 			}
 
-			// Values are different
+			// Values are different.
 			foreach ( $values as $k => $v ) {
 
 				if ( 0 == $v ) {
@@ -796,7 +818,7 @@ final class Inline_Style {
 
 		$unit = $this->get_unit( $input );
 
-		$allowed_units = array( 'px', 'em', 'rem', 'vw', 'vmin', 'vmax' );
+		$allowed_units = array( 'px', 'em', 'rem', 'vw', 'vmin', 'vmax', 'vh' );
 
 		if ( in_array( $unit, $allowed_units ) ) {
 			$input = esc_attr( $input );

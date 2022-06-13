@@ -1,12 +1,4 @@
 <?php
-/**
- * Post Grid widget.
- *
- * @package Total Theme Core
- * @subpackage Widgets
- * @version 1.2.8
- */
-
 namespace TotalThemeCore\Widgets;
 
 use TotalThemeCore\WidgetBuilder as Widget_Builder;
@@ -14,6 +6,13 @@ use WP_Query;
 
 defined( 'ABSPATH' ) || exit;
 
+/**
+ * Post Grid widget.
+ *
+ * @package Total Theme Core
+ * @subpackage Widgets
+ * @version 1.3.2
+ */
 class Widget_Recent_Posts_Thumb_Grid extends Widget_Builder {
 	private $args;
 
@@ -159,39 +158,42 @@ class Widget_Recent_Posts_Thumb_Grid extends Widget_Builder {
 	 */
 	public function widget( $args, $instance ) {
 
-		// Parse and extract widget settings
+		// Parse and extract widget settings.
 		extract( $this->parse_instance( $instance ) );
 
-		// Before widget hook
+		// Before widget hook.
 		echo wp_kses_post( $args['before_widget'] );
 
-		// Display widget title
+		// Display widget title.
 		$this->widget_title( $args, $instance );
 
-		// Define widget output
+		// Define widget output.
 		$output = '';
 
-		// Start output
-		$gap = $gap ? $gap : '5';
-
-		$row_class = 'wpex-recent-posts-thumb-grid wpex-row wpex-clr gap-' . sanitize_html_class( $gap );
+		// Grid class.
+		$grid_class = array(
+			'wpex-recent-posts-thumb-grid',
+			'wpex-inline-grid',
+			'wpex-grid-cols-' . absint( $columns ?: 3 ),
+			'wpex-gap-' . absint( $gap ?: 5 ),
+		);
 
 		if ( $img_lightbox ) {
-			$row_class .= ' wpex-lightbox-group';
+			$grid_class[] = 'wpex-lightbox-group';
 			vcex_enqueue_lightbox_scripts();
 		}
 
-		$output .= '<ul class="' . esc_attr( $row_class ) . '">';
+		$grid_class = array_map( 'sanitize_html_class', $grid_class );
 
-			// Query args
+		$output .= '<div class="' . esc_attr( implode( ' ', $grid_class ) ) . '">';
+
+			// Query args.
 			$query_args = array(
 				'post_type'      => $post_type,
 				'posts_per_page' => $number,
 				'no_found_rows'  => true,
-				'tax_query'      => array(
-					'relation' => 'AND',
-				),
-				'meta_query' => array(
+				'tax_query'      => array( 'relation' => 'AND' ),
+				'meta_query'     => array(
 					array( 'key' => '_thumbnail_id' ) // thumbnails are required
 				),
 			);
@@ -204,17 +206,17 @@ class Widget_Recent_Posts_Thumb_Grid extends Widget_Builder {
 				$query_args['orderby'] = $order; // THIS IS THE FALLBACK
 			}
 
-			// Tax Query
+			// Tax Query.
 			if ( ! empty( $taxonomy ) ) {
 
-				// Include Terms
+				// Include Terms.
 				if (  ! empty( $terms ) ) {
 
-					// Sanitize terms and convert to array
+					// Sanitize terms and convert to array.
 					$terms = str_replace( ', ', ',', $terms );
 					$terms = explode( ',', $terms );
 
-					// Add to query arg
+					// Add to query arg.
 					$query_args['tax_query'][] = array(
 						'taxonomy' => $taxonomy,
 						'field'    => 'slug',
@@ -224,14 +226,14 @@ class Widget_Recent_Posts_Thumb_Grid extends Widget_Builder {
 
 				}
 
-				// Exclude Terms
+				// Exclude Terms.
 				if ( ! empty( $terms_exclude ) ) {
 
-					// Sanitize terms and convert to array
+					// Sanitize terms and convert to array.
 					$terms_exclude = str_replace( ', ', ',', $terms_exclude );
 					$terms_exclude = explode( ',', $terms_exclude );
 
-					// Add to query arg
+					// Add to query arg.
 					$query_args['tax_query'][] = array(
 						'taxonomy' => $taxonomy,
 						'field'    => 'slug',
@@ -243,34 +245,24 @@ class Widget_Recent_Posts_Thumb_Grid extends Widget_Builder {
 
 			}
 
-			// Exclude current post
+			// Exclude current post.
 			if ( is_singular() ) {
 				$query_args['post__not_in'] = array( get_the_ID() );
 			}
 
-			// Query posts
+			// Query posts.
 			$wpex_query = new WP_Query( $query_args );
 
-			// Set post counter variable
-			$count=0;
-
-			// Column classes
-			$columns_class = function_exists( 'wpex_grid_class' ) ? wpex_grid_class( $columns ) : '';
-
-			// Loop through posts
+			// Loop through posts.
 			while ( post_type_exists( $post_type ) && $wpex_query->have_posts() ) : $wpex_query->the_post();
 
 				$thumbnail_id = get_post_thumbnail_id();
 
-				if ( empty( $thumbnail_id ) | '0' === $thumbnail_id ) {
+				if ( empty( $thumbnail_id ) || '0' === $thumbnail_id ) {
 					continue;
 				}
 
-				$count++;
-
-				$li_class = $columns_class . ' nr-col col-' . $count;
-
-				$output .= '<li class="' . esc_attr( $li_class ) . '">';
+				$output .= '<div class="wpex-recent-posts-thumb-grid__item">';
 
 					if ( $img_lightbox ) {
 						$link = vcex_get_lightbox_image( $thumbnail_id );
@@ -291,7 +283,7 @@ class Widget_Recent_Posts_Thumb_Grid extends Widget_Builder {
 						$link_class .= ' ' . wpex_image_filter_class( $img_filter );
 					}
 
-					// Open link tag
+					// Open link tag.
 					$output .= '<a href="' . esc_url( $link ) . '"';
 
 						if ( $link_class ) {
@@ -339,22 +331,17 @@ class Widget_Recent_Posts_Thumb_Grid extends Widget_Builder {
 
 					$output .= '</a>';
 
-				$output .= '</li>';
+				$output .= '</div>';
 
-				// Reset counter to clear floats
-				if ( $count === intval( $columns ) ) {
-					$count = 0;
-				}
-
-			// End loop
+			// End loop.
 			endwhile;
 
-			// Reset global query post data
+			// Reset global query post data.
 			wp_reset_postdata();
 
-		$output .= '</ul>';
+		$output .= '</div>';
 
-		// Echo output
+		// Echo output.
 		echo $output;
 
 		echo wp_kses_post( $args['after_widget'] );

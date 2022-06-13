@@ -1,18 +1,16 @@
 <?php
+namespace TotalThemeCore\Widgets;
+use TotalThemeCore\WidgetBuilder as Widget_Builder;
+
+defined( 'ABSPATH' ) || exit;
+
 /**
  * Newsletter widget.
  *
  * @package Total Theme Core
  * @subpackage Widgets
- * @version 1.2.8
+ * @version 1.3.2
  */
-
-namespace TotalThemeCore\Widgets;
-
-use TotalThemeCore\WidgetBuilder as Widget_Builder;
-
-defined( 'ABSPATH' ) || exit;
-
 class Widget_Newsletter extends Widget_Builder {
 	private $args;
 
@@ -217,7 +215,7 @@ class Widget_Newsletter extends Widget_Builder {
 				// Name field.
 				if ( $name_field ) {
 
-					$name_input_name = $name_input_name ? $name_input_name : 'FNAME';
+					$name_input_name = $name_input_name ?: 'FNAME';
 
 					$output .= '<label>';
 
@@ -232,7 +230,7 @@ class Widget_Newsletter extends Widget_Builder {
 				// Lastname field.
 				if ( $last_name_field ) {
 
-					$last_name_input_name = $last_name_input_name ? $last_name_input_name : 'LNAME';
+					$last_name_input_name = $last_name_input_name ?: 'LNAME';
 
 					$output .= '<label>';
 
@@ -245,7 +243,7 @@ class Widget_Newsletter extends Widget_Builder {
 				}
 
 				// Email input.
-				$email_input_name = $email_input_name ? $email_input_name : 'EMAIL';
+				$email_input_name = $email_input_name ?: 'EMAIL';
 
 				$output .= '<label>';
 

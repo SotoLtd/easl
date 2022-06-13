@@ -1,4 +1,10 @@
 <?php
+namespace TotalThemeCore\Widgets;
+use TotalThemeCore\WidgetBuilder as Widget_Builder;
+use WP_Query;
+
+defined( 'ABSPATH' ) || exit;
+
 /**
  * Post With Thumbnails widget.
  *
@@ -6,14 +12,6 @@
  * @subpackage Widgets
  * @version 1.2.8
  */
-
-namespace TotalThemeCore\Widgets;
-
-use TotalThemeCore\WidgetBuilder as Widget_Builder;
-use WP_Query;
-
-defined( 'ABSPATH' ) || exit;
-
 class Widget_Recent_Posts_Thumb extends Widget_Builder {
 	private $args;
 
@@ -186,29 +184,29 @@ class Widget_Recent_Posts_Thumb extends Widget_Builder {
 	 */
 	public function widget( $args, $instance ) {
 
-		// Parse and extract widget settings
+		// Parse and extract widget settings.
 		extract( $this->parse_instance( $instance ) );
 
-		// Before widget hook
+		// Before widget hook.
 		echo wp_kses_post( $args['before_widget'] );
 
-		// Display widget title
+		// Display widget title.
 		$this->widget_title( $args, $instance );
 
-		// Define widget output
+		// Define widget output.
 		$output = '';
 
 		$post_type = ! empty( $post_type ) ? $post_type : 'post';
 		$post_type_exists = (bool) post_type_exists( $post_type );
 		$style = ! empty( $style ) ? $style : 'default';
 
-		// Custom Query args
+		// Custom Query args.
 		if ( ! empty( $custom_query_args ) && is_callable( $custom_query_args ) ) {
 			$query_args = (array) call_user_func( $custom_query_args );
 			$post_type_exists = true;
 		}
 
-		// Widget query args
+		// Widget query args.
 		else {
 
 			$query_args = array(
@@ -220,7 +218,7 @@ class Widget_Recent_Posts_Thumb extends Widget_Builder {
 				),
 			);
 
-			// Query by thumbnail meta_key
+			// Query by thumbnail meta_key.
 			if ( $thumbnail_query ) {
 				$query_args['meta_query'] = array( array( 'key' => '_thumbnail_id' ) );
 			}
@@ -233,13 +231,13 @@ class Widget_Recent_Posts_Thumb extends Widget_Builder {
 				$query_args['orderby'] = $order; // THIS IS THE FALLBACK
 			}
 
-			// Tax Query
+			// Tax Query.
 			if ( ! empty( $taxonomy ) ) {
 
-				// Include Terms
+				// Include Terms.
 				if (  ! empty( $terms ) ) {
 
-					// Sanitize terms and convert to array
+					// Sanitize terms and convert to array.
 					if ( function_exists( 'wp_parse_list' ) ) {
 						$terms = wp_parse_list( $terms );
 					} else {
@@ -247,7 +245,7 @@ class Widget_Recent_Posts_Thumb extends Widget_Builder {
 						$terms = explode( ',', $terms );
 					}
 
-					// Add to query arg
+					// Add to query arg.
 					$query_args['tax_query'][] = array(
 						'taxonomy' => $taxonomy,
 						'field'    => 'slug',
@@ -257,14 +255,14 @@ class Widget_Recent_Posts_Thumb extends Widget_Builder {
 
 				}
 
-				// Exclude Terms
+				// Exclude Terms.
 				if ( ! empty( $terms_exclude ) ) {
 
-					// Sanitize terms and convert to array
+					// Sanitize terms and convert to array.
 					$terms_exclude = str_replace( ', ', ',', $terms_exclude );
 					$terms_exclude = explode( ',', $terms_exclude );
 
-					// Add to query arg
+					// Add to query arg.
 					$query_args['tax_query'][] = array(
 						'taxonomy' => $taxonomy,
 						'field'    => 'slug',
@@ -276,12 +274,12 @@ class Widget_Recent_Posts_Thumb extends Widget_Builder {
 
 			}
 
-			// Singular post arguments
+			// Singular post arguments.
 			if ( is_singular() ) {
 
 				$query_args['post__not_in'] = array( get_the_ID() );
 
-				// Exclude expired events
+				// Exclude expired events.
 				if ( 'tribe_events' == $post_type
 					&& 'tribe_events' == get_post_type()
 					&& class_exists( 'Tribe__Events__Main' )
@@ -315,23 +313,23 @@ class Widget_Recent_Posts_Thumb extends Widget_Builder {
 
 		}
 
-		// Query posts
+		// Query posts.
 		$wpex_query = new WP_Query( $query_args );
 
-		// If there are posts loop through them
+		// If there are posts loop through them.
 		if ( $post_type_exists && $wpex_query->have_posts() ) :
 
-			// Begin entries output
+			// Begin entries output.
 			$output .= '<ul class="wpex-widget-recent-posts style-' . esc_attr( $style ) . '">';
 
-					// Loop through posts
+					// Loop through posts.
 					$count = 0;
 					while ( $wpex_query->have_posts() ) : $wpex_query->the_post();
 						$count++;
 
 						$li_classes = 'wpex-widget-recent-posts-li';
 
-						if ( $style === 'fullimg' ) {
+						if ( 'fullimg' === $style ) {
 							$li_classes .= ' wpex-mb-15';
 						} else{
 							$li_classes .= ' wpex-py-15 wpex-border-b wpex-border-solid wpex-border-main';
@@ -341,13 +339,13 @@ class Widget_Recent_Posts_Thumb extends Widget_Builder {
 							$li_classes .= ' wpex-border-t';
 						}
 
-						// Output entry
-						$output .= '<li class="'. esc_attr( $li_classes ) . '">';
+						// Output entry.
+						$output .= '<li class="' . esc_attr( $li_classes ) . '">';
 
-							// Open post link
+							// Open post link.
 							$post_link = function_exists( 'wpex_get_permalink' ) ? wpex_get_permalink() : get_permalink();
 
-							if ( $style === 'fullimg' ) {
+							if ( 'fullimg' === $style ) {
 								$link_classes = 'wpex-block';
 							} else {
 								$link_classes = 'wpex-flex';
@@ -358,9 +356,9 @@ class Widget_Recent_Posts_Thumb extends Widget_Builder {
 
 							$link_classes .= ' wpex-inherit-color-important wpex-no-underline';
 
-							$output .= '<a href="' . esc_url( $post_link ) . '" class="'. esc_attr( $link_classes ) . '">';
+							$output .= '<a href="' . esc_url( $post_link ) . '" class="' . esc_attr( $link_classes ) . '">';
 
-								// Get post title attribute
+								// Get post title attribute.
 								if ( function_exists( 'wpex_get_esc_title' ) ) {
 									$esc_title = wpex_get_esc_title();
 								} else {
@@ -369,19 +367,19 @@ class Widget_Recent_Posts_Thumb extends Widget_Builder {
 									) );
 								}
 
-								// Entry thumbnail
+								// Entry thumbnail.
 								if ( has_post_thumbnail() ) {
 
-									// Inline CSS
+									// Inline CSS.
 									$inline_css = '';
 									if ( $add_img_width && $img_width ) {
 										$inline_css = ' style="width:' . intval( $img_width ) . 'px"';
 									}
 
-									// Thumb chasses
+									// Thumb chasses.
 									$thumb_classes = 'wpex-widget-recent-posts-thumbnail';
 
-									if ( $style === 'fullimg' ) {
+									if ( 'fullimg' === $style ) {
 										$thumb_classes .= ' wpex-mb-15';
 									} else {
 										$thumb_classes .= ' wpex-flex-shrink-0 wpex-mr-15';
@@ -421,12 +419,26 @@ class Widget_Recent_Posts_Thumb extends Widget_Builder {
 
 								}
 
-								// Entry details
+								// Entry details.
 								$output .= '<div class="wpex-widget-recent-posts-details wpex-flex-grow">';
 
+									/* Display primary term - @todo add functionality?
+									if ( $show_primary_term && function_exists( 'wpex_get_first_term_name' ) ) {
+
+										$fist_term = wpex_get_first_term_name();
+
+										if ( $fist_term ) {
+											$output .= '<div class="wpex-widget-recent-posts-term wpex-text-xs wpex-text-accent wpex-uppercase wpex-tracking-wider wpex-mb-5">';
+												$output .= $fist_term;
+											$output .= '</div>';
+										}
+
+									}*/
+
+									// Display Title.
 									$output .= '<div class="wpex-widget-recent-posts-title wpex-heading wpex-widget-heading">' . esc_html( get_the_title() ) . '</div>';
 
-									// Display date if enabled
+									// Display date if enabled.
 									if ( '1' != $date ) {
 
 										if ( class_exists( 'Tribe__Events__Main' )
@@ -442,7 +454,7 @@ class Widget_Recent_Posts_Thumb extends Widget_Builder {
 
 									}
 
-									// Display excerpt
+									// Display excerpt.
 									if ( intval( $excerpt_length ) && 0 !== $excerpt_length ) {
 
 										if ( function_exists( 'wpex_get_excerpt' ) ) {
@@ -460,9 +472,7 @@ class Widget_Recent_Posts_Thumb extends Widget_Builder {
 										}
 
 										if ( $excerpt ) {
-
 											$output .= '<div class="wpex-widget-recent-posts-excerpt wpex-mt-5 wpex-last-mb-0">' . $excerpt . '</div>';
-
 										}
 
 									}
@@ -477,12 +487,12 @@ class Widget_Recent_Posts_Thumb extends Widget_Builder {
 
 			$output .= '</ul>';
 
-			// Reset post data
+			// Reset post data.
 			wp_reset_postdata();
 
 		endif;
 
-		// Echo output
+		// Echo output.
 		echo $output;
 
 		echo wp_kses_post( $args['after_widget'] );

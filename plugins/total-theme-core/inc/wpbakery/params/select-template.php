@@ -1,15 +1,15 @@
 <?php
+namespace TotalThemeCore\WPBakery\Params;
+use WP_Query;
+
+defined( 'ABSPATH' ) || exit;
+
 /**
  * WPBakery Param => Select Template.
  *
  * @package TotalThemeCore
  * @version 1.2.10
  */
-namespace TotalThemeCore\WPBakery\Params;
-use WP_Query;
-
-defined( 'ABSPATH' ) || exit;
-
 final class Select_Template {
 
 	public static function output( $settings, $value ) {

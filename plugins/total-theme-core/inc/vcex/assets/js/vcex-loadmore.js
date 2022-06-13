@@ -1,181 +1,184 @@
-( function( $, l10n ) {
+( function( $ ) {
 
-    'use strict';
+	'use strict';
 
-    if ( 'function' !== typeof window.vcexLoadMore ) {
-        window.vcexLoadMore = function ( $context ) {
+	if ( 'function' !== typeof window.vcexLoadMore ) {
+		window.vcexLoadMore = function( $context ) {
 
-            $( '.vcex-loadmore' ).each( function() {
+			$( '.vcex-loadmore' ).each( function() {
 
-                var $buttonWrap = $( this );
-                var $button     = $buttonWrap.find( '.vcex-loadmore-button' );
+				var $buttonWrap = $( this );
+				var $button = $buttonWrap.find( '.vcex-loadmore-button' );
 
-                if ( ! $button.length ) {
-                    return;
-                }
+				if ( ! $button.length ) {
+					return;
+				}
 
-                var $grid        = $buttonWrap.parent().find( '> .wpex-row, > .entries, > .vcex-recent-news, .vcex-image-grid, .wpex-post-cards-list' );
-                var loading      = false;
-                var ajaxUrl      = l10n.ajaxurl;
-                var loadMoreData = $button.data();
-                var page         = loadMoreData.page + 1;
-                var maxPages     = loadMoreData.maxPages;
-                var $textSpan    = $button.find( '.vcex-txt' );
-                var text         = loadMoreData.text;
-                var loadingText  = loadMoreData.loadingText;
-                var failedText   = loadMoreData.failedText;
+				var $grid = $buttonWrap.parent().find( '> .wpex-row, > .entries, > .vcex-recent-news, .vcex-image-grid, .wpex-post-cards-list' );
+				var loading = false;
+				var ajaxUrl = vcex_loadmore_params.ajax_url;
+				var loadMoreData = $button.data();
+				var page = loadMoreData.page + 1;
+				var maxPages = loadMoreData.maxPages;
+				var $textSpan = $button.find( '.vcex-txt' );
+				var text = loadMoreData.text;
+				var loadingText = loadMoreData.loadingText;
+				var failedText = loadMoreData.failedText;
 
-                $buttonWrap.css( 'min-height', $buttonWrap.outerHeight() ); // prevent jump when showing loader icon
+				$buttonWrap.css( 'min-height', $buttonWrap.outerHeight() ); // prevent jump when showing loader icon
 
-                $button.on( 'click', function( e ) {
+				$button.on( 'click', function( e ) {
 
-                    var shortcodeParams = loadMoreData.shortcodeParams; // this gets updated on each refresh
+					var shortcodeParams = loadMoreData.shortcodeParams; // this gets updated on each refresh
 
-                    shortcodeParams.paged = page; // update paged value
+					shortcodeParams.paged = page; // update paged value
 
-                    if ( ! loading ) {
+					if ( ! loading ) {
 
-                        loading = true;
+						loading = true;
 
-                        $button.parent().addClass( 'vcex-loading' );
-                        $textSpan.text( loadingText );
+						$button.parent().addClass( 'vcex-loading' );
+						$textSpan.text( loadingText );
 
-                        var data = {
-                            action          : 'vcex_loadmore_ajax_render',
-                            nonce           : loadMoreData.nonce,
-                            shortcodeTag    : loadMoreData.shortcodeTag,
-                            shortcodeParams : shortcodeParams
-                        };
+						var data = {
+							action: 'vcex_loadmore_ajax_render',
+							nonce: loadMoreData.nonce,
+							shortcodeTag: loadMoreData.shortcodeTag,
+							shortcodeParams: shortcodeParams
+						};
 
-                        $.post( ajaxUrl, data, function( res ) {
+						$.post( ajaxUrl, data, function( res ) {
 
-                            var $newElements = '';
+							var $newElements = '';
 
-                            if ( res.success ) {
+							if ( res.success ) {
 
-                                page = page + 1;
+								page = page + 1;
 
-                                if ( $grid.parent().hasClass( 'vcex-post-type-archive' ) ) {
-                                    $newElements = $( res.data ).find( '> .wpex-row > .col, > .wpex-row > .blog-entry, #blog-entries > .blog-entry' );
-                                } else {
-                                    $newElements = $( res.data ).find( '> .wpex-row > .vcex-grid-item, > .vcex-recent-news > .vcex-recent-news-entry-wrap, .vcex-image-grid-entry, .wpex-post-cards-entry' );
-                                }
+								if ( $grid.parent().hasClass( 'vcex-post-type-archive' ) ) {
+									$newElements = $( res.data ).find( '> .wpex-row > .col, > .wpex-row > .blog-entry, #blog-entries > .blog-entry' );
+								} else {
+									$newElements = $( res.data ).find( '> .wpex-row > .vcex-grid-item, > .vcex-recent-news > .vcex-recent-news-entry-wrap, .vcex-image-grid-entry, .wpex-post-cards-entry' );
+								}
 
-                                if ( $newElements.length ) {
+								if ( $newElements.length ) {
 
-                                    $newElements.css( 'opacity', 0 ); // hide until images are loaded
+									$newElements.css( 'opacity', 0 ); // hide until images are loaded
 
-                                    $newElements.each( function() {
-                                        var $this = $( this );
-                                        if ( $this.hasClass( 'sticky' ) ) {
-                                            $this.addClass( 'vcex-duplicate' );
-                                        }
-                                    } );
+									$newElements.each( function() {
+										var $this = $( this );
+										if ( $this.hasClass( 'sticky' ) ) {
+											$this.addClass( 'vcex-duplicate' );
+										}
+									} );
 
-                                    $grid.append( $newElements ).imagesLoaded( function() {
+									$grid.append( $newElements ).imagesLoaded( function() {
 
-                                        if ( 'undefined' !== typeof retinajs && $.isFunction( retinajs ) ) {
-                                            retinajs();
-                                        }
+										if ( 'object' === typeof wpex && 'function' === typeof wpex.equalHeights ) {
+											wpex.equalHeights();
+										}
 
-                                        if ( 'object' === typeof wpex && 'function' === typeof wpex.equalHeights ) {
-                                            wpex.equalHeights();
-                                        }
+										if ( 'function' === typeof Isotope && ( $grid.hasClass( 'vcex-isotope-grid' ) || $grid.hasClass( 'vcex-navbar-filter-grid' ) || $grid.hasClass( 'wpex-masonry-grid' ) ) ) {
+											var isotope = Isotope.data( $grid[0] );
+											if ( isotope ) {
+												isotope.appended( $newElements );
+												isotope.layout();
+											} else {
+												$newElements.css( 'opacity', 1 );
+											}
+										} else {
+											$newElements.css( 'opacity', 1 );
+										}
 
-                                        if ( $grid.hasClass( 'vcex-isotope-grid' ) || $grid.hasClass( 'vcex-navbar-filter-grid' ) || $grid.hasClass( 'wpex-masonry-grid' ) ) {
-                                            $grid.isotope().append( $newElements ).isotope( 'appended', $newElements ).isotope('layout');
-                                            //$grid.isotope( 'appended', $newElements );
-                                            //$grid.isotope().append( $newElements ).isotope( 'appended', $newElements ).isotope( 'layout' );
-                                        } else {
-                                            $newElements.css( 'opacity', 1 );
-                                        }
+										if ( $grid.hasClass( 'justified-gallery' ) && 'undefined' !== typeof $.fn.justifiedGallery ) {
+											$grid.justifiedGallery( 'norewind' );
+										}
 
-                                        if ( $grid.hasClass( 'justified-gallery' ) && 'undefined' !== typeof $.fn.justifiedGallery ) {
-                                            $grid.justifiedGallery( 'norewind' );
-                                        }
+										if ( 'object' === typeof wpex ) {
 
-                                        if ( 'object' === typeof wpex ) {
+											if ( 'function' === typeof wpex.overlaysMobileSupport ) {
+												wpex.overlaysMobileSupport();
+											}
 
-                                            if ( 'function' === typeof wpex.overlayHovers ) {
-                                                wpex.overlayHovers();
-                                            }
+											if ( 'function' === typeof wpex.hoverStyles ) {
+												wpex.hoverStyles();
+											}
 
-                                            if ( 'function' === typeof wpex.overlaysMobileSupport ) {
-                                                wpex.overlaysMobileSupport();
-                                            }
+										}
 
-                                        }
+										$( '.wpb_animate_when_almost_visible', $grid ).addClass( 'wpb_start_animation animated' );
 
-                                        $( '.wpb_animate_when_almost_visible', $grid ).addClass( 'wpb_start_animation animated' );
+										if ( 'function' === typeof window.wpexSliderPro ) {
+											window.wpexSliderPro( $newElements );
+										}
 
-                                        if ( 'function' === typeof window.wpexSliderPro ) {
-                                            window.wpexSliderPro( $newElements );
-                                        }
+										if ( 'undefined' !== typeof $.fn.mediaelementplayer ) {
+											$newElements.find( 'audio, video' ).mediaelementplayer();
+										}
 
-                                        if ( 'function' === typeof window.vcexHovers ) {
-                                            window.vcexHovers();
-                                        }
+										$grid.trigger( 'vcexLoadMoreFinished', [$newElements] ); // Use this trigger if you need to run other js functions after items are loaded
 
-                                        if ( 'undefined' !== typeof $.fn.mediaelementplayer ) {
-                                            $newElements.find( 'audio, video' ).mediaelementplayer();
-                                        }
+										// Update loadMoreData with new data (used for clearing floats, etc).
+										var newData  = $( res.data ).find( '.vcex-loadmore-button' ).data();
+										loadMoreData = newData ? newData : loadMoreData;
 
-                                        $grid.trigger( 'vcexLoadMoreFinished', [$newElements] ); // Use this trigger if you need to run other js functions after items are loaded
+										$button.parent().removeClass( 'vcex-loading' );
+										$textSpan.text( text );
 
-                                        // Update loadMoreData with new data (used for clearing floats, etc).
-                                        var newData  = $( res.data ).find( '.vcex-loadmore-button' ).data();
-                                        loadMoreData = newData ? newData : loadMoreData;
+										// Set correct focus.
+										var $firstLink = $newElements.first().find( 'a' );
 
-                                        $button.parent().removeClass( 'vcex-loading' );
-                                        $textSpan.text( text );
+										if ( $firstLink.length ) {
+											$firstLink.eq(0).focus();
+										}
 
-                                        // Hide button.
-                                        if ( ( page - 1 ) == maxPages ) {
-                                            $buttonWrap.hide();
-                                        }
+										// Hide button.
+										if ( ( page - 1 ) == maxPages ) {
+											$buttonWrap.hide();
+										}
 
-                                        // Set loading to false.
-                                        loading = false;
+										// Set loading to false.
+										loading = false;
 
-                                    } ); // End images loaded.
+									} ); // End images loaded.
 
-                                } // End $newElements check.
+								} // End $newElements check.
 
-                                else {
+								else {
 
-                                    console.log( res );
+									console.log( res );
 
-                                }
+								}
 
-                            } // End success.
+							} // End success.
 
-                            else {
+							else {
 
-                                $button.text( failedText );
+								$button.text( failedText );
 
-                                console.log( res );
+								console.log( res );
 
-                            }
+							}
 
-                        } ).fail( function( xhr, textGridster, e ) {
+						} ).fail( function( xhr, textGridster, e ) {
 
-                            console.log( xhr.responseText );
+							console.log( xhr.responseText );
 
-                        } );
+						} );
 
-                    } // end loading check
+					} // end loading check
 
-                    return false;
+					return false;
 
-                } ); // end click event
+				} ); // end click event
 
-            } );
+			} );
 
-        };
-    }
+		};
+	}
 
-    $( window ).on( 'load', function() {
-        window.vcexLoadMore();
-    } );
+	$( window ).on( 'load', function() {
+		vcexLoadMore();
+	} );
 
-} ) ( jQuery, wpexLocalize );
+} ) ( jQuery );

@@ -1,16 +1,16 @@
 <?php
-/**
- * WPBakery Param => Text Align.
- *
- * @package TotalThemeCore
- * @version 1.2.8
- *
- * @todo remove "default" setting and actually display the default.
- */
 namespace TotalThemeCore\WPBakery\Params;
 
 defined( 'ABSPATH' ) || exit;
 
+/**
+ * WPBakery Param => Text Align.
+ *
+ * @package TotalThemeCore
+ * @version 1.3.2
+ *
+ * @todo remove "default" setting and actually display the default.
+ */
 final class Text_Align {
 
 	public static function output( $settings, $value ) {
@@ -28,7 +28,7 @@ final class Text_Align {
 
 		$output = '<div class="vcex-alignments-param vcex-noselect wpex-clr">';
 
-		$excluded = isset( $settings[ 'exclude_choices' ] ) ? $settings[ 'exclude_choices' ] : array();
+		$excluded = $settings['exclude_choices'] ?? array();
 
 		foreach ( $options as $option => $label ) {
 
@@ -62,7 +62,7 @@ final class Text_Align {
 
 		}
 
-		$output .= '<input name="' . esc_attr( $settings['param_name'] ) . '" class="vcex-hidden-input wpb-input wpb_vc_param_value  ' . esc_attr( $settings['param_name'] ) . ' ' . esc_attr( $settings['type'] ) . '_field" type="hidden" value="' . esc_attr( $value ) . '" />';
+		$output .= '<input name="' . esc_attr( $settings['param_name'] ) . '" class="vcex-hidden-input wpb-input wpb_vc_param_value  ' . esc_attr( $settings['param_name'] ) . ' ' . esc_attr( $settings['type'] ) . '_field" type="hidden" value="' . esc_attr( $value ) . '">';
 
 		$output .= '</div>';
 

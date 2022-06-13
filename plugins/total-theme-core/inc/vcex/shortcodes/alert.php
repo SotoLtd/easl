@@ -3,7 +3,7 @@
  * Alert Shortcode.
  *
  * @package TotalThemeCore
- * @version 1.2.8
+ * @version 1.3
  */
 
 defined( 'ABSPATH' ) || exit;
@@ -16,7 +16,8 @@ if ( ! class_exists( 'VCEX_Alert_Shortcode' ) ) {
 		 * Main constructor.
 		 */
 		public function __construct() {
-			add_shortcode( 'vcex_alert', array( $this, 'output' ) );
+
+			add_shortcode( 'vcex_alert', __CLASS__ . '::output' );
 
 			if ( function_exists( 'vc_lean_map' ) ) {
 				TotalThemeCore\WPBakery\Map\Vcex_Alert::instance();
@@ -27,7 +28,7 @@ if ( ! class_exists( 'VCEX_Alert_Shortcode' ) ) {
 		/**
 		 * Shortcode output => Get template file and display shortcode.
 		 */
-		public function output( $atts, $content = null ) {
+		public static function output( $atts, $content = null ) {
 			ob_start();
 			do_action( 'vcex_shortcode_before', 'vcex_alert', $atts );
 			include( vcex_get_shortcode_template( 'vcex_alert' ) );

@@ -50,8 +50,10 @@ if ( ! class_exists( 'VCEX_Form_Shortcode' ) ) {
 			$params = array(
 				array(
 					'type' => 'textfield',
-					'heading' => esc_html__( 'Form Shortcode', 'total' ),
+					'heading' => esc_html__( 'Shortcode', 'total' ),
 					'param_name' => 'content',
+					'admin_label' => true,
+					'dependency' => array( 'element' => 'cf7_id', 'is_empty' => true ),
 				),
 				array(
 					'type' => 'textfield',
@@ -183,6 +185,7 @@ if ( ! class_exists( 'VCEX_Form_Shortcode' ) ) {
 			$cf7 = vcex_select_cf7_form( array(
 				'heading' => esc_html__( 'Contact Form 7 Select', 'total' ),
 				'param_name' => 'cf7_id',
+				'admin_label' => true,
 			) );
 
 			if ( $cf7 ) {

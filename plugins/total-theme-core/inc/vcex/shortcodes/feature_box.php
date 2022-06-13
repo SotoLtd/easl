@@ -3,7 +3,7 @@
  * Feature Box Shortcode.
  *
  * @package TotalThemeCore
- * @version 1.2.8
+ * @version 1.3.2
  */
 
 defined( 'ABSPATH' ) || exit;
@@ -64,6 +64,7 @@ if ( ! class_exists( 'VCEX_Feature_Box_Shortcode' ) ) {
 					'type' => 'textfield',
 					'heading' => esc_html__( 'Element ID', 'total-theme-core' ),
 					'param_name' => 'unique_id',
+					'admin_label' => true,
 					'description' => vcex_shortcode_param_description( 'unique_id' ),
 				),
 				array(
@@ -160,28 +161,24 @@ if ( ! class_exists( 'VCEX_Feature_Box_Shortcode' ) ) {
 					'param_name' => 'content_font_size',
 					'description' => vcex_shortcode_param_description( 'font_size' ),
 					'group' => esc_html__( 'Content', 'total-theme-core' ),
-					'dependency' => array( 'element' => 'content', 'not_empty' => true ),
 				),
 				array(
 					'type' => 'vcex_font_weight',
 					'heading' => esc_html__( 'Font Weight', 'total-theme-core' ),
 					'param_name' => 'content_font_weight',
 					'group' => esc_html__( 'Content', 'total-theme-core' ),
-					'dependency' => array( 'element' => 'content', 'not_empty' => true ),
 				),
 				array(
 					'type' => 'vcex_colorpicker',
 					'heading' => esc_html__( 'Background', 'total-theme-core' ),
 					'param_name' => 'content_background',
 					'group' => esc_html__( 'Content', 'total-theme-core' ),
-					'dependency' => array( 'element' => 'content', 'not_empty' => true ),
 				),
 				array(
 					'type' => 'vcex_colorpicker',
 					'heading' => esc_html__( 'Color', 'total-theme-core' ),
 					'param_name' => 'content_color',
 					'group' => esc_html__( 'Content', 'total-theme-core' ),
-					'dependency' => array( 'element' => 'content', 'not_empty' => true ),
 				),
 				array(
 					'type' => 'vcex_trbl',
@@ -189,7 +186,6 @@ if ( ! class_exists( 'VCEX_Feature_Box_Shortcode' ) ) {
 					'param_name' => 'content_padding',
 					'description' => vcex_shortcode_param_description( 'padding' ),
 					'group' => esc_html__( 'Content', 'total-theme-core' ),
-					'dependency' => array( 'element' => 'content', 'not_empty' => true ),
 				),
 				// Heading
 				array(
@@ -199,14 +195,12 @@ if ( ! class_exists( 'VCEX_Feature_Box_Shortcode' ) ) {
 					'group' => esc_html__( 'Heading', 'total-theme-core' ),
 					'std' => '',
 					'choices' => 'html_tag',
-					'dependency' => array( 'element' => 'heading', 'not_empty' => true ),
 				),
 				array(
 					'type' => 'vc_link',
 					'heading' => esc_html__( 'Link', 'total-theme-core' ),
 					'param_name' => 'heading_url',
 					'group' => esc_html__( 'Heading', 'total-theme-core' ),
-					'dependency' => array( 'element' => 'heading', 'not_empty' => true ),
 				),
 				array(
 					'type'  => 'vcex_font_family_select',
@@ -214,14 +208,12 @@ if ( ! class_exists( 'VCEX_Feature_Box_Shortcode' ) ) {
 					'param_name' => 'heading_font_family',
 					'std' => '',
 					'group' => esc_html__( 'Heading', 'total-theme-core' ),
-					'dependency' => array( 'element' => 'heading', 'not_empty' => true ),
 				),
 				array(
 					'type' => 'vcex_colorpicker',
 					'heading' => esc_html__( 'Color', 'total-theme-core' ),
 					'param_name' => 'heading_color',
 					'group' => esc_html__( 'Heading', 'total-theme-core' ),
-					'dependency' => array( 'element' => 'heading', 'not_empty' => true ),
 				),
 				array(
 					'type' => 'vcex_responsive_sizes',
@@ -230,7 +222,6 @@ if ( ! class_exists( 'VCEX_Feature_Box_Shortcode' ) ) {
 					'param_name' => 'heading_size',
 					'description' => vcex_shortcode_param_description( 'font_size' ),
 					'group' => esc_html__( 'Heading', 'total-theme-core' ),
-					'dependency' => array( 'element' => 'heading', 'not_empty' => true ),
 				),
 				array(
 					'type' => 'vcex_trbl',
@@ -238,21 +229,18 @@ if ( ! class_exists( 'VCEX_Feature_Box_Shortcode' ) ) {
 					'param_name' => 'heading_margin',
 					'description' => vcex_shortcode_param_description( 'margin' ),
 					'group' => esc_html__( 'Heading', 'total-theme-core' ),
-					'dependency' => array( 'element' => 'heading', 'not_empty' => true ),
 				),
 				array(
 					'type' => 'vcex_font_weight',
 					'heading' => esc_html__( 'Font Weight', 'total-theme-core' ),
 					'param_name' => 'heading_weight',
 					'group' => esc_html__( 'Heading', 'total-theme-core' ),
-					'dependency' => array( 'element' => 'heading', 'not_empty' => true ),
 				),
 				array(
 					'type' => 'vcex_text_transforms',
 					'heading' => esc_html__( 'Text Transform', 'total-theme-core' ),
 					'param_name' => 'heading_transform',
 					'group' => esc_html__( 'Heading', 'total-theme-core' ),
-					'dependency' => array( 'element' => 'heading', 'not_empty' => true ),
 				),
 				array(
 					'type' => 'textfield',
@@ -260,7 +248,6 @@ if ( ! class_exists( 'VCEX_Feature_Box_Shortcode' ) ) {
 					'param_name' => 'heading_letter_spacing',
 					'description' => vcex_shortcode_param_description( 'letter_spacing' ),
 					'group' => esc_html__( 'Heading', 'total-theme-core' ),
-					'dependency' => array( 'element' => 'heading', 'not_empty' => true ),
 				),
 				// Image
 				array(
@@ -342,6 +329,7 @@ if ( ! class_exists( 'VCEX_Feature_Box_Shortcode' ) ) {
 					'type' => 'vcex_image_hovers',
 					'heading' => esc_html__( 'CSS3 Image Hover', 'total-theme-core' ),
 					'param_name' => 'img_hover_style',
+					'dependency' => array( 'element' => 'equal_heights', 'value' => 'false' ),
 					'group' => esc_html__( 'Image', 'total-theme-core' ),
 				),
 				array(

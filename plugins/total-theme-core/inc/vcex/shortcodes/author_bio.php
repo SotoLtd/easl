@@ -78,6 +78,7 @@ if ( ! class_exists( 'VCEX_Author_Bio_Shortcode' ) ) {
 					'heading' => esc_html__( 'Style', 'total-theme-core' ),
 					'param_name' => 'style',
 					'std' => 'default',
+					'admin_label' => true,
 					'value' => array(
 						esc_html__( 'Theme Default', 'total-theme-core' ) => 'default',
 						esc_html__( 'Alt 1', 'total-theme-core' )         => 'alt-1',
@@ -93,6 +94,20 @@ if ( ! class_exists( 'VCEX_Author_Bio_Shortcode' ) ) {
 					'param_name' => 'bottom_margin', // can't name it margin_bottom due to WPBakery parsing issue.
 					'value' => vcex_margin_choices(),
 					'admin_label' => true,
+					'group' => esc_html__( 'Style', 'total-theme-core' ),
+				),
+				array(
+					'type' => 'textfield',
+					'heading' => esc_html__( 'Max Width', 'total-theme-core' ),
+					'param_name' => 'max_width',
+					'description' => vcex_shortcode_param_description( 'width' ),
+					'group' => esc_html__( 'Style', 'total-theme-core' ),
+				),
+				array(
+					'type' => 'vcex_text_alignments',
+					'heading' => esc_html__( 'Aligment', 'total-theme-core' ),
+					'param_name' => 'align',
+					'dependency' => array( 'element' => 'max_width', 'not_empty' => true ),
 					'group' => esc_html__( 'Style', 'total-theme-core' ),
 				),
 				array(

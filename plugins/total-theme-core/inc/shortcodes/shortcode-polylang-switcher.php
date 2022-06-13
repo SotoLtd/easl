@@ -8,7 +8,7 @@ final class Shortcode_Polylang_Switcher {
 	public function __construct() {
 
 		if ( ! shortcode_exists( 'polylang_switcher' ) ) {
-			add_shortcode( 'polylang_switcher', array( __CLASS__, 'output' ) );
+			add_shortcode( 'polylang_switcher', __CLASS__ . '::output' );
 		}
 
 	}

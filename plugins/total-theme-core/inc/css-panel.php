@@ -1,57 +1,38 @@
 <?php
-/**
- * Custom CSS Admin Panel.
- *
- * @package TotalThemeCore
- * @version 1.2.8
- */
-
 namespace TotalThemeCore;
 
 defined( 'ABSPATH' ) || exit;
 
+/**
+ * Custom CSS Admin Panel.
+ *
+ * @package TotalThemeCore
+ * @version 1.3.1
+ */
 final class CSS_Panel {
 
 	/**
-	 * Our single CSS_Panel instance.
+	 * Instance.
+	 *
+	 * @access private
+	 * @var object Class object.
 	 */
 	private static $instance;
-
-	/**
-	 * Disable instantiation.
-	 */
-	private function __construct() {
-		// Private to disabled instantiation.
-	}
-
-	/**
-	 * Disable the cloning of this class.
-	 *
-	 * @return void
-	 */
-	final public function __clone() {}
-
-	/**
-	 * Disable the wakeup of this class.
-	 */
-	final public function __wakeup() {}
 
 	/**
 	 * Create or retrieve the instance of CSS_Panel.
 	 */
 	public static function instance() {
 		if ( is_null( static::$instance ) ) {
-			static::$instance = new CSS_Panel;
-			static::$instance->init_hooks();
+			static::$instance = new self();
 		}
-
 		return static::$instance;
 	}
 
 	/**
-	 * Hook into actions and filters.
+	 * Constructor.
 	 */
-	public function init_hooks() {
+	public function __construct() {
 		add_action( 'admin_menu', array( $this, 'add_admin_submenu_page' ), 20 );
 		add_action( 'admin_bar_menu', array( $this, 'adminbar_menu' ), 999 );
 		add_action( 'admin_init', array( $this,'register_settings' ) );
@@ -171,7 +152,7 @@ final class CSS_Panel {
 
 			<p><?php esc_html_e( 'This panel hooks into the native WordPress custom CSS functionality which you can also locate under Appearance > Customize > Additional CSS.', 'total' ); ?></p>
 
-			<hr />
+			<hr>
 
 			<div class="wpex-remember-to-save">
 				<p><?php echo wp_kses_post( __( 'Don\'t forget to <a href="#">save your changes</a>', 'total' ) ); ?></p>

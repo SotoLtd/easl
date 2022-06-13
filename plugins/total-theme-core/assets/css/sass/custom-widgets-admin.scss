@@ -1,16 +1,19 @@
 // Social widgets
 .wpex-social-widget-services-list {
-	padding-top: 5px;
+    margin: 5px 0 0 !important;
+	padding: 0 !important; // note important tags are to fix gutenberg issues.
+    list-style: none;
 
 	li {
 		cursor: move;
 		background: #f8f9f9;
 		padding: 10px;
         border: 1px dashed #a2aab2;
-		margin-bottom: 10px;
+		margin: 0 0 10px !important;
+        list-style: none;
 
 		p {
-			margin: 0;
+			margin: 0 !important;
 		}
 
 		label {
@@ -23,6 +26,10 @@
 			}
 
 		}
+
+        input[type="text"] {
+            background: #fff;
+        }
 
 	}
 

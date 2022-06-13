@@ -1,19 +1,16 @@
 <?php
+namespace TotalThemeCore;
+use \WP_Widget;
+
+defined( 'ABSPATH' ) || exit;
+
 /**
  * Social Profiles Widget
  *
  * @package Total Theme Core
  * @subpackage Widgets
- * @version 1.2.8
+ * @version 1.3.1
  */
-
-namespace TotalThemeCore;
-
-use TotalThemeCore\WidgetBuilder as Widget_Builder;
-use WP_Widget;
-
-defined( 'ABSPATH' ) || exit;
-
 class Widget_Social_Profiles extends WP_Widget {
 
 	/**
@@ -64,12 +61,16 @@ class Widget_Social_Profiles extends WP_Widget {
 				'name' => 'LinkedIn',
 				'url'  => '',
 			),
-			'pinterest' => array(
-				'name' => 'Pinterest',
-				'url'  => '',
-			),
 			'etsy' => array(
 				'name' => 'Etsy',
+				'url'  => '',
+			),
+			'discord' => array(
+				'name' => 'Discord',
+				'url'  => '',
+			),
+			'pinterest' => array(
+				'name' => 'Pinterest',
 				'url'  => '',
 			),
 			'yelp' => array(
@@ -128,12 +129,12 @@ class Widget_Social_Profiles extends WP_Widget {
 				'name' => 'Vimeo',
 				'url'  => '',
 			),
-			'vine' => array(
-				'name' => 'Vine',
-				'url'  => '',
-			),
 			'youtube' => array(
 				'name' => 'Youtube',
+				'url'  => '',
+			),
+			'tiktok' => array(
+				'name' => 'Tiktok',
 				'url'  => '',
 			),
 			'twitch' => array(
@@ -191,7 +192,7 @@ class Widget_Social_Profiles extends WP_Widget {
 		$space_between = ! empty( $instance['space_between'] ) ? absint( $instance['space_between'] ) : '5';
 
 		// Parse style.
-		$style = $this->parse_style( $style, $type ); // Fallback for OLD styles pre-3.0.0
+		$style = $this->parse_style( $style, $type ); // Fallback for OLD styles pre-1.0.0
 
 		// Sanitize vars.
 		$size          = ttc_sanitize_data( $size, 'px' );
@@ -272,7 +273,7 @@ class Widget_Social_Profiles extends WP_Widget {
 
 						$a_attrs = array(
 							'href'   => esc_url( $link ),
-							'title'  => esc_attr( $name ),
+							'title'  => $name,
 							'class'  => 'wpex-' . sanitize_html_class( $key ),
 							'rel'    => $nofollow,
 							'target' => $target,
@@ -283,10 +284,7 @@ class Widget_Social_Profiles extends WP_Widget {
 							$a_attrs['class'] .= ' ' . esc_attr( wpex_get_social_button_class( $style ) );
 						}
 
-						$key  = 'vimeo-square' == $key ? 'vimeo' : $key;
-						$icon = 'youtube'      == $key ? 'youtube-play' : $key;
-						$icon = 'bloglovin'    == $key ? 'heart' : $icon;
-						$icon = 'vimeo-square' == $key ? 'vimeo' : $icon;
+						$key = 'vimeo-square' == $key ? 'vimeo' : $key;
 
 						$li_class = 'wpex-inline-block wpex-mb-' . $space_between . ' wpex-mr-' . $space_between;
 
@@ -302,16 +300,14 @@ class Widget_Social_Profiles extends WP_Widget {
 								if ( function_exists( 'wpex_parse_attrs' ) ) {
 									$output .= ' ' . wpex_parse_attrs( $a_attrs );
 								} else {
-
 									foreach ( $a_attrs as $attr_k => $attr_v ) {
 										$output .= ' ' . $attr_k . '=' . '"' . esc_attr( $attr_v ) . '"';
 									}
-
 								}
 
 							$output .= '>';
 
-								$output .= '<span class="ticon ticon-' . esc_attr( $icon ) . '" aria-hidden="true"></span>';
+								$output .= '<span class="' . esc_attr( $this->get_icon_class( $key ) ) . '" aria-hidden="true"></span>';
 
 								if ( ! defined( 'TOTAL_THEME_ACTIVE' ) ) {
 									$output .= '<span class="ttc-social-widget-label">' . esc_html( $name ) . '</span>';
@@ -340,9 +336,28 @@ class Widget_Social_Profiles extends WP_Widget {
 	}
 
 	/**
+	 * Return icon class based on profile.
+	 *
+	 * @since 1.3
+	 */
+	public function get_icon_class( $profile = '' ) {
+		switch ( $profile ) {
+			case 'youtube':
+				$profile = 'youtube-play';
+				break;
+			case 'bloglovin':
+				$profile = 'heart';
+			case 'vimeo-square':
+				$profile = 'vimeo';
+				break;
+		}
+		return 'ticon ticon-' . sanitize_html_class( $profile );
+	}
+
+	/**
 	 * Parses style attribute for fallback styles.
 	 *
-	 * @since 3.0.0
+	 * @since 1.0.0
 	 */
 	public function parse_style( $style = '', $type = '' ) {
 		if ( 'color' === $style && 'flat' === $type ) {
@@ -357,9 +372,8 @@ class Widget_Social_Profiles extends WP_Widget {
 			return 'black-ch-rounded';
 		} elseif ( 'black-color-hover' === $style && 'graphical' === $type ) {
 			return 'black-ch-rounded';
-		} else {
-			return $style;
 		}
+		return $style;
 	}
 
 	/**
@@ -416,11 +430,13 @@ class Widget_Social_Profiles extends WP_Widget {
 			'nofollow'        => '',
 			'expand'          => '',
 			'space_between'   => '',
-		) ); ?>
+		) );
+
+		?>
 
 		<p>
 			<label for="<?php echo esc_attr( $this->get_field_id( 'title' ) ); ?>"><?php esc_html_e( 'Title', 'total-theme-core' ); ?>:</label>
-			<input class="widefat" id="<?php echo esc_attr( $this->get_field_id( 'title' ) ); ?>" name="<?php echo esc_attr( $this->get_field_name( 'title' ) ); ?>" type="text" value="<?php echo esc_attr( $instance['title'] ); ?>" />
+			<input class="widefat" id="<?php echo esc_attr( $this->get_field_id( 'title' ) ); ?>" name="<?php echo esc_attr( $this->get_field_name( 'title' ) ); ?>" type="text" value="<?php echo esc_attr( $instance['title'] ); ?>">
 		</p>
 
 		<p>
@@ -429,17 +445,17 @@ class Widget_Social_Profiles extends WP_Widget {
 		</p>
 
 		<?php
-		// Styles
+		// Styles.
 		$social_styles = function_exists( 'wpex_social_button_styles' ) ? wpex_social_button_styles() : array();
 
 		if ( $social_styles ) {
 
-			// Parse style
+			// Parse style.
 			$style = $this->parse_style( $instance['style'], $instance['type'] ); ?>
 
 			<p>
 				<label for="<?php echo esc_attr( $this->get_field_id( 'style' ) ); ?>"><?php esc_html_e( 'Style', 'total-theme-core' ); ?>:</label>
-				<br />
+				<br>
 				<select class="wpex-widget-select" name="<?php echo esc_attr( $this->get_field_name( 'style' ) ); ?>" id="<?php echo esc_attr( $this->get_field_id( 'style' ) ); ?>">
 					<?php foreach ( $social_styles as $key => $val ) { ?>
 						<option value="<?php echo esc_attr( $key ); ?>" <?php selected( $style, $key ) ?>><?php echo strip_tags( $val ); ?></option>
@@ -451,7 +467,7 @@ class Widget_Social_Profiles extends WP_Widget {
 
 		<p>
 			<label for="<?php echo esc_attr( $this->get_field_id( 'target' ) ); ?>"><?php esc_html_e( 'Link Target', 'total-theme-core' ); ?>:</label>
-			<br />
+			<br>
 			<select class="wpex-widget-select" name="<?php echo esc_attr( $this->get_field_name( 'target' ) ); ?>" id="<?php echo esc_attr( $this->get_field_id( 'target' ) ); ?>">
 				<option value="blank" <?php selected( $instance['target'], 'blank' ) ?>><?php esc_html_e( 'Blank', 'total-theme-core' ); ?></option>
 				<option value="self" <?php selected( $instance['target'], 'self' ) ?>><?php esc_html_e( 'Self', 'total-theme-core' ); ?></option>
@@ -459,13 +475,13 @@ class Widget_Social_Profiles extends WP_Widget {
 		</p>
 
 		<p>
-			<input class="widefat" id="<?php echo esc_attr( $this->get_field_id( 'nofollow' ) ); ?>" name="<?php echo esc_attr( $this->get_field_name( 'nofollow' ) ); ?>" type="checkbox" <?php checked( 'on', $instance['nofollow'], true ); ?> />
+			<input class="widefat" id="<?php echo esc_attr( $this->get_field_id( 'nofollow' ) ); ?>" name="<?php echo esc_attr( $this->get_field_name( 'nofollow' ) ); ?>" type="checkbox" <?php checked( 'on', $instance['nofollow'], true ); ?>>
 			<label for="<?php echo esc_attr( $this->get_field_id( 'nofollow' ) ); ?>"><?php esc_html_e( 'Add nofollow attribute to links. ','total-theme-core' ); ?></label>
 		</p>
 
 		<p>
 			<label for="<?php echo esc_attr( $this->get_field_id( 'align' ) ); ?>"><?php esc_attr_e( 'Align', 'total-theme-core' ); ?>:</label>
-			<br />
+			<br>
 			<select class='wpex-widget-select' name="<?php echo esc_attr( $this->get_field_name( 'align' ) ); ?>" id="<?php echo esc_attr( $this->get_field_id( 'align' ) ); ?>">
 				<option value="" <?php selected( $instance['align'], '' ); ?>><?php esc_attr_e( 'Default', 'total-theme-core' ); ?></option>
 				<option value="left" <?php selected( $instance['align'], 'left' ); ?>><?php esc_attr_e( 'Left', 'total-theme-core' ); ?></option>
@@ -475,7 +491,7 @@ class Widget_Social_Profiles extends WP_Widget {
 		</p>
 
 		<p>
-			<input class="widefat" id="<?php echo esc_attr( $this->get_field_id( 'expand' ) ); ?>" name="<?php echo esc_attr( $this->get_field_name( 'expand' ) ); ?>" type="checkbox" <?php checked( 'on', $instance['expand'], true ); ?> />
+			<input class="widefat" id="<?php echo esc_attr( $this->get_field_id( 'expand' ) ); ?>" name="<?php echo esc_attr( $this->get_field_name( 'expand' ) ); ?>" type="checkbox" <?php checked( 'on', $instance['expand'], true ); ?>>
 			<label for="<?php echo esc_attr( $this->get_field_id( 'expand' ) ); ?>"><?php esc_html_e( 'Expand items to fit the widget area?','total-theme-core' ); ?></label>
 		</p>
 
@@ -484,7 +500,7 @@ class Widget_Social_Profiles extends WP_Widget {
 			if ( $space_between_choices && is_array( $space_between_choices ) ) { ?>
 				<p>
 					<label for="<?php echo esc_attr( $this->get_field_id( 'space_between' ) ); ?>"><?php esc_html_e( 'Spacing', 'total-theme-core' ); ?>:</label>
-					<br />
+					<br>
 					<select class="wpex-widget-select" name="<?php echo esc_attr( $this->get_field_name( 'space_between' ) ); ?>" id="<?php echo esc_attr( $this->get_field_id( 'space_between' ) ); ?>">
 						<?php foreach( $space_between_choices as $space_between_choice_k => $space_between_choice_v ) { ?>
 							<option value="<?php echo esc_attr( $space_between_choice_k ); ?>" <?php selected( $instance['space_between'], esc_attr( $space_between_choice_k ), true ); ?>><?php echo esc_html( $space_between_choice_v ); ?></option>
@@ -496,37 +512,45 @@ class Widget_Social_Profiles extends WP_Widget {
 
 		<p>
 			<label for="<?php echo esc_attr( $this->get_field_id( 'size' ) ); ?>"><?php esc_html_e( 'Dimensions', 'total-theme-core' ); ?>:</label>
-			<input class="widefat" id="<?php echo esc_attr( $this->get_field_id( 'size' ) ); ?>" name="<?php echo esc_attr( $this->get_field_name( 'size' ) ); ?>" type="text" value="<?php echo esc_attr( $instance['size'] ); ?>" placeholder="40px" />
+			<input class="widefat" id="<?php echo esc_attr( $this->get_field_id( 'size' ) ); ?>" name="<?php echo esc_attr( $this->get_field_name( 'size' ) ); ?>" type="text" value="<?php echo esc_attr( $instance['size'] ); ?>" placeholder="40px">
 		</p>
 
 		<p>
 			<label for="<?php echo esc_attr( $this->get_field_id( 'font_size' ) ); ?>"><?php esc_html_e( 'Size', 'total-theme-core' ); ?>:</label>
-			<input class="widefat" id="<?php echo esc_attr( $this->get_field_id( 'font_size' ) ); ?>" name="<?php echo esc_attr( $this->get_field_name( 'font_size' ) ); ?>" type="text" value="<?php echo esc_attr( $instance['font_size'] ); ?>" placeholder="13px" />
+			<input class="widefat" id="<?php echo esc_attr( $this->get_field_id( 'font_size' ) ); ?>" name="<?php echo esc_attr( $this->get_field_name( 'font_size' ) ); ?>" type="text" value="<?php echo esc_attr( $instance['font_size'] ); ?>" placeholder="13px">
 		</p>
 
 		<p>
 			<label for="<?php echo esc_attr( $this->get_field_id( 'border_radius' ) ); ?>"><?php esc_html_e( 'Border Radius', 'total-theme-core' ); ?></label>
-			<input class="widefat" id="<?php echo esc_attr( $this->get_field_id( 'border_radius' ) ); ?>" name="<?php echo esc_attr( $this->get_field_name( 'border_radius' ) ); ?>" type="text" value="<?php echo esc_attr( $instance['border_radius'] ); ?>" placeholder="4px" />
+			<input class="widefat" id="<?php echo esc_attr( $this->get_field_id( 'border_radius' ) ); ?>" name="<?php echo esc_attr( $this->get_field_name( 'border_radius' ) ); ?>" type="text" value="<?php echo esc_attr( $instance['border_radius'] ); ?>" placeholder="4px">
 		</p>
 
 		<?php
 		$field_id_services   = $this->get_field_id( 'social_services' );
-		$field_name_services = $this->get_field_name( 'social_services' ); ?>
+		$field_name_services = $this->get_field_name( 'social_services' );
+		?>
 
 		<label for="<?php echo esc_attr( $this->get_field_id( 'social_services' ) ); ?>"><?php esc_attr_e( 'Social Links', 'total-theme-core' ); ?>:</label>
 
 		<small style="display:block;padding-top:5px;"><?php esc_html_e( 'You can click and drag & drop your items to re-order them. ', 'total-theme-core' ); ?></small>
 
 		<ul id="<?php echo esc_attr( $field_id_services ); ?>" class="wpex-social-widget-services-list">
-			<input type="hidden" id="<?php echo esc_attr( $field_name_services ); ?>" value="<?php echo esc_attr( $field_name_services ); ?>" class="wpex-social-widget-services-hidden-field" />
+			<input type="hidden" id="<?php echo esc_attr( $field_name_services ); ?>" value="<?php echo esc_attr( $field_name_services ); ?>" class="wpex-social-widget-services-hidden-field">
 			<?php
-			// Social array
+			// Social array.
 			$get_social_options = $this->get_social_options();
 
-			// Get current services display
+			// Get current services display.
 			$display_services = isset ( $instance['social_services'] ) ? $instance['social_services'] : '';
 
-			// Loop through social services to display inputs
+			// Add new items to the end of array.
+			foreach( $get_social_options as $key => $val ) {
+				if ( ! array_key_exists( $key, $display_services ) ) {
+					$display_services[$key] = $val;
+				}
+			}
+
+			// Loop through saved items.
 			foreach( $display_services as $key => $val ) {
 
 				if ( empty( $get_social_options[$key] ) ) {
@@ -536,16 +560,13 @@ class Widget_Social_Profiles extends WP_Widget {
 				$url  = ! empty( $display_services[$key]['url'] ) ? $display_services[$key]['url'] : null;
 				$name = $get_social_options[$key]['name'];
 
-				// Set icon
-				$icon = 'vimeo-square' == $key ? 'vimeo' : $key;
-				$icon = 'youtube'      == $key ? 'youtube-play' : $icon;
-				$icon = 'vimeo-square' == $key ? 'vimeo' : $icon; ?>
+				?>
 
 				<li id="<?php echo esc_attr( $field_id_services ); ?>_0<?php echo esc_attr( $key ); ?>">
 					<p>
-						<label for="<?php echo esc_attr( $field_id_services ); ?>-<?php echo esc_attr( $key ); ?>-name"><span class="ticon ticon-<?php echo esc_attr( $icon ); ?>"></span><?php echo strip_tags( $name ); ?>:</label>
+						<label for="<?php echo esc_attr( $field_id_services ); ?>-<?php echo esc_attr( $key ); ?>-name"><span class="<?php echo esc_attr( $this->get_icon_class( $key ) ); ?>"></span><?php echo strip_tags( $name ); ?>:</label>
 						<input type="hidden" id="<?php echo esc_attr( $field_id_services ); ?>-<?php echo esc_attr( $key ); ?>-name" name="<?php echo esc_attr( $field_name_services . '[' .$key. '][name]' ); ?>" value="<?php echo esc_attr( $name ); ?>">
-						<input type="text" id="<?php echo esc_attr( $field_id_services ); ?>-<?php echo esc_attr( $key ); ?>-url" name="<?php echo esc_attr( $field_name_services . '[' .$key. '][url]' ); ?>" value="<?php echo esc_attr( $url ); ?>" class="widefat" />
+						<input type="text" id="<?php echo esc_attr( $field_id_services ); ?>-<?php echo esc_attr( $key ); ?>-url" name="<?php echo esc_attr( $field_name_services . '[' .$key. '][url]' ); ?>" value="<?php echo esc_attr( $url ); ?>" class="widefat">
 					</p>
 				</li>
 
@@ -557,5 +578,4 @@ class Widget_Social_Profiles extends WP_Widget {
 	}
 
 }
-
 register_widget( 'TotalThemeCore\Widget_Social_Profiles' );

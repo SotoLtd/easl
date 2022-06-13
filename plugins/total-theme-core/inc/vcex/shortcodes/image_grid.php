@@ -3,7 +3,7 @@
  * Image Grid Shortcode.
  *
  * @package TotalThemeCore
- * @version 1.2.8
+ * @version 1.3.2
  */
 
 defined( 'ABSPATH' ) || exit;
@@ -26,7 +26,6 @@ if ( ! class_exists( 'VCEX_Image_Grid' ) ) {
 			if ( function_exists( 'vc_lean_map' ) ) {
 				TotalThemeCore\WPBakery\Map\Vcex_Image_Grid::instance();
 			}
-
 		}
 
 		/**
@@ -44,7 +43,6 @@ if ( ! class_exists( 'VCEX_Image_Grid' ) ) {
 		 * Array of shortcode parameters.
 		 */
 		public static function get_params() {
-
 			$params = array(
 				array(
 					'type' => 'vcex_attach_images',
@@ -144,7 +142,8 @@ if ( ! class_exists( 'VCEX_Image_Grid' ) ) {
 					'type' => 'textfield',
 					'heading' => esc_html__( 'Element ID', 'total-theme-core' ),
 					'param_name' => 'unique_id',
-					'description' => sprintf( esc_html__( 'Enter element ID (Note: make sure it is unique and valid according to %sw3c specification%s).', 'total-theme-core' ), '<a href="https://www.w3schools.com/tags/att_global_id.asp" target="_blank" rel="noopener noreferrer">', '</a>' ),
+					'admin_label' => true,
+					'description' => vcex_shortcode_param_description( 'unique_id' ),
 				),
 				array(
 					'type' => 'textfield',
@@ -288,6 +287,7 @@ if ( ! class_exists( 'VCEX_Image_Grid' ) ) {
 						'lightbox' => esc_html__( 'Lightbox', 'total-theme-core' ),
 						'full_image' => esc_html__( 'Full Image', 'total-theme-core' ),
 						'attachment_page' => esc_html__( 'Attachment Page', 'total-theme-core' ),
+						'parent_page' => esc_html__( 'Uploaded To Page', 'total-theme-core' ),
 						'custom_link' => esc_html__( 'Custom Links', 'total-theme-core' ),
 					),
 					'group' => esc_html__( 'Links', 'total-theme-core' ),
@@ -628,15 +628,20 @@ if ( ! class_exists( 'VCEX_Image_Grid' ) ) {
 				array( 'type' => 'hidden', 'param_name' => 'randomize_images' ), // @since 1.2.8
 			);
 
-			return apply_filters( 'vcex_shortcode_params', $params, 'vcex_image_grid' );
+			/**
+			 * Filters the vcex_image_grid shortcode params.
+			 *
+			 * @param array $params
+			 */
+			$params = (array) apply_filters( 'vcex_shortcode_params', $params, 'vcex_image_grid' );
 
+			return $params;
 		}
 
 		/**
 		 * Parses deprecated params.
 		 */
 		public static function parse_deprecated_attributes( $atts = '' ) {
-
 			if ( empty( $atts ) || ! is_array( $atts ) ) {
 				return $atts;
 			}
@@ -649,7 +654,6 @@ if ( ! class_exists( 'VCEX_Image_Grid' ) ) {
 			}
 
 			return $atts;
-
 		}
 
 	}

@@ -4,14 +4,12 @@
  *
  * @package Total WordPress Theme
  * @subpackage Total Theme Core
- * @version 1.2.8
+ * @version 1.3.2
  */
 
 defined( 'ABSPATH' ) || exit;
 
-$shortcode_tag = 'vcex_post_terms';
-
-if ( ! vcex_maybe_display_shortcode( $shortcode_tag, $atts ) ) {
+if ( ! vcex_maybe_display_shortcode( 'vcex_post_terms', $atts ) ) {
 	return;
 }
 
@@ -21,7 +19,7 @@ if ( empty( $atts['archive_link_target'] ) && ! empty( $atts['target'] ) ) {
 }
 
 // Get shortcode attributes.
-$atts = vcex_shortcode_atts( $shortcode_tag, $atts, $this );
+$atts = vcex_shortcode_atts( 'vcex_post_terms', $atts, $this );
 
 // Extract atts.
 extract( $atts );
@@ -34,11 +32,6 @@ if ( empty( $taxonomy ) && function_exists( 'wpex_get_post_primary_taxonomy' ) )
 // Taxonomy is required.
 if ( empty( $taxonomy ) || ! taxonomy_exists( $taxonomy ) ) {
 	return;
-}
-
-// Load Google Fonts if needed.
-if ( ! empty( $button_font_family ) ) {
-	vcex_enqueue_font( $button_font_family );
 }
 
 // Get module style.
@@ -83,6 +76,9 @@ if ( ! $terms || is_wp_error( $terms ) ) {
 	return;
 }
 
+// Define output var.
+$output = '';
+
 // Wrap classes.
 $shortcode_class = array(
 	'vcex-post-terms',
@@ -98,22 +94,38 @@ if ( $button_color && 'buttons' !== $style ) {
 	$shortcode_class[] = 'wpex-child-inherit-color';
 }
 
-// Define output var.
-$output = '';
+// Alignment
+if ( ! empty( $atts['max_width'] ) ) {
+
+	switch ( $atts['align'] ) {
+		case 'left':
+			$shortcode_class[] = 'wpex-mr-auto';
+			break;
+		case 'right':
+			$shortcode_class[] = 'wpex-ml-auto';
+			break;
+		case 'center':
+		default:
+			$shortcode_class[] = 'wpex-mx-auto';
+			break;
+	}
+
+}
 
 // Add extra classes.
-$extra_classes = vcex_get_shortcode_extra_classes( $atts, $shortcode_tag );
+$extra_classes = vcex_get_shortcode_extra_classes( $atts, 'vcex_post_terms' );
 
 if ( $extra_classes ) {
 	$shortcode_class = array_merge( $shortcode_class, $extra_classes );
 }
 
-$shortcode_class = vcex_parse_shortcode_classes( $shortcode_class, $shortcode_tag, $atts );
+$shortcode_class = vcex_parse_shortcode_classes( $shortcode_class, 'vcex_post_terms', $atts );
 
 // Wrap style.
 $wrap_style_args = array(
-	'animation_delay'    => $animation_delay,
-	'animation_duration' => $animation_duration,
+	'animation_delay'    => $atts['animation_delay'],
+	'animation_duration' => $atts['animation_duration'],
+	'max_width'          => $atts['max_width'],
 );
 
 if ( 'buttons' !== $module_style ) {
@@ -132,7 +144,6 @@ $output .= '<div class="' . esc_attr( $shortcode_class ) . '"' . vcex_get_unique
 	// Define link vars
 	$link_style = '';
 	$link_class = array();
-	$link_hover_data = array();
 
 	// Button Style Classes and inline styles.
 	if ( 'buttons' === $module_style ) {
@@ -146,7 +157,7 @@ $output .= '<div class="' . esc_attr( $shortcode_class ) . '"' . vcex_get_unique
 			$button_align
 		);
 
-		$spacing = $spacing ? $spacing : '5';
+		$spacing = $spacing ?: '5';
 		$spacing_direction = ( 'right' === $button_align ) ? 'l' : 'r';
 
 		$link_class[] = 'wpex-m' . $spacing_direction . '-' . sanitize_html_class( absint( $spacing ) );
@@ -157,10 +168,10 @@ $output .= '<div class="' . esc_attr( $shortcode_class ) . '"' . vcex_get_unique
 		}
 
 		// Button Style.
-		$link_style = vcex_inline_style( array(
+		$link_style_args = array(
 			'margin'         => $button_margin,
-			'color'          => $button_color,
-			'background'     => $button_background,
+			'color'          => ( 'term_color' !== $button_color ) ? $button_color : '',
+			'background'     => ( 'term_color' !== $button_background ) ? $button_background : '',
 			'padding'        => $button_padding,
 			'font_size'      => $button_font_size,
 			'font_weight'    => $button_font_weight,
@@ -168,18 +179,9 @@ $output .= '<div class="' . esc_attr( $shortcode_class ) . '"' . vcex_get_unique
 			'text_transform' => $button_text_transform,
 			'font_family'    => $button_font_family,
 			'letter_spacing' => $button_letter_spacing,
-		) );
+		);
 
-		// Button data.
-		if ( $button_hover_background ) {
-			$link_hover_data['background'] = esc_attr( vcex_parse_color( $button_hover_background ) );
-		}
-
-		if ( $button_hover_color ) {
-			$link_hover_data['color'] = esc_attr( vcex_parse_color( $button_hover_color ) );
-		}
-
-		$link_hover_data = $link_hover_data ? htmlspecialchars( wp_json_encode( $link_hover_data ) ) : '';
+		$link_style = vcex_inline_style( $link_style_args );
 
 	}
 
@@ -190,7 +192,6 @@ $output .= '<div class="' . esc_attr( $shortcode_class ) . '"' . vcex_get_unique
 			$child_of_id = $get_child_of->term_id;
 		}
 	}
-
 
 	// Get excluded terms.
 	if ( ! empty( $exclude_terms ) ) {
@@ -219,6 +220,9 @@ $output .= '<div class="' . esc_attr( $shortcode_class ) . '"' . vcex_get_unique
 	$first_run = true;
 	foreach ( $terms as $term ) :
 
+		// Set link class in loop to prevent issues with added term classes.
+		$item_link_class = $link_class;
+
 		// Skip items that aren't a child of a specific parent..
 		if ( ! empty( $child_of_id ) && $term->parent != $child_of_id ) {
 			continue;
@@ -237,16 +241,43 @@ $output .= '<div class="' . esc_attr( $shortcode_class ) . '"' . vcex_get_unique
 			$output .= '<li>';
 		}
 
+		// Hover styles
+		$link_hover_data = array();
+		if ( ! empty( $atts['button_hover_background'] ) ) {
+			$button_hover_background = $atts['button_hover_background'];
+			if ( 'term_color' === $atts['button_hover_background'] ) {
+				$button_hover_background = vcex_get_term_color( $term );
+			}
+			$link_hover_data['background'] = esc_attr( vcex_parse_color( $button_hover_background ) );
+		}
+
+		if ( ! empty( $atts['button_hover_color'] ) ) {
+			$button_hover_color = $atts['button_hover_color'];
+			if ( 'term_color' === $atts['button_hover_color'] ) {
+				$button_hover_color = vcex_get_term_color( $term );
+			}
+			$link_hover_data['color'] = esc_attr( vcex_parse_color( $button_hover_color ) );
+		}
+
+		$link_hover_data = $link_hover_data ? htmlspecialchars( wp_json_encode( $link_hover_data ) ) : '';
+
+		// Add term colors.
+		if ( 'term_color' === $button_background ) {
+			$item_link_class[] = 'has-term-' . sanitize_html_class( $term->term_id ) . '-background-color';
+		}
+		if ( 'term_color' === $button_color ) {
+			$item_link_class[] = 'has-term-' . sanitize_html_class( $term->term_id ) . '-color';
+		}
+
 		// Add filter to link class and sanitize
-		$link_class = apply_filters( 'vcex_post_terms_link_class', $link_class );
-		$link_class = array_map( 'esc_attr', $link_class );
+		$item_link_class = apply_filters( 'vcex_post_terms_link_class', $item_link_class, $term, $atts );
 
 		// Open term element.
 		if ( 'true' == $atts['archive_link'] ) {
 
 			$output .= '<a' . vcex_parse_html_attributes( array(
 				'href'            => esc_url( get_term_link( $term, $taxonomy ) ),
-				'class'           => $link_class,
+				'class'           => $item_link_class,
 				'style'           => $link_style,
 				'target'          => $archive_link_target,
 				'data-wpex-hover' => $link_hover_data,
@@ -255,7 +286,7 @@ $output .= '<div class="' . esc_attr( $shortcode_class ) . '"' . vcex_get_unique
 		} else {
 
 			$output .= '<span' . vcex_parse_html_attributes( array(
-				'class' => $link_class,
+				'class' => $item_link_class,
 				'style' => $link_style,
 				'data-wpex-hover' => $link_hover_data,
 			) ) . '>';

@@ -4,30 +4,29 @@
  *
  * @package Total WordPress Theme
  * @subpackage Total Theme Core
- * @version 1.2.8
+ * @version 1.3.2
  */
 
 defined( 'ABSPATH' ) || exit;
 
-$shortcode_tag = 'vcex_skillbar';
-
-if ( ! vcex_maybe_display_shortcode( $shortcode_tag, $atts ) ) {
+if ( ! vcex_maybe_display_shortcode( 'vcex_skillbar', $atts ) ) {
 	return;
 }
 
 // Get and extract shortcode attributes.
-$atts = vcex_shortcode_atts( $shortcode_tag, $atts, $this );
+$atts = vcex_shortcode_atts( 'vcex_skillbar', $atts, $this );
 extract( $atts );
 
 // Define & sanitize vars.
-$style = $style ? $style : 'default';
+$style = $style ?: 'default';
 $title_position = ( 'default' == $style ) ? 'inside' : 'outside';
+$border_radius_class = vcex_parse_border_radius_class( $border_radius );
 
 // Define output var.
 $output = '';
 
 // Get percentage based on source.
-$source = $source ? $source : 'custom';
+$source = $source ?: 'custom';
 if ( 'custom' !== $source ) {
 	$percentage = vcex_get_source_value( $source, $atts );
 }
@@ -49,7 +48,7 @@ $shortcode_class = array(
 $shortcode_class[] = 'vcex-skillbar-style-' . sanitize_html_class( $style );
 
 if ( $visibility ) {
-    $shortcode_class[] = sanitize_html_class( $visibility );
+    $shortcode_class[] = vcex_parse_visibility_class( $visibility );
 }
 
 if ( $css_animation_class = vcex_get_css_animation( $css_animation ) ) {
@@ -64,7 +63,7 @@ if ( $el_class = vcex_get_extra_class( $classes ) ) {
 	$shortcode_class[] = $el_class;
 }
 
-$shortcode_class = vcex_parse_shortcode_classes( $shortcode_class, $shortcode_tag, $atts );
+$shortcode_class = vcex_parse_shortcode_classes( $shortcode_class, 'vcex_skillbar', $atts );
 
 $shortcode_style = vcex_inline_style( array(
 	'animation_delay' => $atts['animation_delay'],
@@ -84,7 +83,7 @@ $output .= '<div class="' . esc_attr( $shortcode_class ) . '"' . vcex_get_unique
 			vcex_enqueue_icon_font( $icon_type, $icon );
 
 			$icon_class = 'vcex-icon-wrap';
-			$icon_margin = $icon_margin ? $icon_margin : 10;
+			$icon_margin = $icon_margin ?: 10;
 
 			if ( $icon_margin ) {
 				$icon_class .= ' wpex-mr-' . sanitize_html_class( absint( $icon_margin ) );
@@ -165,9 +164,14 @@ $output .= '<div class="' . esc_attr( $shortcode_class ) . '"' . vcex_get_unique
 	 */
 	$inner_class = array(
 		'vcex-skillbar',
-		'wpex-block',
-		'wpex-relative',
 	);
+
+	if ( 'true' == $animate_percent ) {
+		$inner_class[] = 'vcex-skillbar--animated';
+	}
+
+	$inner_class[] = 'wpex-block';
+	$inner_class[] = 'wpex-relative';
 
 	switch ( $title_position ) {
 		case 'inside':
@@ -182,6 +186,11 @@ $output .= '<div class="' . esc_attr( $shortcode_class ) . '"' . vcex_get_unique
 			$inner_class[] = 'wpex-text-gray-600';
 			$inner_class[] = 'wpex-font-semibold';
 			break;
+	}
+
+	if ( $border_radius_class ) {
+		$inner_class[] = $border_radius_class;
+		$inner_class[] = 'wpex-overflow-hidden';
 	}
 
 	$inner_style = array(
@@ -216,12 +225,22 @@ $output .= '<div class="' . esc_attr( $shortcode_class ) . '"' . vcex_get_unique
 		 */
 		if ( $percentage ) {
 
+			$bar_class = 'vcex-skillbar-bar wpex-relative wpex-w-0 wpex-h-100 wpex-bg-accent';
+
+			if ( 'true' == $animate_percent ) {
+				$bar_class .= ' wpex-transition-width wpex-duration-700';
+			}
+
+			if ( $border_radius_class ) {
+				$bar_class .= ' ' . sanitize_html_class( $border_radius_class );
+			}
+
 			$bar_style = vcex_inline_style( array(
 				'background' => $color,
 				'width'      => ( 'true' !== $animate_percent ) ? intval( $percentage ) . '%' : '',
 			) );
 
-			$output .= '<div class="vcex-skillbar-bar wpex-relative wpex-w-0 wpex-h-100 wpex-bg-accent"' . $bar_style . '>';
+			$output .= '<div class="' . esc_attr( $bar_class ) . '"' . $bar_style . '>';
 
 				if ( 'inside' === $title_position && ! empty( $percent_output ) ) {
 					$output .= $percent_output;

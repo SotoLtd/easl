@@ -8,16 +8,12 @@ final class Shortcode_Highlight {
 	public function __construct() {
 
 		if ( ! shortcode_exists( 'highlight' ) ) {
-			add_shortcode( 'highlight', array( __CLASS__, 'output' ) );
+			add_shortcode( 'highlight', __CLASS__ . '::output' );
 		}
 
 	}
 
 	public static function output( $atts, $content = '' ) {
-
-		if ( is_admin() && ! wp_doing_ajax() ) {
-			return;
-		}
 
 		$atts = shortcode_atts( array(
 			'color'  => '',

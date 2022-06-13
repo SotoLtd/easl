@@ -602,8 +602,8 @@ final class Ticons {
 			array( 'ticon ticon-github' => 'GitHub(octocat)' ),
 			array( 'ticon ticon-pinterest' => 'Pinterest' ),
 			array( 'ticon ticon-pinterest-square' => 'Pinterest Square' ),
-			array( 'ticon ticon-google-plus-square' => 'Google Plus Square(social network)' ),
-			array( 'ticon ticon-google-plus' => 'Google Plus(social network)' ),
+			//array( 'ticon ticon-google-plus-square' => 'Google Plus Square(social network)' ),
+			//array( 'ticon ticon-google-plus' => 'Google Plus(social network)' ),
 			array( 'ticon ticon-linkedin' => 'LinkedIn' ),
 			array( 'ticon ticon-github-alt' => 'GitHub Alt(octocat)' ),
 			array( 'ticon ticon-maxcdn' => 'MaxCDN' ),
@@ -755,7 +755,7 @@ final class Ticons {
 			array( 'ticon ticon-first-order' => 'First Order' ),
 			array( 'ticon ticon-yoast' => 'Yoast' ),
 			array( 'ticon ticon-themeisle' => 'ThemeIsle' ),
-			array( 'ticon ticon-google-plus-official' => 'Google Plus Official(google-plus-circle)' ),
+			//array( 'ticon ticon-google-plus-official' => 'Google Plus Official(google-plus-circle)' ),
 			array( 'ticon ticon-font-awesome' => 'Font Awesome(fa)' ),
 			array( 'ticon ticon-linode' => 'Linode' ),
 			array( 'ticon ticon-quora' => 'Quora' ),
@@ -838,6 +838,12 @@ final class Ticons {
 			array( 'ticon ticon-mars-stroke-h' => 'Mars Stroke Horizontal' ),
 			array( 'ticon ticon-neuter' => 'Neuter' ),
 			array( 'ticon ticon-genderless' => 'Genderless' ),
+
+			// Added in 5.2
+			array( 'ticon ticon-tiktok' => 'TikTok' ),
+
+			// Added in 5.3.1
+			array( 'ticon ticon-discord' => 'Discord' ),
 		);
 
 		return array_merge( $icons, $ticons );

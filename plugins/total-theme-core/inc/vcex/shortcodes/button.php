@@ -3,7 +3,7 @@
  * Button Shortcodes.
  *
  * @package TotalThemeCore
- * @version 1.2.8
+ * @version 1.3.2
  */
 
 defined( 'ABSPATH' ) || exit;
@@ -88,6 +88,7 @@ if ( ! class_exists( 'VCEX_Button_Shortcode' ) ) {
 					'type' => 'textfield',
 					'heading' => esc_html__( 'Element ID', 'total-theme-core' ),
 					'param_name' => 'unique_id',
+					'admin_label' => true,
 					'description' => vcex_shortcode_param_description( 'unique_id' ),
 				),
 				array(
@@ -118,24 +119,27 @@ if ( ! class_exists( 'VCEX_Button_Shortcode' ) ) {
 						esc_html__( 'Open custom link', 'total-theme-core' ) => 'custom_link',
 						esc_html__( 'Open internal page', 'total-theme-core' ) => 'internal_link',
 						esc_html__( 'Scroll to section', 'total-theme-core' ) => 'local_scroll',
+						esc_html__( 'Toggle Element', 'total-theme-core' ) => 'toggle_element',
 						esc_html__( 'Open custom field link', 'total-theme-core' ) => 'custom_field',
 						esc_html__( 'Open callback function link', 'total-theme-core' ) => 'callback_function',
 						esc_html__( 'Open image or image gallery lightbox', 'total-theme-core' ) => 'image',
 						esc_html__( 'Open custom lightbox', 'total-theme-core' ) => 'lightbox',
+						esc_html__( 'Go back', 'total-theme-core' ) => 'go_back',
 					),
 					'default' => 'custom_link',
 					'group' => esc_html__( 'Link', 'total-theme-core' ),
 				),
 				array(
 					'type' => 'textfield',
-					'heading' => esc_html__( 'URL', 'total-theme-core' ),
+					'heading' => esc_html__( 'Link', 'total-theme-core' ),
 					'param_name' => 'url',
 					'value' => '#',
 					'dependency' => array(
 						'element' => 'onclick',
-						'value' => array( 'custom_link', 'local_scroll', 'lightbox' )
+						'value' => array( 'custom_link', 'local_scroll', 'lightbox', 'toggle_element' )
 					),
 					'group' => esc_html__( 'Link', 'total-theme-core' ),
+					'description' => esc_html__( 'Enter your custom link url, lightbox url or local/toggle element ID (including a # at the front).', 'total-theme-core' ),
 				),
 				array(
 					'type' => 'vc_link',
@@ -143,20 +147,20 @@ if ( ! class_exists( 'VCEX_Button_Shortcode' ) ) {
 					'param_name' => 'internal_link',
 					'group' => esc_html__( 'Link', 'total-theme-core' ),
 					'description' => esc_html__( 'This setting is used only if you want to link to an internal page to make it easier to find and select it. Any extra settings in the popup (title, target, nofollow) are ignored.', 'total-theme-core' ),
-					'dependency' => array( 'element' => 'onclick', 'value' => array( 'internal_link' ) ),
+					'dependency' => array( 'element' => 'onclick', 'value' => 'internal_link' ),
 				),
 				array(
 					'type' => 'textfield',
 					'heading' => esc_html__( 'Custom Field ID', 'total-theme-core' ),
 					'param_name' => 'url_custom_field',
-					'dependency' => array( 'element' => 'onclick', 'value' => array( 'custom_field' ) ),
+					'dependency' => array( 'element' => 'onclick', 'value' => 'custom_field' ),
 					'group' => esc_html__( 'Link', 'total-theme-core' ),
 				),
 				array(
 					'type' => 'textfield',
 					'heading' => esc_html__( 'Callback Function', 'total-theme-core' ),
 					'param_name' => 'url_callback_function',
-					'dependency' => array( 'element' => 'onclick', 'value' => array( 'callback_function' ) ),
+					'dependency' => array( 'element' => 'onclick', 'value' => 'callback_function' ),
 					'group' => esc_html__( 'Link', 'total-theme-core' ),
 				),
 				array(
@@ -164,6 +168,7 @@ if ( ! class_exists( 'VCEX_Button_Shortcode' ) ) {
 					'heading' => esc_html__( 'Title Attribute', 'total-theme-core' ),
 					'param_name' => 'title',
 					'group' => esc_html__( 'Link', 'total-theme-core' ),
+					'dependency' => array( 'element' => 'onclick', 'value_not_equal_to' => 'toggle_element' ),
 				),
 				array(
 					'type' => 'vcex_select_buttons',
@@ -174,6 +179,7 @@ if ( ! class_exists( 'VCEX_Button_Shortcode' ) ) {
 						'blank' => esc_html__( 'Blank', 'total-theme-core' ),
 					),
 					'group' => esc_html__( 'Link', 'total-theme-core' ),
+					'dependency' => array( 'element' => 'onclick', 'value_not_equal_to' => 'toggle_element' ),
 				),
 				array(
 					'type' => 'vcex_select_buttons',
@@ -186,6 +192,7 @@ if ( ! class_exists( 'VCEX_Button_Shortcode' ) ) {
 						'sponsored' => esc_html__( 'Sponsored', 'total-theme-core' ),
 					),
 					'group' => esc_html__( 'Link', 'total-theme-core' ),
+					'dependency' => array( 'element' => 'onclick', 'value_not_equal_to' => 'toggle_element' ),
 				),
 				array(
 					'type' => 'vcex_ofswitch',
@@ -279,6 +286,16 @@ if ( ! class_exists( 'VCEX_Button_Shortcode' ) ) {
 				),
 				array(
 					'type' => 'dropdown',
+					'heading' => esc_html__( 'State', 'total-theme-core' ),
+					'param_name' => 'state',
+					'value' => array(
+						esc_html__( 'Default', 'total-theme-core' ) => '',
+						esc_html__( 'Active', 'total-theme-core' ) => 'active',
+					),
+					'group' => esc_html__( 'Style', 'total-theme-core' ),
+				),
+				array(
+					'type' => 'dropdown',
 					'heading' => esc_html__( 'Bottom Margin', 'total-theme-core' ),
 					'param_name' => 'bottom_margin', // can't name it margin_bottom due to WPBakery parsing issue
 					'value' => vcex_margin_choices(),
@@ -290,6 +307,14 @@ if ( ! class_exists( 'VCEX_Button_Shortcode' ) ) {
 					'heading' => esc_html__( 'Preset Color', 'total-theme-core' ),
 					'param_name' => 'color',
 					'group' => esc_html__( 'Style', 'total-theme-core' ),
+				),
+				array(
+					'type' => 'dropdown',
+					'heading' => esc_html__( 'Shadow', 'total' ),
+					'param_name' => 'shadow',
+					'value' => vcex_shadow_choices(),
+					'group' => esc_html__( 'Style', 'total-theme-core' ),
+					'dependency' => array( 'element' => 'hover_animation', 'is_empty' => true ),
 				),
 				array(
 					'type' => 'vcex_select_buttons',

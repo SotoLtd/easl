@@ -1,98 +1,63 @@
-( function( $ ) {
+( function() {
 
 	'use strict';
 
-	$( document ).ready( function() {
+	var runVcexFunctions = function() {
 
-		var $modelId, $context = '';
+		if ( 'function' === typeof window.vcexCarousels ) {
+			vcexCarousels();
+		}
 
-		parent.vc.events.on( 'shortcodes:add shortcodes:update shortcodes:clone', function( model ) {
-			$modelId = model.id;
-		} );
+		if ( 'function' === typeof window.vcexResponsiveCSS ) {
+			vcexResponsiveCSS();
+		}
 
-		$( window ).on( 'vc_reload', function() {
+		if ( 'function' === typeof window.vcexResponsiveText ) {
+			vcexResponsiveText();
+		}
 
-			if ( 'undefined' !== typeof window.vcexCarousels ) {
-				window.vcexCarousels();
-			}
+		if ( 'function' === typeof window.vcexStickyNavbar ) {
+			vcexStickyNavbar();
+		}
 
-			if ( 'undefined' !== typeof window.vcexHovers ) {
-				window.vcexHovers();
-			}
+		if ( 'function' === typeof window.vcexNavbarMobileSelect ) {
+			vcexNavbarMobileSelect();
+		}
 
-			if ( 'undefined' !== typeof window.vcexHovers ) {
-				window.vcexHovers();
-			}
+		if ( 'function' === typeof window.vcexIsotopeGrids ) {
+			vcexIsotopeGrids();
+		}
 
-			if ( 'undefined' !== typeof window.vcexResponsiveCSS ) {
-				window.vcexResponsiveCSS();
-			}
+		if ( 'function' === typeof window.vcexNavbarFilterLinks ) {
+			vcexNavbarFilterLinks();
+		}
 
-			if ( 'undefined' !== typeof window.vcexResponsiveText ) {
-				window.vcexResponsiveText();
-			}
+		if ( 'function' === typeof window.vcexBeforeAfter ) {
+			vcexBeforeAfter();
+		}
 
-			if ( 'undefined' !== typeof window.vcexStickyNavbar ) {
-				window.vcexStickyNavbar();
-			}
+		if ( 'function' === typeof window.vcexJustifiedGallery ) {
+			vcexJustifiedGallery();
+		}
 
-			if ( 'undefined' !== typeof window.vcexNavbarMobileSelect ) {
-				window.vcexNavbarMobileSelect();
-			}
+		if ( 'function' === typeof window.vcexAnimatedText ) {
+			vcexAnimatedText();
+		}
 
-			if ( 'undefined' !== typeof window.vcexIsotopeGrids ) {
-				window.vcexIsotopeGrids();
-			}
+		if ( 'function' === typeof window.vcexMilestone ) {
+			vcexMilestone();
+		}
 
-			if ( 'undefined' !== typeof window.vcexNavbarFilterLinks ) {
-				window.vcexNavbarFilterLinks();
-			}
+		if ( 'function' === typeof window.vcexSkillbar ) {
+			vcexSkillbar();
+		}
 
-			if ( 'undefined' !== typeof window.vcexBeforeAfter ) {
-				window.vcexBeforeAfter( $context );
-			}
+		if ( 'function' === typeof window.vcexCountDown ) {
+			vcexCountDown();
+		}
 
-			// Re-run scripts when specific shortcodes are modified.
-			if ( $modelId ) {
+	};
 
-				$context = $( '[data-model-id=' + $modelId + ']' ); // @todo is this secure?
+	jQuery( window ).on( 'vc_reload', runVcexFunctions );
 
-				// Animated Text.
-				if ( $context.hasClass( 'vc_vcex_animated_text' ) ) {
-					if ( 'undefined' !== typeof window.vcexAnimatedText ) {
-						window.vcexAnimatedText( $context );
-					}
-					return;
-				}
-
-				// Countdown.
-				if ( $context.hasClass( 'vc_vcex_countdown' ) ) {
-					if ( 'undefined' !== typeof window.vcexCountDown ) {
-						window.vcexCountDown( $context );
-					}
-					return;
-				}
-
-				// Milestones.
-				if ( $context.hasClass( 'vc_vcex_milestone' ) ) {
-					if ( 'undefined' !== typeof window.vcexMilestone ) {
-						window.vcexMilestone( $context );
-					}
-					return;
-				}
-
-				// Skillbars.
-				if ( $context.hasClass( 'vc_vcex_skillbar' ) ) {
-					if ( 'undefined' !== typeof window.vcexSkillbar ) {
-						window.vcexSkillbar( $context );
-					}
-					return;
-				}
-
-			}
-
-		} );
-
-	} );
-
-} ) ( jQuery );
+})();

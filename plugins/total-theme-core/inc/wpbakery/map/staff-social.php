@@ -8,38 +8,24 @@ defined( 'ABSPATH' ) || exit;
  * Class registers the staff_social shortcode with the WPBakery page builder.
  *
  * @package TotalThemeCore
- * @version 1.2.8
+ * @version 1.3
  */
 final class Staff_Social {
 
 	/**
-	 * Our single instance.
+	 * Instance.
+	 *
+	 * @access private
+	 * @var object Class object.
 	 */
 	private static $instance;
-
-	/**
-	 * Disable instantiation.
-	 */
-	private function __construct() {}
-
-	/**
-	 * Disable the cloning of this class.
-	 *
-	 * @return void
-	 */
-	final public function __clone() {}
-
-	/**
-	 * Disable the wakeup of this class.
-	 */
-	final public function __wakeup() {}
 
 	/**
 	 * Create or retrieve the class instance.
 	 */
 	public static function instance() {
 		if ( is_null( static::$instance ) ) {
-			static::$instance = new Staff_Social;
+			static::$instance = new self();
 			static::$instance->init_hooks();
 		}
 
@@ -76,7 +62,7 @@ final class Staff_Social {
 			'description' => esc_html__( 'Single staff social links', 'total-theme-core' ),
 			'base'        => 'staff_social',
 			'category'    => vcex_shortcodes_branding(),
-			'icon'        => 'vcex-staff-social vcex-icon ticon ticon-share-alt',
+			'icon'        => 'vcex_element-icon vcex_element-icon--staff-social',
 			'params'      => array(
 				array(
 					'type' => 'autocomplete',

@@ -1,4 +1,9 @@
 <?php
+namespace TotalThemeCore\Widgets;
+use TotalThemeCore\WidgetBuilder as Widget_Builder;
+
+defined( 'ABSPATH' ) || exit;
+
 /**
  * Modern Menu widget.
  *
@@ -6,13 +11,6 @@
  * @subpackage Widgets
  * @version 1.2.8
  */
-
-namespace TotalThemeCore\Widgets;
-
-use TotalThemeCore\WidgetBuilder as Widget_Builder;
-
-defined( 'ABSPATH' ) || exit;
-
 class Widget_Modern_Menu extends Widget_Builder {
 	private $args;
 

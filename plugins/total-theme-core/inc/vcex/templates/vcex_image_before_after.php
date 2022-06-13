@@ -4,19 +4,17 @@
  *
  * @package Total WordPress Theme
  * @subpackage Total Theme Core
- * @version 1.2.8
+ * @version 1.3.2
  */
 
 defined( 'ABSPATH' ) || exit;
 
-$shortcode_tag = 'vcex_image_ba';
-
-if ( ! vcex_maybe_display_shortcode( $shortcode_tag, $atts ) ) {
+if ( ! vcex_maybe_display_shortcode( 'vcex_image_ba', $atts ) ) {
 	return;
 }
 
 // Get and extract shortcode attributes.
-$atts = vcex_shortcode_atts( $shortcode_tag, $atts, $this );
+$atts = vcex_shortcode_atts( 'vcex_image_ba', $atts, $this );
 
 // Define output.
 $output = '';
@@ -86,7 +84,11 @@ if ( $atts['align'] ) {
 $output .= '<div' . vcex_parse_html_attributes( $wrap_attrs ) . '>';
 
 	// Figure classes.
-	$figure_classes = array( 'vcex-module', 'vcex-image-ba', 'twentytwenty-container' );
+	$figure_classes = array(
+		'vcex-module',
+		'vcex-image-ba',
+		'twentytwenty-container' // add before JS to prevent potential rendering issues.
+	);
 
 	if ( $atts['el_class'] ) {
 		$figure_classes[] = vcex_get_extra_class( $atts['el_class'] );

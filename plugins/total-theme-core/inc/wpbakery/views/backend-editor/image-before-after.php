@@ -7,56 +7,46 @@ defined( 'ABSPATH' ) || exit;
  * Custom view for displaying images in the WPBakery backend editor.
  *
  * @package TotalThemeCore
- * @version 1.2.8
+ * @version 1.3.2
  */
 final class Image_Before_After {
 
 	/**
-	 * Our single Image_Before_After instance.
+	 * Instance.
+	 *
+	 * @access private
+	 * @var object Class object.
 	 */
 	private static $instance;
-
-	/**
-	 * Disable instantiation.
-	 */
-	private function __construct() {}
-
-	/**
-	 * Disable the cloning of this class.
-	 *
-	 * @return void
-	 */
-	final public function __clone() {}
-
-	/**
-	 * Disable the wakeup of this class.
-	 */
-	final public function __wakeup() {}
 
 	/**
 	 * Create or retrieve the instance of Image_Before_After.
 	 */
 	public static function instance() {
 		if ( is_null( static::$instance ) ) {
-			static::$instance = new Image_Before_After;
-			static::$instance->init_hooks();
+			static::$instance = new self();
 		}
-
 		return static::$instance;
 	}
 
-	public function init_hooks() {
+	/**
+	 * Constructor.
+	 */
+	public function __construct() {
 		add_action( 'wp_ajax_vcex_wpbakery_backend_view_image_before_after', array( $this, 'generate' ) );
 	}
 
+	/**
+	 * AJAX request.
+	 */
 	public function generate() {
 		if ( ! function_exists( 'vc_user_access' ) ) {
-			return;
+			die();
 		}
 
 		vc_user_access()->checkAdminNonce()->validateDie()->wpAny( 'edit_posts', 'edit_pages' )->validateDie();
 
-		$html    = '';
+		$return  = array();
 		$post_id = (int) vc_post_param( 'post_id' );
 		$source  = vc_post_param( 'source' );
 
@@ -76,23 +66,21 @@ final class Image_Before_After {
 				break;
 		}
 
-		if ( $before_image || $after_image ) {
-
-			$html .= '<div class="vcex-backend-view-ba">';
-
-				if ( $before_image ) {
-					$html .= '<div>' . wp_get_attachment_image( $before_image, 'thumbnail', false, array() ) . '</div>';
-				}
-
-				if ( $after_image ) {
-					$html .= '<div>' . wp_get_attachment_image( $after_image, 'thumbnail', false, array() ) . '</div>';
-				}
-
-			$html .= '</div>';
-
+		if ( $before_image ) {
+			$before_image = esc_url( wp_get_attachment_image_url( $before_image, 'thumbnail' ) );
+			if ( $before_image ) {
+				$return['beforeImage'] = $before_image;
+			}
 		}
 
-		echo $html;
+		if ( $after_image ) {
+			$after_image = esc_url( wp_get_attachment_image_url( $after_image, 'thumbnail' ) );
+			if ( $after_image ) {
+				$return['afterImage'] = $after_image;
+			}
+		}
+
+		echo json_encode( $return );
 
 		die();
 

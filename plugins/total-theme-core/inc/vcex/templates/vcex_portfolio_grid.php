@@ -4,7 +4,7 @@
  *
  * @package Total WordPress Theme
  * @subpackage Total Theme Core
- * @version 1.2.8
+ * @version 1.3.2
  */
 
 defined( 'ABSPATH' ) || exit;
@@ -61,7 +61,7 @@ if ( $vcex_query->have_posts() ) :
 	$wrap_classes               = array( 'vcex-module', 'vcex-portfolio-grid-wrap', 'wpex-clr' );
 	$grid_classes               = array( 'wpex-row', 'vcex-portfolio-grid', 'wpex-clr', 'entries' );
 	$is_isotope                 = false;
-	$atts['excerpt_length']     = $atts['excerpt_length'] ? $atts['excerpt_length'] : '30';
+	$atts['excerpt_length']     = $atts['excerpt_length'] ?: 30;
 	$atts['css_animation']      = vcex_get_css_animation( $atts['css_animation'] );
 	$atts['css_animation']      = ( 'true' == $atts['filter'] ) ? false : $atts['css_animation'];
 	$atts['equal_heights_grid'] = ( 'true' == $atts['equal_heights_grid'] && $atts['columns'] > '1' ) ? 'true' : 'false';
@@ -244,7 +244,7 @@ if ( $vcex_query->have_posts() ) :
 	if ( 'true' == $atts['read_more'] ) {
 
 		// Read more text.
-		$read_more_text = $atts['read_more_text'] ? $atts['read_more_text'] : esc_html__( 'read more', 'total' );
+		$read_more_text = $atts['read_more_text'] ?: esc_html__( 'Read more', 'total' );
 
 		// Readmore classes.
 		$readmore_classes = vcex_get_button_classes( $atts['readmore_style'], $atts['readmore_style_color'] );
@@ -297,7 +297,7 @@ if ( $vcex_query->have_posts() ) :
 		if ( ! empty( $atts['header'] ) ) {
 
 			$output .= vcex_get_module_header( array(
-				'style'   => ! empty( $atts['header_style'] ) ? $atts['header_style'] : '',
+				'style'   => $atts['header_style'] ?: '',
 				'content' => $atts['header'],
 				'classes' => array( 'vcex-module-heading vcex_portfolio_grid-heading' ),
 			) );
@@ -310,7 +310,7 @@ if ( $vcex_query->have_posts() ) :
 		if ( 'true' == $atts['filter'] && ! empty( $filter_terms ) ) :
 
 			// Sanitize all text.
-			$all_text = $atts['all_text'] ? $atts['all_text'] : esc_html__( 'All', 'total' );
+			$all_text = $atts['all_text'] ?: esc_html__( 'All', 'total' );
 
 			// Filter button classes.
 			$filter_button_classes = vcex_get_button_classes( $atts['filter_button_style'], $atts['filter_button_color'] );

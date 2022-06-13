@@ -4,19 +4,17 @@
  *
  * @package Total WordPress Theme
  * @subpackage Total Theme Core
- * @version 1.2
+ * @version 1.3.2
  */
 
 defined( 'ABSPATH' ) || exit;
 
-$shortcode_tag = 'vcex_divider_multicolor';
-
-if ( ! vcex_maybe_display_shortcode( $shortcode_tag, $atts ) ) {
+if ( ! vcex_maybe_display_shortcode( 'vcex_divider_multicolor', $atts ) ) {
 	return;
 }
 
 // Get and extract shortcode attributes
-$atts = vcex_shortcode_atts( $shortcode_tag, $atts, $this );
+$atts = vcex_shortcode_atts( 'vcex_divider_multicolor', $atts, $this );
 
 $colors = (array) vcex_vc_param_group_parse_atts( $atts['colors'] );
 
@@ -45,14 +43,14 @@ if ( ! empty( $atts['el_class'] ) ) {
 }
 
 if ( ! empty( $atts['visibility'] ) ) {
-	$wrap_classes[] = sanitize_html_class( $atts['visibility'] );
+	$wrap_classes[] = vcex_parse_visibility_class( $atts['visibility'] );
 }
 
 if ( ! empty( $atts['align'] ) && 'center' != $atts['align'] ) {
 	$wrap_classes[] = 'float-' . sanitize_html_class( $atts['align'] );
 }
 
-$wrap_classes = vcex_parse_shortcode_classes( implode( ' ', $wrap_classes ), $shortcode_tag, $atts );
+$wrap_classes = vcex_parse_shortcode_classes( implode( ' ', $wrap_classes ), 'vcex_divider_multicolor', $atts );
 
 // Get inline wrap style
 $wrap_style = vcex_inline_style( array(

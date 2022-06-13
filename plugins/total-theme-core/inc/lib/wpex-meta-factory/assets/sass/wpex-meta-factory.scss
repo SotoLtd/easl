@@ -58,13 +58,17 @@
 	// Upload preview
 	.wpex-mf-upload-preview {
 		margin-top: 10px;
+		font-size: 0.9em;
 		img {
 			height: 50px;
 			width: auto;
 			max-width: 100%;
 			vertical-align: middle;
 		}
-
+		&__loader {
+			height: 15px;
+			width: 15px;
+		}
 	}
 
 	// Group

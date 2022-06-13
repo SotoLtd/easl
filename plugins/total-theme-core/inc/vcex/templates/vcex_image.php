@@ -4,19 +4,17 @@
  *
  * @package Total WordPress Theme
  * @subpackage Total Theme Core
- * @version 1.3
+ * @version 1.3.2
  */
 
 defined( 'ABSPATH' ) || exit;
 
-$shortcode_tag = 'vcex_image';
-
-if ( ! vcex_maybe_display_shortcode( $shortcode_tag, $atts ) ) {
+if ( ! vcex_maybe_display_shortcode( 'vcex_image', $atts ) ) {
 	return;
 }
 
 // Get shortcode attributes.
-$atts = vcex_shortcode_atts( $shortcode_tag, $atts, $this );
+$atts = vcex_shortcode_atts( 'vcex_image', $atts, $this );
 
 // Extract attributes for easier usage.
 extract( $atts );
@@ -26,7 +24,7 @@ $output = $image = $attachment = $image_style = '';
 $has_overlay = ( $overlay_style && 'none' !== $overlay_style );
 
 // Get link attributes (get early incase we need to modify them for this specific shortcode).
-$onclick_attrs = vcex_get_shortcode_onclick_attributes( $atts, $shortcode_tag );
+$onclick_attrs = vcex_get_shortcode_onclick_attributes( $atts, 'vcex_image' );
 
 // Get image attachment ID.
 switch ( $source ) {
@@ -64,16 +62,20 @@ switch ( $source ) {
 }
 
 // Define image classes.
-$image_classes = 'wpex-align-middle';
+$image_classes = array( 'wpex-align-middle' );
 
-if ( $atts['shadow'] ) {
-	$image_classes .= ' wpex-' . sanitize_html_class( $atts['shadow'] );
+if ( '100%' === $atts['width'] ) {
+	$image_classes[] = 'wpex-w-100';
 }
 
-// Inline image style
+if ( $atts['shadow'] ) {
+	$image_classes[] = 'wpex-' . sanitize_html_class( $atts['shadow'] );
+}
+
+// Inline image style.
 $image_style = vcex_inline_style( array(
 	'border_radius' => $atts['border_radius'],
-), true );
+), false ); // don't include style tag.
 
 // Set image title for overlays.
 if ( ! empty( $atts['img_title'] ) ) {
@@ -86,7 +88,7 @@ if ( ! empty( $atts['img_caption'] ) ) {
 	$atts['overlay_excerpt'] = $atts['img_caption'];
 }
 
-// Generate image html
+// Generate image html.
 if ( $attachment ) {
 
 	$img_args = array(
@@ -96,17 +98,17 @@ if ( $attachment ) {
 		'width'      => $atts['img_width'],
 		'height'     => $atts['img_height'],
 		'style'      => $image_style,
-		'class'      => esc_attr( $image_classes ),
+		'class'      => $image_classes,
 	);
 
 	// Add width to SVG images to fix rendering issues.
 	$attachment_mime_type = get_post_mime_type( $attachment );
 	if ( 'image/svg+xml' === $attachment_mime_type ) {
 
-		if ( empty( $width ) ) {
+		if ( empty( $atts['width'] ) ) {
 			$img_args['attributes']['width'] = '9999';
 		} else {
-			$width_attribute = $width;
+			$width_attribute = $atts['width'];
 			$width_attribute = str_replace( 'px', '', $width_attribute );
 			if ( is_numeric( $width_attribute ) ) {
 				$img_args['attributes']['width'] = esc_attr( $width_attribute );
@@ -156,7 +158,7 @@ if ( $attachment ) {
 		// Define image attributes.
 		$image_attrs = array(
 			'src'   => set_url_scheme( esc_url( $image_url ) ),
-			'class' => esc_attr( $image_classes ),
+			'class' => $image_classes,
 			'style' => $image_style,
 			'alt'   => ! empty( $atts['alt_attr'] ) ? esc_attr( $atts['alt_attr'] ) :  '',
 		);
@@ -164,10 +166,10 @@ if ( $attachment ) {
 		// Add width to SVG images to fix rendering issues.
 		if ( false !== strpos( $image_url, '.svg' ) ) {
 
-			if ( empty( $width ) ) {
+			if ( empty( $atts['width'] ) ) {
 				$image_attrs['width'] = '99999';
 			} else {
-				$width_attribute = $width;
+				$width_attribute = $atts['width'];
 				$width_attribute = str_replace( 'px', '', $width_attribute );
 				$image_attrs['width'] = esc_attr( $width_attribute );
 			}
@@ -175,13 +177,13 @@ if ( $attachment ) {
 		}
 
 		// Set image output.
-		$image = '<img ' . trim( vcex_parse_html_attributes( $image_attrs ) )  . ' />';
+		$image = '<img ' . trim( vcex_parse_html_attributes( $image_attrs ) )  . '>';
 
 	}
 
 }
 
-// Return if no image has been added
+// Return if no image has been added.
 if ( empty( $image ) ) {
 	if ( vcex_vc_is_inline() && function_exists( 'wpex_get_placeholder_image' ) ) {
 		$image = wpex_get_placeholder_image();
@@ -190,7 +192,7 @@ if ( empty( $image ) ) {
 	}
 }
 
-// Define wrap classes
+// Define wrap classes.
 $wrap_classes = array(
 	'vcex-image',
 	'vcex-module',
@@ -217,7 +219,7 @@ if ( $el_class ) {
 	$wrap_classes[] = vcex_get_extra_class( $el_class );
 }
 
-$wrap_classes = vcex_parse_shortcode_classes( implode( ' ', $wrap_classes ), $shortcode_tag, $atts );
+$wrap_classes = vcex_parse_shortcode_classes( implode( ' ', $wrap_classes ), 'vcex_image', $atts );
 
 // Link Setup.
 if ( ! empty( $onclick_attrs['href'] ) ) {
@@ -258,9 +260,12 @@ $output .= '<figure class="' . esc_attr( $wrap_classes ) . '"' . $wrap_inline_st
 
 	$inner_classes = array(
 		'vcex-image-inner',
-		'wpex-inline-block',
 		'wpex-relative',
 	);
+
+	if ( empty( $atts['width'] ) || '100%' !== $atts['width'] ) {
+		$inner_classes[] = 'wpex-inline-block';
+	}
 
 	if ( $img_filter ) {
 		$inner_classes[] = vcex_image_filter_class( $img_filter );
@@ -283,9 +288,17 @@ $output .= '<figure class="' . esc_attr( $wrap_classes ) . '"' . $wrap_inline_st
 		$inner_classes[] = vcex_vc_shortcode_custom_css_class( $css );
 	}
 
-	$inner_style = vcex_inline_style( array(
-		'max_width' => esc_attr( $width ),
-	) );
+	$inner_style_args = array();
+
+	if ( ! empty( $atts['width'] ) && '100%' !== $atts['width'] ) {
+		$inner_style_args['max_width'] = $atts['width'];
+	}
+
+	if ( $has_overlay && ! empty( $atts['border_radius'] ) ) {
+		$inner_style_args['border_radius'] = $atts['border_radius'];
+	}
+
+	$inner_style = vcex_inline_style( $inner_style_args );
 
 	// Setup post data which is used for image overlays.
 	if ( $attachment ) {

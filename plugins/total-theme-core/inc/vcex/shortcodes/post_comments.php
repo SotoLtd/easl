@@ -3,7 +3,7 @@
  * Post Comments Shortcode.
  *
  * @package TotalThemeCore
- * @version 1.2.8
+ * @version 1.3.1
  */
 
 defined( 'ABSPATH' ) || exit;
@@ -53,6 +53,18 @@ if ( ! class_exists( 'VCEX_Comments_Shortcode' ) ) {
 					'param_name' => 'bottom_margin',
 					'value' => vcex_margin_choices(),
 					'admin_label' => true,
+				),
+				array(
+					'type' => 'textfield',
+					'heading' => esc_html__( 'Max Width', 'total-theme-core' ),
+					'param_name' => 'max_width',
+					'description' => vcex_shortcode_param_description( 'width' ),
+				),
+				array(
+					'type' => 'vcex_text_alignments',
+					'heading' => esc_html__( 'Aligment', 'total-theme-core' ),
+					'param_name' => 'align',
+					'dependency' => array( 'element' => 'max_width', 'not_empty' => true ),
 				),
 				array(
 					'type' => 'vcex_visibility',

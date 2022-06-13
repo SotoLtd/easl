@@ -4,19 +4,17 @@
  *
  * @package Total WordPress Theme
  * @subpackage Total Theme Core
- * @version 1.2.8
+ * @version 1.3.2
  */
 
 defined( 'ABSPATH' ) || exit;
 
-$shortcode_tag = 'vcex_icon';
-
-if ( ! vcex_maybe_display_shortcode( $shortcode_tag, $atts ) ) {
+if ( ! vcex_maybe_display_shortcode( 'vcex_icon', $atts ) ) {
 	return;
 }
 
 // Get shortcode attributes.
-$atts = vcex_shortcode_atts( $shortcode_tag, $atts, $this );
+$atts = vcex_shortcode_atts( 'vcex_icon', $atts, $this );
 
 // Sanitize data & declare vars.
 $output = $data_attributes = $link_url = $float = '';
@@ -67,17 +65,22 @@ if ( $css_animation_class = vcex_get_css_animation( $atts['css_animation'] ) ) {
 	$shortcode_class[] = $css_animation_class;
 }
 
+if ( ! empty( $atts['bottom_margin'] ) ) {
+	$shortcode_class[] = vcex_parse_margin_class( $atts['bottom_margin'], 'wpex-mb-' );
+}
+
 if ( $el_class = vcex_get_extra_class( $atts['el_class'] ) ) {
 	$shortcode_class[] = $el_class;
 }
 
 // Parse shortcode classes.
-$shortcode_class = vcex_parse_shortcode_classes( $shortcode_class, $shortcode_tag, $atts );
+$shortcode_class = vcex_parse_shortcode_classes( $shortcode_class, 'vcex_icon', $atts );
 
 // Inline styles.
 $shortcode_style = vcex_inline_style( array(
 	'animation_delay'    => $atts['animation_delay'],
 	'animation_duration' => $atts['animation_duration'],
+	'font_size'          => $atts['custom_size'],
 ) );
 
 // Begin shortcode output.
@@ -87,8 +90,8 @@ $output .= '<div class="' . esc_attr( trim( $shortcode_class ) ) . '"' . vcex_ge
 	if ( $atts['link_url'] ) {
 
 		$link_data = vcex_build_link( $atts['link_url'] );
-		$link_url  = isset( $link_data['url'] ) ? $link_data['url'] : $link_url;
-		$link_url  = esc_url( do_shortcode( $link_url ) );
+		$link_url = $link_data['url'] ?? $link_url;
+		$link_url = esc_url( do_shortcode( $link_url ) );
 
 		if ( $link_url ) {
 
@@ -99,9 +102,9 @@ $output .= '<div class="' . esc_attr( trim( $shortcode_class ) ) . '"' . vcex_ge
 					'wpex-no-underline'
 				),
 			);
-			$link_attrs['title']  = isset( $link_data['title'] ) ? $link_data['title'] : '';
-			$link_attrs['target'] = isset( $link_data['target'] ) ? $link_data['target'] : '';
-			$link_attrs['rel']    = isset( $link_data['rel'] ) ? $link_data['rel'] : '';
+			$link_attrs['title'] = $link_data['title'] ?? '';
+			$link_attrs['target'] = $link_data['target'] ?? '';
+			$link_attrs['rel'] = $link_data['rel'] ?? '';
 
 			if ( 'true' === $atts['link_local_scroll'] ) {
 				unset( $link_attrs['target'] );
@@ -171,7 +174,6 @@ $output .= '<div class="' . esc_attr( trim( $shortcode_class ) ) . '"' . vcex_ge
 
 	// Add Style.
 	$icon_wrap_attrs['style'] = vcex_inline_style( array(
-		'font_size'        => $atts['custom_size'],
 		'color'            => $atts['color'],
 		'padding'          => $atts['padding'],
 		'background_color' => $atts['background'],

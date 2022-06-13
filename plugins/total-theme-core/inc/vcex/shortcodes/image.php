@@ -3,7 +3,7 @@
  * Image Shortcode.
  *
  * @package TotalThemeCore
- * @version 1.3
+ * @version 1.3.1
  */
 
 defined( 'ABSPATH' ) || exit;
@@ -21,7 +21,6 @@ if ( ! class_exists( 'VCEX_Image_Shortcode' ) ) {
 			if ( function_exists( 'vc_lean_map' ) ) {
 				TotalThemeCore\WPBakery\Map\Vcex_Image::instance();
 			}
-
 		}
 
 		/**
@@ -39,7 +38,6 @@ if ( ! class_exists( 'VCEX_Image_Shortcode' ) ) {
 		 * Array of shortcode parameters.
 		 */
 		public static function get_params() {
-
 			$params = array(
 				array(
 					'type' => 'dropdown',
@@ -141,7 +139,7 @@ if ( ! class_exists( 'VCEX_Image_Shortcode' ) ) {
 					'type' => 'textfield',
 					'heading' => esc_html__( 'Width', 'total-theme-core' ),
 					'param_name' => 'width',
-					'description' => esc_html__( 'Constrain your image to a specific width without having to crop it. Can also be used to force a specific width on an SVG image.', 'total-theme-core' ),
+					'description' => esc_html__( 'Constrain your image to a specific width without having to crop it. Can also be used to force a specific width on an SVG image. Enter 100% to stretch your image to fill the parent container.', 'total-theme-core' ),
 					'group' => esc_html__( 'Style', 'total-theme-core' ),
 				),
 				array(
@@ -253,6 +251,7 @@ if ( ! class_exists( 'VCEX_Image_Shortcode' ) ) {
 						esc_html__( 'Go to custom link', 'total-theme-core' ) => 'custom_link',
 						esc_html__( 'Go to internal page', 'total-theme-core' ) => 'internal_link',
 						esc_html__( 'Scroll to section', 'total-theme-core' ) => 'local_scroll',
+						esc_html__( 'Toggle Element', 'total-theme-core' ) => 'toggle_element',
 						esc_html__( 'Go to custom field value', 'total-theme-core' ) => 'custom_field',
 						esc_html__( 'Go to callback function value', 'total-theme-core' ) => 'callback_function',
 						esc_html__( 'Open inline content or iframe popup', 'total-theme-core' ) => 'popup',
@@ -266,13 +265,21 @@ if ( ! class_exists( 'VCEX_Image_Shortcode' ) ) {
 				),
 				array(
 					'type' => 'textfield',
-					'heading' => esc_html__( 'URL', 'total-theme-core' ),
+					'heading' => esc_html__( 'Link', 'total-theme-core' ),
 					'param_name' => 'onclick_url',
 					'description' => vcex_shortcode_param_description( 'text' ),
 					'dependency' => array(
 						'element' => 'onclick',
-						'value' => array( 'custom_link', 'local_scroll', 'popup', 'lightbox_image', 'lightbox_video' ),
+						'value' => array(
+							'custom_link',
+							'local_scroll',
+							'popup',
+							'lightbox_image',
+							'lightbox_video',
+							'toggle_element',
+						),
 					),
+					'description' => esc_html__( 'Enter your custom link url, lightbox url or local/toggle element ID (including a # at the front).', 'total-theme-core' ),
 					'group' => esc_html__( 'Link', 'total-theme-core' ),
 				),
 				array(
@@ -355,6 +362,7 @@ if ( ! class_exists( 'VCEX_Image_Shortcode' ) ) {
 					'param_name' => 'onclick_video_overlay_icon',
 					'group' => esc_html__( 'Link', 'total-theme-core' ),
 					'std' => 'false',
+					'description' => esc_html__( 'More options available under Style > Image Overlay.', 'total-theme-core' ),
 					'dependency' => array( 'element' => 'onclick', 'value' => 'lightbox_video' ),
 				),
 				array(
@@ -397,6 +405,7 @@ if ( ! class_exists( 'VCEX_Image_Shortcode' ) ) {
 							'custom_field',
 							'callback_function',
 							'popup',
+							'toggle_element',
 						),
 					),
 					'description' => esc_html__( 'Enter your custom data attributes in the format of data|value. Hit enter after each set of data attributes.', 'total-theme-core' ),
@@ -423,15 +432,20 @@ if ( ! class_exists( 'VCEX_Image_Shortcode' ) ) {
 				array( 'type' => 'hidden', 'param_name' => 'lightbox_video_overlay_icon' ), // @since v5.1
 			);
 
-			return apply_filters( 'vcex_shortcode_params', $params, 'vcex_image' );
+			/**
+			 * Filters the vcex_image shortcode params.
+			 *
+			 * @param array $params
+			 */
+			$params = (array) apply_filters( 'vcex_shortcode_params', $params, 'vcex_image' );
 
+			return $params;
 		}
 
 		/**
 		 * Parses deprecated params.
 		 */
 		public static function parse_deprecated_attributes( $atts = '' ) {
-
 			if ( empty( $atts ) || ! is_array( $atts ) ) {
 				return $atts;
 			}
@@ -554,9 +568,7 @@ if ( ! class_exists( 'VCEX_Image_Shortcode' ) ) {
 				unset( $atts['lightbox_video_overlay_icon'] );
 			}
 
-			// Return shortcode atts.
 			return $atts;
-
 		}
 
 	}

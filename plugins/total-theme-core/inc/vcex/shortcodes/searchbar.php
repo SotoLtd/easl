@@ -3,7 +3,7 @@
  * Searchbar Shortcode.
  *
  * @package TotalThemeCore
- * @version 1.2.8
+ * @version 1.3.2
  */
 
 defined( 'ABSPATH' ) || exit;
@@ -52,6 +52,7 @@ if ( ! class_exists( 'VCEX_Searchbar_Shortcode' ) ) {
 					'std' => 'false',
 					'heading' => esc_html__( 'Autofocus', 'total-theme-core'),
 					'param_name' => 'autofocus',
+					'admin_label' => true,
 				),
 				array(
 					'type' => 'vcex_ofswitch',
@@ -68,7 +69,8 @@ if ( ! class_exists( 'VCEX_Searchbar_Shortcode' ) ) {
 					'type' => 'textfield',
 					'heading' => esc_html__( 'Element ID', 'total-theme-core' ),
 					'param_name' => 'unique_id',
-					'description' => sprintf( esc_html__( 'Enter element ID (Note: make sure it is unique and valid according to %sw3c specification%s).', 'total-theme-core' ), '<a href="https://www.w3schools.com/tags/att_global_id.asp" target="_blank" rel="noopener noreferrer">', '</a>' ),
+					'admin_label' => true,
+					'description' => vcex_shortcode_param_description( 'unique_id' ),
 				),
 				array(
 					'type' => 'textfield',
@@ -95,7 +97,7 @@ if ( ! class_exists( 'VCEX_Searchbar_Shortcode' ) ) {
 					'heading' => esc_html__( 'Advanced Search', 'total-theme-core' ),
 					'param_name' => 'advanced_query',
 					'group' => esc_html__( 'Query', 'total-theme-core' ),
-					'description' => esc_html__( 'Example: ', 'total-theme-core' ) . 'post_type=portfolio&taxonomy=portfolio_category&term=advertising',
+					'description' => esc_html__( 'Example: ', 'total-theme-core' ) . 'post_type=portfolio&taxonomy=portfolio_category&term=advertising' . '<br>' . esc_html__( 'You can use term=current_term and author=current_author for dynamic templates.', 'total-theme-core' ),
 				),
 				// Widths
 				array(
@@ -164,6 +166,13 @@ if ( ! class_exists( 'VCEX_Searchbar_Shortcode' ) ) {
 					'type' => 'vcex_font_weight',
 					'heading' => esc_html__( 'Font Weight', 'total-theme-core' ),
 					'param_name' => 'input_font_weight',
+					'group' => esc_html__( 'Input', 'total-theme-core' ),
+				),
+				array(
+					'type' => 'textfield',
+					'heading' => esc_html__( 'Border Radius', 'total-theme-core' ),
+					'param_name' => 'input_border_radius',
+					'description' => vcex_shortcode_param_description( 'border_radius' ),
 					'group' => esc_html__( 'Input', 'total-theme-core' ),
 				),
 				array(

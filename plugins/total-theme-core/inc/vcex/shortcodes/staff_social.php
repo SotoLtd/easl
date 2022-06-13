@@ -12,9 +12,6 @@ if ( ! class_exists( 'VCEX_Staff_Social_Shortcode' ) ) {
 
 	class VCEX_Staff_Social_Shortcode {
 
-		/**
-		 * Main constructor.
-		 */
 		public function __construct() {
 
 			if ( function_exists( 'vc_lean_map' ) ) {

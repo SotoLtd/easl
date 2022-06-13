@@ -8,38 +8,24 @@ defined( 'ABSPATH' ) || exit;
  * Class registers the vcex_image_banner shortcode with the WPBakery page builder.
  *
  * @package TotalThemeCore
- * @version 1.2.8
+ * @version 1.3
  */
 final class Vcex_Image_Banner {
 
 	/**
-	 * Our single instance.
+	 * Instance.
+	 *
+	 * @access private
+	 * @var object Class object.
 	 */
 	private static $instance;
-
-	/**
-	 * Disable instantiation.
-	 */
-	private function __construct() {}
-
-	/**
-	 * Disable the cloning of this class.
-	 *
-	 * @return void
-	 */
-	final public function __clone() {}
-
-	/**
-	 * Disable the wakeup of this class.
-	 */
-	final public function __wakeup() {}
 
 	/**
 	 * Create or retrieve the class instance.
 	 */
 	public static function instance() {
 		if ( is_null( static::$instance ) ) {
-			static::$instance = new Vcex_Image_Banner;
+			static::$instance = new self();
 			static::$instance->init_hooks();
 		}
 
@@ -84,7 +70,7 @@ final class Vcex_Image_Banner {
 			'name'             => esc_html__( 'Image Banner', 'total-theme-core' ),
 			'description'      => esc_html__( 'Image Banner with overlay text and animation', 'total-theme-core' ),
 			'base'             => 'vcex_image_banner',
-			'icon'             => 'vcex-image-banner vcex-icon ticon ticon-picture-o',
+			'icon'             => 'vcex_element-icon vcex_element-icon--image-banner',
 			'category'         => vcex_shortcodes_branding(),
 			'params'           => VCEX_Image_Banner_Shortcode::get_params(),
 			'admin_enqueue_js' => vcex_wpbakery_asset_url( 'js/backend-editor/vcex-image-view.min.js' ),

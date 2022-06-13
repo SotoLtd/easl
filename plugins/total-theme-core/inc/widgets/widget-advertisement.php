@@ -1,16 +1,15 @@
 <?php
+namespace TotalThemeCore\Widgets;
+use TotalThemeCore\WidgetBuilder as Widget_Builder;
+
+defined( 'ABSPATH' ) || exit;
+
 /**
  * Advertisement widget.
  *
  * @package TotalThemeCore
- * @version 1.2.8
+ * @version 1.3.1
  */
-
-namespace TotalThemeCore\Widgets;
-
-use TotalThemeCore\WidgetBuilder as Widget_Builder;
-
-defined( 'ABSPATH' ) || exit;
 
 class Widget_Advertisement extends Widget_Builder {
 	private $args;
@@ -176,7 +175,7 @@ class Widget_Advertisement extends Widget_Builder {
 
 						}
 
-					$output .= '/>';
+					$output .= '>';
 
 					$output .= '</a>';
 

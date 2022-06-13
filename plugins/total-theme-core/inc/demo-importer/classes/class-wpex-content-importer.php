@@ -1,5 +1,6 @@
 <?php
-// @version 4.6
+defined( 'ABSPATH' ) || exit;
+
 if ( ! class_exists( 'WPEX_Content_Importer' ) ) {
 
 	class WPEX_Content_Importer {
@@ -28,7 +29,7 @@ if ( ! class_exists( 'WPEX_Content_Importer' ) ) {
 		 */
 		public function process_xml( $demo, $import_images ) {
 
-			$response = WPEX_Demo_Importer_Utils::remote_get( $this->demos[ $demo ][ 'xml' ] );
+			$response = WPEX_Demo_Importer_Utils::remote_get( $this->demos[$demo]['xml'] );
 
 			// No sample data found
 			if ( $response === false ) {
@@ -45,13 +46,19 @@ if ( ! class_exists( 'WPEX_Content_Importer' ) ) {
 			// If file exists lets import it
 			if ( file_exists( $attachment_url ) ) {
 				$this->import_xml( $attachment_url, $import_images );
+				$this->replace_demo_urls( $this->demos[$demo] );
 			} else {
 				// Import file can't be imported - we should die here since this is core for most people.
-				return new WP_Error( 'xml_import_error', __( 'The xml import file could not be accessed. Please try again or contact the theme developer.', 'total-theme-core' ) );
+				return new WP_Error( 'xml_import_error', esc_html__( 'The xml import file could not be accessed. Please try again or contact the theme developer.', 'total-theme-core' ) );
 			}
 
 		}
 
+		/**
+		 * Run the xml importer.
+		 *
+		 * @since 1.1.0
+		 */
 		private function import_xml( $file, $import_images ) {
 
 			// Make sure importers constant is defined
@@ -79,7 +86,7 @@ if ( ! class_exists( 'WPEX_Content_Importer' ) ) {
 				if ( file_exists( $class_wp_importer ) ) {
 					require_once $class_wp_importer;
 				} else {
-					$importer_error = __( 'Can not retrieve class-wp-importer.php', 'total-theme-core' );
+					$importer_error = esc_html__( 'Can not retrieve class-wp-importer.php', 'total-theme-core' );
 				}
 			}
 
@@ -89,7 +96,7 @@ if ( ! class_exists( 'WPEX_Content_Importer' ) ) {
 				if ( file_exists( $class_wp_import ) ) {
 					require_once $class_wp_import;
 				} else {
-					$importer_error = __( 'Can not retrieve wordpress-importer.php', 'total-theme-core' );
+					$importer_error = esc_html__( 'Can not retrieve wordpress-importer.php', 'total-theme-core' );
 				}
 			}
 
@@ -100,14 +107,47 @@ if ( ! class_exists( 'WPEX_Content_Importer' ) ) {
 
 				// No error, lets import things...
 				if ( ! is_file( $file ) ) {
-					$importer_error = __( 'Sample data file appears corrupt or can not be accessed.', 'total-theme-core' );
+					$importer_error = esc_html__( 'Sample data file appears corrupt or can not be accessed.', 'total-theme-core' );
 					return new WP_Error( 'xml_import_error', $importer_error );
 				} else {
 					$wp_import = new WP_Import();
 					$wp_import->fetch_attachments = $import_images;
 					$wp_import->import( $file );
+
+					$this->xml_imported = true;
+
+					// Clear temp xml file.
+					$temp_xml = WPEX_DEMO_IMPORTER_DIR . '/temp.xml';
+					file_put_contents( $temp_xml, '' );
 				}
+
 			}
+
+		}
+
+		/**
+		 * Process the theme mods json file
+		 *
+		 * @since 1.2
+		 */
+		public function replace_demo_urls( $demo ) {
+			global $wpdb;
+
+			if ( empty( $demo['demo_slug'] ) || ! $wpdb ) {
+				return;
+			}
+
+			$from_url = 'https://total.wpexplorer.com/' . $demo['demo_slug'] . '/';
+			$to_url = esc_url( home_url( '/' ) );
+
+			if ( ! $to_url ) {
+				return;
+			}
+
+			// @codingStandardsIgnoreLine
+			$wpdb->query( $wpdb->prepare( "UPDATE {$wpdb->posts} SET post_content = REPLACE(post_content, %s, %s)", $from_url, $to_url ) );
+			// @codingStandardsIgnoreLine
+			$wpdb->query( $wpdb->prepare( "UPDATE {$wpdb->postmeta} SET meta_value = REPLACE(meta_value, %s, %s) WHERE meta_key='enclosure'", $from_url, $to_url ) );
 		}
 
 		/**
@@ -125,7 +165,7 @@ if ( ! class_exists( 'WPEX_Content_Importer' ) ) {
 
 			// Make sure mods aren't empty
 			if ( empty( $mods ) ) {
-				return new WP_Error( 'theme_mods_import_error', __( 'No customizer found or required for this demo.', 'total-theme-core' ) );
+				return new WP_Error( 'theme_mods_import_error', esc_html__( 'No customizer found or required for this demo.', 'total-theme-core' ) );
 			}
 
 			// Extract json data
@@ -135,7 +175,7 @@ if ( ! class_exists( 'WPEX_Content_Importer' ) ) {
 			if ( '0' == json_last_error() ) {
 				$this->import_theme_mods( $data );
 			} else {
-				return new WP_Error( 'theme_mods_import_error', __( 'There was an error parsing the theme mods json file.', 'total-theme-core' ) );
+				return new WP_Error( 'theme_mods_import_error', esc_html__( 'There was an error parsing the theme mods json file.', 'total-theme-core' ) );
 			}
 
 		}
@@ -176,12 +216,12 @@ if ( ! class_exists( 'WPEX_Content_Importer' ) ) {
 
 			// Checks
 			if ( ! function_exists( 'download_url' ) ) {
-				return new WP_Error( 'revslider_import_error', __( 'Sliders could not be imported because the download_url function does not exist.', 'total-theme-core' ) );
+				return new WP_Error( 'revslider_import_error', esc_html__( 'Sliders could not be imported because the download_url function does not exist.', 'total-theme-core' ) );
 			}
 
 			// Make sure rev is active
 			if ( ! class_exists( 'RevSlider' ) ) {
-				return new WP_Error( 'revslider_import_error', __( 'Sliders could not be imported because the Revolution slider plugin is disabled.', 'total-theme-core' ) );
+				return new WP_Error( 'revslider_import_error', esc_html__( 'Sliders could not be imported because the Revolution slider plugin is disabled.', 'total-theme-core' ) );
 			}
 
 			// Get sliders for this demo
@@ -204,7 +244,7 @@ if ( ! class_exists( 'WPEX_Content_Importer' ) ) {
 				// Check for download errors
 				if ( $error = is_wp_error( $temp ) ) {
 					if ( is_object( $error ) ) {
-						$errors[] = new WP_Error( 'revslider_import_error', __( 'Slider error:', 'total-theme-core' ) .' '. $temp->get_error_message() );
+						$errors[] = new WP_Error( 'revslider_import_error', esc_html__( 'Slider error:', 'total-theme-core' ) .' '. $temp->get_error_message() );
 					}
 					unlink( $file_array[ 'tmp_name' ] );
 					continue;
@@ -216,7 +256,7 @@ if ( ! class_exists( 'WPEX_Content_Importer' ) ) {
 				// Check for handle sideload errors.
 				if ( is_wp_error( $id ) ) {
 					if ( is_object( $id ) ) {
-						$errors[] = new WP_Error( 'revslider_import_error', __( 'Slider error:', 'total-theme-core' ) .' '. $id->get_error_message() );
+						$errors[] = new WP_Error( 'revslider_import_error', esc_html__( 'Slider error:', 'total-theme-core' ) .' '. $id->get_error_message() );
 					}
 					unlink( $file_array['tmp_name'] );
 					continue;
@@ -243,11 +283,11 @@ if ( ! class_exists( 'WPEX_Content_Importer' ) ) {
 		public function process_widget_import( $demo ) {
 
 			// Get widgets json file
-			$widgets = WPEX_Demo_Importer_Utils::remote_get( $this->demos[ $demo ][ 'widgets' ] );
+			$widgets = isset( $this->demos[$demo]['widgets'] ) ? WPEX_Demo_Importer_Utils::remote_get( $this->demos[$demo]['widgets'] ) : '';
 
 			// Display warning and return
 			if ( empty( $widgets ) ) {
-				return new WP_Error( 'widgets_import_error', __( 'No widgets found or required for this demo.', 'total-theme-core' ) );
+				return new WP_Error( 'widgets_import_error', esc_html__( 'No widgets found or required for this demo.', 'total-theme-core' ) );
 			}
 
 			// Extract json data
@@ -332,7 +372,7 @@ if ( ! class_exists( 'WPEX_Content_Importer' ) ) {
 			  $sidebar_available = false;
 			  $use_sidebar_id = 'wp_inactive_widgets'; // add to inactive if sidebar does not exist in theme
 			  $sidebar_message_type = 'error';
-			  $sidebar_message = __( 'Sidebar does not exist in theme (using Inactive)', 'total-theme-core' );
+			  $sidebar_message = esc_html__( 'Sidebar does not exist in theme (using Inactive)', 'total-theme-core' );
 			}
 
 			/* Result for sidebar
@@ -353,7 +393,7 @@ if ( ! class_exists( 'WPEX_Content_Importer' ) ) {
 				  if ( ! $fail && ! isset( $available_widgets[$id_base] ) ) {
 					$fail = true;
 					$widget_message_type = 'error';
-					$widget_message = __( 'Site does not support widget', 'total-theme-core' ); // explain why widget not imported
+					$widget_message = esc_html__( 'Site does not support widget', 'total-theme-core' ); // explain why widget not imported
 				  }
 
 				  // Filter to modify settings before import
@@ -376,7 +416,7 @@ if ( ! class_exists( 'WPEX_Content_Importer' ) ) {
 					  if ( in_array( "$id_base-$check_id", $sidebar_widgets ) && (array) $widget == $check_widget ) {
 						$fail = true;
 						$widget_message_type = 'warning';
-						$widget_message = __( 'Widget already exists', 'total-theme-core' ); // explain why widget not imported
+						$widget_message = esc_html__( 'Widget already exists', 'total-theme-core' ); // explain why widget not imported
 						break;
 					  }
 
@@ -432,16 +472,16 @@ if ( ! class_exists( 'WPEX_Content_Importer' ) ) {
 					// Success message
 					if ( $sidebar_available ) {
 					  $widget_message_type = 'success';
-					  $widget_message      = __( 'Imported', 'total-theme-core' );
+					  $widget_message      = esc_html__( 'Imported', 'total-theme-core' );
 					} else {
 					  $widget_message_type = 'warning';
-					  $widget_message      = __( 'Imported to Inactive', 'total-theme-core' );
+					  $widget_message      = esc_html__( 'Imported to Inactive', 'total-theme-core' );
 					}
 				  }
 
 				  /* Result for widget instance
 				  $this->results[$sidebar_id]['widgets'][$widget_instance_id]['name'] = isset( $available_widgets[$id_base]['name'] ) ? $available_widgets[$id_base]['name'] : $id_base;
-				  $this->results[$sidebar_id]['widgets'][$widget_instance_id]['title'] = $widget->title ? $widget->title : __( 'No Title', 'total-theme-core' );
+				  $this->results[$sidebar_id]['widgets'][$widget_instance_id]['title'] = $widget->title ? $widget->title : esc_html__( 'No Title', 'total-theme-core' );
 				  $this->results[$sidebar_id]['widgets'][$widget_instance_id]['message_type'] = $widget_message_type;
 				  $this->results[$sidebar_id]['widgets'][$widget_instance_id]['message'] = $widget_message; */
 				}
@@ -461,19 +501,70 @@ if ( ! class_exists( 'WPEX_Content_Importer' ) ) {
 
 			$demo_menus = $this->demos[ $demo ]['nav_menu_locations'];
 
-			// Get current locations
+			// Get current locations.
 			$locations = get_theme_mod( 'nav_menu_locations' );
 
 			// Add demo locations
 			foreach ( $demo_menus as $location => $slug ) {
+
+				// Get menu.
 				$menu = get_term_by( 'slug', $slug, 'nav_menu');
+
 				if ( $menu ) {
+
+					// Assign menus to correct locations.
 					$locations[$location] = $menu->term_id;
+
+					// Delete duplicate menu items.
+					$this->delete_duplicate_menu_items( $menu );
+
 				}
+
 			}
 
 			// Set menu locations
 			set_theme_mod( 'nav_menu_locations', $locations );
+
+		}
+
+		/**
+		 * Delete potentially duplicated menu items.
+		 *
+		 * @since 1.0.0
+		 */
+		public function delete_duplicate_menu_items( $menu ) {
+
+			$menu_items = wp_get_nav_menu_items( $menu );
+
+			if ( ! is_array( $menu_items ) || empty( $menu_items ) ) {
+				return;
+			}
+
+			$uniq_items = array();
+
+			foreach( $menu_items as $menu_item ) {
+
+				$uniq_item = json_encode( array(
+					'post_parent'      => isset( $menu_item->post_parent ) ? $menu_item->post_parent : '',
+					'post_title'       => isset( $menu_item->post_title ) ? $menu_item->post_title : '',
+					'post_content'     => isset( $menu_item->post_content ) ? $menu_item->post_content : '',
+					'type'             => isset( $menu_item->type ) ? $menu_item->type : '',
+					'menu_item_parent' => isset( $menu_item->menu_item_parent ) ? $menu_item->menu_item_parent : '',
+					'url'              => isset( $menu_item->url ) ? $menu_item->url : '',
+					'description'      => isset( $menu_item->description ) ? $menu_item->description : '',
+					'classes'          => isset( $menu_item->classes ) ? $menu_item->classes : '',
+				) );
+
+				// Duplicate
+				if ( in_array( $uniq_item, $uniq_items ) ) {
+					if ( 'nav_menu_item' === get_post_type( $menu_item->ID ) ) { // added security check to ensure we are only deleting menu items.
+						wp_delete_post( $menu_item->ID );
+					}
+				} else {
+					$uniq_items[] = $uniq_item;
+				}
+
+			}
 
 		}
 

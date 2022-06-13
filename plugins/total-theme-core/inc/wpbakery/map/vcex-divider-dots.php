@@ -8,38 +8,24 @@ defined( 'ABSPATH' ) || exit;
  * Class registers the vcex_divider_dots shortcode with the WPBakery page builder.
  *
  * @package TotalThemeCore
- * @version 1.2.8
+ * @version 1.3
  */
 final class Vcex_Divider_Dots {
 
 	/**
-	 * Our single instance.
+	 * Instance.
+	 *
+	 * @access private
+	 * @var object Class object.
 	 */
 	private static $instance;
-
-	/**
-	 * Disable instantiation.
-	 */
-	private function __construct() {}
-
-	/**
-	 * Disable the cloning of this class.
-	 *
-	 * @return void
-	 */
-	final public function __clone() {}
-
-	/**
-	 * Disable the wakeup of this class.
-	 */
-	final public function __wakeup() {}
 
 	/**
 	 * Create or retrieve the class instance.
 	 */
 	public static function instance() {
 		if ( is_null( static::$instance ) ) {
-			static::$instance = new Vcex_Divider_Dots;
+			static::$instance = new self();
 			static::$instance->init_hooks();
 		}
 
@@ -82,7 +68,7 @@ final class Vcex_Divider_Dots {
 			'name'        => esc_html__( 'Divider Dots', 'total-theme-core' ),
 			'description' => esc_html__( 'Dot Separator', 'total-theme-core' ),
 			'base'        => 'vcex_divider_dots',
-			'icon'        => 'vcex-dots vcex-icon ticon ticon-ellipsis-h',
+			'icon'        => 'vcex_element-icon vcex_element-icon--divider-dots',
 			'category'    => vcex_shortcodes_branding(),
 			'params'      => VCEX_Divider_Dots_Shortcode::get_params(),
 		);

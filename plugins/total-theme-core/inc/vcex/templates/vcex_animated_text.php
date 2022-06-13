@@ -4,18 +4,16 @@
  *
  * @package Total WordPress Theme
  * @subpackage Total Theme Core
- * @version 1.2.8
+ * @version 1.3.2
  */
 
 defined( 'ABSPATH' ) || exit;
 
-$shortcode_tag = 'vcex_animated_text';
-
-if ( ! vcex_maybe_display_shortcode( $shortcode_tag, $atts ) ) {
+if ( ! vcex_maybe_display_shortcode( 'vcex_animated_text', $atts ) ) {
 	return;
 }
 
-$atts = vcex_shortcode_atts( $shortcode_tag, $atts, $this );
+$atts = vcex_shortcode_atts( 'vcex_animated_text', $atts, $this );
 
 $strings = (array) vcex_vc_param_group_parse_atts( $atts['strings'] );
 
@@ -23,8 +21,13 @@ if ( ! $strings ) {
 	return;
 }
 
+// Define shortcode output.
+$output = '';
+
+// Enqueue element scripts.
 $this->enqueue_scripts(); // @todo move to main class?
 
+// Define shortcode CSS classes.
 $shortcode_class = array(
 	'vcex-animated-text',
 	'vcex-module',
@@ -36,14 +39,29 @@ $shortcode_class = array(
 	'vcex-typed-text-wrap',
 );
 
-$extra_classes = vcex_get_shortcode_extra_classes( $atts, $shortcode_tag );
+// Responsive CSS.
+$unique_classname = vcex_element_unique_classname();
 
-if ( $extra_classes ) {
+$el_responsive_styles = array(
+	'font_size' => $atts['font_size'],
+);
+
+$responsive_css = vcex_element_responsive_css( $el_responsive_styles, $unique_classname );
+
+if ( $responsive_css ) {
+	$shortcode_class[] = $unique_classname;
+	$output .= '<style>' . $responsive_css . '</style>';
+}
+
+// Add extra classes.
+if ( $extra_classes = vcex_get_shortcode_extra_classes( $atts, 'vcex_animated_text' ) ) {
 	$shortcode_class = array_merge( $shortcode_class, $extra_classes );
 }
 
-$shortcode_class = vcex_parse_shortcode_classes( $shortcode_class, $shortcode_tag, $atts );
+// Apply filters to shortcode class.
+$shortcode_class = vcex_parse_shortcode_classes( $shortcode_class, 'vcex_animated_text', $atts );
 
+// Animated text data attributes.
 $data_attr = '';
 
 $data = array();
@@ -53,6 +71,7 @@ foreach ( $strings as $string ) {
 	}
 }
 
+// Define animation settings.
 $settings = array(
 	'typeSpeed'  => vcex_intval( $atts['speed'], 40 ),
 	'loop'       => vcex_validate_boolean( $atts['loop'] ),
@@ -62,6 +81,7 @@ $settings = array(
 	'startDelay' => vcex_intval( $atts['start_delay'], 0 ),
 );
 
+// Inline styles.
 $inline_style = vcex_inline_style( array(
 	'background_color'   => $atts['background_color'],
 	'border_color'       => $atts['border_color'],
@@ -75,10 +95,7 @@ $inline_style = vcex_inline_style( array(
 	'animation_duration' => $atts['animation_duration'],
 ) );
 
-if ( $atts['font_family'] ) {
-	vcex_enqueue_font( $atts['font_family'] );
-}
-
+// Inner inline style.
 $typed_inline_style = vcex_inline_style( array(
 	'background'      => $atts['animated_background_color'],
 	'color'           => $atts['animated_color'],
@@ -91,19 +108,11 @@ $typed_inline_style = vcex_inline_style( array(
 	'text_align'      => $atts['animated_text_align'],
 ) );
 
-if ( $atts['animated_font_family'] ) {
-	vcex_enqueue_font( $atts['animated_font_family'] );
-}
-
-// Get responsive data.
-if ( $responsive_data = vcex_get_module_responsive_data( $atts ) ) {
-	$data_attr .= ' ' . $responsive_data;
-}
-
+// Escape element tag.
 $tag_escaped = $atts['tag'] ? tag_escape( $atts['tag'] ) : 'div';
 
 // Output Shortcode.
-$output = '<' . $tag_escaped . ' class="' . esc_attr( $shortcode_class ) . '"' . $inline_style . $data_attr . '>';
+$output .= '<' . $tag_escaped . ' class="' . esc_attr( $shortcode_class ) . '"' . $inline_style . $data_attr . '>';
 
 	if ( 'true' === $atts['static_text'] && $atts['static_before'] ) {
 		$output .= '<span class="vcex-before">' . do_shortcode( wp_kses_post( $atts['static_before'] ) ) . '</span> ';

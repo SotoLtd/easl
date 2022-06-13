@@ -8,7 +8,7 @@ final class Shortcode_Wpml_Language_Selector {
 	public function __construct() {
 
 		if ( ! shortcode_exists( 'wpml_lang_selector' ) ) {
-			add_shortcode( 'wpml_lang_selector', array( __CLASS__, 'output' ) );
+			add_shortcode( 'wpml_lang_selector', __CLASS__ . '::output' );
 		}
 
 	}

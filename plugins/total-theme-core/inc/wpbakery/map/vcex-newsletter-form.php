@@ -8,38 +8,24 @@ defined( 'ABSPATH' ) || exit;
  * Class registers the vcex_newsletter_form shortcode with the WPBakery page builder.
  *
  * @package TotalThemeCore
- * @version 1.2.8
+ * @version 1.3
  */
 final class Vcex_Newsletter_Form {
 
 	/**
-	 * Our single instance.
+	 * Instance.
+	 *
+	 * @access private
+	 * @var object Class object.
 	 */
 	private static $instance;
-
-	/**
-	 * Disable instantiation.
-	 */
-	private function __construct() {}
-
-	/**
-	 * Disable the cloning of this class.
-	 *
-	 * @return void
-	 */
-	final public function __clone() {}
-
-	/**
-	 * Disable the wakeup of this class.
-	 */
-	final public function __wakeup() {}
 
 	/**
 	 * Create or retrieve the class instance.
 	 */
 	public static function instance() {
 		if ( is_null( static::$instance ) ) {
-			static::$instance = new Vcex_Newsletter_Form;
+			static::$instance = new self();
 			static::$instance->init_hooks();
 		}
 
@@ -82,7 +68,7 @@ final class Vcex_Newsletter_Form {
 			'description' => esc_html__( 'Newsletter subscription form', 'total-theme-core' ),
 			'base'        => 'vcex_newsletter_form',
 			'category'    => vcex_shortcodes_branding(),
-			'icon'        => 'vcex-newsletter vcex-icon ticon ticon-envelope',
+			'icon'        => 'vcex_element-icon vcex_element-icon--newsletter',
 			'params'      => VCEX_Newsletter_Shortcode::get_params(),
 		);
 	}

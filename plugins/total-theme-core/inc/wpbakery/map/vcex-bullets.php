@@ -8,38 +8,24 @@ defined( 'ABSPATH' ) || exit;
  * Class registers the vcex_bullets shortcode with the WPBakery page builder.
  *
  * @package TotalThemeCore
- * @version 1.2.8
+ * @version 1.3
  */
 final class Vcex_Bullets {
 
 	/**
-	 * Our single instance.
+	 * Instance.
+	 *
+	 * @access private
+	 * @var object Class object.
 	 */
 	private static $instance;
-
-	/**
-	 * Disable instantiation.
-	 */
-	private function __construct() {}
-
-	/**
-	 * Disable the cloning of this class.
-	 *
-	 * @return void
-	 */
-	final public function __clone() {}
-
-	/**
-	 * Disable the wakeup of this class.
-	 */
-	final public function __wakeup() {}
 
 	/**
 	 * Create or retrieve the class instance.
 	 */
 	public static function instance() {
 		if ( is_null( static::$instance ) ) {
-			static::$instance = new Vcex_Bullets;
+			static::$instance = new self();
 			static::$instance->init_hooks();
 		}
 
@@ -79,11 +65,11 @@ final class Vcex_Bullets {
 	 */
 	public function map() {
 		return array(
-			'name'        => esc_html__( 'Bullets', 'total-theme-core' ),
-			'description' => esc_html__( 'Styled bulleted lists', 'total-theme-core' ),
+			'name'        => esc_html__( 'List (bullets)', 'total-theme-core' ),
+			'description' => esc_html__( 'Bulleted list with icons', 'total-theme-core' ),
 			'base'        => 'vcex_bullets',
 			'category'    => vcex_shortcodes_branding(),
-			'icon'        => 'vcex-bullets vcex-icon ticon ticon-dot-circle-o',
+			'icon'        => 'vcex_element-icon vcex_element-icon--bullets',
 			'params'      => VCEX_Bullets_Shortcode::get_params(),
 		);
 	}

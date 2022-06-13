@@ -3,7 +3,7 @@
  * Multi Buttons Shortcode.
  *
  * @package TotalThemeCore
- * @version 1.2.8
+ * @version 1.3
  */
 
 defined( 'ABSPATH' ) || exit;
@@ -158,7 +158,7 @@ if ( ! class_exists( 'VCEX_Multi_Buttons_Shortcode' ) ) {
 				),
 				array(
 					'type' => 'textfield',
-					'heading' => esc_html__( 'Spacing', 'total' ),
+					'heading' => esc_html__( 'Gap', 'total' ),
 					'param_name' => 'spacing',
 					'description' => esc_html__( 'Enter a custom spacing in pixels that will be added between the buttons.', 'total' ),
 				),
@@ -209,17 +209,23 @@ if ( ! class_exists( 'VCEX_Multi_Buttons_Shortcode' ) ) {
 					'description' => vcex_shortcode_param_description( 'font_size' ),
 				),
 				array(
+					'type' => 'vcex_font_weight',
+					'heading' => esc_html__( 'Font Weight', 'total' ),
+					'param_name' => 'font_weight',
+					'group' => esc_html__( 'Typography', 'total' ),
+				),
+				array(
+					'type' => 'vcex_text_transforms',
+					'heading' => esc_html__( 'Text Transform', 'total-theme-core' ),
+					'param_name' => 'text_transform',
+					'group' => esc_html__( 'Typography', 'total-theme-core' ),
+				),
+				array(
 					'type' => 'textfield',
 					'heading' => esc_html__( 'Letter Spacing', 'total' ),
 					'param_name' => 'letter_spacing',
 					'group' => esc_html__( 'Typography', 'total' ),
 					'description' => vcex_shortcode_param_description( 'letter_spacing' ),
-				),
-				array(
-					'type' => 'vcex_font_weight',
-					'heading' => esc_html__( 'Font Weight', 'total' ),
-					'param_name' => 'font_weight',
-					'group' => esc_html__( 'Typography', 'total' ),
 				),
 			);
 

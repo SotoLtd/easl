@@ -4,15 +4,13 @@
  *
  * @package Total WordPress Theme
  * @subpackage Total Theme Core
- * @version 1.2.8
+ * @version 1.3.2
  *
  */
 
 defined( 'ABSPATH' ) || exit;
 
-$shortcode_tag = 'vcex_woocommerce_loop_carousel';
-
-if ( ! vcex_maybe_display_shortcode( $shortcode_tag, $atts ) ) {
+if ( ! vcex_maybe_display_shortcode( 'vcex_woocommerce_loop_carousel', $atts ) ) {
 	return;
 }
 
@@ -22,7 +20,7 @@ if ( ! class_exists( 'woocommerce' ) ) {
 }
 
 // Get and extract shortcode attributes.
-$atts = vcex_shortcode_atts( $shortcode_tag, $atts, $this );
+$atts = vcex_shortcode_atts( 'vcex_woocommerce_loop_carousel', $atts, $this );
 
 // Define vars.
 $atts['post_type'] = 'product';
@@ -78,7 +76,7 @@ if ( $vcex_query->have_posts() ) :
 	}
 
 	if ( $visibility ) {
-		$wrap_classes[] = $visibility;
+		$wrap_classes[] = vcex_parse_visibility_class( $visibility );
 	}
 
 	if ( $css_animation && 'none' != $css_animation ) {
@@ -101,7 +99,7 @@ if ( $vcex_query->have_posts() ) :
 
 	<div class="woocommerce wpex-clr">
 
-		<ul class="<?php echo esc_attr( $wrap_classes ); ?>" data-wpex-carousel="<?php echo vcex_get_carousel_settings( $atts, $shortcode_tag ); ?>"<?php vcex_unique_id( $unique_id ); ?>>
+		<ul class="<?php echo esc_attr( $wrap_classes ); ?>" data-wpex-carousel="<?php echo vcex_get_carousel_settings( $atts, 'vcex_woocommerce_loop_carousel' ); ?>"<?php vcex_unique_id( $unique_id ); ?>>
 
 			<?php
 			// Loop through posts.

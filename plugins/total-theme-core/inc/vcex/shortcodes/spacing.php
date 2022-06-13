@@ -42,10 +42,25 @@ if ( ! class_exists( 'VCEX_Spacing_Shortcode' ) ) {
 				array(
 					'type' => 'textfield',
 					'admin_label' => true,
-					'heading' => esc_html__( 'Spacing', 'total-theme-core' ),
+					'heading' => esc_html__( 'Height', 'total-theme-core' ),
 					'param_name' => 'size',
 					'value' => '30px',
-					'description' => esc_html__( 'Enter a px, em, % or vh value. If you do not specify a unit it will use px.', 'total-theme-core' ),
+					'description' => vcex_shortcode_param_description( 'height' ),
+					'dependency' => array( 'element' => 'responsive', 'value' => 'false' ),
+				),
+				array(
+					'type' => 'vcex_ofswitch',
+					'heading' => esc_html__( 'Responsive?', 'total-theme-core' ),
+					'param_name' => 'responsive',
+					'value' => 'false',
+				),
+				array(
+					'type' => 'vcex_responsive_sizes',
+					'heading' => esc_html__( 'Height', 'total-theme-core' ),
+					'param_name' => 'size_responsive',
+					'value' => '30px',
+					'description' => vcex_shortcode_param_description( 'height' ),
+					'dependency' => array( 'element' => 'responsive', 'value' => 'true' ),
 				),
 				array(
 					'type' => 'textfield',

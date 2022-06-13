@@ -1,26 +1,34 @@
-( function( $ ) {
+if ( 'function' !== typeof window.vcexBeforeAfter ) {
+	window.vcexBeforeAfter = function( context ) {
 
-	'use strict';
+		if ( 'undefined' === typeof jQuery || 'function' !== typeof jQuery.fn.twentytwenty ) {
+			return;
+		}
 
-	if ( 'function' !== typeof window.vcexBeforeAfter ) {
+		if ( ! context || ! context.childNodes ) {
+			context = document;
+		}
 
-		window.vcexBeforeAfter = function ( $context ) {
-
-			if ( 'undefined' === typeof $.fn.twentytwenty ) {
-				return;
-			}
-
-			$( '.vcex-image-ba', $context ).each( function() {
-				var $this = $( this );
-				$this.twentytwenty( $this.data( 'options' ) );
-			} );
-
+		var renderBa = function( element ) {
+			jQuery( element ).twentytwenty( JSON.parse( element.dataset.options ) );
+			element.setAttribute( 'data-vcex-image-ba-init', 'true' );
 		};
 
-	}
+		context.querySelectorAll( '.vcex-image-ba:not([data-vcex-image-ba-init="true"]' ).forEach( function( element ) {
+			if ( 'function' === typeof imagesLoaded ) {
+				imagesLoaded( element, function() {
+					renderBa( element );
+				} );
+			} else {
+				renderBa( element );
+			}
+		} );
 
-	$( window ).on( 'load', function() {
-		window.vcexBeforeAfter();
-	} );
+	};
+}
 
-} ) ( jQuery );
+if ( document.readyState === 'interactive' || document.readyState === 'complete' ) {
+	setTimeout( vcexBeforeAfter, 0 );
+} else {
+	document.addEventListener( 'DOMContentLoaded', vcexBeforeAfter, false );
+}

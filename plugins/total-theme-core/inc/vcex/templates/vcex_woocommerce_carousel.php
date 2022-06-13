@@ -4,16 +4,14 @@
  *
  * @package Total WordPress Theme
  * @subpackage Total Theme Core
- * @version 1.2.8
+ * @version 1.3.2
  *
  * @todo convert output to var $output
  */
 
 defined( 'ABSPATH' ) || exit;
 
-$shortcode_tag = 'vcex_woocommerce_carousel';
-
-if ( ! vcex_maybe_display_shortcode( $shortcode_tag, $atts ) ) {
+if ( ! vcex_maybe_display_shortcode( 'vcex_woocommerce_carousel', $atts ) ) {
 	return;
 }
 
@@ -33,7 +31,7 @@ if ( ! empty( $atts['term_slug'] ) && empty( $atts['include_categories']) ) {
 }
 
 // Get and extract shortcode attributes.
-$atts = vcex_shortcode_atts( $shortcode_tag, $atts, $this );
+$atts = vcex_shortcode_atts( 'vcex_woocommerce_carousel', $atts, $this );
 
 // Define vars
 $atts['post_type'] = 'product';
@@ -93,15 +91,15 @@ if ( $vcex_query->have_posts() ) :
 		$arrows_position = ( 'no-margins' === $style && 'default' === $arrows_position ) ? 'abs' : $arrows_position;
 	}
 
-	$arrows_style = $arrows_style ? $arrows_style : 'default';
-	$wrap_classes[] = 'arrwstyle-'. $arrows_style;
+	$arrows_style = $arrows_style ?: 'default';
+	$wrap_classes[] = 'arrwstyle-' . sanitize_html_class( $arrows_style );
 
 	if ( $arrows_position && 'default' !== $arrows_position ) {
-		$wrap_classes[] = 'arrwpos-'. $arrows_position;
+		$wrap_classes[] = 'arrwpos-' . sanitize_html_class( $arrows_position );
 	}
 
 	if ( $visibility ) {
-		$wrap_classes[] = $visibility;
+		$wrap_classes[] = vcex_parse_visibility_class( $visibility );
 	}
 
 	if ( $css_animation_class = vcex_get_css_animation( $css_animation ) ) {
@@ -175,7 +173,7 @@ if ( $vcex_query->have_posts() ) :
 	if ( 'true' == $read_more ) {
 
 		// Readmore text.
-		$read_more_text = $read_more_text ? $read_more_text : esc_html__( 'view product', 'total' );
+		$read_more_text = $read_more_text ?: esc_html__( 'view product', 'total' );
 
 		// Readmore classes.
 		$readmore_classes = vcex_get_button_classes( $readmore_style, $readmore_style_color );
@@ -210,7 +208,7 @@ if ( $vcex_query->have_posts() ) :
 	}
 
 	// Filter wrap classes.
-	$wrap_classes = vcex_parse_shortcode_classes( implode( ' ', $wrap_classes ), $shortcode_tag, $atts );
+	$wrap_classes = vcex_parse_shortcode_classes( implode( ' ', $wrap_classes ), 'vcex_woocommerce_carousel', $atts );
 
 	// Wrap style.
 	$wrap_style = array(
@@ -220,7 +218,7 @@ if ( $vcex_query->have_posts() ) :
 
 	?>
 
-	<div class="woocommerce <?php echo esc_attr( $wrap_classes ); ?>" data-wpex-carousel="<?php echo vcex_get_carousel_settings( $atts, $shortcode_tag ); ?>"<?php vcex_unique_id( $unique_id ); ?><?php echo vcex_inline_style( $wrap_style ); ?>>
+	<div class="woocommerce <?php echo esc_attr( $wrap_classes ); ?>" data-wpex-carousel="<?php echo vcex_get_carousel_settings( $atts, 'vcex_woocommerce_carousel' ); ?>"<?php vcex_unique_id( $unique_id ); ?><?php echo vcex_inline_style( $wrap_style ); ?>>
 
 		<?php
 		// Loop through posts.

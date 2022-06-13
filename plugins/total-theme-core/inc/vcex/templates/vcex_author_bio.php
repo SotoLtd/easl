@@ -4,19 +4,17 @@
  *
  * @package Total WordPress Theme
  * @subpackage Total Theme Core
- * @version 1.2.8
+ * @version 1.3.2
  */
 
 defined( 'ABSPATH' ) || exit;
 
-$shortcode_tag = 'vcex_author_bio';
-
-if ( ! vcex_maybe_display_shortcode( $shortcode_tag, $atts ) ) {
+if ( ! vcex_maybe_display_shortcode( 'vcex_author_bio', $atts ) ) {
 	return;
 }
 
 // Get and extract shortcode attributes.
-$atts = vcex_shortcode_atts( $shortcode_tag, $atts, $this );
+$atts = vcex_shortcode_atts( 'vcex_author_bio', $atts, $this );
 
 // Define main vars.
 $output = '';
@@ -79,7 +77,7 @@ if ( $bottom_margin_class = vcex_parse_margin_class( $atts['bottom_margin'], 'wp
 }
 
 if ( $atts['visibility'] ) {
-	$shortcode_class[] = sanitize_html_class( $atts['visibility'] );
+	$shortcode_class[] = vcex_parse_visibility_class( $atts['visibility'] );
 }
 
 if ( $css_animation_class = vcex_get_css_animation( $atts['css_animation'] ) ) {
@@ -110,13 +108,31 @@ if ( 'default' !== $style ) {
 
 }
 
+if ( ! empty( $atts['max_width'] ) ) {
+
+	switch ( $atts['align'] ) {
+		case 'left':
+			$shortcode_class[] = 'wpex-mr-auto';
+			break;
+		case 'right':
+			$shortcode_class[] = 'wpex-ml-auto';
+			break;
+		case 'center':
+		default:
+			$shortcode_class[] = 'wpex-mx-auto';
+			break;
+	}
+
+}
+
 if ( $el_class = vcex_get_extra_class( $atts['el_class'] ) ) {
 	$shortcode_class[] = $el_class;
 }
 
-$shortcode_class = vcex_parse_shortcode_classes( $shortcode_class, $shortcode_tag, $atts );
+$shortcode_class = vcex_parse_shortcode_classes( $shortcode_class, 'vcex_author_bio', $atts );
 
 $shortcode_style = vcex_inline_style( array(
+	'max_width'          => $atts['max_width'],
 	'background_color'   => $atts['background_color'],
 	'border_color'       => $atts['border_color'],
 	'animation_delay'    => $atts['animation_delay'],

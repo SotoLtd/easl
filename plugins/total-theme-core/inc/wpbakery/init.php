@@ -1,38 +1,23 @@
 <?php
-/**
- * WPBakery tweaks and custom shortcodes.
- *
- * @package TotalThemeCore
- * @version 1.2.8
- */
-
 namespace TotalThemeCore\WPBakery;
 
 defined( 'ABSPATH' ) || exit;
 
+/**
+ * WPBakery tweaks and custom shortcodes.
+ *
+ * @package TotalThemeCore
+ * @version 1.3.1
+ */
 final class Init {
 
 	/**
-	 * Our single Init instance.
+	 * Instance.
+	 *
+	 * @access private
+	 * @var object Class object.
 	 */
 	private static $instance;
-
-	/**
-	 * Disable instantiation.
-	 */
-	private function __construct() {}
-
-	/**
-	 * Disable the cloning of this class.
-	 *
-	 * @return void
-	 */
-	final public function __clone() {}
-
-	/**
-	 * Disable the wakeup of this class.
-	 */
-	final public function __wakeup() {}
 
 	/**
 	 * Create or retrieve the instance of Init.
@@ -56,11 +41,15 @@ final class Init {
 		// Global functions.
 		add_action( 'vc_before_mapping', array( $this, 'vc_before_mapping' ) );
 
-		// WPBakery Frontend-Editor scripts.
-		if ( is_admin() || ( function_exists( 'vc_is_inline' ) && vc_is_inline() ) ) {
-			add_action( 'vc_inline_editor_page_view', array( $this, 'frontend_editor_scripts' ), PHP_INT_MAX );
-			add_action( 'admin_enqueue_scripts', array( $this, 'admin_scripts' ) );
-		}
+		// Register scripts.
+		add_action( 'vc_base_register_admin_css', array( $this, 'register_editor_css' ) );
+		add_action( 'vc_base_register_front_css', array( $this, 'register_editor_css' ) );
+
+		// Enqueue scripts.
+		add_action( 'vc_load_iframe_jscss', array( $this, 'editor_iframe_scripts' ), PHP_INT_MAX );
+		add_action( 'vc_backend_editor_enqueue_js_css', array( $this, 'backend_editor_scripts' ) );
+		add_action( 'vc_frontend_editor_enqueue_js_css', array( $this, 'frontend_editor_scripts' ) );
+		add_action( 'vc_page_settings_build', array( $this, 'settings_scripts' ) );
 
 	}
 
@@ -107,12 +96,40 @@ final class Init {
 	}
 
 	/**
-	 * Editor Scripts.
-	 *
-	 * @todo move vcex-params.js here if possible.
+	 * Register CSS scripts.
 	 */
-	public function frontend_editor_scripts() {
+	public function register_editor_css() {
+		wp_register_style(
+			'vcex-wpbakery-editor',
+			TTC_PLUGIN_DIR_URL . 'inc/wpbakery/assets/css/vcex-wpbakery-editor.css',
+			array(),
+			TTC_VERSION
+		);
+	}
 
+	/**
+	 * Register JS Scripts.
+	 */
+	public function register_frontend_js() {
+		wp_register_script(
+			'vcex-vc_reload',
+			TTC_PLUGIN_DIR_URL . 'inc/wpbakery/assets/js/frontend-editor/vcex-vc_reload.min.js',
+			array( 'jquery' ),
+			TTC_VERSION,
+			true
+		);
+	}
+
+	/**
+	 * Editor Scripts.
+	 */
+	public function editor_iframe_scripts() {
+		wp_enqueue_style(
+			'vcex-wpbakery-vc-helper',
+			TTC_PLUGIN_DIR_URL . 'inc/wpbakery/assets/css/vc-helper.css',
+			array(),
+			TTC_VERSION
+		);
 		wp_enqueue_script(
 			'vcex-vc_reload',
 			TTC_PLUGIN_DIR_URL . 'inc/wpbakery/assets/js/frontend-editor/vcex-vc_reload.min.js',
@@ -120,35 +137,34 @@ final class Init {
 			TTC_VERSION,
 			true
 		);
-
 	}
 
 	/**
-	 * Admin Scripts.
+	 * Enqueue backend editor scripts.
 	 *
-	 * @todo move vcex-params.js here if possible.
+	 * @todo move vcex-params.min.js here if possible? Not sure if it's any better.
 	 */
-	public function admin_scripts( $hook ) {
+	public function backend_editor_scripts() {
+		wp_enqueue_style( 'vcex-wpbakery-editor' );
+	}
 
-		$hooks = array(
-			'edit.php',
-			'post.php',
-			'post-new.php',
-			'widgets.php',
-			'toolset_page_ct-editor', // Support VC widget plugin.
-		);
+	/**
+	 * Enqueue frontend editor scripts.
+	 */
+	public function frontend_editor_scripts() {
+		wp_enqueue_style( 'vcex-wpbakery-editor' );
+	}
 
-		if ( ! in_array( $hook, $hooks ) ) {
-			return;
-		}
-
+	/**
+	 * Enqueue scripts for the WPBakery settings pages.
+	 */
+	public function settings_scripts() {
 		wp_enqueue_style(
-			'vcex-wpbakery-backend',
-			TTC_PLUGIN_DIR_URL . 'inc/wpbakery/assets/css/vcex-wpbakery-backend.css',
-			array(),
+			'vcex-element-icons',
+			TTC_PLUGIN_DIR_URL . 'inc/wpbakery/assets/css/vcex-element-icons.css',
+			array( 'js_composer_settings' ),
 			TTC_VERSION
 		);
-
 	}
 
 }

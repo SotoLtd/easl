@@ -3,32 +3,30 @@
 	'use strict';
 
 	if ( 'function' !== typeof window.vcexStickyNavbar ) {
-		window.vcexStickyNavbar = function ( $context ) {
+		window.vcexStickyNavbar = function( $context ) {
 
-			var $nav      = $( '.vcex-navbar-sticky' ),
-				$window   = $( window ),
-				windowTop = $window.scrollTop();
+			var $nav = $( '.vcex-navbar-sticky' ),
+				$window = $( window );
 
 			if ( ! $nav.length ) {
 				return;
 			}
 
 			$nav.each( function() {
-
-				var $this           = $( this );
-				var $isSticky       = false;
+				var $this = $( this );
+				var $isSticky = false;
 				var $stickyEndPoint = $this.data( 'sticky-endpoint' ) ? $( $this.data( 'sticky-endpoint' ) ) : '';
 
-				// Add sticky wrap
+				// Add sticky wrap.
 				var $stickyWrap = $( '<div class="vcex-navbar-sticky-wrapper not-sticky"></div>' );
 				$this.wrapAll( $stickyWrap );
 				$stickyWrap = $this.parent( '.vcex-navbar-sticky-wrapper' );
 
-				// Check sticky offSet based on other sticky elements
+				// Check sticky offSet based on other sticky elements.
 				function getStickyOffset() {
 
 					var offset = 0;
-					var items  = '';
+					var items = '';
 
 					if ( $this.data( 'vcex-sticky-offset-items' ) ) {
 						items = $this.data( 'vcex-sticky-offset-items' );
@@ -53,16 +51,16 @@
 
 				}
 
-				// Set sticky
+				// Set sticky.
 				function setSticky( $offset ) {
 
-					// Return if hidden
+					// Return if hidden.
 					if ( ! $this.is( ':visible' ) ) {
 						destroySticky(); // make sure to destroy if hidden
 						return;
 					}
 
-					// Already sticky or hidden
+					// Already sticky or hidden.
 					if ( $isSticky ) {
 						$this.css( {
 							'top' : getStickyOffset() // recalculate for shrink sticky elements
@@ -70,24 +68,24 @@
 						return;
 					}
 
-					// Set placeholder
+					// Set placeholder.
 					$stickyWrap
 						.css( 'height', $this.outerHeight() )
 						.removeClass( 'not-sticky' )
 						.addClass( 'is-sticky' );
 
-					// Position Fixed nav
+					// Position Fixed nav.
 					$this.css( {
-						'top'   : $offset,
-						'width' : $stickyWrap.width()
+						'top': $offset,
+						'width': $stickyWrap.width()
 					} );
 
-					// Update sticky var
+					// Update sticky var.
 					$isSticky = true;
 
 				}
 
-				// Un-Shrink header function
+				// Un-Shrink header function.
 				function destroySticky() {
 
 					// Not sticky
@@ -95,30 +93,30 @@
 						return;
 					}
 
-					// Remove sticky wrap height and toggle sticky class
+					// Remove sticky wrap height and toggle sticky class.
 					$stickyWrap
 						.css( 'height', '' )
 						.removeClass( 'is-sticky' )
 						.addClass( 'not-sticky' );
 
-					// Remove navbar width
+					// Remove navbar width.
 					$this.css( {
 						'width' : '',
 						'top'   : ''
 					} );
 
-					// Update shrunk var
+					// Update shrunk var.
 					$isSticky = false;
 
 				}
 
-				// On scroll function
+				// On scroll function.
 				function stickyCheck() {
 
-					var windowTop     = $( window ).scrollTop(),
-						stickyOffset  = getStickyOffset(),
+					var windowTop = $( window ).scrollTop(),
+						stickyOffset = getStickyOffset(),
 						stickyWrapTop = $stickyWrap.offset().top,
-						setStickyPos  = stickyWrapTop - stickyOffset;
+						setStickyPos = stickyWrapTop - stickyOffset;
 
 					if ( windowTop > setStickyPos && 0 !== windowTop ) {
 						setSticky( stickyOffset );
@@ -135,27 +133,27 @@
 
 				}
 
-				// On resize function
+				// On resize function.
 				function onResize() {
 
 					// Should it be sticky?
 					stickyCheck();
 
-					// Sticky fixes
+					// Sticky fixes.
 					if ( $isSticky ) {
 
-						// Destroy if hidden
+						// Destroy if hidden.
 						if ( ! $this.is( ':visible' ) ) {
 							destroySticky();
 						}
 
-						// Set correct height on wrapper
+						// Set correct height on wrapper.
 						$stickyWrap.css( 'height', $this.outerHeight() );
 
-						// Set correct width and offset value on sticky element
+						// Set correct width and offset value on sticky element.
 						$this.css( {
-							'top'   : getStickyOffset(),
-							'width' : $stickyWrap.width()
+							'top': getStickyOffset(),
+							'width': $stickyWrap.width()
 						} );
 
 					}
@@ -167,20 +165,16 @@
 
 				}
 
-				// Fire on init
+				// Fire on init.
 				stickyCheck();
 
-				// Fire onscroll event
-				$window.scroll( function() {
-					stickyCheck();
-				} );
+				// Fire onscroll event.
+				window.addEventListener( 'scroll', stickyCheck, { passive: true } );
 
-				// Fire onResize
-				$window.resize( function() {
-					onResize();
-				} );
+				// Fire onResize.
+				window.addEventListener( 'resize', onResize );
 
-				// Fire resize on flip
+				// Fire resize on flip.
 				$window.on( 'orientationchange', function( e ) {
 					destroySticky();
 					stickyCheck();
@@ -189,11 +183,21 @@
 			} ); // End each
 
 		};
-
 	}
 
 	$( window ).on( 'load', function() {
-		window.vcexStickyNavbar();
+		vcexStickyNavbar();
+	} );
+
+	// Fix potential width issues with sticky elements inside WPBakery stretched rows in Firefox/Safari.
+	// This is because sometimes window.load loads after document.ready
+	$( document ).on( 'vc_js', function() {
+		document.querySelectorAll( '[data-vc-full-width-init] .vcex-navbar-sticky' ).forEach( function( element ) {
+			var stickyWrapper = element.closest( '.vcex-navbar-sticky-wrapper' );
+			if ( stickyWrapper ) {
+				element.style.width = stickyWrapper.getBoundingClientRect().width + 'px';
+			}
+		} );
 	} );
 
 } ) ( jQuery );

@@ -1,15 +1,14 @@
 <?php
-/**
- * Class for easily adding term meta settings.
- *
- * @package TotalThemeCore
- * @version 1.2.8
- */
-
 namespace TotalThemeCore\Meta;
 
 defined( 'ABSPATH' ) || exit;
 
+/**
+ * Class for easily adding term meta settings.
+ *
+ * @package TotalThemeCore
+ * @version 1.3.2
+ */
 final class Term_Settings {
 
 	/**
@@ -18,66 +17,36 @@ final class Term_Settings {
 	private static $instance;
 
 	/**
-	 * Disable instantiation.
-	 */
-	private function __construct() {}
-
-	/**
-	 * Disable the cloning of this class.
-	 *
-	 * @return void
-	 */
-	final public function __clone() {}
-
-	/**
-	 * Disable the wakeup of this class.
-	 */
-	final public function __wakeup() {}
-
-	/**
 	 * Create or retrieve the instance of Term_Settings.
 	 */
 	public static function instance() {
 		if ( is_null( static::$instance ) ) {
-			static::$instance = new Term_Settings;
-			static::$instance->init_hooks();
+			static::$instance = new self();
 		}
-
 		return static::$instance;
 	}
 
 	/**
-	 * Hook into actions and filters.
+	 * Constructor.
 	 */
-	public function init_hooks() {
+	public function __construct() {
 
 		// Register meta options
 		// Not needed since it only is used for sanitization which we do ourselves
-		//add_action( 'init', array( $this, 'register_meta' ) );
+		//add_action( 'init', __CLASS__ . '::register_meta' );
 
 		// Admin init
-		add_action( 'admin_init', array( $this, 'meta_form_fields' ), 40 );
+		add_action( 'admin_init', __CLASS__ . '::meta_form_fields', 40 );
 
 	}
 
 	/**
 	 * Array of meta options.
 	 */
-	public function meta_options() {
+	public static function get_options() {
+
 		$options = array(
-			/* Category Color - WIP - coming soon!
-			'wpex_accent_color'  => array(
-				'label'          => esc_html__( 'Accent Color', 'total-theme-core' ),
-				'type'           => 'color',
-				'has_admin_col'  => true,
-				'show_on_create' => true,
-				'args'           => array(
-					'type'              => 'color',
-					'single'            => true,
-					'sanitize_callback' => 'sanitize_hex_color',
-				),
-			),*/
-			// Card style.
+			// Card style
 			'wpex_entry_card_style' => array(
 				'label'     => esc_html__( 'Entry Card Style', 'total-theme-core' ),
 				'type'      => 'select',
@@ -88,7 +57,7 @@ final class Term_Settings {
 					'sanitize_callback' => 'sanitize_text_field',
 				),
 			),
-			// Redirect.
+			// Redirect
 			'wpex_redirect' => array(
 				'label'     => esc_html__( 'Redirect', 'total-theme-core' ),
 				'type'      => 'wp_dropdown_pages',
@@ -98,7 +67,7 @@ final class Term_Settings {
 					'sanitize_callback' => 'sanitize_text_field',
 				),
 			),
-			// Sidebar select.
+			// Sidebar select
 			'wpex_sidebar' => array(
 				'label'    => esc_html__( 'Sidebar', 'total-theme-core' ),
 				'type'     => 'select',
@@ -110,40 +79,48 @@ final class Term_Settings {
 				),
 			),
 		);
-		return apply_filters( 'wpex_term_meta_options', $options );
+
+		/**
+		 * Filters the term meta options array.
+		 *
+		 * @param array $options.
+		 */
+		$options = apply_filters( 'wpex_term_meta_options', $options );
+
+		return $options;
 	}
 
 	/**
 	 * Add meta form fields.
 	 */
-	public function meta_form_fields() {
+	public static function meta_form_fields() {
 
-		// Get taxonomies
-		$taxonomies = apply_filters( 'wpex_term_meta_taxonomies', get_taxonomies( array(
+		// Get taxonomies.
+		$taxonomies = (array) apply_filters( 'wpex_term_meta_taxonomies', get_taxonomies( array(
 			'public' => true,
 		) ) );
 
-		// Return if no taxes defined
+		// Return if no taxes defined.
 		if ( ! $taxonomies ) {
 			return;
 		}
 
-		// Loop through taxonomies
+		// Loop through taxonomies.
 		foreach ( $taxonomies as $taxonomy ) {
 
-			// Add fileds to add new term page
-			add_action( $taxonomy . '_add_form_fields', array( $this, 'add_form_fields' ) );
+			// Add fields to add new term page.
+			add_action( $taxonomy . '_add_form_fields', __CLASS__ . '::add_form_fields' );
 
-			// Add fields to edit term page
-			add_action( $taxonomy . '_edit_form_fields', array( $this, 'edit_form_fields' ) );
+			// Add fields to edit term page.
+			add_action( $taxonomy . '_edit_form_fields', __CLASS__ . '::edit_form_fields' );
 
-			// Save fields
-			add_action( 'created_' . $taxonomy, array( $this, 'save_forms' ), 10, 3 );
-			add_action( 'edited_' . $taxonomy, array( $this, 'save_forms' ), 10, 3 );
+			// Save fields.
+			add_action( 'created_' . $taxonomy, __CLASS__ . '::save_forms', 10, 3 );
+			add_action( 'edited_' . $taxonomy, __CLASS__ . '::save_forms', 10, 3 );
 
-			// Show fields in admin columns
-			add_filter( 'manage_edit-' . $taxonomy . '_columns', array( $this, 'admin_columns' ) );
-			add_filter( 'manage_' . $taxonomy . '_custom_column', array( $this, 'admin_column' ), 10, 3 );
+			// Show fields in admin columns.
+			add_filter( 'manage_edit-' . $taxonomy . '_columns', __CLASS__ . '::admin_columns' );
+			add_filter( 'manage_' . $taxonomy . '_custom_column', __CLASS__ . '::admin_column', 10, 3 );
 
 		}
 
@@ -152,9 +129,9 @@ final class Term_Settings {
 	/**
 	 * Register meta options.
 	 */
-	public function register_meta() {
-		foreach( $this->meta_options() as $key => $val ) {
-			$args = isset( $val['args'] ) ? $val['args'] : array();
+	public static function register_meta() {
+		foreach( self::get_options() as $key => $val ) {
+			$args = $val['args'] ?? array();
 			register_meta( 'term', $key, $args );
 		}
 	}
@@ -162,16 +139,16 @@ final class Term_Settings {
 	/**
 	 * Adds new category fields.
 	 */
-	public function add_form_fields( $taxonomy ) {
+	public static function add_form_fields( $taxonomy ) {
 		$has_fields = false;
 
-		// Get term options
-		$meta_options = $this->meta_options();
+		// Get term options.
+		$meta_options = self::get_options();
 
-		// Make sure options aren't empty/disabled
+		// Make sure options aren't empty/disabled.
 		if ( ! empty( $meta_options ) && is_array( $meta_options ) ) {
 
-			// Loop through options
+			// Loop through options.
 			foreach ( $meta_options as $key => $val ) {
 
 				if ( empty( $val['show_on_create'] ) ) {
@@ -182,18 +159,22 @@ final class Term_Settings {
 					$has_fields = true;
 				}
 
-				$label = isset( $val['label'] ) ? $val['label'] : '';
+				$label = $val['label'] ?? '';
+
+				if ( ! self::maybe_add_option_to_taxonomy( $val, $taxonomy ) ) {
+					continue;
+				}
 
 				?>
 
 				<div class="form-field">
 					<label for="<?php echo esc_attr( $key ); ?>"><?php echo esc_html( $label ); ?></label>
-					<?php $this->meta_form_field( $key, $val, '' ); ?>
+					<?php self::meta_form_field( $key, $val, '' ); ?>
 				</div>
 
 			<?php }
 
-			// Add security nonce only if fields are shown
+			// Add security nonce only if fields are to be added.
 			if ( $has_fields ) {
 				wp_nonce_field( 'wpex_term_meta_nonce', 'wpex_term_meta_nonce' );
 			}
@@ -205,27 +186,31 @@ final class Term_Settings {
 	/**
 	 * Adds new category fields.
 	 */
-	public function edit_form_fields( $term ) {
+	public static function edit_form_fields( $term ) {
 
-		// Security nonce
+		// Security nonce.
 		wp_nonce_field( 'wpex_term_meta_nonce', 'wpex_term_meta_nonce' );
 
-		// Get term options
-		$meta_options = $this->meta_options();
+		// Get term options.
+		$meta_options = self::get_options();
 
-		// Make sure options aren't empty/disabled
+		// Make sure options aren't empty/disabled.
 		if ( ! empty( $meta_options ) && is_array( $meta_options ) ) {
 
-			// Loop through options
+			// Loop through options.
 			foreach ( $meta_options as $key => $val ) {
 
-				$label = isset( $val['label'] ) ? $val['label'] : '';
+				$label = $val['label'] ?? '';
+
+				if ( ! self::maybe_add_option_to_taxonomy( $val, $term->taxonomy ) ) {
+					continue;
+				}
 
 				?>
 
 				<tr class="form-field">
 					<th scope="row" valign="top"><label for="<?php echo esc_attr( $key ); ?>"><?php echo esc_html( $label ); ?></label></th>
-					<td><?php $this->meta_form_field( $key, $val, $term ); ?></td>
+					<td><?php self::meta_form_field( $key, $val, $term ); ?></td>
 				</tr>
 
 			<?php }
@@ -237,33 +222,43 @@ final class Term_Settings {
 	/**
 	 * Saves meta fields.
 	 */
-	public function save_forms( $term_id ) {
+	public static function save_forms( $term_id ) {
 
-		// Make sure everything is secure
+		// Make sure everything is secure.
 		if ( empty( $_POST['wpex_term_meta_nonce'] )
 			|| ! wp_verify_nonce( $_POST['wpex_term_meta_nonce'], 'wpex_term_meta_nonce' )
 		) {
 			return;
 		}
 
-		// Get options
-		$meta_options = $this->meta_options();
+		// Get options.
+		$meta_options = self::get_options();
 
-		// Make sure options aren't empty/disabled
+		// Make sure options aren't empty/disabled.
 		if ( ! empty( $meta_options ) && is_array( $meta_options ) ) {
 
-			// Loop through options
+			// Loop through options.
 			foreach ( $meta_options as $key => $val ) {
 
-				// Check option value
-				$value = isset( $_POST[$key] ) ? $_POST[$key] : '';
-
-				// Save setting
-				if ( $value ) {
-					update_term_meta( $term_id, $key, sanitize_text_field( $value ) );
+				// Skip any option that isn't in $__POST - this way we aren't deleting meta that could be temporarily hidden.
+				if ( ! array_key_exists( $key, $_POST ) ) {
+					continue;
 				}
 
-				// Delete setting
+				// Check option value.
+				$value = $_POST[$key];
+
+				// Save setting.
+				if ( $value ) {
+					if ( isset( $val['args']['sanitize_callback'] ) && is_callable( $val['args']['sanitize_callback'] ) ) {
+						$safe_value = call_user_func( $val['args']['sanitize_callback'], $value );
+					} else {
+						$safe_value = sanitize_text_field( $value );
+					}
+					update_term_meta( $term_id, $key, $safe_value );
+				}
+
+				// Delete setting.
 				else {
 					delete_term_meta( $term_id, $key );
 				}
@@ -277,27 +272,26 @@ final class Term_Settings {
 	/**
 	 * Add new admin columns for specific fields.
 	 */
-	public function admin_columns( $columns ) {
-
-		$meta_options = $this->meta_options();
-
-		if ( ! empty( $meta_options ) && is_array( $meta_options ) ) {
-			foreach ( $meta_options as $key => $val ) {
-				if ( ! empty( $val['has_admin_col'] ) ) {
-					$columns[$key] = esc_html( $val['label'] );
+	public static function admin_columns( $columns ) {
+		$meta_options = self::get_options();
+		if ( ! empty( $meta_options ) && is_array( $meta_options ) && array_key_exists( 'taxonomy', $_GET ) ) {
+			foreach ( $meta_options as $key => $option ) {
+				if ( ! empty( $option['has_admin_col'] )
+					&& self::maybe_add_option_to_taxonomy( $option, $_GET['taxonomy'] )
+				) {
+					$columns[$key] = esc_html( $option['label'] );
 				}
 			}
 		}
-
 		return $columns;
 	}
 
 	/**
 	 * Display certain field vals in admin columns.
 	 */
-	public function admin_column( $columns, $column, $term_id ) {
+	public static function admin_column( $columns, $column, $term_id ) {
 
-		$meta_options = $this->meta_options();
+		$meta_options = self::get_options();
 
 		if ( ! empty( $meta_options[$column] ) && ! empty( $meta_options[$column]['has_admin_col'] ) ) {
 
@@ -308,7 +302,7 @@ final class Term_Settings {
 
 				switch ( $field_type ) {
 					case 'color':
-						$columns .= '<span style="background:' . esc_attr( $meta ) . ';width:20px;height:20px;display:inline-block;border-radius:999px;"></span>';
+						$columns .= '<span style="background:' . esc_attr( $meta ) . ';width:15px;height:15px;display:inline-block;border-radius:999px;"></span>';
 						break;
 					default:
 						$columns .= esc_html( $meta );
@@ -328,13 +322,13 @@ final class Term_Settings {
 	/**
 	 * Outputs the form field.
 	 */
-	public function meta_form_field( $key, $val, $term = '' ) {
+	public static function meta_form_field( $key, $val, $term = '' ) {
 
-		$type    = isset( $val['type'] ) ? $val['type'] : 'text';
+		$type = $val['type'] ?? 'text';
 		$term_id = ( ! empty( $term ) && is_object( $term ) ) ? $term->term_id : '';
-		$value   = get_term_meta( $term_id, $key, true );
+		$value = get_term_meta( $term_id, $key, true );
 
-		// Text
+		// Text.
 		switch ( $type ) {
 
 			case 'select':
@@ -373,7 +367,7 @@ final class Term_Settings {
 
 				?>
 
-					<input type="text" name="<?php echo esc_attr( $key ); ?>" value="<?php echo esc_attr( $value ); ?>" class="wpex-color-field" />
+					<input type="text" name="<?php echo esc_attr( $key ); ?>" value="<?php echo esc_attr( $value ); ?>" class="wpex-color-field">
 
 				<?php
 				break;
@@ -381,8 +375,8 @@ final class Term_Settings {
 			case 'wp_dropdown_pages':
 
 				$args = array(
-					'name'             => $key,
-					'selected'         => $value,
+					'name' => $key,
+					'selected' => $value,
 					'show_option_none' => esc_html__( 'None', 'total-theme-core' )
 				);
 
@@ -393,13 +387,25 @@ final class Term_Settings {
 			case 'text':
 			default: ?>
 
-				<input type="text" name="<?php echo esc_attr( $key ); ?>" value="<?php echo esc_attr( $value ); ?>" /></td>
+				<input type="text" name="<?php echo esc_attr( $key ); ?>" value="<?php echo esc_attr( $value ); ?>"></td>
 
 			<?php
 			break;
 
-		} // end switch type
+		} // end switch type.
 
+	}
+
+	/**
+	 * Checks if a specific option should be added to the taxonomy.
+	 */
+	public static function maybe_add_option_to_taxonomy( $option, $taxonomy ) {
+		if ( isset( $option['taxonomies'] ) && is_array( $option['taxonomies'] ) ) {
+			if ( ! in_array( $taxonomy, $option['taxonomies'] ) ) {
+				return false;
+			}
+		}
+		return true;
 	}
 
 }

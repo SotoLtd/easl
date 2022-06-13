@@ -8,38 +8,24 @@ defined( 'ABSPATH' ) || exit;
  * Class registers the vcex_spacing shortcode with the WPBakery page builder.
  *
  * @package TotalThemeCore
- * @version 1.2.8
+ * @version 1.3
  */
 final class Vcex_Spacing {
 
 	/**
-	 * Our single instance.
+	 * Instance.
+	 *
+	 * @access private
+	 * @var object Class object.
 	 */
 	private static $instance;
-
-	/**
-	 * Disable instantiation.
-	 */
-	private function __construct() {}
-
-	/**
-	 * Disable the cloning of this class.
-	 *
-	 * @return void
-	 */
-	final public function __clone() {}
-
-	/**
-	 * Disable the wakeup of this class.
-	 */
-	final public function __wakeup() {}
 
 	/**
 	 * Create or retrieve the class instance.
 	 */
 	public static function instance() {
 		if ( is_null( static::$instance ) ) {
-			static::$instance = new Vcex_Spacing;
+			static::$instance = new self();
 			static::$instance->init_hooks();
 		}
 
@@ -69,7 +55,7 @@ final class Vcex_Spacing {
 			'description' => esc_html__( 'Adds spacing anywhere you need it', 'total-theme-core' ),
 			'base'        => 'vcex_spacing',
 			'category'    => vcex_shortcodes_branding(),
-			'icon'        => 'vcex-spacing vcex-icon ticon ticon-sort',
+			'icon'        => 'vcex_element-icon vcex_element-icon--spacing',
 			'params'      => VCEX_Spacing_Shortcode::get_params(),
 		);
 	}

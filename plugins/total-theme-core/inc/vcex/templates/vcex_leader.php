@@ -1,22 +1,20 @@
 <?php
 /**
- * vcex_leader shortcode output
+ * vcex_leader shortcode output.
  *
  * @package Total WordPress Theme
  * @subpackage Total Theme Core
- * @version 1.2
+ * @version 1.3.2
  */
 
 defined( 'ABSPATH' ) || exit;
 
-$shortcode_tag = 'vcex_leader';
-
-if ( ! vcex_maybe_display_shortcode( $shortcode_tag, $atts ) ) {
+if ( ! vcex_maybe_display_shortcode( 'vcex_leader', $atts ) ) {
 	return;
 }
 
 // Get and extract shortcode attributes
-extract( vcex_shortcode_atts( $shortcode_tag, $atts, $this ) );
+extract( vcex_shortcode_atts( 'vcex_leader', $atts, $this ) );
 
 $leaders = (array) vcex_vc_param_group_parse_atts( $leaders );
 
@@ -24,10 +22,15 @@ if ( ! $leaders ) {
 	return;
 }
 
+// Define output var.
+$output = '';
+
+// Define element attributes.
 $wrap_atrrs = array(
 	'class' => '',
 );
 
+// Define element classes.
 $wrap_classes = array(
 	'vcex-module',
 	'vcex-leader',
@@ -51,24 +54,34 @@ if ( $el_class ) {
 	$wrap_classes[] = vcex_get_extra_class( $el_class );
 }
 
-if ( $responsive_data = vcex_get_module_responsive_data( $atts ) ) {
-	$wrap_atrrs['data-wpex-rcss'] = $responsive_data;
-}
-
 $wrap_atrrs['style'] = vcex_inline_style( array(
 	'color'     => $color,
 	'font_size' => $font_size,
 ), false );
 
-// Add filters to the module classes
-$wrap_classes = vcex_parse_shortcode_classes( implode( ' ', $wrap_classes ), $shortcode_tag, $atts );
+// Responsive CSS.
+$unique_classname = vcex_element_unique_classname();
+
+$el_responsive_styles = array(
+	'font_size' => $font_size,
+);
+
+$responsive_css = vcex_element_responsive_css( $el_responsive_styles, $unique_classname );
+
+if ( $responsive_css ) {
+	$wrap_classes[] = $unique_classname;
+	$output .= '<style>' . $responsive_css . '</style>';
+}
+
+// Filter the element classes.
+$wrap_classes = vcex_parse_shortcode_classes( implode( ' ', $wrap_classes ), 'vcex_leader', $atts );
 
 $wrap_atrrs['class'] = $wrap_classes;
 
-// Begin output
-$output = '<div' . vcex_parse_html_attributes( $wrap_atrrs ) . '>';
+// Begin output.
+$output .= '<div' . vcex_parse_html_attributes( $wrap_atrrs ) . '>';
 
-// Label typography
+// Label typography.
 $label_typo = vcex_inline_style( array(
 	'color'       => $label_color,
 	'font_weight' => $label_font_weight,
@@ -77,11 +90,7 @@ $label_typo = vcex_inline_style( array(
 	'background'  => $background,
 ) );
 
-if ( $label_font_family ) {
-	vcex_enqueue_font( $label_font_family );
-}
-
-// value typography
+// Value typography.
 $value_typo = vcex_inline_style( array(
 	'color'       => $value_color,
 	'font_weight' => $value_font_weight,
@@ -90,11 +99,7 @@ $value_typo = vcex_inline_style( array(
 	'background'  => $background,
 ) );
 
-if ( $value_font_family ) {
-	vcex_enqueue_font( $value_font_family );
-}
-
-// Individual item classes
+// Individual item classes.
 $leader_classes = array(
 	'vcex-leader-item',
 	'wpex-clr',
@@ -104,15 +109,15 @@ if ( $spacing ) {
 	$leader_classes[] = 'wpex-mb-' . absint( $spacing );
 }
 
-if ( $css_animation && 'none' != $css_animation ) {
-	$leader_classes[] = trim( vcex_get_css_animation( $css_animation ) );
+if ( $css_animation_class = vcex_get_css_animation( $css_animation ) ) {
+	$leader_classes[] = $css_animation_class;
 }
 
-// Loop through leaders and output it's content
+// Loop through leaders and output it's content.
 foreach ( $leaders as $leader ) {
 
-	$label = isset( $leader['label'] ) ? $leader['label'] : esc_html__( 'Label', 'total' );
-	$value = isset( $leader['value'] ) ? $leader['value'] : esc_html__( 'Value', 'total' );
+	$label = $leader['label'] ?? esc_html__( 'Label', 'total' );
+	$value = $leader['value'] ?? esc_html__( 'Value', 'total' );
 
 	$output .= '<div class="' . esc_attr( implode( ' ', $leader_classes ) ) . '">';
 

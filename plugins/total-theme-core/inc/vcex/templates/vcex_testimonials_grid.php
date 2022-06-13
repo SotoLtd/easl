@@ -4,14 +4,12 @@
  *
  * @package Total WordPress Theme
  * @subpackage Total Theme Core
- * @version 1.2.8
+ * @version 1.3.2
  */
 
 defined( 'ABSPATH' ) || exit;
 
-$shortcode_tag = 'vcex_testimonials_grid';
-
-if ( ! vcex_maybe_display_shortcode( $shortcode_tag, $atts ) ) {
+if ( ! vcex_maybe_display_shortcode( 'vcex_testimonials_grid', $atts ) ) {
 	return;
 }
 
@@ -30,7 +28,7 @@ $og_atts = $atts;
 $entry_count = ! empty( $og_atts['entry_count'] ) ? $og_atts['entry_count'] : 0;
 
 // Get and extract shortcode attributes
-$atts = vcex_shortcode_atts( $shortcode_tag, $atts, $this );
+$atts = vcex_shortcode_atts( 'vcex_testimonials_grid', $atts, $this );
 extract( $atts );
 
 // Add paged attribute for load more button (used for WP_Query)
@@ -62,7 +60,7 @@ if ( $vcex_query->have_posts() ) :
 	$grid_data     = array();
 	$is_isotope    = false;
 	$css_animation = vcex_get_css_animation( $css_animation );
-	$title_tag     = $title_tag ? $title_tag : 'div';
+	$title_tag     = $title_tag ?: 'div';
 
 	// Is Isotope var
 	if ( 'true' == $filter || 'masonry' == $grid_style ) {
@@ -117,7 +115,7 @@ if ( $vcex_query->have_posts() ) :
 	}
 
 	if ( $visibility ) {
-		$wrap_classes[] = $visibility;
+		$wrap_classes[] = vcex_parse_visibility_class( $visibility );
 	}
 
 	if ( $css_animation && 'true' == $filter ) {
@@ -150,15 +148,12 @@ if ( $vcex_query->have_posts() ) :
 		}
 	} else {
 
-		$isotope_transition_duration = apply_filters( 'vcex_isotope_transition_duration', null, $shortcode_tag );
+		$isotope_transition_duration = apply_filters( 'vcex_isotope_transition_duration', null, 'vcex_testimonials_grid' );
 		if ( $isotope_transition_duration ) {
 			$grid_data[] = 'data-transition-duration="' . esc_attr( $isotope_transition ) . '"';
 		}
 
 	}
-
-	// Load custom fonts.
-	vcex_enqueue_font( $title_font_family );
 
 	// Columns classes.
 	$columns_class = vcex_get_grid_column_class( $atts );
@@ -180,7 +175,7 @@ if ( $vcex_query->have_posts() ) :
 	$grid_data     = $grid_data ? ' '. implode( ' ', $grid_data ) : '';
 
 	// VC filter
-	$wrap_classes = vcex_parse_shortcode_classes( $wrap_classes, $shortcode_tag, $atts );
+	$wrap_classes = vcex_parse_shortcode_classes( $wrap_classes, 'vcex_testimonials_grid', $atts );
 
 	// Begin shortcode output.
 	$output .= '<div class="'. esc_attr( $wrap_classes ) .'"'. vcex_get_unique_id( $unique_id ) .'>';
@@ -202,7 +197,7 @@ if ( $vcex_query->have_posts() ) :
 		if ( 'true' == $filter && ! empty( $filter_terms ) ) {
 
 			// Sanitize all text.
-			$all_text = $all_text ? $all_text : esc_html__( 'All', 'total' );
+			$all_text = $all_text ?: esc_html__( 'All', 'total' );
 
 			// Filter button classes.
 			$filter_button_classes = vcex_get_button_classes( $filter_button_style, $filter_button_color );
@@ -414,13 +409,13 @@ if ( $vcex_query->have_posts() ) :
 									'post_id' => $atts['post_id'],
 									'length'  => $excerpt_length,
 									'more'    => $read_more_link,
-									'context' => $shortcode_tag,
+									'context' => 'vcex_testimonials_grid',
 								) );
 
 							// Display full post content.
 							} else {
 
-								$excerpt_output .= vcex_the_content( get_the_content(), $shortcode_tag );
+								$excerpt_output .= vcex_the_content( get_the_content(), 'vcex_testimonials_grid' );
 
 							// End excerpt check.
 							}
@@ -688,7 +683,7 @@ if ( $vcex_query->have_posts() ) :
 		if ( 'true' == $atts['pagination_loadmore'] && ! empty( $vcex_query->max_num_pages ) ) {
 			vcex_loadmore_scripts();
 			$og_atts['entry_count'] = $entry_count; // Update counter
-			$output .= vcex_get_loadmore_button( $shortcode_tag, $og_atts, $vcex_query );
+			$output .= vcex_get_loadmore_button( 'vcex_testimonials_grid', $og_atts, $vcex_query );
 		}
 
 	$output .= '</div>';

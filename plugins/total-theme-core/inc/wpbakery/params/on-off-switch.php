@@ -1,14 +1,14 @@
 <?php
-/**
- * WPBakery Param => On/Off Switch.
- *
- * @package TotalThemeCore
- * @version 1.2.8
- */
 namespace TotalThemeCore\WPBakery\Params;
 
 defined( 'ABSPATH' ) || exit;
 
+/**
+ * WPBakery Param => On/Off Switch.
+ *
+ * @package TotalThemeCore
+ * @version 1.3.1
+ */
 final class On_Off_Switch {
 
 	public static function output( $settings, $value ) {
@@ -44,7 +44,7 @@ final class On_Off_Switch {
 
 			$output .= '<button class="vcex-btn vcex-off' . $active . '" data-value="' . esc_attr( $off ) . '">' . esc_html__( 'off', 'total-theme-core' ) . '</button>';
 
-			$output .= '<input name="' . esc_attr( $settings['param_name'] ) . '" class="vcex-hidden-input wpb-input wpb_vc_param_value  ' . esc_attr( $settings['param_name'] ) . ' ' . esc_attr( $settings['type'] ) . '_field" type="hidden" value="' . esc_attr( $value ) . '" />';
+			$output .= '<input name="' . esc_attr( $settings['param_name'] ) . '" class="vcex-hidden-input wpb-input wpb_vc_param_value  ' . esc_attr( $settings['param_name'] ) . ' ' . esc_attr( $settings['type'] ) . '_field" type="hidden" value="' . esc_attr( $value ) . '">';
 
 		$output .= '</div>';
 

@@ -1,18 +1,16 @@
 <?php
+namespace TotalThemeCore\Widgets;
+use WP_Widget;
+
+defined( 'ABSPATH' ) || exit;
+
 /**
  * bbPress Forum Info Widget.
  *
  * @package Total Theme Core
  * @subpackage Widgets
- * @version 1.2.8
+ * @version 1.3.1
  */
-
-namespace TotalThemeCore\Widgets;
-
-use WP_Widget;
-
-defined( 'ABSPATH' ) || exit;
-
 class Widget_bbPress_Forum_Info extends WP_Widget {
 
 	/**
@@ -136,7 +134,7 @@ class Widget_bbPress_Forum_Info extends WP_Widget {
 
 		<p>
 			<label for="<?php echo esc_attr( $this->get_field_id( 'title' ) ); ?>"><?php esc_html_e( 'Title', 'total-theme-core' ); ?>:</label>
-			<input class="widefat" id="<?php echo esc_attr( $this->get_field_id( 'title' ) ); ?>" name="<?php echo esc_attr( $this->get_field_name( 'title' ) ); ?>" type="text" value="<?php echo esc_attr( $title ); ?>" />
+			<input class="widefat" id="<?php echo esc_attr( $this->get_field_id( 'title' ) ); ?>" name="<?php echo esc_attr( $this->get_field_name( 'title' ) ); ?>" type="text" value="<?php echo esc_attr( $title ); ?>">
 		</p>
 
 		<?php

@@ -4,14 +4,12 @@
  *
  * @package Total WordPress Theme
  * @subpackage Total Theme Core
- * @version 1.2.8
+ * @version 1.3.2
  */
 
 defined( 'ABSPATH' ) || exit;
 
-$shortcode_tag = 'vcex_post_type_archive';
-
-if ( ! vcex_maybe_display_shortcode( $shortcode_tag, $atts ) ) {
+if ( ! vcex_maybe_display_shortcode(  'vcex_post_type_archive', $atts ) ) {
 	return;
 }
 
@@ -27,7 +25,7 @@ if ( function_exists( 'wpex_set_loop_counter' ) ) {
 }
 
 // Get and extract shortcode attributes
-$atts = vcex_shortcode_atts( $shortcode_tag, $atts, $this );
+$atts = vcex_shortcode_atts(  'vcex_post_type_archive', $atts, $this );
 extract( $atts );
 
 // Add paged attribute for load more button (used for WP_Query)
@@ -69,10 +67,10 @@ if ( $vcex_query->have_posts() ) :
 	}
 
 	if ( $visibility ) {
-	    $wrap_classes[] = sanitize_html_class( $visibility );
+	    $wrap_classes[] = vcex_parse_visibility_class( $visibility );
 	}
 
-	$wrap_classes = vcex_parse_shortcode_classes( implode( ' ', $wrap_classes ), $shortcode_tag, $atts );
+	$wrap_classes = vcex_parse_shortcode_classes( implode( ' ', $wrap_classes ),  'vcex_post_type_archive', $atts );
 
 
 	$wrap_style_escaped = vcex_inline_style( array(
@@ -88,7 +86,7 @@ if ( $vcex_query->have_posts() ) :
 		//Heading
 		if ( ! empty( $heading ) ) {
 			echo vcex_get_module_header( array(
-				'style'   => isset( $header_style ) ? $header_style : '',
+				'style'   => $header_style ?? '',
 				'content' => $heading,
 				'classes' => array(
 					'vcex-module-heading',
@@ -133,7 +131,7 @@ if ( $vcex_query->have_posts() ) :
 					$og_atts['entry_count'] = wpex_get_loop_counter(); // pass counter to ajax
 				}
 
-				echo vcex_get_loadmore_button( $shortcode_tag, $og_atts, $vcex_query );
+				echo vcex_get_loadmore_button(  'vcex_post_type_archive', $og_atts, $vcex_query );
 
 			}
 

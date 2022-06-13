@@ -7,61 +7,51 @@ defined( 'ABSPATH' ) || exit;
  * Custom view for displaying shortcode image gallery in the WPBakery backend editor.
  *
  * @package TotalThemeCore
- * @version 1.2.8
+ * @version 1.3.2
  */
 final class Image_Gallery {
 
 	/**
-	 * Our single Image_Gallery instance.
+	 * Instance.
+	 *
+	 * @access private
+	 * @var object Class object.
 	 */
 	private static $instance;
-
-	/**
-	 * Disable instantiation.
-	 */
-	private function __construct() {}
-
-	/**
-	 * Disable the cloning of this class.
-	 *
-	 * @return void
-	 */
-	final public function __clone() {}
-
-	/**
-	 * Disable the wakeup of this class.
-	 */
-	final public function __wakeup() {}
 
 	/**
 	 * Create or retrieve the instance of Image_Gallery.
 	 */
 	public static function instance() {
 		if ( is_null( static::$instance ) ) {
-			static::$instance = new Image_Gallery;
-			static::$instance->init_hooks();
+			static::$instance = new self();
 		}
-
 		return static::$instance;
 	}
 
-	public function init_hooks() {
+	/**
+	 * Constructor.
+	 */
+	public function __construct() {
 		add_action( 'wp_ajax_vcex_wpbakery_backend_view_image_gallery', array( $this, 'generate' ) );
 	}
 
+	/**
+	 * AJAX callback.
+	 */
 	public function generate() {
+
 		if ( ! function_exists( 'vc_user_access' ) ) {
-			return;
+			die();
 		}
 
 		vc_user_access()->checkAdminNonce()->validateDie()->wpAny( 'edit_posts', 'edit_pages' )->validateDie();
 
-		$html         = '';
-		$post_id      = (int) vc_post_param( 'post_id' );
-		$image_ids    = vc_post_param( 'imageIds' );
+		$post_id = (int) vc_post_param( 'post_id' );
+		$image_ids = vc_post_param( 'imageIds' );
 		$post_gallery = vc_post_param( 'postGallery' );
 		$custom_field = vc_post_param( 'customField' );
-		$images       = array();
+		$return = array();
 
 		if ( $image_ids ) {
 			$images = $image_ids;
@@ -87,21 +77,19 @@ final class Image_Gallery {
 				$images = explode( ',', $images );
 			}
 
-			$html .= '<div class="vcex-backend-view-images">';
-
+			if ( $images && is_array( $images ) ) {
 				$i = 0;
-				foreach ( $images as $image_id ) {
+				foreach( $images as $image_id ) {
 					if ( $i++ > 100 ) {
 						break; // don't show too many images.
 					}
-					$html .= wp_get_attachment_image( $image_id, 'thumbnail', false, array() );
+					$return[] = esc_url( wp_get_attachment_image_url( $image_id, 'thumbnail' ) );
 				}
-
-			$html .= '<div>';
+			}
 
 		}
 
-		echo $html;
+		echo json_encode( $return );
 
 		die();
 

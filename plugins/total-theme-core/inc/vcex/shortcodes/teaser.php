@@ -3,7 +3,7 @@
  * Teaser Shortcode.
  *
  * @package TotalThemeCore
- * @version 1.2.8
+ * @version 1.3.2
  */
 
 defined( 'ABSPATH' ) || exit;
@@ -42,64 +42,24 @@ if ( ! class_exists( 'VCEX_Teaser_Shortcode' ) ) {
 			$params = array(
 				// General
 				array(
-					'type' => 'dropdown',
-					'heading' => esc_html__( 'Style', 'total-theme-core' ),
-					'param_name' => 'style',
-					'value' => array(
-						esc_html__( 'Default', 'total-theme-core' ) => '',
-						esc_html__( 'Plain', 'total-theme-core' )   => 'one',
-						esc_html__( 'Boxed Rounded', 'total-theme-core' ) => 'two',
-						esc_html__( 'Boxed Square', 'total-theme-core' ) => 'three',
-						esc_html__( 'Outline', 'total-theme-core' ) => 'four',
-					),
-				),
-				array(
-					'type' => 'dropdown',
-					'heading' => esc_html__( 'Bottom Margin', 'total-theme-core' ),
-					'param_name' => 'bottom_margin',
-					'value' => vcex_margin_choices(),
-					'admin_label' => true,
-				),
-				array(
-					'type' => 'vcex_hover_animations',
-					'heading' => esc_html__( 'Hover Animation', 'total-theme-core'),
-					'param_name' => 'hover_animation',
-				),
-				array(
-					'type' => 'vcex_text_alignments',
-					'heading' => esc_html__( 'Text Align', 'total-theme-core' ),
-					'param_name' => 'text_align',
-					'std' => '',
-				),
-				array(
-					'type' => 'vcex_trbl',
-					'heading' => esc_html__( 'Padding', 'total-theme-core' ),
-					'param_name' => 'padding',
-					'dependency' => array( 'element' => 'style', 'value' => 'two' ),
-				),
-				array(
-					'type' => 'vcex_colorpicker',
-					'heading' => esc_html__( 'Background Color', 'total-theme-core' ),
-					'param_name' => 'background',
-					'dependency' => array( 'element' => 'style', 'value' => array( 'two', 'three' ) ),
-				),
-				array(
-					'type' => 'vcex_colorpicker',
-					'heading' => esc_html__( 'Border Color', 'total-theme-core' ),
-					'param_name' => 'border_color',
-					'dependency' => array( 'element' => 'style', 'value' => array( 'four' ) ),
-				),
-				array(
 					'type' => 'textfield',
-					'heading' => esc_html__( 'Border Radius', 'total-theme-core' ),
-					'param_name' => 'border_radius',
-					'dependency' => array( 'element' => 'style', 'value' => array( 'two', 'three', 'four' ) ),
+					'heading' => esc_html__( 'Heading', 'total-theme-core' ),
+					'param_name' => 'heading',
+					'value' => 'Sample Heading',
+				),
+				array(
+					'type' => 'textarea_html',
+					'holder' => 'div',
+					'heading' => esc_html__( 'Content', 'total-theme-core' ),
+					'param_name' => 'content',
+					'value' => 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed faucibus feugiat convallis. Integer nec eros et risus condimentum tristique vel vitae arcu.',
 				),
 				array(
 					'type' => 'textfield',
 					'heading' => esc_html__( 'Element ID', 'total-theme-core' ),
 					'param_name' => 'unique_id',
-					'description' => sprintf( esc_html__( 'Enter element ID (Note: make sure it is unique and valid according to %sw3c specification%s).', 'total-theme-core' ), '<a href="https://www.w3schools.com/tags/att_global_id.asp" target="_blank" rel="noopener noreferrer">', '</a>' ),
+					'admin_label' => true,
+					'description' => vcex_shortcode_param_description( 'unique_id' ),
 				),
 				array(
 					'type' => 'textfield',
@@ -111,6 +71,11 @@ if ( ! class_exists( 'VCEX_Teaser_Shortcode' ) ) {
 					'type' => 'vcex_visibility',
 					'heading' => esc_html__( 'Visibility', 'total-theme-core' ),
 					'param_name' => 'visibility',
+				),
+				array(
+					'type' => 'vcex_hover_animations',
+					'heading' => esc_html__( 'Hover Animation', 'total-theme-core'),
+					'param_name' => 'hover_animation',
 				),
 				vcex_vc_map_add_css_animation(),
 				array(
@@ -125,14 +90,71 @@ if ( ! class_exists( 'VCEX_Teaser_Shortcode' ) ) {
 					'param_name' => 'animation_delay',
 					'description' => esc_html__( 'Enter your custom time in seconds (decimals allowed).', 'total'),
 				),
-				// Heading
+				// Style
+				array(
+					'type' => 'dropdown',
+					'heading' => esc_html__( 'Style', 'total-theme-core' ),
+					'param_name' => 'style',
+					'value' => array(
+						esc_html__( 'Default', 'total-theme-core' ) => '',
+						esc_html__( 'Plain', 'total-theme-core' )   => 'one',
+						esc_html__( 'Boxed Rounded', 'total-theme-core' ) => 'two',
+						esc_html__( 'Boxed Square', 'total-theme-core' ) => 'three',
+						esc_html__( 'Outline', 'total-theme-core' ) => 'four',
+					),
+					'group' => esc_html__( 'Style', 'total-theme-core' ),
+				),
+				array(
+					'type' => 'dropdown',
+					'heading' => esc_html__( 'Bottom Margin', 'total-theme-core' ),
+					'param_name' => 'bottom_margin',
+					'value' => vcex_margin_choices(),
+					'admin_label' => true,
+					'group' => esc_html__( 'Style', 'total-theme-core' ),
+				),
+				array(
+					'type' => 'dropdown',
+					'heading' => esc_html__( 'Shadow', 'total' ),
+					'param_name' => 'shadow',
+					'value' => vcex_shadow_choices(),
+					'group' => esc_html__( 'Style', 'total-theme-core' ),
+				),
+				array(
+					'type' => 'vcex_text_alignments',
+					'heading' => esc_html__( 'Text Align', 'total-theme-core' ),
+					'param_name' => 'text_align',
+					'std' => '',
+					'group' => esc_html__( 'Style', 'total-theme-core' ),
+				),
+				array(
+					'type' => 'vcex_trbl',
+					'heading' => esc_html__( 'Padding', 'total-theme-core' ),
+					'param_name' => 'padding',
+					'dependency' => array( 'element' => 'style', 'value' => array( 'two', 'three' ) ),
+					'group' => esc_html__( 'Style', 'total-theme-core' ),
+				),
+				array(
+					'type' => 'vcex_colorpicker',
+					'heading' => esc_html__( 'Background Color', 'total-theme-core' ),
+					'param_name' => 'background',
+					'dependency' => array( 'element' => 'style', 'value' => array( 'two', 'three' ) ),
+					'group' => esc_html__( 'Style', 'total-theme-core' ),
+				),
+				array(
+					'type' => 'vcex_colorpicker',
+					'heading' => esc_html__( 'Border Color', 'total-theme-core' ),
+					'param_name' => 'border_color',
+					'dependency' => array( 'element' => 'style', 'value' => array( 'four' ) ),
+					'group' => esc_html__( 'Style', 'total-theme-core' ),
+				),
 				array(
 					'type' => 'textfield',
-					'heading' => esc_html__( 'Heading', 'total-theme-core' ),
-					'param_name' => 'heading',
-					'value' => 'Sample Heading',
-					'group' => esc_html__( 'Heading', 'total-theme-core' ),
+					'heading' => esc_html__( 'Border Radius', 'total-theme-core' ),
+					'param_name' => 'border_radius',
+					'dependency' => array( 'element' => 'style', 'value' => array( 'two', 'three', 'four' ) ),
+					'group' => esc_html__( 'Style', 'total-theme-core' ),
 				),
+				// Heading
 				array(
 					'type' => 'vcex_colorpicker',
 					'heading' => esc_html__( 'Color', 'total-theme-core' ),
@@ -189,11 +211,10 @@ if ( ! class_exists( 'VCEX_Teaser_Shortcode' ) ) {
 				),
 				// Content
 				array(
-					'type' => 'textarea_html',
-					'holder' => 'div',
-					'heading' => esc_html__( 'Content', 'total-theme-core' ),
-					'param_name' => 'content',
-					'value' => 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed faucibus feugiat convallis. Integer nec eros et risus condimentum tristique vel vitae arcu.',
+					'type' => 'dropdown',
+					'heading' => esc_html__( 'Top Spacing', 'total-theme-core' ),
+					'param_name' => 'content_top_margin',
+					'value' => vcex_margin_choices(),
 					'group' => esc_html__( 'Content', 'total-theme-core' ),
 				),
 				array(
@@ -238,9 +259,28 @@ if ( ! class_exists( 'VCEX_Teaser_Shortcode' ) ) {
 				),
 				// Media
 				array(
+					'type' => 'dropdown',
+					'heading' => esc_html__( 'Source', 'total-theme-core' ),
+					'param_name' => 'image_source',
+					'std' => 'media_library',
+					'value' => array(
+						esc_html__( 'Media Library', 'total-theme-core' ) => 'media_library',
+						esc_html__( 'External', 'total-theme-core' ) => 'external',
+					),
+					'group' => esc_html__( 'Media', 'total-theme-core' ),
+				),
+				array(
 					'type' => 'attach_image',
 					'heading' => esc_html__( 'Image', 'total-theme-core' ),
 					'param_name' => 'image',
+					'dependency' => array( 'element' => 'image_source', 'value' => 'media_library' ),
+					'group' => esc_html__( 'Media', 'total-theme-core' ),
+				),
+				array(
+					'type' => 'textfield',
+					'heading' => esc_html__( 'External Image URL', 'total-theme-core' ),
+					'param_name' => 'external_image',
+					'dependency' => array( 'element' => 'image_source', 'value' => 'external' ),
 					'group' => esc_html__( 'Media', 'total-theme-core' ),
 				),
 				array(
@@ -270,9 +310,16 @@ if ( ! class_exists( 'VCEX_Teaser_Shortcode' ) ) {
 				),
 				array(
 					'type' => 'vcex_text_alignments',
-					'heading' => esc_html__( 'Image Align', 'total-theme-core' ),
+					'heading' => esc_html__( 'Align', 'total-theme-core' ),
 					'param_name' => 'img_align',
 					'std' => '',
+					'group' => esc_html__( 'Media', 'total-theme-core' ),
+				),
+				array(
+					'type' => 'dropdown',
+					'heading' => esc_html__( 'Border Radius', 'total-theme-core' ),
+					'param_name' => 'img_border_radius',
+					'value' => vcex_border_radius_choices(),
 					'group' => esc_html__( 'Media', 'total-theme-core' ),
 				),
 				array(
@@ -288,6 +335,7 @@ if ( ! class_exists( 'VCEX_Teaser_Shortcode' ) ) {
 					'param_name' => 'img_size',
 					'std' => 'wpex_custom',
 					'group' => esc_html__( 'Media', 'total-theme-core' ),
+					'dependency' => array( 'element' => 'image_source', 'value' => 'media_library' ),
 				),
 				array(
 					'type' => 'vcex_image_crop_locations',
@@ -295,6 +343,7 @@ if ( ! class_exists( 'VCEX_Teaser_Shortcode' ) ) {
 					'param_name' => 'img_crop',
 					'group' => esc_html__( 'Media', 'total-theme-core' ),
 					'dependency' => array( 'element' => 'img_size', 'value' => 'wpex_custom' ),
+					'dependency' => array( 'element' => 'image_source', 'value' => 'media_library' ),
 				),
 				array(
 					'type' => 'textfield',
