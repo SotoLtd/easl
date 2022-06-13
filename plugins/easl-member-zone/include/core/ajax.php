@@ -351,8 +351,24 @@ class EASL_MZ_Ajax_Handler {
 		$template_data = array( 'rows' => $rows );
 		$this->respond_file( '/members-documents/members-documents-row.php', $template_data, 200 );
 	}
+    public function get_members_wp_docs() {
+        if ( ! easl_mz_is_member_logged_in() ) {
+            $this->respond( 'Member not logged in!', 401 );
+        }
+        $member_email = $this->session->get_current_members_login();
+        if(!$member_email) {
+            $this->respond( 'Member not found!', 404 );
+        }
+        $members_doc_handler = easl_mz_get_manager()->getDocHandler();
+        $members_docs = $members_doc_handler->get_docs_by_email($member_email);
+        if ( empty( $members_docs ) ) {
+            $this->respond( 'No documents found.', 404 );
+        }
+        $template_data = array( 'members_docs' => $members_docs );
+        $this->respond_file( '/members-documents/wp-docs.php', $template_data, 200 );
+    }
 
-	public function get_members_notes() {
+	public function get_members_crm_notes() {
         if ( ! easl_mz_is_member_logged_in() ) {
             $this->respond( 'Member not logged in!', 401 );
         }

@@ -37,6 +37,7 @@ if ( ! empty( $css_class ) ) {
 	$wrapper_attributes[] = 'class="' . esc_attr( $css_class ) . '"';
 }
 $back_link = easl_membership_page_url();
+
 ?>
 <div <?php echo implode( ' ', $wrapper_attributes ); ?>>
     <div class="easl-mz-mydocs-inner mz-docs-loading">
@@ -45,12 +46,8 @@ $back_link = easl_membership_page_url();
                 <a class="easl-mz-back-link" href="<?php echo $back_link; ?>">Back</a>
             </div>
             <h2 class="mz-page-heading">My documents</h2>
-            <div class="mzmd-docs-table">
-                <div class="mzmd-docs-table-row mzmd-docs-table-head">
-                    <div class="mzmd-docs-table-col mzmd-docs-table-col-name">Subject</div>
-                    <div class="mzmd-docs-table-col mzmd-docs-table-col-type">Type</div>
-                    <div class="mzmd-docs-table-col mzmd-docs-table-col-download">&nbsp;</div>
-                </div>
+            <div class="mzmd-docs-cards">
+            
             </div>
         </div>
         <div class="easl-mz-loader">

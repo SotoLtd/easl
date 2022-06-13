@@ -1,0 +1,12 @@
+.taxonomy-mz_doc_group .term-slug-wrap,
+.taxonomy-mz_doc_group .term-description-wrap,
+.taxonomy-mz_doc_category .term-slug-wrap,
+.taxonomy-mz_doc_category .term-description-wrap {
+    display: none!important;
+}
+
+.post-type-mz_doc #exactmetrics-metabox,
+.post-type-mz_doc #tagsdiv-mz_doc_category,
+.post-type-mz_doc #tagsdiv-mz_doc_group {
+    display: none!important;
+}

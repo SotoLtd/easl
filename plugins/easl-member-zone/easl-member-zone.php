@@ -14,9 +14,9 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 
 
-define( 'EASL_MZ_VERSION', '1.5.0' );
+//define( 'EASL_MZ_VERSION', '1.5.0' );
 
-//define( 'EASL_MZ_VERSION', time() );
+define( 'EASL_MZ_VERSION', time() );
 
 class EASL_MZ_Manager {
 	/**
@@ -37,6 +37,10 @@ class EASL_MZ_Manager {
 	 * @var EASL_MZ_Ajax_Handler
 	 */
 	protected $ajax;
+	/**
+	 * @var EASL_MZ_Documents
+	 */
+	protected $docs;
 
 	protected $messages = array();
 
@@ -63,6 +67,7 @@ class EASL_MZ_Manager {
 		add_action( 'init', array( $this->session, 'init', ), 0 );
 		add_action( 'init', array( $this, 'init', ), 8 );
 		add_action( 'wp_enqueue_scripts', array( $this, 'assets', ), 11 );
+		add_action( 'admin_enqueue_scripts', array( $this, 'admin_assets', ), 11 );
 
 		add_action( 'easl_mz_memberzone_page_content', array( $this, 'memberzone_page_content' ) );
 
@@ -122,6 +127,7 @@ class EASL_MZ_Manager {
         require_once $this->path( 'CORE_DIR', 'sso.php' );
         require_once $this->path( 'CORE_DIR', 'ajax.php' );
         require_once $this->path( 'CORE_DIR', 'class-easl-mz-tps-token.php' );
+        require_once $this->path( 'APP_ROOT', 'include/documents/documents.php' );
         require_once $this->path( 'APP_ROOT', 'include/customizer/customizer.php' );
 	}
 
@@ -129,6 +135,7 @@ class EASL_MZ_Manager {
 		$this->session = EASL_MZ_Session_Handler::get_instance();
 		$this->api     = EASL_MZ_API::get_instance();
 		$this->ajax    = EASL_MZ_Ajax_Handler::get_instance();
+		$this->docs    = EASL_MZ_Documents::get_instance();
 	}
 
 	/**
@@ -890,7 +897,10 @@ class EASL_MZ_Manager {
 			}
 		}
 	}
-
+    public function admin_assets() {
+        $version = EASL_MZ_VERSION;
+        wp_enqueue_style( 'easl-mz-admin-styles', $this->asset_url( 'css/mz-admin.css' ), array(), $version );
+    }
 	public function assets() {
 		$version = EASL_MZ_VERSION;
 
@@ -966,7 +976,7 @@ class EASL_MZ_Manager {
 	}
 
 	/**
-	 * Get the instance of CR_VCE_Manager
+	 * Get the instance of EASL_MZ_Manager
 	 *
 	 * @return self
 	 */
@@ -999,6 +1009,13 @@ class EASL_MZ_Manager {
 	 */
 	public function getApi() {
 		return $this->api;
+	}
+
+	/**
+	 * @return EASL_MZ_Documents
+	 */
+	public function getDocHandler() {
+		return $this->docs;
 	}
 }
 

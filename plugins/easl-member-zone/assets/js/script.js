@@ -91,7 +91,8 @@
             "getMemberDirectory": "get_members_list",
             "getMemberDetails": "get_member_details",
             "getMembersMembership": "get_members_memberships",
-            "getMembersNotes": "get_members_notes",
+            "getMembersWPDocs": "get_members_wp_docs",
+            "getMembersCRMNotes": "get_members_crm_notes",
             "getMembershipNotes": "get_memberships_notes",
             "getMemberStats": "get_member_statistics"
         },
@@ -1003,10 +1004,20 @@
             var _this = this;
             var $el = $(".easl-mz-mydocs-inner");
             if ($el.length) {
-                var $table = $(".mzmd-docs-table", $el);
-                $el.on("mz_loaded:" + this.methods.getMembersNotes, function (event, response, method) {
+                var $docs_con = $(".mzmd-docs-cards", $el);
+                $el.on("mz_loaded:" + this.methods.getMembersWPDocs, function (event, response, method) {
                     if (response.Status === 200) {
-                        $table.append(response.Html);
+                        $docs_con.append(response.Html);
+                    } else if (response.Status === 404) {
+
+                    } else if (response.Status === 401) {
+                        // TODO-maybe reload
+                    }
+                    _this.request(_this.methods.getMembersCRMNotes, $el);
+                });
+                $el.on("mz_loaded:" + this.methods.getMembersCRMNotes, function (event, response, method) {
+                    if (response.Status === 200) {
+                        $docs_con.append(response.Html);
                     } else if (response.Status === 404) {
 
                     } else if (response.Status === 401) {
@@ -1014,7 +1025,7 @@
                     }
                     $el.removeClass("mz-docs-loading");
                 });
-                this.request(this.methods.getMembersNotes, $el);
+                this.request(this.methods.getMembersWPDocs, $el);
             }
         },
         initMemberStatsEvents: function ($el) {

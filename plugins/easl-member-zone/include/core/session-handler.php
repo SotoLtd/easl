@@ -250,6 +250,10 @@ class EASL_MZ_Session_Handler {
 		return $this->session_db_id;
 	}
 
+	public function get_current_members_login() {
+		return $this->_member_login;
+	}
+
 	protected function verify_token( $token ) {
 		return (bool) $this->get_session_by_token( $token );
 	}

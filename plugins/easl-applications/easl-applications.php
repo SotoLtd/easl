@@ -86,6 +86,7 @@ class EASLApplicationsPlugin {
         add_filter( 'intermediate_image_sizes_advanced', [ $this, 'prevent_intermediate_sizes_creation' ] );
         add_action( 'wp_create_file_in_uploads', [ $this, 'restore_image_sizes' ] );
         add_filter( 'wp_handle_upload', [ $this, 'restore_files_upload_dir' ] );
+        return $errors;
     }
     
     public function files_upload_dir( $uploads ) {
