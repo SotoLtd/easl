@@ -403,8 +403,7 @@ final class Theme_Settings {
 
 								// Date Field.
 								case 'date':
-
-									$meta_value = $meta_value ? date( get_option( 'date_format' ), $meta_value ) : '';
+									$meta_value = $meta_value ? date( 'Y-m-d', $meta_value ) : '';
 
 									wp_enqueue_script( 'jquery-ui' );
 
