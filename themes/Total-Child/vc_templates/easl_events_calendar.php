@@ -410,7 +410,7 @@ if ( ! empty( $el_id ) ) {
 }
 wp_enqueue_script(
 	'appear',
-	vcex_asset_url( 'js/lib/jquery.appear.min.js' ),
+    get_stylesheet_directory_uri() . '/assets/lib/appear/jquery.appear.min.js',
 	array( 'jquery' ),
 	'1.0',
 	true
