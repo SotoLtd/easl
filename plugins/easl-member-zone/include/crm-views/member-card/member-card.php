@@ -35,7 +35,7 @@ if ( isset( $member['dotb_mb_id'] ) && in_array( $member['dotb_mb_current_status
 }
 ?>
 <div class="mz-member-card-inner">
-    <div class="mz-member-welcome-block">
+    <div class="mz-member-welcome-block mz-membership-status-<?php echo $member['dotb_mb_current_status']; ?>">
         <p class="mz-member-welcome-row">Welcome back <span class="mz-member-name"><?php echo implode( ' ', $member_name_parts ); ?></span></p>
         <p class="mz-member-duration-row">Your membership is active until 23/12/2022</p>
         <p class="mz-member-buttons-row">

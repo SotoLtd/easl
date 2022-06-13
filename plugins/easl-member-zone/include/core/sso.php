@@ -40,7 +40,8 @@ class EASL_MZ_SSO {
 
     public function get_logout_url() {
         $data = [
-            'redirect_uri' => 'https://slo.easl.eu/?slo_app_id=easldev'
+            //'redirect_uri' => 'https://slo.easl.eu/?slo_app_id=easldev',
+            'redirect_uri' => 'https://easldev.websitestage.co.uk/?mz_logout=1'
         ];
         $query_string = build_query($data);
         return $this->base_url . '/logout?' . $query_string;

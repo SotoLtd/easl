@@ -35,46 +35,6 @@ $login_form_class     = 'easl-mz-login-form-wrapper easl-mz-login-form';
 if ( $login_error_messages ) {
 	$login_form_class .= ' mz-login-form-has-error easl-active';
 }
-
-if(isset($_GET['ms_mimic_login'])):
-?>
-    <div class="easl-mz-header-member-card">
-        <?php
-        while ( have_rows( 'mz_logged_in_links', 'option' ) ) {
-            the_row();
-            $button_title   = get_sub_field( 'title' );
-            $button_url     = get_sub_field( 'url' );
-            $button_new_tab = get_sub_field( 'new_tab' );
-            if ( $button_new_tab ) {
-                $button_new_tab = ' target="_blank"';
-            }
-            $buttons_to_display[] = sprintf( $button_html_format, esc_url( $button_url ), $button_new_tab, strip_tags( $button_title ) );
-        }
-        ?>
-        <?php if ( $buttons_to_display ): ?>
-            <div class="easl-mz-header-buttons">
-                <?php echo implode( '', $buttons_to_display ); ?>
-            </div>
-        <?php endif; ?>
-        <div class="easl-mz-crm-view2 easl-mz-membercard">
-            <?php
-            $member_name_parts = ['M.', 'Cyriac', 'Couvas'];
-            ?>
-            <div class="mz-member-card-inner">
-                <div class="mz-member-welcome-block">
-                    <p class="mz-member-welcome-row">Welcome back <span class="mz-member-name"><?php echo implode( ' ', $member_name_parts ); ?></span></p>
-                    <p class="mz-member-duration-row">Your membership is active until 23/12/2022</p>
-                    <p class="mz-member-buttons-row">
-                        <a class="mz-member-panel-button" href="<?php echo esc_url( $member_dashboard_url ); ?>">My portal</a>
-                        <span class="mz-buttonsep">|</span>
-                        <a class="mz-logout-link" href="<?php echo EASL_MZ_SSO::get_instance()->get_logout_url(); ?>">Logout</a>
-                    </p>
-                </div>
-            </div>
-        </div>
-    </div>
-<?php
-else:
 if ( ! easl_mz_is_member_logged_in() ):
 	while ( have_rows( 'mz_logged_out_links', 'option' ) ) {
 		the_row();
@@ -116,5 +76,4 @@ if ( ! easl_mz_is_member_logged_in() ):
 
         </div>
     </div>
-<?php endif; ?>
 <?php endif; ?>

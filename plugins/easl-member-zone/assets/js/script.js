@@ -1015,7 +1015,7 @@
         init: function () {
             this.events();
             this.showModuleLoading();
-            //this.getMemberCard();
+            this.getMemberCard();
             this.initNewMemberForm();
             this.resetPassword();
         }
