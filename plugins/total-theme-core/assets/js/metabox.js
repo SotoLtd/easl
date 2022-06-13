@@ -6,7 +6,7 @@
 		// Date picker.
 		var $date = $( '.wpex-date-meta' );
 		if ( $.datepicker && $date.length ) {
-			$date.datepicker();
+			$date.datepicker({dateFormat: "yy-mm-dd"});
 		}
 
 		// Button Group.
