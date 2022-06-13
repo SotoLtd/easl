@@ -39,9 +39,10 @@ class EASL_MZ_SSO {
     }
 
     public function get_logout_url() {
+        $session = EASL_MZ_Session_Handler::get_instance();
         $data = [
-            //'redirect_uri' => 'https://slo.easl.eu/?slo_app_id=easldev',
-            'redirect_uri' => 'https://easldev.websitestage.co.uk/?mz_logout=1'
+            'redirect_url' => 'https://slo.easl.eu/?slo_app_id=easldev',
+            //'redirect_uri' => 'https://easldev.websitestage.co.uk/?mz_logout=1'
         ];
         $query_string = build_query($data);
         return $this->base_url . '/logout?' . $query_string;
@@ -102,6 +103,7 @@ class EASL_MZ_SSO {
 		    'expires_in'         => intval( $response->expires_in ),
 		    'refresh_expires_in' => intval( $response->refresh_expires_in ),
 		    'login'              => time(),
+            'authorization_code' => $code,
 	    );
     }
     public function get_crm_member_details($access_token) {

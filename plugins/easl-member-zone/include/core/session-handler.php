@@ -221,6 +221,7 @@ class EASL_MZ_Session_Handler {
 			'last_name'          => '',
 			'membership_status'  => '',
 			'login'              => time(),
+            'authorization_code' => '',
 		);
 		$session_data = wp_parse_args( $data, $defaults );
 		// IP address.

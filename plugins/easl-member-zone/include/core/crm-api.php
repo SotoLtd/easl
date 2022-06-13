@@ -428,13 +428,13 @@ class EASL_MZ_API {
         $filter_args = array(
             'max_num' => 1,
             'filter'  => array(
-                array( 'portal_name' => $email ),
+                array( 'email1' => $email ),
             )
         );
         if ( ! $id_only ) {
             $filter_args['fields'] = 'id';
         } else {
-            $filter_args['fields'] = 'id,salutation,first_name,last_name,dotb_mb_current_status';
+            $filter_args['fields'] = 'id,salutation,first_name,last_name,dotb_mb_current_status,email1';
         }
         $headers     = array(
             'Content-Type'  => 'application/json',
