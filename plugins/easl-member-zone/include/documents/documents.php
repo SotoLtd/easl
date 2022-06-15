@@ -496,12 +496,31 @@ class EASL_MZ_Documents {
         if ( ! easl_mz_is_member_logged_in() ) {
             return false;
         }
-        $sessionData = easl_mz_get_current_session_data();
+        $member_email = easl_mz_get_manager()->getSession()->get_current_members_login();
+        if ( ! $member_email ) {
+            return false;
+        }
+        $docs_access_groups = get_the_terms( $doc_id, 'mz_doc_group' );
         
-        if ( ! empty( $sessionData['member_id'] ) && ( $sessionData['member_id'] == get_post_meta( $doc_id, 'member_id', true ) ) ) {
-            return true;
+        $allowed = false;
+        foreach ( $docs_access_groups as $access_group ) {
+            $access_type   = get_field( 'mz_md_access_type', 'mz_doc_group_' . $access_group->term_id );
+            $access_emails = get_field( 'mz_md_member_emails', 'mz_doc_group_' . $access_group->term_id );
+            $access_emails = is_array( $access_emails ) ? wp_list_pluck( $access_emails, 'email' ) : [];
+
+            if ( 'all' == $access_type ) {
+                return true;
+            }
+            if ( 'include' == $access_type && is_array( $access_emails ) && in_array( $member_email, $access_emails ) ) {
+                $allowed = true;
+                break;
+            }
+            if ( 'exclude' == $access_emails && is_array( $access_emails ) && ! in_array( $member_email, $access_emails ) ) {
+                $allowed = true;
+                break;
+            }
         }
         
-        return false;
+        return $allowed;
     }
 }

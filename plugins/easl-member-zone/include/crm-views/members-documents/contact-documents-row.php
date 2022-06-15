@@ -16,42 +16,47 @@ if ( ! defined( 'ABSPATH' ) ) {
  */
 ?>
 <?php
-
-foreach ( $member_notes as $note ):
-    $download_title = '';
+$cards = [];
+foreach ($member_notes as $note) {
+    $card_file_li = '<li>';
+    $card_file_li .= '<a href="' . easl_mz_get_note_download_url( $note ) . '"><span>' . basename($note['filename']) . '</span><span>Download</span></a>';
+    $card_file_li .= '</li>';
+    
     $doc_type_title = '';
     switch ( $note['dotb_type'] ) {
         case 'receipt':
-            $download_title = 'Download receipt';
-            $doc_type_title = 'Receipt';
+            $doc_type_title = 'Receipts';
             break;
         case 'certificate':
-            $download_title = 'Download certificate';
-            $doc_type_title = 'Certificate';
+            $doc_type_title = 'Certificates';
             break;
         case 'invoice':
-            $download_title = 'Download invoice';
-            $doc_type_title = 'Invoice';
+            $doc_type_title = 'Invoices';
             break;
         case 'proof_age':
-            $download_title = 'Download proof of age';
-            $doc_type_title = 'Proof of age';
+            $doc_type_title = 'Proofs of age';
             break;
         case 'proof_nurse':
-            $download_title = 'Download proof of nurse';
-            $doc_type_title = 'Proof of nurse';
+            $doc_type_title = 'Proofs of nurse';
             break;
         default:
-            $download_title = 'Download document';
-            $doc_type_title = 'Other';
+            $doc_type_title = 'Others';
             break;
     }
+    if ( ! isset( $cards[ $doc_type_title ] ) ) {
+        $cards[ $doc_type_title ] = [];
+    }
+    $cards[ $doc_type_title ][] = $card_file_li;
+}
+
+ksort($cards);
+
+foreach ( $cards as $card_title => $card_lis ):
     ?>
-    <div class="mzmd-docs-table-row">
-        <div class="mzmd-docs-table-col mzmd-docs-table-col-name"><?php echo $note['name']; ?></div>
-        <div class="mzmd-docs-table-col mzmd-docs-table-col-type"><?php echo $doc_type_title; ?></div>
-        <div class="mzmd-docs-table-col mzmd-docs-table-col-download">
-            <a class="mzmd-download-link" href="<?php echo easl_mz_get_note_download_url( $note ); ?>" data-type="<?php echo $note['dotb_type']; ?>" target="_blank"><?php echo $download_title; ?></a>
-        </div>
+    <div class="mzmd-docs-card">
+        <h3><?php echo $card_title; ?></h3>
+        <ul>
+            <?php echo implode( "\n", $card_lis ); ?>
+        </ul>
     </div>
 <?php endforeach; ?>
