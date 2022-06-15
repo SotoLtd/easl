@@ -222,8 +222,12 @@ class EASL_MZ_Session_Handler {
 			'membership_status'  => '',
 			'login'              => time(),
             'authorization_code' => '',
+            'id_token' => '',
 		);
 		$session_data = wp_parse_args( $data, $defaults );
+        if(isset($data['id_token_claim'])) {
+            unset($data['id_token_claim']);
+        }
 		// IP address.
 		if ( ! empty( $_SERVER['REMOTE_ADDR'] ) ) {
 			$session_data['ip'] = $_SERVER['REMOTE_ADDR'];
@@ -288,6 +292,14 @@ class EASL_MZ_Session_Handler {
 			return sha1( $token );
 		}
 	}
+    
+    public function get_data( $key ) {
+        if ( ! isset( $this->_data[ $key ] ) ) {
+            return '';
+        }
+        
+        return $this->_data[ $key ];
+    }
 
 	public function add_data( $key, $value ) {
 		if ( isset( $this->_data[ $key ] ) && ( $this->_data[ $key ] == $value ) ) {

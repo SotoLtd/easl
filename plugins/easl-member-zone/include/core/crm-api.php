@@ -431,7 +431,7 @@ class EASL_MZ_API {
                 array( 'email1' => $email ),
             )
         );
-        if ( ! $id_only ) {
+        if ( $id_only ) {
             $filter_args['fields'] = 'id';
         } else {
             $filter_args['fields'] = 'id,salutation,first_name,last_name,dotb_mb_current_status,email1';
