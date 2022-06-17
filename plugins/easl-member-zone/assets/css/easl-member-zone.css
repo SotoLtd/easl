@@ -439,6 +439,9 @@ body .mzms-button::after {
 .mz-member-welcome-block .mz-member-duration-row {
     color: #008001;
 }
+.mz-member-welcome-block.mz-membership-status-active .mz-member-duration-row {
+    color: #008001;
+}
 .mz-member-welcome-block.mz-membership-status-expired .mz-member-duration-row {
     color: #de2a57;
 }

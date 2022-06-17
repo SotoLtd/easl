@@ -28,7 +28,7 @@ if ( $member['first_name'] ) {
 if ( $member['last_name'] ) {
 	$member_name_parts[] = $member['last_name'];
 }
-if ( isset( $member['dotb_mb_id'] ) && in_array( $member['dotb_mb_current_status'], array( 'expired', 'active' ) ) ) {
+if ( isset( $member['dotb_mb_id'] ) && in_array( $member['dotb_mb_current_status'], array( 'active' ) ) ) {
     $member_profile_url       = get_field( 'member_profile_url', 'option' );
 } elseif ( $member['dotb_mb_current_status'] === 'expired' ) {
     $member_profile_url = easl_member_new_membership_form_url( );
@@ -37,7 +37,9 @@ if ( isset( $member['dotb_mb_id'] ) && in_array( $member['dotb_mb_current_status
 <div class="mz-member-card-inner">
     <div class="mz-member-welcome-block mz-membership-status-<?php echo $member['dotb_mb_current_status']; ?>">
         <p class="mz-member-welcome-row">Welcome back <span class="mz-member-name"><?php echo implode( ' ', $member_name_parts ); ?></span></p>
-        <p class="mz-member-duration-row">Your membership is active until 23/12/2022</p>
+        <?php if($member['dotb_mb_current_end_date']): ?>
+        <p class="mz-member-duration-row">Your membership is active until <?php echo $member['dotb_mb_current_end_date']; ?></p>
+        <?php endif; ?>
         <p class="mz-member-buttons-row">
             <a class="mz-member-panel-button" href="<?php echo esc_url( $member_profile_url ); ?>">My portal</a>
             <span class="mz-buttonsep">|</span>
