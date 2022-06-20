@@ -540,6 +540,7 @@ class EASL_MZ_API {
     public function get_member_by_email( $email, $id_only = true ) {
         $filter_args = array(
             'max_num' => 1,
+            'order_by' => 'dotb_mb_id:DESC,date_modified:DESC',
             'filter'  => array(
                 array( 'email1' => $email ),
             )
