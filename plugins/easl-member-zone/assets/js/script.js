@@ -1156,10 +1156,10 @@
     };
 
     $(document).ready(function () {
-        $(".easl-mz-header-login-button").on("click", function (event) {
-            event.preventDefault();
-            $(".easl-mz-login-form").toggleClass("easl-active").find('[name="mz_is_renew"]').val( $(this).hasClass("mz-enable-renew") ? 1 : 0);
-        });
+        // $(".easl-mz-header-login-button").on("click", function (event) {
+        //     event.preventDefault();
+        //     $(".easl-mz-login-form").toggleClass("easl-active");
+        // });
         if (typeof $.fn.select2 !== "undefined") {
             $(".easl-mz-select2").length && $(".easl-mz-select2").select2({
                 closeOnSelect: true,
