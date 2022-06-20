@@ -230,6 +230,7 @@ class EASL_MZ_Manager {
 	 */
 	public function init() {
 		$this->add_options_page();
+        $this->handle_openid_auth_code();
 		$this->handle_member_login();
 		$this->handle_other_member_login();
 		$this->handle_member_logout();
