@@ -28,9 +28,9 @@ if ( ! defined( 'ABSPATH' ) ) {
 <div class="mzms-fields-row easl-row easl-row-col-2">
     <div class="easl-col">
         <div class="easl-col-inner mzms-fields-con">
-            <label class="mzms-field-label" for="mzf_dotb_area_of_interest">Area of interest <span class="mzms-asteric">*</span></label>
+            <label class="mzms-field-label" for="mzf_area_of_interest_c">Area of interest <span class="mzms-asteric">*</span></label>
             <div class="mzms-field-wrap">
-                <select class="easl-mz-select2" name="dotb_area_of_interest[]" id="mzf_dotb_area_of_interest" multiple="multiple" data-placeholder="Select one/more options"  style="width: 100%;">
+                <select class="easl-mz-select2" name="area_of_interest_c[]" id="mzf_area_of_interest_c" multiple="multiple" data-placeholder="Select one/more options"  style="width: 100%;">
                     <?php echo easl_mz_get_crm_dropdown_items( 'area_of_interests' ); ?>
                 </select>
             </div>
@@ -40,9 +40,9 @@ if ( ! defined( 'ABSPATH' ) ) {
 <div class="mzms-fields-row easl-row easl-row-col-2">
     <div class="easl-col">
         <div class="easl-col-inner mzms-fields-con">
-            <label class="mzms-field-label" for="mzf_dotb_user_category">User category <span class="mzms-asteric">*</span></label>
+            <label class="mzms-field-label" for="mzf_participant_type_c">User category <span class="mzms-asteric">*</span></label>
             <div class="mzms-field-wrap">
-                <select class="easl-mz-select2" name="dotb_user_category" id="mzf_dotb_user_category" data-placeholder="Select an option"  style="width: 100%;">
+                <select class="easl-mz-select2" name="participant_type_c" id="mzf_participant_type_c" data-placeholder="Select an option"  style="width: 100%;">
                     <option value=""></option>
                     <?php echo easl_mz_get_crm_dropdown_items( 'user_categories' ); ?>
                 </select>
@@ -50,10 +50,10 @@ if ( ! defined( 'ABSPATH' ) ) {
         </div>
     </div>
     <div class="easl-col">
-        <div class="easl-col-inner mzms-fields-con" id="mzms-fields-con-dotb_user_category_other">
-            <label class="mzms-field-label" for="mzf_dotb_user_category_other">User category - Other <span class="mzms-asteric">*</span></label>
+        <div class="easl-col-inner mzms-fields-con" id="mzms-fields-con-participant_type_c_other">
+            <label class="mzms-field-label" for="mzf_participant_type_c_other">User category - Other <span class="mzms-asteric">*</span></label>
             <div class="mzms-field-wrap">
-                <input type="text" placeholder="" name="dotb_user_category_other" id="mzf_dotb_user_category_other" autocomplete="off">
+                <input type="text" placeholder="" name="participant_type_c_other" id="mzf_participant_type_c_other" autocomplete="off">
             </div>
         </div>
     </div>
@@ -62,19 +62,19 @@ if ( ! defined( 'ABSPATH' ) ) {
 <div class="mzms-fields-row easl-row easl-row-col-2">
     <div class="easl-col">
         <div class="easl-col-inner mzms-fields-con">
-            <label class="mzms-field-label" for="mzf_dotb_easl_specialty">Specialty <span class="mzms-asteric">*</span></label>
+            <label class="mzms-field-label" for="mzf_medical_speciality_c">Specialty <span class="mzms-asteric">*</span></label>
             <div class="mzms-field-wrap">
-                <select class="easl-mz-select2" name="dotb_easl_specialty[]" id="mzf_dotb_easl_specialty" multiple="multiple" data-placeholder="Select one/more options" style="width: 100%;">
+                <select class="easl-mz-select2" name="medical_speciality_c[]" id="mzf_medical_speciality_c" multiple="multiple" data-placeholder="Select one/more options" style="width: 100%;">
                     <?php echo easl_mz_get_crm_dropdown_items( 'specialities'); ?>
                 </select>
             </div>
         </div>
     </div>
     <div class="easl-col">
-        <div class="easl-col-inner mzms-fields-con" id="mzms-fields-con-dotb_easl_specialty_other">
-            <label class="mzms-field-label" for="mzf_dotb_easl_specialty_other">Specialty - Other <span class="mzms-asteric">*</span></label>
+        <div class="easl-col-inner mzms-fields-con" id="mzms-fields-con-medical_speciality_c_other">
+            <label class="mzms-field-label" for="mzf_medical_speciality_c_other">Specialty - Other <span class="mzms-asteric">*</span></label>
             <div class="mzms-field-wrap">
-                <input type="text" placeholder="" name="dotb_easl_specialty_other" id="mzf_dotb_easl_specialty_other" autocomplete="off">
+                <input type="text" placeholder="" name="medical_speciality_c_other" id="mzf_medical_speciality_c_other" autocomplete="off">
             </div>
         </div>
     </div>

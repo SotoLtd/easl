@@ -537,20 +537,25 @@ class EASL_MZ_API {
         return true;
     }
     
-    public function get_member_by_email( $email ) {
+    public function get_member_by_email( $email, $id_only = true ) {
         $filter_args = array(
             'max_num' => 1,
-            'fields'  => 'id',
             'filter'  => array(
-                array( 'portal_name' => $email ),
+                array( 'email1' => $email ),
             )
         );
+        if ( $id_only ) {
+            $filter_args['fields'] = 'id';
+        } else {
+            $filter_args['fields'] = 'id,salutation,first_name,last_name,dotb_mb_current_status,email1';
+        }
         $headers     = array(
             'Content-Type'  => 'application/json',
             'Cache-Control' => 'no-cache',
-            'OAuth-Token'   => $this->get_access_token( false ),
+            'OAuth-Token'   => $this->get_access_token(false),
         );
         $result      = $this->get( '/Contacts/filter', false, $headers, $filter_args );
+
         if ( ! $result ) {
             return false;
         }
@@ -561,8 +566,10 @@ class EASL_MZ_API {
         if ( count( $response->records ) < 1 ) {
             return false;
         }
-        
-        return $response->records[0]->id;
+        if($id_only) {
+            return $response->records[0]->id;
+        }
+        return $response->records[0];
     }
     
     public function get_members( $filter_args = array() ) {

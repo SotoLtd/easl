@@ -218,11 +218,22 @@ body .mzms-button::after {
 .mz-loggedout-buttons.header-aside-buttons {
     position: relative;
     overflow: hidden;
+    padding-top: 67px;
     width: 630px;
+}
+.mz-loggedout-buttons.header-aside-buttons .easl-mz-header-login-button {
+    background-color: #004b87;
+    color: #fff;
+    border-radius: 5px;
+    padding: 6px 10px;
+}
+.mz-loggedout-buttons.header-aside-buttons .easl-mz-header-login-button:hover {
+    background-color: #71c5e8;
 }
 
 .easl-header-sticky-active .mz-loggedout-buttons.header-aside-buttons {
     height: 62px;
+    padding-top: 15px;
 }
 
 .easl-mz-login-form {
@@ -366,7 +377,7 @@ body .mzms-button::after {
 .easl-mz-header-member-card {
     display: flex;
     flex-wrap: nowrap;
-    align-items: stretch;
+    align-items: center;
     margin: 7px 0;
     height: 103px;
 }
@@ -386,8 +397,8 @@ body .mzms-button::after {
     color: #005499;
     padding: 5px;
     font-weight: 700;
-    font-size: 15px;
-    line-height: 18px;
+    font-size: 16px;
+    line-height: 20px;
     margin: 0 0 15px;
 }
 
@@ -403,14 +414,58 @@ body .mzms-button::after {
 }
 
 .easl-mz-membercard {
-    padding: 8px;
-    border-bottom: 4px solid #62cff5;
-    margin: 0 0 0 15px;
-    min-width: 255px;
+    padding: 0;
+    margin: 0;
+    min-width: 32px;
 }
 
-.easl-mz-membercard {
+.mz-member-welcome-block {
+    padding: 15px 17px;
+    margin: 0;
+    min-width: 255px;
     background: #d0d0d0;
+    border-radius: 15px;
+    text-align: right;
+    font-size: 16px;
+    line-height: 16px;
+    color: #454545;
+    font-weight: 700;
+}
+.mz-member-welcome-block p {
+    margin: 0 0 10px;
+}
+.mz-member-welcome-block p:last-child {
+    margin-bottom: 0;
+}
+.mz-member-welcome-block .mz-member-duration-row {
+    color: #008001;
+}
+.mz-member-welcome-block.mz-membership-status-active .mz-member-duration-row {
+    color: #008001;
+}
+.mz-member-welcome-block.mz-membership-status-expired .mz-member-duration-row {
+    color: #de2a57;
+}
+
+.mz-member-welcome-block .mz-member-buttons-row {
+
+}
+.mz-member-welcome-block .mz-member-buttons-row a {
+    color: #004b87;
+}
+.mz-member-welcome-block .mz-member-buttons-row .mz-buttonsep {
+    color: inherit;
+}
+
+.easl-header-sticky-active .mz-member-welcome-block {
+    padding: 4px 10px;
+    border-radius: 5px;
+}
+.easl-header-sticky-active .mz-member-welcome-block p {
+    margin-bottom: 3px;
+}
+.easl-header-sticky-active .mz-member-welcome-block p:last-child {
+    margin-bottom: 0;
 }
 
 .easl-member-banner {
@@ -450,9 +505,6 @@ body .mzms-button::after {
 }
 
 .mz-member-card-inner {
-    display: flex;
-    flex-direction: row;
-    flex-wrap: nowrap;
 }
 
 .mz-member-avatar {
@@ -483,7 +535,7 @@ body .mzms-button::after {
 
 .mz-member-welcome-block .mz-member-welcome-button {
     white-space: nowrap;
-    margin: 0px;
+    margin: 0;
     padding-top: 8px;
 }
 
@@ -544,29 +596,12 @@ body .mzms-button::after {
 
 .easl-header-sticky-active .easl-mz-membercard {
     border-bottom: 0 none;
-    padding-top: 4px;
-    padding-bottom: 4px;
 }
 
 .easl-header-sticky-active .mz-member-avatar {
     height: 40px;
     width: 40px;
     margin-right: 12px;
-}
-
-.easl-header-sticky-active .mz-member-welcome-block .mz-member-welcome-row {
-    display: inline-block;
-    margin: 0;
-}
-
-.easl-header-sticky-active .mz-member-welcome-block .mz-member-welcome-row.mz-member-welcome-button {
-    margin-left: 10px;
-}
-
-.easl-header-sticky-active .mz-member-welcome-block .mz-member-welcome-row.mz-member-welcome-button a {
-    display: inline-block;
-    padding-left: 10px;
-    padding-right: 10px;
 }
 
 /*Member Zone*/
