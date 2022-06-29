@@ -166,7 +166,7 @@ class EASL_VC_Staffs extends EASL_ShortCode {
             'excerpt',
             'name',
             'job_title',
-            'easl_posiiton',
+            'easl_position',
         );
     }
     
