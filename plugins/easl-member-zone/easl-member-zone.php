@@ -14,9 +14,9 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 
 
-//define( 'EASL_MZ_VERSION', '1.5.0' );
+define( 'EASL_MZ_VERSION', '2.0.0' );
 
-define( 'EASL_MZ_VERSION', time() );
+//define( 'EASL_MZ_VERSION', time() );
 
 class EASL_MZ_Manager {
 	/**

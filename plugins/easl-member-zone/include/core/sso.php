@@ -31,7 +31,7 @@ class EASL_MZ_SSO {
         $this->endsession_endpoint_url       = $this->base_url . '/logout';
         $this->scope                         = 'email profile openid';
         
-        $this->logout_redirec_url = 'https://easldev.websitestage.co.uk/?mz_logout=1';
+        $this->logout_redirec_url = 'https://easl.eu/?mz_logout=1';
     }
     
     /**
