@@ -252,10 +252,10 @@
             var _this = this;
             var $jobFunction = $("#mzf_dotb_job_function", $el);
             var $jobFunctionOther = $("#mzms-fields-con-dotb_job_function_other", $el);
-            var $speciality = $("#mzf_dotb_easl_specialty", $el);
-            var $specialityOther = $("#mzms-fields-con-dotb_easl_specialty_other", $el);
-            var $userCategory = $("#mzf_dotb_user_category", $el);
-            var $userCategoryOther = $("#mzms-fields-con-dotb_user_category_other", $el);
+            var $speciality = $("#mzf_medical_speciality_c", $el);
+            var $specialityOther = $("#mzms-fields-con-medical_speciality_c_other", $el);
+            var $userCategory = $("#mzf_participant_type_c", $el);
+            var $userCategoryOther = $("#mzms-fields-con-participant_type_c_other", $el);
             var $publicField = $("#mzms_dotb_public_profile", $el);
             var $publicProfileFields = $("#mzf_dotb_public_profile_fields", $el);
 
